@@ -1,0 +1,63 @@
+{
+  "name": "nz-legislation-tool",
+  "version": "1.0.0",
+  "description": "CLI tool for searching and retrieving New Zealand legislation data",
+  "type": "module",
+  "main": "dist/cli.js",
+  "bin": {
+    "nzlegislation": "./dist/cli.js"
+  },
+  "scripts": {
+    "dev": "tsx src/cli.ts",
+    "build": "tsc",
+    "start": "node dist/cli.js",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "nz",
+    "legislation",
+    "cli",
+    "legal-tech",
+    "research",
+    "new-zealand",
+    "api"
+  ],
+  "author": "Dylan Mordaunt <dylan.mordaunt@vuw.ac.nz>",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dylanmordaunt/nz-legislation-tool.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dylanmordaunt/nz-legislation-tool/issues"
+  },
+  "homepage": "https://github.com/dylanmordaunt/nz-legislation-tool#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "cli-table3": "^0.6.5",
+    "commander": "^12.1.0",
+    "conf": "^13.0.1",
+    "dotenv": "^16.4.5",
+    "got": "^14.4.2",
+    "ora": "^8.1.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.11",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.3",
+    "vitest": "^2.1.9"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ]
+}
