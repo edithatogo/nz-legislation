@@ -1,0 +1,69 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "schedule:weekly",
+    "group:allNonMajor",
+    ":semanticCommitTypeAll(chore)",
+    ":automergeMinor",
+    ":automergePr",
+    ":automergeRequireAllStatusChecks",
+    ":disableDependencyDashboard"
+  ],
+  "timezone": "Pacific/Auckland",
+  "schedule": ["before 6am on Monday"],
+  "labels": ["dependencies", "automated"],
+  "reviewers": ["edithatogo"],
+  "assignees": ["edithatogo"],
+  "packageRules": [
+    {
+      "groupName": "Production Dependencies",
+      "matchDepTypes": ["dependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true,
+      "commitMessagePrefix": "chore(deps):"
+    },
+    {
+      "groupName": "Development Dependencies",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true,
+      "commitMessagePrefix": "chore(deps-dev):"
+    },
+    {
+      "groupName": "Major Dependencies",
+      "matchUpdateTypes": ["major"],
+      "automerge": false,
+      "commitMessagePrefix": "chore(deps)!: "
+    },
+    {
+      "groupName": "GitHub Actions",
+      "matchManagers": ["github-actions"],
+      "commitMessagePrefix": "chore(ci):",
+      "labels": ["dependencies", "github-actions", "automated"]
+    },
+    {
+      "groupName": "Node.js",
+      "matchDatasources": ["node-version"],
+      "commitMessagePrefix": "chore(node):"
+    }
+  ],
+  "npm": {
+    "minimumReleaseAge": "3 days",
+    "internalChecksFilter": "strict"
+  },
+  "github-actions": {
+    "enabled": true
+  },
+  "prConcurrentLimit": 10,
+  "prHourlyLimit": 0,
+  "rangeStrategy": "bump",
+  "separateMajorMinor": true,
+  "separateMultipleMajor": false,
+  "separateMinorPatch": true,
+  "stabilityDays": 3,
+  "dependencyDashboard": false,
+  "suppressNotifications": ["prEditedNotification"],
+  "rebaseWhen": "behind-base-branch",
+  "platformAutomerge": true
+}
