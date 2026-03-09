@@ -126,7 +126,7 @@ jobs:
   # Build
   build:
     runs-on: ubuntu-latest
-    needs: test  # Only depend on tests passing
+    needs: security  # Only depend on security scan
     steps:
       - uses: actions/checkout@v4
 
