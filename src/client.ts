@@ -10,7 +10,6 @@ import { getConfig } from './config.js';
 import {
   createApiError,
   NetworkError,
-  ErrorCode,
 } from './errors.js';
 import {
   LegislationVersionSchema,
