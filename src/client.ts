@@ -8,6 +8,11 @@ import { z } from 'zod';
 
 import { getConfig } from './config.js';
 import {
+  createApiError,
+  NetworkError,
+  ErrorCode,
+} from './errors.js';
+import {
   LegislationVersionSchema,
   SearchResultsSchema,
   VersionSchema,
@@ -179,10 +184,20 @@ export async function searchWorks(params: {
 
     return SearchResultsSchema.parse(data);
   } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(`Search failed: ${error.message}`);
+    if (error instanceof NetworkError) {
+      throw error;
     }
-    throw error;
+    if (error instanceof Error && 'response' in error) {
+      const apiError = error as { response?: { statusCode?: number; url?: string } };
+      if (apiError.response) {
+        throw createApiError(
+          apiError.response.statusCode || 500,
+          apiError.response.url || 'unknown',
+          `Search failed: ${error.message}`,
+        );
+      }
+    }
+    throw new Error(`Search failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
 
@@ -198,10 +213,20 @@ export async function getWork(workId: string): Promise<Work> {
     const data = await client.get(`v0/works/${workId}`).json();
     return WorkSchema.parse(data);
   } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(`Failed to get work: ${error.message}`);
+    if (error instanceof NetworkError) {
+      throw error;
     }
-    throw error;
+    if (error instanceof Error && 'response' in error) {
+      const apiError = error as { response?: { statusCode?: number; url?: string } };
+      if (apiError.response) {
+        throw createApiError(
+          apiError.response.statusCode || 500,
+          apiError.response.url || 'unknown',
+          `Failed to get work: ${error.message}`,
+        );
+      }
+    }
+    throw new Error(`Failed to get work: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
 
@@ -217,10 +242,20 @@ export async function getWorkVersions(workId: string): Promise<Version[]> {
     const data = await client.get(`v0/works/${workId}/versions`).json();
     return z.array(VersionSchema).parse(data);
   } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(`Failed to get versions: ${error.message}`);
+    if (error instanceof NetworkError) {
+      throw error;
     }
-    throw error;
+    if (error instanceof Error && 'response' in error) {
+      const apiError = error as { response?: { statusCode?: number; url?: string } };
+      if (apiError.response) {
+        throw createApiError(
+          apiError.response.statusCode || 500,
+          apiError.response.url || 'unknown',
+          `Failed to get versions: ${error.message}`,
+        );
+      }
+    }
+    throw new Error(`Failed to get versions: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
 
@@ -236,10 +271,20 @@ export async function getVersion(versionId: string): Promise<LegislationVersion>
     const data = await client.get(`v0/versions/${versionId}`).json();
     return LegislationVersionSchema.parse(data);
   } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(`Failed to get version: ${error.message}`);
+    if (error instanceof NetworkError) {
+      throw error;
     }
-    throw error;
+    if (error instanceof Error && 'response' in error) {
+      const apiError = error as { response?: { statusCode?: number; url?: string } };
+      if (apiError.response) {
+        throw createApiError(
+          apiError.response.statusCode || 500,
+          apiError.response.url || 'unknown',
+          `Failed to get version: ${error.message}`,
+        );
+      }
+    }
+    throw new Error(`Failed to get version: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
 
