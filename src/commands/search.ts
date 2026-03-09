@@ -4,8 +4,20 @@
 
 import { Command } from 'commander';
 import ora from 'ora';
+
 import { searchWorks } from '../client.js';
 import { printTable, printJson, worksToCsv } from '../output/index.js';
+
+interface SearchOptions {
+  query: string;
+  type?: string;
+  status?: string;
+  from?: string;
+  to?: string;
+  limit: string;
+  offset: string;
+  format: string;
+}
 
 export const searchCommand = new Command()
   .name('search')
@@ -18,7 +30,7 @@ export const searchCommand = new Command()
   .option('-l, --limit <number>', 'Maximum results (default: 25, max: 100)', '25')
   .option('-o, --offset <number>', 'Result offset for pagination', '0')
   .option('--format <format>', 'Output format (table, json, csv)', 'table')
-  .action(async (options, cmd) => {
+  .action(async (options: SearchOptions) => {
     const spinner = ora('Searching legislation...').start();
 
     try {

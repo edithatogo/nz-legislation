@@ -5,20 +5,21 @@
 
 import got from 'got';
 import { z } from 'zod';
-import { getConfig, hasApiKey } from './config.js';
+
+import { getConfig } from './config.js';
 import {
-  WorkSchema,
-  VersionSchema,
-  SearchResultsSchema,
   LegislationVersionSchema,
-  type Work,
-  type Version,
-  type SearchResults,
+  SearchResultsSchema,
+  VersionSchema,
+  WorkSchema,
   type LegislationVersion,
+  type SearchResults,
+  type Version,
+  type Work,
 } from './models/index.js';
 
 // Rate limit state
-let rateLimitState = {
+const rateLimitState = {
   remaining: 10000,
   resetTime: Date.now() + 86400000, // 24 hours from now
   burstRemaining: 2000,

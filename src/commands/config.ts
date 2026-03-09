@@ -3,7 +3,14 @@
  */
 
 import { Command } from 'commander';
-import { getConfig, setApiKey, hasApiKey, clearConfig, getConfigPath } from '../config.js';
+
+import { clearConfig, getConfig, getConfigPath, hasApiKey, setApiKey } from '../config.js';
+
+interface ConfigOptions {
+  show?: boolean;
+  key?: string;
+  clear?: boolean;
+}
 
 export const configCommand = new Command()
   .name('config')
@@ -11,7 +18,7 @@ export const configCommand = new Command()
   .option('--show', 'Show current configuration')
   .option('--key <key>', 'Set API key')
   .option('--clear', 'Clear all configuration')
-  .action((options) => {
+  .action((options: ConfigOptions) => {
     if (options.clear) {
       clearConfig();
       console.log('✓ Configuration cleared.');

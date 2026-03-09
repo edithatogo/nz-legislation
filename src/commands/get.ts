@@ -4,8 +4,14 @@
 
 import { Command } from 'commander';
 import ora from 'ora';
+
 import { getWork, getWorkVersions } from '../client.js';
 import { printWorkDetail, printVersionsTable, printJson, versionsToCsv } from '../output/index.js';
+
+interface GetOptions {
+  versions?: boolean;
+  format: string;
+}
 
 export const getCommand = new Command()
   .name('get')
@@ -13,7 +19,7 @@ export const getCommand = new Command()
   .argument('<id>', 'Work ID (e.g., act/2020/67)')
   .option('--versions', 'Show version history')
   .option('--format <format>', 'Output format (table, json, csv)', 'table')
-  .action(async (workId, options) => {
+  .action(async (workId: string, options: GetOptions) => {
     const spinner = ora('Retrieving legislation...').start();
 
     try {

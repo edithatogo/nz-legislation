@@ -4,8 +4,14 @@
 
 import { Command } from 'commander';
 import ora from 'ora';
+
 import { getWork } from '../client.js';
 import { generateCitation } from '../output/index.js';
+
+interface CiteOptions {
+  style: string;
+  copy: boolean;
+}
 
 export const citeCommand = new Command()
   .name('cite')
@@ -13,7 +19,7 @@ export const citeCommand = new Command()
   .argument('<id>', 'Work ID (e.g., act/2020/67)')
   .option('-s, --style <style>', 'Citation style (nzmj, bibtex, ris, apa)', 'nzmj')
   .option('--copy', 'Copy to clipboard (not implemented)', false)
-  .action(async (workId, options) => {
+  .action(async (workId: string, options: CiteOptions) => {
     const spinner = ora('Generating citation...').start();
 
     try {
