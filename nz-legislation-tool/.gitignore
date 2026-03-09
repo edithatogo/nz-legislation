@@ -38,7 +38,3 @@ coverage/
 
 # OS
 Thumbs.db
-
-# Log files (from logger utility)
-*.log
-logs/

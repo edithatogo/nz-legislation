@@ -17,12 +17,7 @@ const configSchema = z.object({
   timeout: z.number().positive().default(30000),
   cacheEnabled: z.boolean().default(true),
   cacheTTL: z.number().positive().default(3600000), // 1 hour in ms
-  
-  // Rate limiting configuration
-  dailyLimit: z.number().positive().default(10000), // API default: 10,000/day
-  burstLimit: z.number().positive().default(2000), // API default: 2,000/5min
-  rateLimitSafetyMargin: z.number().min(0).max(1).default(0.1), // 10% safety buffer
-  
+  rateLimitPerMinute: z.number().positive().default(100),
   outputFormat: z.enum(['table', 'json', 'csv']).default('table'),
   verbose: z.boolean().default(false),
 });

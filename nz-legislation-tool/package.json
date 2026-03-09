@@ -1,6 +1,6 @@
 {
   "name": "nz-legislation-tool",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CLI tool for searching and retrieving New Zealand legislation data",
   "type": "module",
   "main": "dist/cli.js",
@@ -12,8 +12,6 @@
     "build": "tsc",
     "start": "node dist/cli.js",
     "test": "vitest",
-    "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage",
     "lint": "eslint src/",
     "typecheck": "tsc --noEmit"
   },
@@ -40,20 +38,20 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "chalk": "^5.3.0",
-    "cli-table3": "^0.6.5",
     "commander": "^12.1.0",
-    "conf": "^13.0.1",
-    "dotenv": "^16.4.5",
     "got": "^14.4.2",
+    "cli-table3": "^0.6.5",
+    "chalk": "^5.3.0",
     "ora": "^8.1.0",
+    "dotenv": "^16.4.5",
+    "conf": "^13.0.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "typescript": "^5.5.3",
     "@types/node": "^20.14.11",
     "tsx": "^4.16.2",
-    "typescript": "^5.5.3",
-    "vitest": "^2.1.9"
+    "vitest": "^2.0.4"
   },
   "files": [
     "dist",

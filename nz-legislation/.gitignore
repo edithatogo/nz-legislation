@@ -1,0 +1,43 @@
+# Rust
+/target/
+**/target/
+*.rlib
+*.lib
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+*.pdb
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test
+*.gcno
+*.gcda
+*.profraw
+*.profdata
+
+# Coverage
+*.lcov
+coverage/
+
+# Benchmarks
+criterion/
+
+# Debug
+*.log

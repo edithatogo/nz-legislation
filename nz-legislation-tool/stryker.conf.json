@@ -1,0 +1,37 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "packageManager": "npm",
+  "reporters": [
+    "html",
+    "clear-text",
+    "progress"
+  ],
+  "testRunner": "vitest",
+  "testRunner_comment": "Vitest runner requires @stryker-mutator/vitest-runner package",
+  "coverageAnalysis": "perTest",
+  "thresholds": {
+    "high": 80,
+    "low": 60
+  },
+  "mutator": {
+    "plugins": []
+  },
+  "tempDirName": "stryker-tmp",
+  "cleanTempDir": true,
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/coverage/**",
+    "**/tests/**",
+    "**/*.test.ts",
+    "**/*.d.ts",
+    "**/*.config.ts"
+  ],
+  "ignoreStatic": true,
+  "force": false,
+  "fileLogLevel": "off",
+  "logLevel": "info",
+  "concurrency": 4,
+  "timeoutFactor": 4,
+  "timeoutMS": 90000
+}

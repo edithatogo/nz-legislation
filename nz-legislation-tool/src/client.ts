@@ -5,13 +5,17 @@
 
 import got from 'got';
 import { z } from 'zod';
-import { getConfig, hasApiKey } from './config.js';
+import { getConfig, hasApiKey } from '../config.js';
 import {
   WorkSchema,
+  VersionSchema,
   SearchResultsSchema,
+  LegislationVersionSchema,
   type Work,
+  type Version,
   type SearchResults,
-} from './models/index.js';
+  type LegislationVersion,
+} from '../models/index.js';
 
 // Rate limit state
 let rateLimitState = {
@@ -22,49 +26,30 @@ let rateLimitState = {
 };
 
 /**
- * Initialize rate limit state from config
- */
-function initializeRateLimitState(config: { dailyLimit: number; burstLimit: number }) {
-  rateLimitState = {
-    remaining: config.dailyLimit,
-    resetTime: Date.now() + 86400000,
-    burstRemaining: config.burstLimit,
-    burstResetTime: Date.now() + 300000,
-  };
-}
-
-/**
  * Check and enforce rate limits
  */
 function checkRateLimit(): void {
-  const config = getConfig();
   const now = Date.now();
-  
-  // Apply safety margin to limits
-  const safeDailyLimit = Math.floor(config.dailyLimit * (1 - config.rateLimitSafetyMargin));
-  const safeBurstLimit = Math.floor(config.burstLimit * (1 - config.rateLimitSafetyMargin));
-  
+
   // Check daily limit
   if (now >= rateLimitState.resetTime) {
-    rateLimitState.remaining = safeDailyLimit;
+    rateLimitState.remaining = 10000;
     rateLimitState.resetTime = now + 86400000;
   }
-  
+
   // Check burst limit
   if (now >= rateLimitState.burstResetTime) {
-    rateLimitState.burstRemaining = safeBurstLimit;
+    rateLimitState.burstRemaining = 2000;
     rateLimitState.burstResetTime = now + 300000;
   }
-  
+
   if (rateLimitState.remaining <= 0) {
     const waitTime = Math.ceil((rateLimitState.resetTime - now) / 1000);
-    const hours = Math.floor(waitTime / 3600);
-    const minutes = Math.floor((waitTime % 3600) / 60);
     throw new Error(
-      `Daily rate limit exceeded. Please wait ${hours}h ${minutes}m or until midnight.`
+      `Daily rate limit exceeded. Please wait ${waitTime} seconds or until midnight.`
     );
   }
-  
+
   if (rateLimitState.burstRemaining <= 0) {
     const waitTime = Math.ceil((rateLimitState.burstResetTime - now) / 1000);
     throw new Error(
@@ -96,23 +81,16 @@ function updateRateLimitState(headers: Record<string, string | undefined>): void
  */
 function createClient() {
   const config = getConfig();
-  
-  // Initialize rate limit state from config on first use
-  if (rateLimitState.remaining === 10000 && rateLimitState.burstRemaining === 2000) {
-    initializeRateLimitState(config);
-  }
 
   return got.extend({
     prefixUrl: config.baseUrl,
-    timeout: {
-      request: config.timeout,
-    },
+    timeout: config.timeout,
     headers: {
       'Accept': 'application/json',
       'User-Agent': 'nz-legislation-tool/1.0.0',
     },
     searchParams: {
-      api_key: config.apiKey,
+      apikey: config.apiKey,
     },
     retry: {
       limit: 3,
@@ -193,7 +171,7 @@ export async function searchWorks(params: {
 }
 
 /**
- * Get a specific work by ID (searches with pagination)
+ * Get a specific work by ID
  */
 export async function getWork(workId: string): Promise<Work> {
   checkRateLimit();
@@ -201,64 +179,52 @@ export async function getWork(workId: string): Promise<Work> {
   const client = createClient();
 
   try {
-    // Strategy 1: Try searching with work ID as query
-    // This often finds the exact work faster
-    const searchResponse = await client.get('v0/works', {
-      searchParams: {
-        q: workId.replace(/_/g, ' '), // Convert ID to searchable text
-        limit: '20',
-      },
-    });
-
-    const searchData = JSON.parse(searchResponse.body);
-    const searchResults = SearchResultsSchema.parse(searchData);
-    
-    // Find exact work ID match
-    const work = searchResults.results.find(w => w.work_id === workId);
-    
-    if (work) {
-      return work;
-    }
-    
-    // Strategy 2: If not found, paginate through results
-    // This is slower but more thorough
-    const maxPages = 5; // Limit to avoid excessive API calls
-    const perPage = 100;
-    
-    for (let page = 1; page <= maxPages; page++) {
-      checkRateLimit();
-      
-      const response = await client.get('v0/works', {
-        searchParams: {
-          limit: perPage.toString(),
-          // Note: API doesn't support offset, so we can't paginate properly
-          // This is a limitation of the current API
-        },
-      });
-
-      const data = JSON.parse(response.body);
-      const results = SearchResultsSchema.parse(data);
-      
-      // Find exact work ID match
-      const work = results.results.find(w => w.work_id === workId);
-      
-      if (work) {
-        return work;
-      }
-      
-      // If we got fewer results than requested, we've reached the end
-      if (results.results.length < perPage) {
-        break;
-      }
-    }
-    
-    throw new Error(`Work "${workId}" not found. Try searching for it first with: nzlegislation search --query "<title>"`);
+    const response = await client.get(`v0/works/${workId}`);
+    const data = JSON.parse(response.body);
+    return WorkSchema.parse(data);
   } catch (error) {
     if (error instanceof Error) {
-      if (error.message.includes('not found')) {
-        throw error;
-      }
       throw new Error(`Failed to get work: ${error.message}`);
+    }
+    throw error;
+  }
+}
+
+/**
+ * Get all versions of a work
+ */
+export async function getWorkVersions(workId: string): Promise<Version[]> {
+  checkRateLimit();
+
+  const client = createClient();
+
+  try {
+    const response = await client.get(`v0/works/${workId}/versions`);
+    const data = JSON.parse(response.body);
+    return z.array(VersionSchema).parse(data);
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(`Failed to get versions: ${error.message}`);
+    }
+    throw error;
+  }
+}
+
+/**
+ * Get a specific version of a work
+ */
+export async function getVersion(versionId: string): Promise<LegislationVersion> {
+  checkRateLimit();
+
+  const client = createClient();
+
+  try {
+    const response = await client.get(`v0/versions/${versionId}`);
+    const data = JSON.parse(response.body);
+    return LegislationVersionSchema.parse(data);
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(`Failed to get version: ${error.message}`);
     }
     throw error;
   }

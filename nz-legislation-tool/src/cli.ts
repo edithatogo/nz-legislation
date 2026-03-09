@@ -12,8 +12,6 @@ import { exportCommand } from './commands/export.js';
 import { citeCommand } from './commands/cite.js';
 import { configCommand } from './commands/config.js';
 import { getConfig } from './config.js';
-import { logger, setLoggerVerbose } from './utils/logger.js';
-import { checkForUpdates, getVersionString } from './utils/version.js';
 
 // Get package version from package.json
 const pkg = await import('../package.json', { with: { type: 'json' } });
@@ -24,7 +22,7 @@ const program = new Command();
 program
   .name('nzlegislation')
   .description('Search and retrieve New Zealand legislation data')
-  .version(getVersionString())
+  .version(pkg.default.version)
   .configureHelp({
     sortOptions: true,
     sortSubcommands: true,
@@ -34,9 +32,10 @@ program
     `
 Examples:
   $ nzlegislation search --query "health" --type act
-  $ nzlegislation get "act_public_1989_18"
+  $ nzlegislation get "act/2020/67"
+  $ nzlegislation get "act/2020/67" --versions
   $ nzlegislation export --query "health" --output health.csv
-  $ nzlegislation cite "act_public_1989_18" --style nzmj
+  $ nzlegislation cite "act/2020/67" --style nzmj
   $ nzlegislation config --show
 
 Documentation: https://github.com/dylanmordaunt/nz-legislation-tool
@@ -56,30 +55,23 @@ program
   .addCommand(citeCommand)
   .addCommand(configCommand);
 
-// Pre-command hook
+// Pre-command hook to check configuration
 program.hook('preAction', (thisCommand, actionCommand) => {
-  // Apply verbose mode
-  if (thisCommand.opts().verbose) {
-    setLoggerVerbose(true);
-    const config = getConfig();
-    config.verbose = true;
-  }
-
   // Skip config check for config command itself
   if (actionCommand.name() === 'config') {
     return;
   }
 
-  // Check API key configuration
   const config = getConfig();
+
   if (!config.apiKey || config.apiKey === 'your_api_key_here') {
-    logger.warn('API key not configured.');
-    logger.info('Run "nzlegislation config" to set up your API key.\n');
+    console.log(chalk.yellow('Warning: API key not configured.'));
+    console.log(chalk.yellow('Run "nzlegislation config" to set up your API key.\n'));
   }
 
-  // Check for updates (non-blocking)
-  if (actionCommand.name() === 'search') {
-    checkForUpdates().catch(() => {});
+  // Apply global options
+  if (thisCommand.opts().verbose) {
+    config.verbose = true;
   }
 });
 
