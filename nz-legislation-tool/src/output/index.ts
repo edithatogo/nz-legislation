@@ -3,9 +3,10 @@
  * Tables, JSON, CSV, and citation formatting
  */
 
-import Table from 'cli-table3';
 import chalk from 'chalk';
-import type { Work, Version, SearchResults, LegislationVersion } from '../models/index.js';
+import Table from 'cli-table3';
+
+import type { SearchResults, Version, Work } from '../models/index.js';
 
 /**
  * Format work type for display

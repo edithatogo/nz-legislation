@@ -1,0 +1,57 @@
+name: Feature Request
+description: Suggest a new feature or improvement
+labels: ['enhancement']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a feature! Please provide as much detail as possible.
+  
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What problem are you trying to solve?
+    validations:
+      required: true
+  
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe your suggested solution
+    validations:
+      required: true
+  
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Any alternative solutions you've considered
+    validations:
+      required: false
+  
+  - type: textarea
+    id: examples
+    attributes:
+      label: Usage Examples
+      description: How would this feature be used?
+      placeholder: |
+        ```bash
+        nzlegislation new-command --option value
+        ```
+    validations:
+      required: false
+  
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature to you?
+      options:
+        - Nice to have
+        - Would improve workflow
+        - Important
+        - Critical
+    validations:
+      required: true

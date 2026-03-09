@@ -2,11 +2,25 @@
  * Export command - Export search results to file
  */
 
+import { writeFileSync } from 'fs';
+
 import { Command } from 'commander';
 import ora from 'ora';
-import { writeFileSync } from 'fs';
+
 import { searchWorks } from '../client.js';
-import { worksToCsv, printJson } from '../output/index.js';
+import { worksToCsv } from '../output/index.js';
+
+interface ExportOptions {
+  query: string;
+  output: string;
+  type?: string;
+  status?: string;
+  from?: string;
+  to?: string;
+  limit: string;
+  format: string;
+  includeMetadata: boolean;
+}
 
 export const exportCommand = new Command()
   .name('export')
@@ -20,7 +34,7 @@ export const exportCommand = new Command()
   .option('-l, --limit <number>', 'Maximum results (default: 100)', '100')
   .option('-f, --format <format>', 'Output format (csv, json)', 'csv')
   .option('--include-metadata', 'Include export metadata', false)
-  .action(async (options) => {
+  .action(async (options: ExportOptions) => {
     const spinner = ora('Searching and exporting...').start();
 
     try {
@@ -71,8 +85,8 @@ export const exportCommand = new Command()
           csvContent += `\n# Timestamp: ${timestamp}`;
           csvContent += `\n# Total Results: ${results.total}`;
           csvContent += `\n# Exported: ${results.results.length}`;
-          if (options.type) csvContent += `\n# Type: ${options.type}`;
-          if (options.status) csvContent += `\n# Status: ${options.status}`;
+          if (options.type) {csvContent += `\n# Type: ${options.type}`;}
+          if (options.status) {csvContent += `\n# Status: ${options.status}`;}
         }
 
         output = csvContent;

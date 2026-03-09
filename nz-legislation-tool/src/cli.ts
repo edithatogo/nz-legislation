@@ -4,13 +4,14 @@
  * Command-line interface for searching and retrieving NZ legislation data
  */
 
-import { Command } from 'commander';
 import chalk from 'chalk';
-import { searchCommand } from './commands/search.js';
-import { getCommand } from './commands/get.js';
-import { exportCommand } from './commands/export.js';
+import { Command } from 'commander';
+
 import { citeCommand } from './commands/cite.js';
 import { configCommand } from './commands/config.js';
+import { exportCommand } from './commands/export.js';
+import { getCommand } from './commands/get.js';
+import { searchCommand } from './commands/search.js';
 import { getConfig } from './config.js';
 
 // Get package version from package.json

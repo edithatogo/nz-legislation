@@ -6,6 +6,7 @@
 import { appendFileSync, existsSync, mkdirSync, readdirSync, statSync, unlinkSync } from 'fs';
 import { homedir } from 'os';
 import { join } from 'path';
+
 import chalk from 'chalk';
 
 const LOG_DIR = join(homedir(), '.nz-legislation-tool', 'logs');
@@ -45,7 +46,7 @@ export class Logger {
   /**
    * Debug log (only shown in verbose mode)
    */
-  debug(message: string, ...args: any[]) {
+  debug(message: string, ...args: unknown[]) {
     if (this.verbose) {
       console.log(chalk.gray(`[DEBUG] ${message}`), ...args);
     }
@@ -54,14 +55,14 @@ export class Logger {
   /**
    * Info log
    */
-  info(message: string, ...args: any[]) {
+  info(message: string, ...args: unknown[]) {
     console.log(chalk.blue(`[INFO] ${message}`), ...args);
   }
 
   /**
    * Warning log
    */
-  warn(message: string, ...args: any[]) {
+  warn(message: string, ...args: unknown[]) {
     console.log(chalk.yellow(`[WARN] ${message}`), ...args);
     this.logToFile('warn', message, args);
   }
@@ -80,7 +81,7 @@ export class Logger {
   /**
    * Log to file
    */
-  private logToFile(level: LogLevel, message: string, args: any[]) {
+  private logToFile(level: LogLevel, message: string, args: unknown[]) {
     try {
       ensureLogDir();
 
@@ -93,15 +94,24 @@ export class Logger {
           if (arg instanceof Error) {
             return `\n  Stack: ${arg.stack}`;
           }
-          if (typeof arg === 'object') {
-            return JSON.stringify(arg, null, 2);
+          if (arg === null) {
+            return 'null';
           }
+          if (typeof arg === 'object') {
+            try {
+              return JSON.stringify(arg, null, 2);
+            } catch {
+              return '[Circular or non-serializable object]';
+            }
+          }
+          // For primitives (string, number, boolean, symbol, bigint), convert explicitly
+          // eslint-disable-next-line @typescript-eslint/no-base-to-string
           return String(arg);
         }),
       ].join(' ');
 
       appendFileSync(LOG_FILE, logEntry + '\n');
-    } catch (logError) {
+    } catch {
       // Silently fail - don't want logging errors to crash the app
       console.error(chalk.gray('[LOG ERROR] Failed to write to log file'));
     }

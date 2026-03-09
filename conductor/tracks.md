@@ -134,6 +134,19 @@ Each track represents a high-level unit of work (feature, bug fix, or research t
 
 ---
 
+### [ ] Track 12: Australian Legislation API Integration Feasibility
+**Link:** [./tracks/track-12-australian-expansion/](./tracks/track-12-australian-expansion/)
+
+**Status:** ⏳ **PENDING**
+
+**Summary:** Research and assess feasibility of expanding to Australian legislation including Queensland API, AustLII, Commonwealth, and other state/territory APIs.
+
+**Date Created:** 2026-03-09
+**Estimated Effort:** 6-8 weeks research phase
+**Key Deliverables:** API discovery report, feasibility assessment, architecture design, implementation roadmap, Go/No-Go recommendation
+
+---
+
 ## Archive
 
 *No archived tracks yet.*
@@ -149,5 +162,5 @@ Each track represents a high-level unit of work (feature, bug fix, or research t
 
 ---
 
-**Last Updated:** 2026-03-09
-**Total Tracks:** 10 (2 completed, 8 pending)
+**Last Updated:** 2026-03-09  
+**Total Tracks:** 11 (2 completed, 9 pending)

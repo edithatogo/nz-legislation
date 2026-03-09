@@ -1,0 +1,51 @@
+name: Close Stale Issues and PRs
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Run daily at midnight UTC
+  workflow_dispatch:
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close stale issues and PRs
+        uses: actions/stale@v9
+        with:
+          # Issues
+          days-before-issue-stale: 30
+          days-before-issue-close: 14
+          stale-issue-label: 'stale'
+          stale-issue-message: |
+            This issue has been automatically marked as stale because it has been inactive for 30 days.
+            
+            If this issue is still relevant, please comment with an update. Otherwise, it will be closed in 14 days.
+            
+            Thank you for your contributions!
+          close-issue-message: |
+            This issue was automatically closed because it has been inactive for 44 days (30 days stale + 14 days grace period).
+            
+            If this issue is still relevant, please reopen it or create a new one.
+          exempt-issue-labels: 'bug,enhancement,security,pinned'
+          exempt-all-issue-assignees: true
+          
+          # PRs
+          days-before-pr-stale: 14
+          days-before-pr-close: 7
+          stale-pr-label: 'stale'
+          stale-pr-message: |
+            This pull request has been automatically marked as stale because it has been inactive for 14 days.
+            
+            If this PR is still relevant, please comment with an update. Otherwise, it will be closed in 7 days.
+            
+            Thank you for your contributions!
+          close-pr-message: |
+            This PR was automatically closed because it has been inactive for 21 days (14 days stale + 7 days grace period).
+            
+            If this PR is still relevant, please reopen it or create a new one.
+          exempt-pr-labels: 'bug,security,pinned'
+          
+          # General
+          operations-per-run: 30
+          remove-stale-when-updated: true
+          debug-only: false

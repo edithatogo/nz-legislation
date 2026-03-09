@@ -1,8 +1,11 @@
 # NZ Legislation Tool
 
 [![npm](https://img.shields.io/npm/v/nz-legislation-tool)](https://www.npmjs.com/package/nz-legislation-tool)
+[![npm](https://img.shields.io/npm/dm/nz-legislation-tool)](https://www.npmjs.com/package/nz-legislation-tool)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.5-blue)](https://www.typescriptlang.org/)
+[![CI/CD](https://github.com/edithatogo/nz-legislation/actions/workflows/ci.yml/badge.svg)](https://github.com/edithatogo/nz-legislation/actions/workflows/ci.yml)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/edithatogo/nz-legislation/graphs/commit-activity)
 
 **Command-line interface for searching and retrieving New Zealand legislation data**
 
@@ -16,10 +19,13 @@ A fast, user-friendly CLI tool for researchers, legal professionals, and anyone 
 - 📄 **Retrieve** - Get legislation by ID with version history
 - 📤 **Export** - Export to CSV/JSON with reproducibility metadata
 - 📚 **Cite** - Generate citations in NZMJ, BibTeX, RIS, APA styles
+- 🤖 **MCP Server** - AI assistant integration for automated research
 - ⚡ **Fast** - Instant startup, no compilation needed
 - 🎨 **Beautiful Output** - Colored tables, formatted JSON, clean CSV
 - 🔒 **Secure** - API key stored securely, never shared
 - 📊 **Research-Ready** - Reproducible exports with metadata
+- 🧪 **Tested** - 43+ automated tests
+- 📈 **Benchmarked** - Performance tracking included
 
 ---
 
@@ -60,11 +66,13 @@ nzlegislation search --query "health"
 ### Configure the CLI
 
 **Option 1: Interactive setup (recommended)**
+
 ```bash
 nzlegislation config --key YOUR_API_KEY
 ```
 
 **Option 2: Environment variable**
+
 ```bash
 # Linux/macOS
 export NZ_LEGISLATION_API_KEY=your_api_key_here
@@ -77,6 +85,7 @@ set NZ_LEGISLATION_API_KEY=your_api_key_here
 ```
 
 **Option 3: .env file**
+
 ```bash
 # Create .env file in your project directory
 NZ_LEGISLATION_API_KEY=your_api_key_here
@@ -110,6 +119,7 @@ nzlegislation search --query "health" --limit 50 --offset 100
 ```
 
 **Options:**
+
 - `-q, --query <text>` - Search query (required)
 - `-t, --type <type>` - Filter by type: act, bill, regulation, instrument
 - `-s, --status <status>` - Filter by status: in-force, repealed, etc.
@@ -133,9 +143,11 @@ nzlegislation get "act/2020/67" --format json
 ```
 
 **Arguments:**
+
 - `<id>` - Work ID (e.g., `act/2020/67`)
 
 **Options:**
+
 - `--versions` - Show version history
 - `--format <format>` - Output format: table, json, csv (default: table)
 
@@ -153,6 +165,7 @@ nzlegislation export --query "mental health" --type act --status in-force --outp
 ```
 
 **Options:**
+
 - `-q, --query <text>` - Search query (required)
 - `-o, --output <file>` - Output file path (required)
 - `-f, --format <format>` - Output format: csv, json (default: csv)
@@ -180,9 +193,11 @@ nzlegislation cite "act/2020/67" --style apa
 ```
 
 **Arguments:**
+
 - `<id>` - Work ID (e.g., `act/2020/67`)
 
 **Options:**
+
 - `-s, --style <style>` - Citation style: nzmj, bibtex, ris, apa (default: nzmj)
 
 ### `config` - View and manage configuration
@@ -199,6 +214,7 @@ nzlegislation config --clear
 ```
 
 **Options:**
+
 - `--show` - Show current configuration
 - `--key <key>` - Set API key
 - `--clear` - Clear all configuration
@@ -251,6 +267,7 @@ nzlegislation search --query "health" --status repealed
 ## 🎨 Output Formats
 
 ### Table (Default)
+
 ```
 ┌────────────────────┬──────────────────────────────────────────┬────────┬──────────┬────────────┐
 │ ID                 │ Title                                    │ Type   │ Status   │ Date       │
@@ -263,6 +280,7 @@ Total: 42 results (showing 25)
 ```
 
 ### JSON
+
 ```json
 {
   "total": 42,
@@ -281,6 +299,7 @@ Total: 42 results (showing 25)
 ```
 
 ### CSV
+
 ```csv
 id,title,shortTitle,type,status,date,url,versionCount
 act/2020/67,Health Act 2020,Health Act 2020,act,in-force,2020-11-15,https://api.legislation.govt.nz/v0/works/act/2020/67,5
@@ -297,11 +316,11 @@ act/2020/67,Health Act 2020,Health Act 2020,act,in-force,2020-11-15,https://api.
 
 ### Environment Variables
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `NZ_LEGISLATION_API_KEY` | Your API key | - |
-| `NZ_LEGISLATION_BASE_URL` | API base URL | `https://api.legislation.govt.nz` |
-| `NZ_LEGISLATION_TIMEOUT` | Request timeout (ms) | `30000` |
+| Variable                  | Description          | Default                           |
+| ------------------------- | -------------------- | --------------------------------- |
+| `NZ_LEGISLATION_API_KEY`  | Your API key         | -                                 |
+| `NZ_LEGISLATION_BASE_URL` | API base URL         | `https://api.legislation.govt.nz` |
+| `NZ_LEGISLATION_TIMEOUT`  | Request timeout (ms) | `30000`                           |
 
 ---
 
@@ -322,11 +341,13 @@ The CLI automatically handles rate limiting and will show helpful error messages
 ### "API key not configured"
 
 **Solution:**
+
 ```bash
 nzlegislation config --key YOUR_API_KEY
 ```
 
 Or set environment variable:
+
 ```bash
 export NZ_LEGISLATION_API_KEY=your_key_here
 ```
@@ -334,16 +355,19 @@ export NZ_LEGISLATION_API_KEY=your_key_here
 ### "Authentication failed"
 
 **Causes:**
+
 - Invalid API key
 - Expired API key
 
 **Solution:**
+
 1. Check your API key in the email from PCO
 2. Re-run: `nzlegislation config --key YOUR_NEW_KEY`
 
 ### "Rate limit exceeded"
 
 **Solution:**
+
 - Wait 5 minutes for burst limit to reset
 - Or wait until midnight for daily limit to reset
 - Reduce request frequency
@@ -351,10 +375,12 @@ export NZ_LEGISLATION_API_KEY=your_key_here
 ### "Resource not found"
 
 **Causes:**
+
 - Incorrect work ID format
 - Work doesn't exist
 
 **Solution:**
+
 - Check work ID format (e.g., `act/2020/67`)
 - Search first to find correct ID: `nzlegislation search --query "health"`
 
@@ -363,16 +389,19 @@ export NZ_LEGISLATION_API_KEY=your_key_here
 ## 📦 Installation Options
 
 ### npm (Recommended)
+
 ```bash
 npm install -g nz-legislation-tool
 ```
 
 ### npx (No install)
+
 ```bash
 npx nz-legislation-tool search --query "health"
 ```
 
 ### From Source
+
 ```bash
 git clone https://github.com/dylanmordaunt/nz-legislation-tool
 cd nz-legislation-tool
@@ -404,6 +433,26 @@ Apache License 2.0 - See [LICENSE](LICENSE) for details.
 
 ---
 
+## 🤖 Automation & Maintenance
+
+This repository is **automatically maintained** with minimal manual intervention:
+
+| Automation            | Frequency    | Description                           |
+| --------------------- | ------------ | ------------------------------------- |
+| 🔒 Security Audit     | Weekly       | Automated vulnerability scanning      |
+| ✨ Code Quality       | Every Commit | Pre-commit hooks + CI checks          |
+| 📦 Dependency Updates | Weekly       | Renovate bot auto-merges safe updates |
+| 🧪 Tests              | Every Commit | 43+ automated tests                   |
+| ⚡ Benchmarks         | Weekly       | Performance tracking                  |
+| 🗑️ Stale Cleanup      | Daily        | Auto-closes inactive issues/PRs       |
+| 📝 Maintenance Report | Weekly       | Automated quality report              |
+
+**Manual maintenance required: ~0 hours/month** ✅
+
+See [MAINTENANCE_GUIDE.md](MAINTENANCE_GUIDE.md) for details.
+
+---
+
 ## 🙏 Acknowledgments
 
 - NZ Legislation API team (Parliamentary Counsel Office) for providing the API
@@ -425,6 +474,9 @@ Apache License 2.0 - See [LICENSE](LICENSE) for details.
 
 **Built with ❤️ for New Zealand research**
 
-[npm](https://www.npmjs.com/package/nz-legislation-tool) | [GitHub](https://github.com/dylanmordaunt/nz-legislation-tool) | [API Docs](https://api.legislation.govt.nz/docs/)
+[npm](https://www.npmjs.com/package/nz-legislation-tool) |
+[GitHub](https://github.com/edithatogo/nz-legislation) |
+[API Docs](https://api.legislation.govt.nz/docs/) |
+[Maintenance Status](https://github.com/edithatogo/nz-legislation/actions/workflows/maintenance.yml)
 
 </div>
