@@ -5,12 +5,15 @@
   "type": "module",
   "main": "dist/cli.js",
   "bin": {
-    "nzlegislation": "./dist/cli.js"
+    "nzlegislation": "./dist/cli.js",
+    "nzlegislation-mcp": "./dist/mcp-cli.js"
   },
   "scripts": {
     "dev": "tsx src/cli.ts",
+    "dev:mcp": "tsx src/mcp-cli.ts",
     "build": "tsc",
     "start": "node dist/cli.js",
+    "start:mcp": "node dist/mcp-cli.js",
     "test": "vitest",
     "lint": "eslint src/",
     "typecheck": "tsc --noEmit",
@@ -39,6 +42,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.27.1",
     "chalk": "^5.3.0",
     "cli-table3": "^0.6.5",
     "commander": "^12.1.0",
