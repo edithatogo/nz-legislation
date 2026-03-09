@@ -103,8 +103,34 @@ Each track represents a high-level unit of work (feature, bug fix, or research t
 **Summary:** Optimize, humanize, and simplify all project documentation to make it accessible, engaging, and useful for diverse audiences including researchers, developers, and end users.
 
 **Date Created:** 2026-03-09
-**Estimated Effort:** 60+ tasks across 10 phases
+**Estimated Effort:** 80+ tasks across 11 phases
 **Key Deliverables:** Rewritten README, user guides, developer docs, visual diagrams, tutorials, documentation site
+
+---
+
+### [ ] Track: Developer Experience Enhancement
+**Link:** [./tracks/developer-experience-enhancement/](./tracks/developer-experience-enhancement/)
+
+**Status:** ⏳ **PENDING**
+
+**Summary:** Improve developer experience through better tooling, faster feedback loops, streamlined workflows, and enhanced development environment setup.
+
+**Date Created:** 2026-03-09
+**Estimated Effort:** 70+ tasks across 10 phases
+**Key Deliverables:** Pre-commit hooks, hot reload, VS Code extension, DevContainer, interactive CLI help, code generation
+
+---
+
+### [ ] Track: Performance & Scalability
+**Link:** [./tracks/performance-scalability/](./tracks/performance-scalability/)
+
+**Status:** ⏳ **PENDING**
+
+**Summary:** Optimize performance for large datasets and high-volume usage through caching, batching, streaming, and comprehensive performance monitoring.
+
+**Date Created:** 2026-03-09
+**Estimated Effort:** 80+ tasks across 10 phases
+**Key Deliverables:** Caching layer, request batching, streaming exports, performance benchmarks, load testing
 
 ---
 
@@ -124,4 +150,4 @@ Each track represents a high-level unit of work (feature, bug fix, or research t
 ---
 
 **Last Updated:** 2026-03-09
-**Total Tracks:** 8 (2 completed, 6 pending)
+**Total Tracks:** 10 (2 completed, 8 pending)

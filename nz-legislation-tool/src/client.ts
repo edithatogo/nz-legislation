@@ -5,7 +5,7 @@
 
 import got from 'got';
 import { z } from 'zod';
-import { getConfig, hasApiKey } from '../config.js';
+import { getConfig, hasApiKey } from './config.js';
 import {
   WorkSchema,
   VersionSchema,
@@ -15,7 +15,7 @@ import {
   type Version,
   type SearchResults,
   type LegislationVersion,
-} from '../models/index.js';
+} from './models/index.js';
 
 // Rate limit state
 let rateLimitState = {
@@ -59,20 +59,36 @@ function checkRateLimit(): void {
 }
 
 /**
+ * Helper to get a single header value (handles string[])
+ */
+function getHeaderValue(headers: Record<string, string | string[] | undefined>, name: string): string | undefined {
+  const value = headers[name];
+  if (Array.isArray(value)) {
+    return value[0];
+  }
+  return value;
+}
+
+/**
  * Update rate limit state from response headers
  */
-function updateRateLimitState(headers: Record<string, string | undefined>): void {
-  if (headers['x-ratelimit-remaining']) {
-    rateLimitState.remaining = parseInt(headers['x-ratelimit-remaining'], 10);
+function updateRateLimitState(headers: Record<string, string | string[] | undefined>): void {
+  const remaining = getHeaderValue(headers, 'x-ratelimit-remaining');
+  const reset = getHeaderValue(headers, 'x-ratelimit-reset');
+  const burstRemaining = getHeaderValue(headers, 'x-burst-remaining');
+  const burstReset = getHeaderValue(headers, 'x-burst-reset');
+
+  if (remaining) {
+    rateLimitState.remaining = parseInt(remaining, 10);
   }
-  if (headers['x-ratelimit-reset']) {
-    rateLimitState.resetTime = parseInt(headers['x-ratelimit-reset'], 10) * 1000;
+  if (reset) {
+    rateLimitState.resetTime = parseInt(reset, 10) * 1000;
   }
-  if (headers['x-burst-remaining']) {
-    rateLimitState.burstRemaining = parseInt(headers['x-burst-remaining'], 10);
+  if (burstRemaining) {
+    rateLimitState.burstRemaining = parseInt(burstRemaining, 10);
   }
-  if (headers['x-burst-reset']) {
-    rateLimitState.burstResetTime = parseInt(headers['x-burst-reset'], 10) * 1000;
+  if (burstReset) {
+    rateLimitState.burstResetTime = parseInt(burstReset, 10) * 1000;
   }
 }
 
@@ -84,7 +100,7 @@ function createClient() {
 
   return got.extend({
     prefixUrl: config.baseUrl,
-    timeout: config.timeout,
+    timeout: { request: config.timeout },
     headers: {
       'Accept': 'application/json',
       'User-Agent': 'nz-legislation-tool/1.0.0',
@@ -98,7 +114,7 @@ function createClient() {
       statusCodes: [408, 413, 429, 500, 502, 503, 504],
       calculateDelay: ({ attemptCount, error }) => {
         if (error.response?.statusCode === 429) {
-          const retryAfter = error.response.headers['retry-after'];
+          const retryAfter = getHeaderValue(error.response.headers, 'retry-after');
           if (retryAfter) {
             return parseInt(retryAfter, 10) * 1000;
           }
@@ -148,7 +164,7 @@ export async function searchWorks(params: {
   const client = createClient();
 
   try {
-    const response = await client.get('v0/works', {
+    const data = await client.get('v0/works', {
       searchParams: {
         ...(params.query && { q: params.query }),
         ...(params.type && { type: params.type }),
@@ -158,9 +174,8 @@ export async function searchWorks(params: {
         ...(params.limit && { limit: params.limit.toString() }),
         ...(params.offset && { offset: params.offset.toString() }),
       },
-    });
+    }).json();
 
-    const data = JSON.parse(response.body);
     return SearchResultsSchema.parse(data);
   } catch (error) {
     if (error instanceof Error) {
@@ -179,8 +194,7 @@ export async function getWork(workId: string): Promise<Work> {
   const client = createClient();
 
   try {
-    const response = await client.get(`v0/works/${workId}`);
-    const data = JSON.parse(response.body);
+    const data = await client.get(`v0/works/${workId}`).json();
     return WorkSchema.parse(data);
   } catch (error) {
     if (error instanceof Error) {
@@ -199,8 +213,7 @@ export async function getWorkVersions(workId: string): Promise<Version[]> {
   const client = createClient();
 
   try {
-    const response = await client.get(`v0/works/${workId}/versions`);
-    const data = JSON.parse(response.body);
+    const data = await client.get(`v0/works/${workId}/versions`).json();
     return z.array(VersionSchema).parse(data);
   } catch (error) {
     if (error instanceof Error) {
@@ -219,8 +232,7 @@ export async function getVersion(versionId: string): Promise<LegislationVersion>
   const client = createClient();
 
   try {
-    const response = await client.get(`v0/versions/${versionId}`);
-    const data = JSON.parse(response.body);
+    const data = await client.get(`v0/versions/${versionId}`).json();
     return LegislationVersionSchema.parse(data);
   } catch (error) {
     if (error instanceof Error) {

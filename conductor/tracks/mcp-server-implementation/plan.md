@@ -233,6 +233,43 @@
   - Sanitize outputs
   - Add rate limiting
   - Implement access controls
+  - Add API key validation for MCP server
+  - Configure rate limiting specific to MCP tools
+  - Add audit logging for all tool invocations
+
+---
+
+## Phase 8.5: Testing & Developer Experience ⏳ PENDING
+
+- [ ] Task: Add MCP protocol compliance tests
+  - Test tool discovery and listing
+  - Verify resource template handling
+  - Test prompt handling (if applicable)
+  - Validate protocol version compatibility
+
+- [ ] Task: Implement mock MCP clients for testing
+  - Create test harness for tool invocation
+  - Mock MCP client requests
+  - Test error scenarios
+  - Validate response formats
+
+- [ ] Task: Create integration tests with MCP hosts
+  - Test with Claude Desktop
+  - Test with other popular MCP clients
+  - Validate tool execution end-to-end
+  - Test resource access patterns
+
+- [ ] Task: Add performance benchmarks
+  - Measure tool execution time
+  - Benchmark resource retrieval
+  - Set performance targets
+  - Add performance regression tests
+
+- [ ] Task: Create developer tools
+  - Add MCP server configuration wizard
+  - Create example MCP client implementations
+  - Provide sample workflows and use cases
+  - Document debugging procedures
 
 ---
 
@@ -266,8 +303,8 @@
 
 ## Summary
 
-**Total Tasks:** 50+
-**Phases:** 9
+**Total Tasks:** 65+
+**Phases:** 10
 
 **Expected Outcomes:**
 - Fully functional MCP server
@@ -276,6 +313,9 @@
 - Integration with MCP clients
 - Comprehensive documentation
 - Production-ready implementation
+- MCP protocol compliance verified
+- Performance benchmarks established
+- Security hardening complete
 
 ---
 

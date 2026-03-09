@@ -121,17 +121,3 @@ export const ExportMetadataSchema = z.object({
 });
 export type ExportMetadata = z.infer<typeof ExportMetadataSchema>;
 
-// Export all schemas for use in other modules
-export {
-  WorkTypeSchema,
-  LegislationStatusSchema,
-  DateStringSchema,
-  WorkSchema,
-  VersionSchema,
-  FormatInfoSchema,
-  LegislationVersionSchema,
-  PaginationLinksSchema,
-  SearchResultsSchema,
-  CitationSchema,
-  ExportMetadataSchema,
-};

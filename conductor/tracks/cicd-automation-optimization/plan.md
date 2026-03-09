@@ -75,11 +75,19 @@
   - Add build caching
   - Configure esbuild or tsup for faster builds
   - Add build size analysis
+  - Configure bundle size tracking with limits
+  - Add performance budgets with automated enforcement
 
 - [ ] Task: Add workflow artifacts and caching
   - Upload coverage reports as artifacts
   - Cache build outputs between jobs
   - Store test results for analysis
+
+- [ ] Task: Add build validation gates
+  - Add TypeScript strict mode check (`tsc --noEmit`)
+  - Configure ESLint with auto-fix on PR
+  - Add code coverage thresholds that block merges
+  - Implement code complexity limits (function length, cyclomatic complexity)
 
 ---
 
@@ -130,12 +138,20 @@
   - Auto-generate release notes
   - Add release assets (binaries, docs)
   - Configure release notifications
+  - Add release notes generation with contributor attribution
+  - Configure automatic GitHub Releases from tags
 
 - [ ] Task: Set up auto-merge
   - Enable Dependabot auto-merge
   - Configure merge methods (squash, rebase)
   - Add merge queue management
   - Set up status checks for auto-merge
+
+- [ ] Task: Add release channel support
+  - Implement canary/alpha release channels
+  - Configure beta release automation
+  - Add release channel documentation
+  - Set up automated publishing to multiple channels
 
 ---
 
@@ -170,6 +186,34 @@
   - Add auto-label workflow
   - Implement label-based routing
   - Set up label color standards
+
+---
+
+## Phase 6.5: Dependency Management Automation ⏳ PENDING
+
+- [ ] Task: Configure Renovate or Dependabot
+  - Install and configure Renovate Bot (or enhance Dependabot)
+  - Set up automated dependency update PRs
+  - Configure update schedules (daily/weekly)
+  - Add grouping rules for related packages
+
+- [ ] Task: Implement automated lockfile maintenance
+  - Set up lockfile update workflow
+  - Configure automatic lockfile refresh
+  - Add lockfile validation
+  - Test lockfile update automation
+
+- [ ] Task: Set up security vulnerability alerts
+  - Enable GitHub Security Advisories
+  - Configure auto-fix PRs for vulnerabilities
+  - Set up email notifications for critical issues
+  - Define vulnerability response SLA
+
+- [ ] Task: Add dependency audit to CI/CD
+  - Add `npm audit` or `pnpm audit` to pipeline
+  - Configure audit failure thresholds
+  - Add audit report generation
+  - Integrate with security dashboard
 
 ---
 
@@ -259,8 +303,8 @@
 
 ## Summary
 
-**Total Tasks:** 50+
-**Phases:** 9
+**Total Tasks:** 65+
+**Phases:** 10
 
 **Expected Outcomes:**
 - CI/CD pipeline <5 minutes
@@ -269,6 +313,8 @@
 - Auto-generated changelogs and releases
 - Comprehensive code quality automation
 - Self-healing repository management
+- Automated dependency updates with security alerts
+- Bundle size tracking and performance budgets
 
 ---
 

@@ -34,6 +34,34 @@
 
 ---
 
+## Phase 1.5: Import Path Standardization ⏳ PENDING
+
+- [ ] Task: Audit and fix all relative imports
+  - Identify all `../` vs `./` import inconsistencies
+  - Standardize import paths across all modules
+  - Fix broken module references (e.g., `client.ts`, `config.ts`, `models/index.ts`)
+  - Ensure consistent import style throughout codebase
+
+- [ ] Task: Configure TypeScript path aliases
+  - Add path mappings in tsconfig.json (`@models/*`, `@commands/*`, `@utils/*`)
+  - Update module resolution to use paths
+  - Configure ESLint to enforce path alias usage
+  - Add path alias documentation for contributors
+
+- [ ] Task: Add ESLint import rules
+  - Install eslint-plugin-import
+  - Configure import/order rule for consistent sorting
+  - Add import/no-cycle to prevent circular dependencies
+  - Set up import/extensions rule for consistent `.js` extensions
+
+- [ ] Task: Verify import resolution
+  - Run TypeScript compiler to verify all imports resolve
+  - Test build after import changes
+  - Add import validation to CI/CD pipeline
+  - Document import conventions
+
+---
+
 ## Phase 2: Error Handling Framework ⏳ PENDING
 
 - [ ] Task: Create error hierarchy
@@ -143,6 +171,40 @@
   - Add request timeout enforcement
   - Validate SSL certificates
   - Implement secure defaults
+
+---
+
+## Phase 5.5: Configuration Management & Type Safety ⏳ PENDING
+
+- [ ] Task: Centralize configuration module
+  - Create single source of truth for configuration
+  - Export configuration from dedicated module
+  - Remove scattered config imports
+  - Add configuration validation at startup
+
+- [ ] Task: Add configuration schema validation
+  - Define configuration schema with Zod
+  - Validate all config values at runtime
+  - Add type-safe configuration access
+  - Implement configuration error messages
+
+- [ ] Task: Implement proper environment variable handling
+  - Create environment variable loader
+  - Add .env.example with all required variables
+  - Validate environment variables at startup
+  - Add environment-specific configurations
+
+- [ ] Task: Fix configuration type issues
+  - Address `IncomingHttpHeaders` type mismatches
+  - Use proper types for headers (handle `string | string[] | undefined`)
+  - Add type guards for runtime type checking
+  - Remove `any` types from configuration
+
+- [ ] Task: Enhance type safety
+  - Remove all `any` types
+  - Add proper return types to all functions
+  - Use discriminated unions for error handling
+  - Implement branded types for IDs (WorkId, VersionId)
 
 ---
 
@@ -282,8 +344,8 @@
 
 ## Summary
 
-**Total Tasks:** 70+
-**Phases:** 10
+**Total Tasks:** 85+
+**Phases:** 12
 
 **Expected Outcomes:**
 - Production-ready error handling
@@ -292,6 +354,9 @@
 - Zero high/critical security issues
 - 90%+ type coverage
 - Maintainable, well-documented code
+- Standardized import paths with TypeScript aliases
+- Centralized configuration with runtime validation
+- Proper type safety for headers and external data
 
 ---
 

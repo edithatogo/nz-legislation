@@ -184,9 +184,11 @@
 
 - [ ] Task: Accessibility improvements
   - Add alt text to images
-  - Ensure color contrast compliance
+  - Ensure color contrast compliance (WCAG 2.1 AA)
   - Make navigation keyboard-accessible
   - Test with screen readers
+  - Add screen reader testing sessions
+  - Include accessibility statement
 
 - [ ] Task: Search implementation
   - Add documentation search
@@ -205,6 +207,41 @@
   - Compress images
   - Implement lazy loading
   - Cache static content
+
+- [ ] Task: Video content
+  - Record getting started video (5 min)
+  - Create command walkthrough videos
+  - Add troubleshooting video series
+  - Include architecture overview video
+  - Add video captions for accessibility
+
+---
+
+## Phase 7.5: API Documentation & Troubleshooting ⏳ PENDING
+
+- [ ] Task: Generate API reference from TypeScript types
+  - Install TypeDoc or similar tool
+  - Configure automatic API doc generation
+  - Add interactive API explorer
+  - Include request/response examples
+
+- [ ] Task: Create error message reference
+  - Document all error codes
+  - Add troubleshooting solutions for each error
+  - Include common causes and fixes
+  - Link errors to relevant documentation
+
+- [ ] Task: Build troubleshooting guide
+  - Create FAQ for common issues
+  - Add debugging guide with step-by-step instructions
+  - Document known issues and workarounds
+  - Include community-contributed solutions
+
+- [ ] Task: Add interactive examples
+  - Create runnable code examples
+  - Add try-it-now functionality (where applicable)
+  - Include example output for all commands
+  - Provide copy-paste snippets
 
 ---
 
@@ -294,8 +331,8 @@
 
 ## Summary
 
-**Total Tasks:** 60+
-**Phases:** 10
+**Total Tasks:** 80+
+**Phases:** 11
 
 **Expected Outcomes:**
 - Humanized, conversational documentation
@@ -303,7 +340,10 @@
 - Improved user onboarding
 - Higher user satisfaction
 - Better search engine visibility
-- Accessible to all users
+- Accessible to all users (WCAG 2.1 AA compliant)
+- Comprehensive API reference
+- Video tutorials for key workflows
+- Interactive examples and troubleshooting guides
 
 ---
 

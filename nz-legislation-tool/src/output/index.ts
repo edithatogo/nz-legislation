@@ -11,7 +11,7 @@ import type { Work, Version, SearchResults, LegislationVersion } from '../models
  * Format work type for display
  */
 function formatWorkType(type: string): string {
-  const colors: Record<string, chalk.Chalk> = {
+  const colors: Record<string, (text: string) => string> = {
     act: chalk.cyan,
     bill: chalk.magenta,
     regulation: chalk.yellow,
@@ -24,7 +24,7 @@ function formatWorkType(type: string): string {
  * Format status for display
  */
 function formatStatus(status: string): string {
-  const colors: Record<string, chalk.Chalk> = {
+  const colors: Record<string, (text: string) => string> = {
     'in-force': chalk.green,
     'not-yet-in-force': chalk.yellow,
     repealed: chalk.red,
