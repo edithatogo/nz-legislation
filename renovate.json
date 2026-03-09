@@ -8,62 +8,66 @@
     ":automergeMinor",
     ":automergePr",
     ":automergeRequireAllStatusChecks",
-    ":disableDependencyDashboard"
+    ":disableDependencyDashboard",
+    ":automergeBranch"
   ],
   "timezone": "Pacific/Auckland",
   "schedule": ["before 6am on Monday"],
   "labels": ["dependencies", "automated"],
-  "reviewers": ["edithatogo"],
   "assignees": ["edithatogo"],
   "packageRules": [
     {
-      "groupName": "Production Dependencies",
-      "matchDepTypes": ["dependencies"],
+      "groupName": "All Dependencies (Auto-merge)",
       "matchUpdateTypes": ["minor", "patch"],
       "automerge": true,
-      "commitMessagePrefix": "chore(deps):"
+      "automergeType": "branch",
+      "automergeStrategy": "fast-forward",
+      "commitMessagePrefix": "chore(deps):",
+      "labels": ["dependencies", "automated", "auto-merge"]
     },
     {
-      "groupName": "Development Dependencies",
-      "matchDepTypes": ["devDependencies"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true,
-      "commitMessagePrefix": "chore(deps-dev):"
-    },
-    {
-      "groupName": "Major Dependencies",
+      "groupName": "Major Dependencies (Require Review)",
       "matchUpdateTypes": ["major"],
       "automerge": false,
-      "commitMessagePrefix": "chore(deps)!: "
+      "commitMessagePrefix": "chore(deps)!: ",
+      "labels": ["dependencies", "major-update", "requires-review"]
     },
     {
-      "groupName": "GitHub Actions",
+      "groupName": "GitHub Actions (Auto-merge)",
       "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true,
+      "automergeType": "branch",
       "commitMessagePrefix": "chore(ci):",
-      "labels": ["dependencies", "github-actions", "automated"]
+      "labels": ["dependencies", "github-actions", "automated", "auto-merge"]
     },
     {
-      "groupName": "Node.js",
+      "groupName": "Node.js (Auto-merge)",
       "matchDatasources": ["node-version"],
-      "commitMessagePrefix": "chore(node):"
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true,
+      "automergeType": "branch",
+      "commitMessagePrefix": "chore(node):",
+      "labels": ["dependencies", "nodejs", "automated", "auto-merge"]
     }
   ],
   "npm": {
-    "minimumReleaseAge": "3 days",
+    "minimumReleaseAge": "0 days",
     "internalChecksFilter": "strict"
   },
   "github-actions": {
     "enabled": true
   },
-  "prConcurrentLimit": 10,
+  "prConcurrentLimit": 0,
   "prHourlyLimit": 0,
   "rangeStrategy": "bump",
   "separateMajorMinor": true,
   "separateMultipleMajor": false,
   "separateMinorPatch": true,
-  "stabilityDays": 3,
+  "stabilityDays": 0,
   "dependencyDashboard": false,
-  "suppressNotifications": ["prEditedNotification"],
+  "suppressNotifications": ["prEditedNotification", "prAutomergedNotification"],
   "rebaseWhen": "behind-base-branch",
-  "platformAutomerge": true
+  "platformAutomerge": true,
+  "ignoreTests": false
 }
