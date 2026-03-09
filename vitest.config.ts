@@ -14,7 +14,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html', 'lcov'],
-      exclude: ['node_modules', 'dist', 'tests/'],
+      exclude: ['node_modules', 'dist', 'tests/', '*.config.*'],
       thresholds: {
         global: {
           branches: 60,
@@ -25,5 +25,6 @@ export default defineConfig({
       },
     },
     testTimeout: 30000,
+    setupFiles: ['./tests/setup.ts'],
   },
 });
