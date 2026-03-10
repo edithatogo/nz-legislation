@@ -142,10 +142,18 @@ function analyzeTreeshaking(): TreeshakingResult {
   const duplicateDependencies: string[] = [];
   
   try {
-    // Check package-lock.json for duplicates
-    const lockFile = JSON.parse(
-      readFileSync(join(PROJECT_ROOT, 'package-lock.json'), 'utf-8')
-    );
+    // Check npm lockfile for duplicates when present.
+    const lockfilePath = join(PROJECT_ROOT, 'package-lock.json');
+    if (!existsSync(lockfilePath)) {
+      return {
+        hasSideEffects,
+        unusedExports,
+        duplicateDependencies,
+        treeshakingPotential: hasSideEffects ? 'medium' : 'high',
+      };
+    }
+
+    const lockFile = JSON.parse(readFileSync(lockfilePath, 'utf-8'));
     
     // Simple duplicate detection (would need more sophisticated analysis)
     const dependencies = new Set<string>();

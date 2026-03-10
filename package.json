@@ -29,8 +29,8 @@
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:publish": "changeset publish",
-    "audit": "npm audit",
-    "audit:fix": "npm audit fix",
+    "audit": "pnpm audit",
+    "audit:fix": "pnpm audit --fix",
     "docs": "typedoc",
     "docs:serve": "npx http-server docs/api -p 8080 -o"
   },
@@ -79,7 +79,6 @@
     "@typescript-eslint/parser": "^8.56.1",
     "@vitest/coverage-v8": "^4.0.18",
     "benchmark": "^2.1.4",
-    "clinic": "^13.0.0",
     "eslint": "^8.57.1",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
@@ -89,8 +88,8 @@
     "lint-staged": "^16.3.2",
     "msw": "^2.12.10",
     "prettier": "^3.8.1",
-    "typedoc": "^0.28.17",
     "tsx": "^4.16.2",
+    "typedoc": "^0.28.17",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.56.1",
     "vitest": "^4.0.18"

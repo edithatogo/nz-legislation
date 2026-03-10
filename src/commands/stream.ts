@@ -117,7 +117,7 @@ export const streamCommand = new Command()
 
     } catch (error) {
       spinner.fail('Stream export failed');
-      console.error('\nError:', error instanceof Error ? error.message : error);
+      console.error('\nError: Stream export failed.');
       
       if (error instanceof Error && error.message.includes('EACCES')) {
         console.log('\nHint: Check file permissions and ensure the output directory exists.');

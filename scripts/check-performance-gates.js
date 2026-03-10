@@ -10,7 +10,6 @@
 
 import { readFileSync } from 'fs';
 import { glob } from 'glob';
-import { join } from 'path';
 
 // Get threshold from environment or use default
 const PERFORMANCE_THRESHOLD = parseInt(process.env.PERFORMANCE_THRESHOLD || '60', 10);
@@ -63,13 +62,13 @@ try {
   console.log('Gate Results:');
   console.log('─'.repeat(60));
 
-  for (const [name, gate] of Object.entries(gates)) {
+  for (const [, gate] of Object.entries(gates)) {
     const status = gate.value >= gate.threshold ? '✅ PASS' : '❌ FAIL';
     const isWarning = gate.value < gate.threshold + 10 && gate.value >= gate.threshold;
     
     console.log(`${status} ${gate.name}: ${gate.value}/100 (threshold: ${gate.threshold})`);
     
-    if (!gate.value >= gate.threshold) {
+    if (!(gate.value >= gate.threshold)) {
       failed = true;
     } else if (isWarning) {
       warnings++;
@@ -107,7 +106,7 @@ try {
 
   process.exit(0);
 } catch (error) {
-  console.error('❌ Performance gate check failed:', error instanceof Error ? error.message : error);
+  console.error('❌ Performance gate check failed.');
   console.error('\nThis is typically caused by:');
   console.error('1. Missing baseline file (run "npm run bench:audit")');
   console.error('2. Invalid baseline JSON format');

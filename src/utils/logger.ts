@@ -230,7 +230,7 @@ export class Logger {
         }
       }
     } catch (error) {
-      this.debug('Failed to clear old logs', error instanceof Error ? { error: error.message } : undefined);
+      this.debug('Failed to clear old logs');
     }
   }
 

@@ -100,7 +100,7 @@ async function measureCLIStartup(): Promise<{ cold: number[]; warm: number[] }> 
       coldRuns.push(duration);
       console.log(`   Cold run ${i + 1}: ${duration}ms`);
     } catch (error) {
-      console.error(`   Cold run ${i + 1} failed: ${(error as Error).message}`);
+      console.error(`   Cold run ${i + 1} failed.`);
     }
   }
 
@@ -116,7 +116,7 @@ async function measureCLIStartup(): Promise<{ cold: number[]; warm: number[] }> 
       warmRuns.push(duration);
       console.log(`   Warm run ${i + 1}: ${duration}ms`);
     } catch (error) {
-      console.error(`   Warm run ${i + 1} failed: ${(error as Error).message}`);
+      console.error(`   Warm run ${i + 1} failed.`);
     }
   }
 
@@ -151,7 +151,7 @@ async function measureAPIResponseTimes(): Promise<{
       searchTimes.push(duration);
       console.log(`   Search ${i + 1}: ${duration}ms`);
     } catch (error) {
-      console.error(`   Search ${i + 1} failed: ${(error as Error).message}`);
+      console.error(`   Search ${i + 1} failed.`);
     }
   }
 
@@ -165,7 +165,7 @@ async function measureAPIResponseTimes(): Promise<{
       getWorkTimes.push(duration);
       console.log(`   Get Work ${i + 1}: ${duration}ms`);
     } catch (error) {
-      console.error(`   Get Work ${i + 1} failed: ${(error as Error).message}`);
+      console.error(`   Get Work ${i + 1} failed.`);
     }
   }
 
@@ -178,7 +178,7 @@ async function measureAPIResponseTimes(): Promise<{
       getVersionsTimes.push(duration);
       console.log(`   Get Versions ${i + 1}: ${duration}ms`);
     } catch (error) {
-      console.error(`   Get Versions ${i + 1} failed: ${(error as Error).message}`);
+      console.error(`   Get Versions ${i + 1} failed.`);
     }
   }
 
@@ -298,7 +298,7 @@ function analyzeBundleSize(): {
       dependencies: dependencySize,
     };
   } catch (error) {
-    console.error('   Bundle analysis failed:', (error as Error).message);
+    console.error('   Bundle analysis failed.');
     return {
       total: 0,
       main: 0,
@@ -570,8 +570,7 @@ async function runPerformanceAudit(): Promise<void> {
     console.log(`📄 Baseline data saved to: ${jsonPath}\n`);
 
   } catch (error) {
-    console.error('\n❌ Performance Audit Failed:', (error as Error).message);
-    console.error(error);
+    console.error('\n❌ Performance Audit Failed.');
     process.exit(1);
   }
 }
