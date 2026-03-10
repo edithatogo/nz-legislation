@@ -134,10 +134,10 @@ Each track represents a high-level unit of work (feature, bug fix, or research t
 
 ---
 
-### [ ] Track 12: Australian Legislation API Integration Feasibility
+### [~] Track 12: Australian Legislation API Integration Feasibility
 **Link:** [./tracks/track-12-australian-expansion/](./tracks/track-12-australian-expansion/)
 
-**Status:** ⏳ **PENDING**
+**Status:** 🔄 **IN PROGRESS**
 
 **Summary:** Research and assess feasibility of expanding to Australian legislation including Queensland API, AustLII, Commonwealth, and other state/territory APIs.
 
