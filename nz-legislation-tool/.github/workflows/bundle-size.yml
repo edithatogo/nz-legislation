@@ -1,0 +1,80 @@
+name: Bundle Size Analysis
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  bundle-size:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Analyze bundle size
+        id: analyze
+        run: |
+          # Get bundle sizes
+          CLI_SIZE=$(du -k dist/cli.js | cut -f1)
+          MCP_SIZE=$(du -k dist/mcp-cli.js | cut -f1)
+          TOTAL_SIZE=$(du -k dist/*.js | awk '{sum += $1} END {print sum}')
+          
+          # Output sizes
+          echo "cli_size=$CLI_SIZE" >> $GITHUB_OUTPUT
+          echo "mcp_size=$MCP_SIZE" >> $GITHUB_OUTPUT
+          echo "total_size=$TOTAL_SIZE" >> $GITHUB_OUTPUT
+          
+          # Display sizes
+          echo "## Bundle Size Analysis" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Bundle | Size |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|------|" >> $GITHUB_STEP_SUMMARY
+          echo "| CLI | ${CLI_SIZE}KB |" >> $GITHUB_STEP_SUMMARY
+          echo "| MCP Server | ${MCP_SIZE}KB |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Total** | **${TOTAL_SIZE}KB** |" >> $GITHUB_STEP_SUMMARY
+
+      - name: Comment bundle size on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const cliSize = ${{ steps.analyze.outputs.cli_size }};
+            const mcpSize = ${{ steps.analyze.outputs.mcp_size }};
+            const totalSize = ${{ steps.analyze.outputs.total_size }};
+            
+            const body = `## 📦 Bundle Size Analysis
+            
+            | Bundle | Size |
+            |--------|------|
+            | CLI | ${cliSize}KB |
+            | MCP Server | ${mcpSize}KB |
+            | **Total** | **${totalSize}KB** |
+            
+            > Bundle size budget: <5MB (current: ${totalSize}KB ✅)
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });

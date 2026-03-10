@@ -1,0 +1,44 @@
+name: Close Stale Issues
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Run daily at midnight UTC
+  workflow_dispatch:
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/stale@v9
+        with:
+          # Issues
+          days-before-issue-stale: 30
+          days-before-issue-close: 14
+          stale-issue-label: 'stale'
+          stale-issue-message: |
+            This issue has been automatically marked as stale because it has not had recent activity. It will be closed if no further activity occurs.
+            
+            If you believe this issue is still relevant, please leave a comment or remove the stale label. Thank you for your contributions!
+          close-issue-message: |
+            This issue was closed because it has been inactive for 14 days since being marked as stale. Please reopen if this issue is still relevant.
+          exempt-issue-labels: 'pinned,security,help-wanted'
+          exempt-all-issue-assignees: true
+          
+          # Pull Requests
+          days-before-pr-stale: 14
+          days-before-pr-close: 7
+          stale-pr-label: 'stale'
+          stale-pr-message: |
+            This pull request has been automatically marked as stale because it has not had recent activity. It will be closed if no further activity occurs.
+            
+            If you're still working on this PR, please leave a comment or remove the stale label. Thank you for your contributions!
+          close-pr-message: |
+            This PR was closed because it has been inactive for 7 days since being marked as stale.
+          exempt-pr-labels: 'pinned,security,help-wanted'
+          
+          # General
+          operations-per-run: 100
+          remove-stale-when-updated: true

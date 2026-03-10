@@ -5,14 +5,11 @@
  */
 
 import Conf from 'conf';
-import dotenv from 'dotenv';
 import { z } from 'zod';
 
 import { logger } from '@utils/logger';
 import { loadSecureConfig, saveSecureConfig, validateApiKeyFormat } from '@utils/secure-config';
-
-// Load environment variables from .env file
-dotenv.config();
+import { loadEnvConfig } from '@utils/env-loader';
 
 /**
  * Configuration schema with Zod validation
@@ -114,16 +111,16 @@ const store = new Conf<Config>({
 });
 
 /**
- * Get environment configuration
+ * Get environment configuration using centralized loader
  */
 function getEnvConfig(): Partial<Config> {
-  const envTimeout = process.env.NZ_LEGISLATION_TIMEOUT;
-  
+  const envConfig = loadEnvConfig();
+
   return {
-    apiKey: process.env.NZ_LEGISLATION_API_KEY,
-    baseUrl: process.env.NZ_LEGISLATION_BASE_URL,
-    timeout: envTimeout ? parseInt(envTimeout, 10) : undefined,
-    verbose: process.env.NZ_LEGISLATION_VERBOSE === 'true',
+    apiKey: envConfig.apiKey,
+    baseUrl: envConfig.baseUrl,
+    timeout: envConfig.timeout,
+    verbose: envConfig.verbose,
   };
 }
 

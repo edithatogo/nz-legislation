@@ -1,57 +1,52 @@
-name: Feature Request
-description: Suggest a new feature or improvement
-labels: ['enhancement']
+name: ✨ Feature Request
+description: Suggest an idea for this project
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for suggesting a feature! Please provide as much detail as possible.
-  
+        Thanks for taking the time to suggest a feature!
+
   - type: textarea
     id: problem
     attributes:
       label: Problem Statement
-      description: What problem are you trying to solve?
+      description: Is your feature request related to a problem? Please describe.
+      placeholder: I'm always frustrated when [...]
     validations:
       required: true
-  
+
   - type: textarea
     id: solution
     attributes:
       label: Proposed Solution
-      description: Describe your suggested solution
+      description: Describe the solution you'd like.
+      placeholder: It would be great if [...]
     validations:
       required: true
-  
+
   - type: textarea
     id: alternatives
     attributes:
-      label: Alternatives Considered
-      description: Any alternative solutions you've considered
+      label: Alternative Solutions
+      description: Describe alternatives you've considered.
     validations:
       required: false
-  
+
   - type: textarea
-    id: examples
+    id: context
     attributes:
-      label: Usage Examples
-      description: How would this feature be used?
-      placeholder: |
-        ```bash
-        nzlegislation new-command --option value
-        ```
+      label: Additional Context
+      description: Add any other context or examples about the feature request here.
     validations:
       required: false
-  
-  - type: dropdown
-    id: priority
+
+  - type: checkboxes
+    id: terms
     attributes:
-      label: Priority
-      description: How important is this feature to you?
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our Code of Conduct.
       options:
-        - Nice to have
-        - Would improve workflow
-        - Important
-        - Critical
-    validations:
-      required: true
+        - label: I agree to follow this project's Code of Conduct
+          required: true

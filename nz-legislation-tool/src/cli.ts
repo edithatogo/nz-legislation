@@ -13,6 +13,8 @@ import { configCommand } from './commands/config.js';
 import { exportCommand } from './commands/export.js';
 import { getCommand } from './commands/get.js';
 import { searchCommand } from './commands/search.js';
+import { createInteractiveHelpCommand, createContextualHelpCommand } from './commands/help.js';
+import { createGenerateCommand } from './commands/generate.js';
 import { getConfig } from './config.js';
 import {
   ApplicationError,
@@ -62,7 +64,10 @@ program
   .addCommand(exportCommand)
   .addCommand(citeCommand)
   .addCommand(configCommand)
-  .addCommand(cacheCommand);
+  .addCommand(cacheCommand)
+  .addCommand(createInteractiveHelpCommand())
+  .addCommand(createContextualHelpCommand())
+  .addCommand(createGenerateCommand());
 
 // Pre-command hook to check configuration
 program.hook('preAction', (thisCommand, actionCommand) => {

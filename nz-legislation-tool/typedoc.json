@@ -1,0 +1,40 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["src/cli.ts", "src/client.ts", "src/config.ts"],
+  "out": "docs/api",
+  "exclude": ["node_modules", "dist", "tests", "**/*.test.ts"],
+  "excludePrivate": true,
+  "excludeProtected": false,
+  "excludeExternals": true,
+  "includeVersion": true,
+  "includeCompilerOptions": true,
+  "readme": "README.md",
+  "name": "NZ Legislation Tool API",
+  "plugin": [],
+  "theme": "default",
+  "entryPointStrategy": "expand",
+  "categorizeByGroup": true,
+  "categoryOrder": ["Commands", "Client", "Config", "Models", "Utils", "Output", "MCP", "*"],
+  "sort": ["alphabetical"],
+  "navigationLinks": {
+    "GitHub": "https://github.com/edithatogo/nz-legislation",
+    "npm": "https://www.npmjs.com/package/nz-legislation-tool"
+  },
+  "gitRevision": "main",
+  "sourceLinkTemplate": "https://github.com/edithatogo/nz-legislation/blob/{gitRevision}/{path}#L{line}",
+  "visibilityFilters": {
+    "protected": true,
+    "private": false,
+    "inherited": true,
+    "external": false
+  },
+  "commentStyle": "all",
+  "validation": {
+    "notExported": true,
+    "invalidLink": true,
+    "notDocumented": false
+  },
+  "treatValidationWarningsAsErrors": false,
+  "searchInComments": true,
+  "useTsLinkResolution": true
+}

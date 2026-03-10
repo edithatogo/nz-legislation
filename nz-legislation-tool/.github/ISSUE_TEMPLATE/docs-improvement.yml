@@ -1,0 +1,42 @@
+name: 📚 Documentation Improvement
+description: Suggest improvements to documentation
+title: "[Docs]: "
+labels: ["documentation", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve our documentation!
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Type of Improvement
+      description: What type of documentation improvement are you suggesting?
+      options:
+        - README update
+        - API documentation
+        - Tutorial/Guide
+        - Fix typo or error
+        - Add missing documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the improvement you'd like to see.
+      placeholder: It would be helpful if the documentation included [...]
+    validations:
+      required: true
+
+  - type: textarea
+    id: location
+    attributes:
+      label: Affected Documentation
+      description: Which part of the documentation does this relate to?
+      placeholder: README.md, API docs, etc.
+    validations:
+      required: false

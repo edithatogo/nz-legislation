@@ -1,85 +1,82 @@
-name: Bug Report
-description: Report a bug or unexpected behavior
-labels: ['bug']
+name: 🐛 Bug Report
+description: File a bug report
+title: "[Bug]: "
+labels: ["bug", "triage"]
+assignees:
+  - ${{ github.actor }}
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to report a bug! Please fill out the form below.
-        
-  - type: checkboxes
-    id: checks
-    attributes:
-      label: Preliminary Checks
-      description: Please confirm you've completed these steps before reporting
-      options:
-        - label: I've searched existing issues
-          required: true
-        - label: I've checked the documentation
-          required: true
-        - label: I'm using the latest version
-          required: false
-  
+        Thanks for taking the time to fill out this bug report!
+
   - type: input
     id: version
     attributes:
-      label: Package Version
-      description: What version are you using?
-      placeholder: "1.0.1"
+      label: Version
+      description: What version of nz-legislation-tool are you using?
+      placeholder: v1.0.1
     validations:
       required: true
-  
+
   - type: input
-    id: node
+    id: node-version
     attributes:
       label: Node.js Version
-      description: Output of `node --version`
-      placeholder: "v20.x.x"
+      description: What version of Node.js are you using?
+      placeholder: v20.0.0
     validations:
       required: true
-  
+
   - type: textarea
     id: description
     attributes:
-      label: Bug Description
-      description: Clear and concise description of the bug
+      label: Description
+      description: Clearly and concisely describe what the bug is.
+      placeholder: When I run [command], [unexpected behavior] happens...
     validations:
       required: true
-  
+
   - type: textarea
     id: reproduction
     attributes:
       label: Steps to Reproduce
-      description: Detailed steps to reproduce the behavior
+      description: Steps to reproduce the behavior.
       placeholder: |
         1. Run command '...'
         2. With options '...'
-        3. See error '...'
+        3. See error
     validations:
       required: true
-  
+
   - type: textarea
     id: expected
     attributes:
       label: Expected Behavior
-      description: What should happen instead
+      description: What did you expect to happen?
     validations:
       required: true
-  
+
   - type: textarea
     id: actual
     attributes:
       label: Actual Behavior
-      description: What actually happened
-      render: shell
+      description: What actually happened? Include error messages and screenshots if applicable.
     validations:
       required: true
-  
+
   - type: textarea
-    id: context
+    id: logs
     attributes:
-      label: Additional Context
-      description: Any other relevant information, logs, or screenshots
+      label: Relevant Log Output
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code.
       render: shell
-    validations:
-      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our Code of Conduct.
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

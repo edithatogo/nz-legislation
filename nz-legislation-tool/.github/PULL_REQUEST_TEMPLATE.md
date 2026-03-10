@@ -1,54 +1,120 @@
-## Description
+# Pull Request Template
 
-<!-- Describe your changes in detail -->
+<!-- Thanks for contributing! Please follow the checklist below and ensure all items are completed before requesting review. -->
 
-## Related Issue
+## 📋 Description
 
-<!-- Link to related issue(s): Fixes #123 -->
+<!-- Provide a clear and concise description of what this PR does. -->
 
-## Type of Change
+**Type of Change:**
+- [ ] 🐛 Bug fix (non-breaking change that fixes an issue)
+- [ ] ✨ New feature (non-breaking change that adds functionality)
+- [ ] 💥 Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] 📚 Documentation update
+- [ ] ♻️ Refactoring (no functional changes)
+- [ ] ⚡ Performance improvement
+- [ ] 🔒 Security fix
+- [ ] 🧪 Test addition/update
+- [ ] 🔧 Configuration change
 
-<!-- Mark relevant options with an x -->
+## 🎯 Related Issues
 
-- [ ] Bug fix (non-breaking change that fixes an issue)
-- [ ] New feature (non-breaking change that adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to change)
-- [ ] Documentation update
-- [ ] Performance improvement
-- [ ] Code refactoring (no functionality changes)
-- [ ] Tests only
-- [ ] Configuration changes
+<!-- Link any related issues using GitHub keywords (e.g., "Fixes #123", "Closes #456", "Related to #789") -->
 
-## Checklist
+Fixes #
+Related to #
 
-<!-- Mark completed items with an x -->
+## ✅ Checklist
 
-- [ ] My code follows the code style of this project
-- [ ] I have updated the documentation accordingly
-- [ ] I have added tests to cover my changes
-- [ ] All new and existing tests passed
-- [ ] I have run `npm run lint` with no errors
-- [ ] I have run `npm run typecheck` with no errors
-- [ ] I have run `npm test` with all tests passing
-- [ ] I have updated the changelog (if applicable)
-- [ ] I have checked for security issues with `npm audit`
+### Code Quality
+- [ ] My code follows the project's style guidelines
+- [ ] I have performed a self-review of my code
+- [ ] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [ ] My changes generate no new warnings
+- [ ] I have run `pnpm lint` and `pnpm typecheck` locally
+- [ ] I have run `pnpm format` to ensure consistent formatting
 
-## Testing
+### Testing
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] All tests pass locally (`pnpm test:run`)
+- [ ] I have updated test documentation if needed
+- [ ] Test coverage has not decreased (or decrease is justified)
 
-<!-- Describe how you tested your changes -->
+### Documentation
+- [ ] I have updated the README.md if needed
+- [ ] I have updated CHANGESETS.md if this affects versioning
+- [ ] I have added a changeset for this PR (run `pnpm changeset`)
 
-### Test Commands Run
+### Security
+- [ ] My changes do not introduce security vulnerabilities
+- [ ] I have not committed any secrets, API keys, or credentials
+- [ ] I have followed secure coding practices
 
+## 🧪 Testing Instructions
+
+<!-- Provide step-by-step instructions for testing this PR. Include:
+     - How to set up the environment
+     - Commands to run
+     - Expected behavior
+     - Any specific test cases to verify
+-->
+
+### Setup
 ```bash
-npm run lint
-npm run typecheck
-npm test
+# Install dependencies
+pnpm install
+
+# Build if needed
+pnpm build
 ```
 
-## Screenshots (if applicable)
+### Test Steps
+1. 
+2. 
+3. 
 
-<!-- Add screenshots to help explain your changes -->
+### Expected Behavior
+<!-- Describe what should happen when testing -->
 
-## Additional Notes
+## 📊 Screenshots/Recordings (if applicable)
 
-<!-- Any other information that would be helpful to reviewers -->
+<!-- For UI changes, add screenshots or screen recordings showing the before/after -->
+
+## 🚀 Deployment Notes (if applicable)
+
+<!-- Include any special deployment instructions, database migrations, or configuration changes required -->
+
+## 📝 Additional Context
+
+<!-- Add any other context about the PR here. This could include:
+     - Background information
+     - Design decisions
+     - Trade-offs considered
+     - Future improvements
+-->
+
+---
+
+## 🔬 For Maintainers
+
+### Review Checklist
+- [ ] Code quality and style approved
+- [ ] Tests are comprehensive and passing
+- [ ] Documentation is updated
+- [ ] Changeset is present and correct
+- [ ] Security review completed (if needed)
+- [ ] Performance impact assessed (if applicable)
+
+### Pre-Merge Actions
+- [ ] Squash commits if needed
+- [ ] Ensure commit message follows conventional commits
+- [ ] Add to milestone (if applicable)
+- [ ] Add labels as needed
+
+---
+
+**By submitting this PR, I confirm that:**
+- I have read and agree to the project's [Contributing Guidelines](CONTRIBUTING.md)
+- My contributions are licensed under the project's [Apache 2.0 License](LICENSE)
+- This PR does not contain any third-party code without proper attribution

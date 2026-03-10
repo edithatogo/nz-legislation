@@ -9,7 +9,7 @@ on:
     types: [published]
 
 jobs:
-  # Simple test and build
+  # Test and build with coverage
   test-and-build:
     runs-on: ubuntu-latest
     steps:
@@ -27,13 +27,29 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
 
-      - name: Run tests
-        run: pnpm test:run
+      - name: Run tests with coverage
+        run: pnpm test:coverage
         continue-on-error: true
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
 
       - name: Build
         run: pnpm build
         continue-on-error: true
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 7
 
   # Publish to npm on release
   publish-npm:

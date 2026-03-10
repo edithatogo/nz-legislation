@@ -82,6 +82,23 @@ const batchQueue = new Map<string, BatchRequest[]>();
 const batchTimeout = 50; // ms to wait before executing batch
 
 /**
+ * Cache metrics for observability
+ */
+interface CacheMetrics {
+  hits: number;
+  misses: number;
+  evictions: number;
+  sets: number;
+}
+
+const cacheMetrics: CacheMetrics = {
+  hits: 0,
+  misses: 0,
+  evictions: 0,
+  sets: 0,
+};
+
+/**
  * Generate cache key from request parameters
  */
 function generateCacheKey(endpoint: string, params?: Record<string, string>): string {
@@ -95,16 +112,22 @@ function generateCacheKey(endpoint: string, params?: Record<string, string>): st
 function getFromCache<T>(key: string): T | null {
   const entry = cache.get(key) as CacheEntry<T> | undefined;
   if (!entry) {
+    cacheMetrics.misses++;
+    logger.debug('Cache miss', { key });
     return null;
   }
-  
+
   const age = Date.now() - entry.timestamp;
   if (age > entry.ttl) {
     cache.delete(key);
+    cacheMetrics.evictions++;
+    cacheMetrics.misses++;
+    logger.debug('Cache expired', { key, age: `${age}ms` });
     return null;
   }
-  
-  logger.debug('Cache hit', { key, age: `${age}ms` });
+
+  cacheMetrics.hits++;
+  logger.debug('Cache hit', { key, age: `${age}ms`, metrics: cacheMetrics });
   return entry.data;
 }
 
@@ -117,7 +140,8 @@ function setInCache<T>(key: string, data: T, ttl: number): void {
     timestamp: Date.now(),
     ttl,
   });
-  logger.debug('Cache set', { key, ttl: `${ttl}ms` });
+  cacheMetrics.sets++;
+  logger.debug('Cache set', { key, ttl: `${ttl}ms`, metrics: cacheMetrics });
 }
 
 /**
@@ -143,11 +167,58 @@ export function clearCache(pattern?: string): void {
  * Get cache statistics
  */
 export function getCacheStats() {
+  const total = cacheMetrics.hits + cacheMetrics.misses;
+  const hitRate = total > 0 ? ((cacheMetrics.hits / total) * 100).toFixed(2) : '0.00';
+  
   return {
     size: cache.size,
     maxSize: CACHE_CONFIG.max,
+    metrics: cacheMetrics,
+    hitRate: `${hitRate}%`,
     keys: Array.from(cache.keys()).slice(0, 10), // First 10 keys
   };
+}
+
+/**
+ * Reset cache metrics (for testing)
+ */
+export function resetCacheMetrics() {
+  cacheMetrics.hits = 0;
+  cacheMetrics.misses = 0;
+  cacheMetrics.evictions = 0;
+  cacheMetrics.sets = 0;
+}
+
+/**
+ * Execute batched requests
+ */
+async function executeBatch(queueKey: string): Promise<void> {
+  const requests = batchQueue.get(queueKey);
+  if (!requests || requests.length === 0) return;
+
+  batchQueue.delete(queueKey);
+
+  logger.debug('Executing batched requests', { 
+    queueKey, 
+    count: requests.length,
+  });
+
+  // Execute all requests in the batch concurrently
+  // Note: This is a placeholder for future batch API implementation
+  // The NZ Legislation API doesn't currently support batch endpoints
+  const promises = requests.map(({ resolve, reject }) => ({ resolve, reject }));
+  
+  // Resolve all promises (actual execution happens in individual functions)
+  await Promise.allSettled(promises.map(() => Promise.resolve()));
+}
+
+/**
+ * Schedule batch execution with debouncing
+ */
+function scheduleBatchExecution(queueKey: string): void {
+  setTimeout(() => {
+    executeBatch(queueKey);
+  }, batchTimeout);
 }
 
 /**
@@ -184,13 +255,30 @@ function checkRateLimit(): void {
 }
 
 /**
- * Helper to get a single header value (handles string[])
+ * Type guard to check if value is a string array
  */
-function getHeaderValue(headers: Record<string, string | string[] | undefined>, name: string): string | undefined {
+function isStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((item): item is string => typeof item === 'string');
+}
+
+/**
+ * Helper to get a single header value (handles string[] and undefined)
+ * @param headers - Response headers object
+ * @param name - Header name to retrieve
+ * @returns Single header value or undefined
+ */
+function getHeaderValue(
+  headers: Record<string, string | string[] | undefined>,
+  name: string
+): string | undefined {
   const value = headers[name];
-  if (Array.isArray(value)) {
+  
+  // Type guard: check if it's a string array
+  if (isStringArray(value)) {
     return value[0];
   }
+  
+  // If it's a string or undefined, return as-is
   return value;
 }
 
