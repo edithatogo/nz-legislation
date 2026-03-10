@@ -77,7 +77,7 @@
     "@types/node": "^20.14.11",
     "@typescript-eslint/eslint-plugin": "^8.56.1",
     "@typescript-eslint/parser": "^8.56.1",
-    "@vitest/coverage-v8": "^2.0.4",
+    "@vitest/coverage-v8": "^4.0.18",
     "benchmark": "^2.1.4",
     "clinic": "^13.0.0",
     "eslint": "^8.57.1",
@@ -92,7 +92,7 @@
     "tsx": "^4.16.2",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.56.1",
-    "vitest": "^2.0.4"
+    "vitest": "^4.0.18"
   },
   "files": [
     "dist",
