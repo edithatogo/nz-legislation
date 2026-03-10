@@ -36,7 +36,8 @@ jobs:
         uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
-          queries: security-extended,security-and-quality
+          # Use the default security suite to keep alerts actionable.
+          queries: default
           build-mode: none
 
       - name: Perform CodeQL Analysis
