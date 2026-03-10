@@ -24,6 +24,40 @@
 
 ---
 
+## Documentation & Communication Standards
+
+### Writing Principles
+1. **Conversational**: Write like you're talking to a colleague
+2. **Concise**: Use fewer words, say more
+3. **Clear**: Avoid jargon, explain technical terms
+4. **Complete**: Answer follow-up questions before they're asked
+5. **Correct**: Verify all information, test all examples
+6. **Considerate**: Respect the reader's time and intelligence
+
+### Documentation Requirements
+- **README**: Understandable in <3 minutes, quick start in <10 minutes
+- **All CLI commands**: Must have examples with expected output
+- **Error messages**: Link to relevant documentation sections
+- **Visual diagrams**: Use Mermaid for architecture and workflow diagrams
+- **Accessibility**: WCAG 2.1 AA compliance for all documentation
+
+### Multi-Audience Support
+- **End Users**: README + User Guide + FAQ + Troubleshooting
+- **Researchers**: Research Workflow + Citation Guide + API Reference
+- **Developers**: Developer Guide + Architecture + API Reference + Contributing
+- **Non-Technical**: Glossary + ELI5 explanations + Learning Paths
+
+### Documentation Deliverables (Completed)
+- ✅ 17 documentation files (~78,000 words)
+- ✅ 18 Mermaid diagrams
+- ✅ FAQ (36 questions)
+- ✅ Glossary (26 terms with ELI5)
+- ✅ API Reference (11 functions)
+- ✅ Error Reference (20+ errors)
+- ✅ WCAG 2.1 AA accessibility compliance
+
+---
+
 ## Code Style Guidelines
 
 ### Naming Conventions
