@@ -7,9 +7,9 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
 
-import { searchWorks, getWork, getWorkVersions } from '../client.js';
-import { getConfig, hasApiKey } from '../config.js';
-import { generateCitation, worksToCsv } from '../output/index.js';
+import { searchWorks, getWork, getWorkVersions } from '@client';
+import { getConfig, hasApiKey } from '@config';
+import { generateCitation, worksToCsv } from '@output';
 
 /**
  * Create MCP server instance

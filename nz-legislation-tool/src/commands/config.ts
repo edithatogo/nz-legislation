@@ -4,7 +4,7 @@
 
 import { Command } from 'commander';
 
-import { clearConfig, getConfig, getConfigPath, hasApiKey, setApiKey } from '../config.js';
+import { clearConfig, getConfig, getConfigPath, hasApiKey, setApiKey } from '@config';
 
 interface ConfigOptions {
   show?: boolean;

@@ -25,7 +25,7 @@ export async function checkForUpdates(): Promise<void> {
     const response = await fetch('https://registry.npmjs.org/nz-legislation-tool/latest');
 
     if (!response.ok) {
-      logger.debug('Update check failed: Registry returned', response.status);
+      logger.debug('Update check failed: Registry returned', { status: response.status });
       return;
     }
 
@@ -47,7 +47,7 @@ export async function checkForUpdates(): Promise<void> {
     }
   } catch (error) {
     // Log debug info if verbose mode is enabled
-    logger.debug('Update check failed', error);
+    logger.debug('Update check failed', error instanceof Error ? { error: error.message } : { error });
   }
 }
 

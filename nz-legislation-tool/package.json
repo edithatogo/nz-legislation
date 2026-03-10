@@ -50,7 +50,10 @@
     "conf": "^13.0.1",
     "dotenv": "^16.4.5",
     "got": "^14.4.2",
+    "lru-cache": "^11.2.6",
     "ora": "^8.1.0",
+    "winston": "^3.19.0",
+    "winston-daily-rotate-file": "^5.0.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

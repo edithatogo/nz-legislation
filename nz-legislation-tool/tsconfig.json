@@ -14,14 +14,17 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "paths": {
+      "@models": ["src/models/index.ts"],
       "@models/*": ["src/models/*"],
       "@commands/*": ["src/commands/*"],
+      "@utils": ["src/utils/index.ts"],
       "@utils/*": ["src/utils/*"],
+      "@output": ["src/output/index.ts"],
       "@output/*": ["src/output/*"],
       "@mcp/*": ["src/mcp/*"],
-      "@client": ["src/client"],
-      "@config": ["src/config"],
-      "@errors": ["src/errors"]
+      "@client": ["src/client.ts"],
+      "@config": ["src/config.ts"],
+      "@errors": ["src/errors.ts"]
     }
   },
   "include": ["src/**/*"],

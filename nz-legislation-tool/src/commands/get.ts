@@ -5,8 +5,8 @@
 import { Command } from 'commander';
 import ora from 'ora';
 
-import { getWork, getWorkVersions } from '../client.js';
-import { printWorkDetail, printVersionsTable, printJson, versionsToCsv } from '../output/index.js';
+import { getWork, getWorkVersions } from '@client';
+import { printWorkDetail, printVersionsTable, printJson, versionsToCsv } from '@output';
 
 interface GetOptions {
   versions?: boolean;

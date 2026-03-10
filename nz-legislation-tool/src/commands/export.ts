@@ -7,8 +7,8 @@ import { writeFileSync } from 'fs';
 import { Command } from 'commander';
 import ora from 'ora';
 
-import { searchWorks } from '../client.js';
-import { worksToCsv } from '../output/index.js';
+import { searchWorks } from '@client';
+import { worksToCsv } from '@output';
 
 interface ExportOptions {
   query: string;
