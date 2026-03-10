@@ -567,7 +567,7 @@ export async function getWork(workId: string): Promise<Work> {
         throw createApiError(
           apiError.response.statusCode || 500,
           apiError.response.url || 'unknown',
-          `Failed to get work: ${error.message}`,
+          `Failed to get work: ${error instanceof Error ? error.message : 'Unknown error'}`,
         );
     }
     throw new Error(`Failed to get work: ${error instanceof Error ? error.message : 'Unknown error'}`);

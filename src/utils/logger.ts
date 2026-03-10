@@ -172,13 +172,18 @@ export class Logger {
    * Warning log
    */
   warn(message: string, metadata?: Record<string, unknown>) {
-    winstonLogger.warn(message, { ...this.requestContext, ...metadata });
+    if (!this.quiet) {
+      winstonLogger.warn(message, { ...this.requestContext, ...metadata });
+    }
   }
 
   /**
    * Error log
    */
   error(message: string, error?: Error, metadata?: Record<string, unknown>) {
+    if (this.quiet) {
+      return;
+    }
     const errorData: Record<string, unknown> = {
       ...this.requestContext,
       ...metadata,

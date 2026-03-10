@@ -33,26 +33,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
           queries: security-extended,security-and-quality
-
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v3
+          build-mode: none
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4
         with:
           category: "/language:${{matrix.language}}"
-          upload: true
-          output: sarif-results
-          add-snippets: true
-
-      - name: Upload SARIF results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: sarif-results
-          path: sarif-results
-          retention-days: 7

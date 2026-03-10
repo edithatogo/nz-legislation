@@ -16,8 +16,8 @@ import { loadEnvConfig } from '@utils/env-loader';
  */
 const configSchema = z.object({
   apiKey: z.string()
-    .min(1, 'API key is required')
-    .refine((key) => validateApiKeyFormat(key), 'Invalid API key format'),
+    .default('')
+    .refine((key) => key.length === 0 || validateApiKeyFormat(key), 'Invalid API key format'),
   baseUrl: z.string()
     .url('Must be a valid URL')
     .refine((url) => url.startsWith('https://'), 'API URL must use HTTPS')
@@ -176,7 +176,7 @@ export function getConfig(): Config {
 export function hasApiKey(): boolean {
   try {
     const config = getConfig();
-    return config.apiKey.length > 0 && config.apiKey !== 'your_api_key_here';
+    return validateApiKeyFormat(config.apiKey);
   } catch {
     return false;
   }
