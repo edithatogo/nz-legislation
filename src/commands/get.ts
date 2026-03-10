@@ -18,7 +18,7 @@ interface GetOptions {
 export const getCommand = new Command()
   .name('get')
   .description('Get legislation by ID')
-  .argument('<id>', 'Work ID (e.g., act/2020/67)')
+  .argument('<id>', 'Work ID (e.g., act_public_1989_18)')
   .option('--versions', 'Show version history')
   .option('--format <format>', 'Output format (table, json, csv)', 'table')
   .action(async (workId: string, options: GetOptions) => {
@@ -36,7 +36,7 @@ export const getCommand = new Command()
         validation.errors?.forEach((err) => {
           console.error(`  - ${err.message}`);
         });
-        console.error('\nExpected format: type/year/number (e.g., act/2020/67)');
+        console.error('\nExpected format: API work ID (e.g., act_public_1989_18)');
         process.exit(3);
       }
 

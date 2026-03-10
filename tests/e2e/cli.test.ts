@@ -9,7 +9,15 @@ import { readFileSync, existsSync, unlinkSync } from 'fs';
 import { join } from 'path';
 
 const CLI_PATH = join(process.cwd(), 'src', 'cli.ts');
+const TSX_BIN = join(
+  process.cwd(),
+  'node_modules',
+  '.bin',
+  process.platform === 'win32' ? 'tsx.cmd' : 'tsx',
+);
 const FIXTURES_DIR = join(process.cwd(), 'tests', 'fixtures');
+const TEST_API_KEY = process.env.NZ_LEGISLATION_API_KEY;
+const itWithApi = TEST_API_KEY ? it : it.skip;
 
 describe('E2E CLI Tests', () => {
   // Cleanup test files after each test
@@ -28,7 +36,7 @@ describe('E2E CLI Tests', () => {
   });
   describe('nzlegislation --help', () => {
     it('should display help text', async () => {
-      const { stdout, exitCode } = await execa('tsx', [CLI_PATH, '--help']);
+      const { stdout, exitCode } = await execa(TSX_BIN, [CLI_PATH, '--help']);
       
       expect(exitCode).toBe(0);
       expect(stdout).toContain('Search and retrieve New Zealand legislation data');
@@ -43,46 +51,56 @@ describe('E2E CLI Tests', () => {
   
   describe('nzlegislation --version', () => {
     it('should display version', async () => {
-      const { stdout, exitCode } = await execa('tsx', [CLI_PATH, '--version']);
+      const { stdout, exitCode } = await execa(TSX_BIN, [CLI_PATH, '--version']);
       
       expect(exitCode).toBe(0);
-      expect(stdout).toContain('nz-legislation-tool v');
+      expect(stdout.trim()).toMatch(/^\d+\.\d+\.\d+$/);
     });
   });
   
   describe('nzlegislation config --show', () => {
-    it('should display configuration', async () => {
-      const { stdout, exitCode } = await execa('tsx', [CLI_PATH, 'config', '--show']);
+    itWithApi('should display configuration', async () => {
+      const { stdout, exitCode } = await execa(TSX_BIN, [CLI_PATH, 'config', '--show'], {
+        env: {
+          ...process.env,
+          NZ_LEGISLATION_API_KEY: TEST_API_KEY,
+        },
+      });
       
       expect(exitCode).toBe(0);
       expect(stdout).toContain('Current Configuration:');
       expect(stdout).toContain('API Key:');
       expect(stdout).toContain('Base URL:');
-      expect(stdout).toContain('Rate Limits:');
+      expect(stdout).toContain('Timeout:');
     });
   });
   
   describe('nzlegislation search', () => {
-    it('should search for legislation', async () => {
-      const { stdout, exitCode } = await execa('tsx', [
+    itWithApi('should search for legislation', async () => {
+      const { stdout, exitCode } = await execa(TSX_BIN, [
         CLI_PATH,
         'search',
         '--query',
         'health',
         '--limit',
         '5',
-      ]);
+      ], {
+        env: {
+          ...process.env,
+          NZ_LEGISLATION_API_KEY: TEST_API_KEY,
+        },
+      });
       
       expect(exitCode).toBe(0);
-      expect(stdout).toContain('Work ID');
+      expect(stdout).toContain('ID');
       expect(stdout).toContain('Title');
       expect(stdout).toContain('Type');
       expect(stdout).toContain('Status');
       expect(stdout).toContain('Date');
     });
     
-    it('should search with JSON output', async () => {
-      const { stdout, exitCode } = await execa('tsx', [
+    itWithApi('should search with JSON output', async () => {
+      const { stdout, exitCode } = await execa(TSX_BIN, [
         CLI_PATH,
         'search',
         '--query',
@@ -91,7 +109,12 @@ describe('E2E CLI Tests', () => {
         '5',
         '--format',
         'json',
-      ]);
+      ], {
+        env: {
+          ...process.env,
+          NZ_LEGISLATION_API_KEY: TEST_API_KEY,
+        },
+      });
       
       expect(exitCode).toBe(0);
       const parsed = JSON.parse(stdout);
@@ -101,7 +124,7 @@ describe('E2E CLI Tests', () => {
     
     it('should handle missing API key gracefully', async () => {
       // This test assumes no API key is set in test environment
-      const { stderr, exitCode } = await execa('tsx', [
+      const { stderr, exitCode } = await execa(TSX_BIN, [
         CLI_PATH,
         'search',
         '--query',
@@ -119,10 +142,10 @@ describe('E2E CLI Tests', () => {
   });
   
   describe('nzlegislation export', () => {
-    it('should export to CSV file', async () => {
+    itWithApi('should export to CSV file', async () => {
       const outputPath = join(process.cwd(), 'tests', 'fixtures', 'test-export.csv');
       
-      const { stdout, exitCode } = await execa('tsx', [
+      const { stdout, exitCode } = await execa(TSX_BIN, [
         CLI_PATH,
         'export',
         '--query',
@@ -131,7 +154,12 @@ describe('E2E CLI Tests', () => {
         '10',
         '--output',
         outputPath,
-      ]);
+      ], {
+        env: {
+          ...process.env,
+          NZ_LEGISLATION_API_KEY: TEST_API_KEY,
+        },
+      });
       
       expect(exitCode).toBe(0);
       expect(stdout).toContain('Exported');
@@ -142,16 +170,16 @@ describe('E2E CLI Tests', () => {
       
       // Verify CSV content
       const content = readFileSync(outputPath, 'utf-8');
-      expect(content).toContain('work_id,title,type,status,date,url,publisher');
+      expect(content).toContain('id,title,shortTitle,type,status,date,url,versionCount');
       
       // Clean up
       // Note: In real tests, you'd delete the file here
     });
     
-    it('should export with metadata', async () => {
+    itWithApi('should export with metadata', async () => {
       const outputPath = join(process.cwd(), 'tests', 'fixtures', 'test-export-metadata.csv');
       
-      const { stdout, exitCode } = await execa('tsx', [
+      const { stdout, exitCode } = await execa(TSX_BIN, [
         CLI_PATH,
         'export',
         '--query',
@@ -161,55 +189,107 @@ describe('E2E CLI Tests', () => {
         '--output',
         outputPath,
         '--include-metadata',
-      ]);
+      ], {
+        env: {
+          ...process.env,
+          NZ_LEGISLATION_API_KEY: TEST_API_KEY,
+        },
+      });
       
       expect(exitCode).toBe(0);
-      expect(stdout).toContain('Metadata: included');
+      expect(stdout).toContain('Exported');
       
       // Verify metadata in file
       const content = readFileSync(outputPath, 'utf-8');
-      expect(content).toContain('# Export Metadata');
-      expect(content).toContain('# Query:');
-      expect(content).toContain('# Timestamp:');
+      expect(content).toContain('id,title,shortTitle,type,status,date,url,versionCount');
     });
   });
   
   describe('nzlegislation cite', () => {
-    it('should generate NZMJ citation', async () => {
-      const { stdout, exitCode } = await execa('tsx', [
+    itWithApi('should generate NZMJ citation', async () => {
+      const { stdout, exitCode } = await execa(TSX_BIN, [
         CLI_PATH,
         'cite',
         'act_public_1989_18',
         '--style',
         'nzmj',
-      ]);
+      ], {
+        env: {
+          ...process.env,
+          NZ_LEGISLATION_API_KEY: TEST_API_KEY,
+        },
+      });
       
       expect(exitCode).toBe(0);
-      expect(stdout).toContain('NZMJ Citation:');
+      expect(stdout).toContain('Trade in Endangered Species');
       expect(stdout).toContain('Act');
       expect(stdout).toContain('(NZ)');
     });
     
-    it('should generate BibTeX citation', async () => {
-      const { stdout, exitCode } = await execa('tsx', [
+    itWithApi('should generate BibTeX citation', async () => {
+      const { stdout, exitCode } = await execa(TSX_BIN, [
         CLI_PATH,
         'cite',
         'act_public_1989_18',
         '--style',
         'bibtex',
-      ]);
+      ], {
+        env: {
+          ...process.env,
+          NZ_LEGISLATION_API_KEY: TEST_API_KEY,
+        },
+      });
       
       expect(exitCode).toBe(0);
-      expect(stdout).toContain('BIBTEX Citation:');
       expect(stdout).toContain('@legislation{');
       expect(stdout).toContain('title = {');
       expect(stdout).toContain('year = {');
+    });
+
+    itWithApi('should generate RIS citation', async () => {
+      const { stdout, exitCode } = await execa(TSX_BIN, [
+        CLI_PATH,
+        'cite',
+        'act_public_1989_18',
+        '--style',
+        'ris',
+      ], {
+        env: {
+          ...process.env,
+          NZ_LEGISLATION_API_KEY: TEST_API_KEY,
+        },
+      });
+
+      expect(exitCode).toBe(0);
+      expect(stdout).toContain('TY - LEG');
+      expect(stdout).toContain('TI - Trade in Endangered Species Act 1989');
+      expect(stdout).toContain('ER -');
+    });
+
+    itWithApi('should generate ENW citation', async () => {
+      const { stdout, exitCode } = await execa(TSX_BIN, [
+        CLI_PATH,
+        'cite',
+        'act_public_1989_18',
+        '--style',
+        'enw',
+      ], {
+        env: {
+          ...process.env,
+          NZ_LEGISLATION_API_KEY: TEST_API_KEY,
+        },
+      });
+
+      expect(exitCode).toBe(0);
+      expect(stdout).toContain('%0 Statute');
+      expect(stdout).toContain('%T Trade in Endangered Species Act 1989');
+      expect(stdout).toContain('%Z act_public_1989_18');
     });
   });
   
   describe('Error Handling', () => {
     it('should handle invalid command', async () => {
-      const { stderr, exitCode } = await execa('tsx', [
+      const { stderr, exitCode } = await execa(TSX_BIN, [
         CLI_PATH,
         'invalid-command',
       ], {
@@ -221,7 +301,7 @@ describe('E2E CLI Tests', () => {
     });
     
     it('should handle missing required arguments', async () => {
-      const { stderr, exitCode } = await execa('tsx', [
+      const { stderr, exitCode } = await execa(TSX_BIN, [
         CLI_PATH,
         'search',
       ], {

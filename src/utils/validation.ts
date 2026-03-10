@@ -16,11 +16,14 @@ export const DateStringSchema = z.string()
   }, 'Invalid date');
 
 /**
- * Work ID validation (e.g., act/2020/67)
+ * Work ID validation for current API work IDs (e.g., act_public_1989_18)
  */
 export const WorkIdSchema = z.string()
   .min(1, 'Work ID is required')
-  .regex(/^[a-z0-9-]+\/\d{4}\/\d+$/, 'Invalid work ID format. Expected: type/year/number (e.g., act/2020/67)');
+  .regex(
+    /^(?:[a-z0-9-]+(?:_[a-z0-9-]+){2,}|[a-z0-9-]+\/\d{4}\/\d+)$/,
+    'Invalid work ID format. Expected an API work ID like act_public_1989_18.',
+  );
 
 /**
  * Search query validation
@@ -100,7 +103,7 @@ export const GetWorkParamsSchema = z.object({
 /**
  * Citation style validation
  */
-export const CitationStyleSchema = z.enum(['nzmj', 'bibtex', 'ris', 'apa']).default('nzmj');
+export const CitationStyleSchema = z.enum(['nzmj', 'bibtex', 'ris', 'enw', 'apa']).default('nzmj');
 
 /**
  * Export parameters schema

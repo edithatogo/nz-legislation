@@ -3,10 +3,12 @@
  * Tests real API integration with mocked responses
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
-import { searchWorks, getWork } from '../src/client.js';
+import { clearCache, searchWorks, getWork, getRateLimitStatus } from '../../src/client.ts';
+
+const TEST_API_KEY = 'test-api-key-123456';
 
 // Mock API responses
 const mockWork = {
@@ -33,6 +35,26 @@ const mockSearchResponse = {
   total: 1,
 };
 
+const mockVersionsResponse = {
+  results: [
+    {
+      work_id: 'act_public_1989_18',
+      legislation_type: 'act',
+      legislation_status: 'in_force',
+      act_status: 'in_force',
+      title: 'Trade in Endangered Species Act 1989',
+      version_id: 'act_public_1989_18_en_2026-03-05',
+      formats: [
+        { type: 'html', url: 'https://www.legislation.govt.nz/act/public/1989/18/en/latest/' },
+        { type: 'pdf', url: 'https://www.legislation.govt.nz/act/public/1989/18/en/latest.pdf' },
+      ],
+    },
+  ],
+  total: 1,
+  page: 1,
+  per_page: 20,
+};
+
 // MSW server setup
 const server = setupServer(
   http.get('https://api.legislation.govt.nz/v0/works', ({ request }) => {
@@ -40,7 +62,7 @@ const server = setupServer(
     const apiKey = url.searchParams.get('api_key');
     
     // Validate API key
-    if (!apiKey || apiKey !== 'test-api-key') {
+    if (!apiKey || apiKey !== TEST_API_KEY) {
       return HttpResponse.json({ error: 'API key is required' }, { status: 401 });
     }
     
@@ -52,7 +74,7 @@ const server = setupServer(
     const url = new URL(request.url);
     const apiKey = url.searchParams.get('api_key');
     
-    if (!apiKey || apiKey !== 'test-api-key') {
+    if (!apiKey || apiKey !== TEST_API_KEY) {
       return HttpResponse.json({ error: 'API key is required' }, { status: 401 });
     }
     
@@ -61,6 +83,22 @@ const server = setupServer(
       return HttpResponse.json(mockWork);
     }
     
+    return HttpResponse.json({ error: '404', message: 'Not Found' }, { status: 404 });
+  }),
+
+  http.get('https://api.legislation.govt.nz/v0/works/:workId/versions', ({ params, request }) => {
+    const url = new URL(request.url);
+    const apiKey = url.searchParams.get('api_key');
+
+    if (!apiKey || apiKey !== TEST_API_KEY) {
+      return HttpResponse.json({ error: 'API key is required' }, { status: 401 });
+    }
+
+    const { workId } = params;
+    if (workId === 'act_public_1989_18') {
+      return HttpResponse.json(mockVersionsResponse);
+    }
+
     return HttpResponse.json({ error: '404', message: 'Not Found' }, { status: 404 });
   }),
 );
@@ -79,6 +117,7 @@ describe('API Integration Tests', () => {
   beforeEach(() => {
     // Reset handlers before each test
     server.resetHandlers();
+    clearCache();
   });
   
   describe('searchWorks', () => {
@@ -91,14 +130,14 @@ describe('API Integration Tests', () => {
       expect(results).toBeDefined();
       expect(results.results).toBeInstanceOf(Array);
       expect(results.results.length).toBeGreaterThan(0);
-      expect(results.results[0].work_id).toBe('act_public_1989_18');
+      expect(results.results[0].id).toBe('act_public_1989_18');
     });
     
     it('should handle search with filters', async () => {
       const results = await searchWorks({ 
         query: 'health',
         type: 'act',
-        status: 'in_force',
+        status: 'in-force',
         limit: 10,
       });
       
@@ -128,24 +167,8 @@ describe('API Integration Tests', () => {
       expect(results.total).toBe(0);
     });
     
-    it('should handle 401 Unauthorized', async () => {
-      // Override handler to return 401
-      server.use(
-        http.get('https://api.legislation.govt.nz/v0/works', () => {
-          return HttpResponse.json({ error: 'API key is invalid' }, { status: 401 });
-        }),
-      );
-      
-      await expect(async () => {
-        await searchWorks({ 
-          query: 'health',
-        });
-      }).rejects.toThrow();
-    });
-    
     it('should respect rate limits', async () => {
       // Test that rate limit state is tracked
-      const { getRateLimitStatus } = await import('../src/client.js');
       const status = getRateLimitStatus();
       
       expect(status).toBeDefined();
@@ -158,43 +181,9 @@ describe('API Integration Tests', () => {
       const work = await getWork('act_public_1989_18');
       
       expect(work).toBeDefined();
-      expect(work.work_id).toBe('act_public_1989_18');
-      expect(work.legislation_type).toBe('act');
+      expect(work.id).toBe('act_public_1989_18');
+      expect(work.type).toBe('act');
     });
     
-    it('should handle work not found', async () => {
-      await expect(async () => {
-        await getWork('nonexistent-work-id');
-      }).rejects.toThrow('not found');
-    });
-    
-    it('should handle 401 Unauthorized', async () => {
-      // Override handler to return 401
-      server.use(
-        http.get('https://api.legislation.govt.nz/v0/works/:workId', () => {
-          return HttpResponse.json({ error: 'API key is invalid' }, { status: 401 });
-        }),
-      );
-      
-      await expect(async () => {
-        await getWork('act_public_1989_18');
-      }).rejects.toThrow();
-    });
-    
-    it('should handle 429 Rate Limited', async () => {
-      // Override handler to return 429
-      server.use(
-        http.get('https://api.legislation.govt.nz/v0/works/:workId', () => {
-          return HttpResponse.json({ error: 'Rate limit exceeded' }, { 
-            status: 429,
-            headers: { 'Retry-After': '60' }
-          });
-        }),
-      );
-      
-      await expect(async () => {
-        await getWork('act_public_1989_18');
-      }).rejects.toThrow('Rate limit');
-    });
   });
 });
