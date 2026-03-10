@@ -85,6 +85,7 @@ export const SearchParamsSchema = z.object({
   to: DateStringSchema.optional(),
   limit: LimitSchema,
   offset: OffsetSchema,
+  format: OutputFormatSchema,
 });
 
 /**
@@ -167,7 +168,7 @@ export function validateInput<T>(schema: z.ZodSchema<T>, data: unknown): { valid
     const errors: ValidationError[] = result.error.errors.map((err) => ({
       field: err.path.join('.'),
       message: err.message,
-      value: err.input,
+      value: 'input' in err ? err.input : undefined,
     }));
     return { valid: false, errors };
   }
@@ -186,22 +187,60 @@ export function sanitizeInput(input: string): string {
 }
 
 /**
+ * Search parameters schema (output types for validated data)
+ */
+export interface ValidatedSearchParams {
+  query: string;
+  type?: 'act' | 'bill' | 'regulation' | 'instrument';
+  status?: 'in-force' | 'not-yet-in-force' | 'repealed' | 'partially-repealed' | 'withdrawn';
+  from?: string;
+  to?: string;
+  limit: number;
+  offset: number;
+  format: 'table' | 'json' | 'csv';
+}
+
+/**
  * Validate and sanitize search parameters
  */
 export function validateSearchParams(params: unknown) {
-  return validateInput(SearchParamsSchema, params);
+  const result = SearchParamsSchema.safeParse(params);
+  if (!result.success) {
+    const errors: ValidationError[] = result.error.errors.map((err) => ({
+      field: err.path.join('.'),
+      message: err.message,
+    }));
+    return { valid: false, errors };
+  }
+  return { valid: true, data: result.data };
 }
 
 /**
  * Validate and sanitize work ID
  */
 export function validateWorkId(workId: string) {
-  return validateInput(WorkIdSchema, workId);
+  const result = WorkIdSchema.safeParse(workId);
+  if (!result.success) {
+    const errors: ValidationError[] = result.error.errors.map((err) => ({
+      field: 'workId',
+      message: err.message,
+    }));
+    return { valid: false, errors };
+  }
+  return { valid: true, data: result.data };
 }
 
 /**
  * Validate and sanitize export parameters
  */
 export function validateExportParams(params: unknown) {
-  return validateInput(ExportParamsSchema, params);
+  const result = ExportParamsSchema.safeParse(params);
+  if (!result.success) {
+    const errors: ValidationError[] = result.error.errors.map((err) => ({
+      field: err.path.join('.'),
+      message: err.message,
+    }));
+    return { valid: false, errors };
+  }
+  return { valid: true, data: result.data };
 }

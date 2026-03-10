@@ -59,7 +59,11 @@ export const searchCommand = new Command()
       }
 
       const validatedParams = validation.data;
-      logger.debug('Search parameters validated', validatedParams);
+      logger.debug('Search parameters validated', { 
+        query: validatedParams?.query,
+        type: validatedParams?.type,
+        limit: validatedParams?.limit,
+      });
 
       const results = await searchWorks({
         query: validatedParams.query,
