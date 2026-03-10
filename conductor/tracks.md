@@ -137,19 +137,20 @@ This file tracks all major work streams for the NZ Legislation Tool project.
 
 ---
 
-### [ ] Track: Australian Legislation Implementation
-**Link:** [./tracks/australian-legislation-implementation/](./tracks/australian-legislation-implementation/)
+## 📦 Archived Tracks
 
-**Status:** 🔄 **IN PROGRESS** (10%)
+### [x] Track: Australian Legislation Implementation
+**Link:** [../archive/australian-legislation-implementation/](../archive/australian-legislation-implementation/)
 
-**Summary:** Implement Australian legislation support across 9 jurisdictions (Commonwealth + 8 states/territories) using modular plugin system.
+**Status:** 📦 **ARCHIVED**
+
+**Summary:** Implemented plugin system infrastructure for Australian legislation with 10 improvements. Track archived after review fixes applied.
 
 **Date Created:** 2026-03-10
-**Current Phase:** Phase 0 (Improvement Integration)
-**Key Deliverables:** Plugin system, 9 jurisdiction plugins, health monitoring, fallback strategies, performance budgets
+**Date Archived:** 2026-03-11
+**Key Deliverables:** Plugin system, provider interface, health monitoring, fallback strategies, performance budgets, rate limiting, caching
 
-**Timeline:** 10 weeks (accelerated with parallel execution)
-**Next Action:** Implement parallel execution framework
+**Review Summary:** Critical/High issues fixed. Remaining work: dependency installation, test coverage, scraper implementations.
 
 ---
 
@@ -168,16 +169,91 @@ This file tracks all major work streams for the NZ Legislation Tool project.
 
 ---
 
+## 🔬 Research Programme Tracks (NZMJ Publication)
+
+*Five-paper research programme analyzing NZ health legislation for 2026 election policy relevance.*
+
+### [ ] Track: P1 - Legislative Volatility
+**Link:** [./tracks/p1-legislative-volatility/](./tracks/p1-legislative-volatility/)
+
+**Status:** ⏳ **PENDING**
+
+**Research Question:** What is the tempo and pattern of legislative change in NZ health law across reform cycles, and does reform frequency outpace implementation capacity?
+
+**Differentiation:** Focuses on legislative change tempo and implementation gaps, distinct from prior "policy whiplash" framing which emphasized political direction shifts.
+
+**Priority:** 🔴 **HIGH**
+**Timeline:** 10-12 weeks
+**Key Deliverables:** NZMJ manuscript, supplementary appendix, figures/tables, policy brief
+
+**Robustness Features:** Inter-rater reliability (κ > 0.7), sensitivity analysis, expert review, triangulation, OSF pre-registration, open science
+
+---
+
+### [ ] Track: P2 - Accountability Drift
+**Link:** [./tracks/p2-accountability-drift/](./tracks/p2-accountability-drift/)
+
+**Status:** ⏳ **PENDING**
+
+**Research Question:** How have responsibilities shifted across institutions after Pae Ora?
+
+**Priority:** 🔴 **HIGH**
+**Timeline:** 10-12 weeks
+**Key Deliverables:** NZMJ manuscript, supplementary appendix, figures/tables, policy brief
+
+---
+
+### [ ] Track: P3 - Governance Load
+**Link:** [./tracks/p3-governance-load/](./tracks/p3-governance-load/)
+
+**Status:** ⏳ **PENDING**
+
+**Research Question:** Has governance burden increased in NZ health legislation?
+
+**Priority:** 🔴 **HIGH**
+**Timeline:** 10-12 weeks
+**Key Deliverables:** NZMJ manuscript, supplementary appendix, figures/tables, policy brief
+
+---
+
+### [ ] Track: P4 - Rights vs Coercion
+**Link:** [./tracks/p4-rights-vs-coercion/](./tracks/p4-rights-vs-coercion/)
+
+**Status:** ⏳ **PENDING**
+
+**Research Question:** Has rights language displaced coercive language in mental health legislation?
+
+**Priority:** 🔴 **HIGH**
+**Timeline:** 10-12 weeks
+**Key Deliverables:** NZMJ manuscript, supplementary appendix, figures/tables, policy brief
+
+---
+
+### [ ] Track: P5 - Māori Governance Equity
+**Link:** [./tracks/p5-maori-governance-equity/](./tracks/p5-maori-governance-equity/)
+
+**Status:** ⏳ **PENDING**
+
+**Research Question:** How has Māori governance and equity language evolved in NZ health law?
+
+**Priority:** 🔴 **HIGH**
+**Timeline:** 10-12 weeks
+**Key Deliverables:** NZMJ manuscript, supplementary appendix, figures/tables, policy brief
+
+**Cultural Considerations:** Requires Māori co-authorship, Te Tiriti principles applied to research
+
+---
+
 ## 📊 Summary
 
 | Status | Count | Percentage |
 |--------|-------|------------|
-| ✅ **Complete** | 9 | 75% |
-| 🔄 **In Progress** | 1 | 8% |
-| ⏳ **Pending** | 2 | 17% |
-| **Total** | **12** | **100%** |
+| ✅ **Complete** | 9 | 56% |
+| 📦 **Archived** | 1 | 6% |
+| ⏳ **Pending** | 6 | 38% |
+| **Total** | **16** | **100%** |
 
-**Overall Project Progress:** ~85% complete
+**Overall Project Progress:** ~59% complete (technical infrastructure complete, research programme pending)
 
 ---
 
@@ -193,4 +269,4 @@ This file tracks all major work streams for the NZ Legislation Tool project.
 ---
 
 **Last Updated:** 2026-03-11
-**Total Tracks:** 12 (8 completed, 2 in progress, 2 pending)
+**Total Tracks:** 16 (9 completed, 1 archived, 6 pending)
