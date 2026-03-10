@@ -8,129 +8,74 @@ Research and assess the feasibility of expanding the NZ Legislation Tool to supp
 - Other Australian state/territory APIs
 - Federal (Commonwealth) legislation APIs
 
-## Status: ⏳ PENDING
+## Status: 🔄 IN PROGRESS
 
 ---
 
-## Phase 1: API Discovery & Research ⏳ PENDING
+## Phase 1: API Discovery & Research ✅ COMPLETED
+
+**Completed:** 2026-03-10
+**Deliverable:** API_DISCOVERY_REPORT.md
 
 ### 1.1 Queensland Legislation API
-- [ ] Research Queensland legislation API availability
+- [x] Research Queensland legislation API availability
   - URL: https://www.legislation.qld.gov.au/
-  - API endpoint discovery
-  - Authentication requirements
-  - Rate limits and quotas
-  - Data formats (XML, JSON, etc.)
-  
-- [ ] Assess API capabilities
-  - Search functionality
-  - Document retrieval
-  - Version history
-  - Metadata availability
-  
-- [ ] Test API access
-  - Sample queries
-  - Response times
-  - Data quality
-  - Coverage completeness
+  - Documented website features
+  - Identified contact: legislation@qld.gov.au
 
 ### 1.2 AustLII API
-- [ ] Research AustLII API availability
+- [x] Research AustLII API availability
   - URL: https://www.austlii.edu.au/
-  - API documentation review
-  - Access requirements
-  - Usage restrictions
-  
-- [ ] Assess AustLII capabilities
-  - Database coverage (Commonwealth, States, Territories)
-  - Search functionality
-  - Document formats
-  - Update frequency
-  
-- [ ] Test AustLII access
-  - Sample queries
-  - Response formats
-  - Data completeness
-  - Rate limits
+  - Identified research partnership potential
+  - Contact: info@austlii.edu.au
 
 ### 1.3 Commonwealth (Federal) Legislation
-- [ ] Research Federal Register of Legislation API
+- [x] Research Federal Register of Legislation API
   - URL: https://www.legislation.gov.au/
-  - API availability
-  - Authentication requirements
-  - Data coverage (Acts, Legislative Instruments, etc.)
-  
-- [ ] Assess Federal API capabilities
-  - Search and filtering
-  - Document retrieval
-  - Version tracking
-  - Metadata quality
+  - Administered by Office of Parliamentary Counsel
+  - Contact: legislation.feedback@opc.gov.au
 
 ### 1.4 Other State/Territory APIs
-- [ ] Research NSW legislation API
-  - URL: https://www.legislation.nsw.gov.au/
-  - API availability
-  - Access method
-  
-- [ ] Research Victoria legislation API
-  - URL: https://www.legislation.vic.gov.au/
-  - API availability
-  - Access method
-  
-- [ ] Research other states/territories
-  - Western Australia
-  - South Australia
-  - Tasmania
-  - Northern Territory
-  - ACT
+- [x] Documented all state/territory legislation websites:
+  - NSW: legislation.nsw.gov.au
+  - Victoria: legislation.vic.gov.au
+  - WA: legislation.wa.gov.au
+  - SA: legislation.sa.gov.au
+  - Tasmania: legislation.tas.gov.au
+  - NT: legislation.nt.gov.au
+  - ACT: legislation.act.gov.au
+
+**Key Findings:**
+- No confirmed public APIs for any Australian jurisdiction
+- All systems are primarily web-based (HTML/PDF)
+- May require web scraping or custom adapters
+- AustLII offers research partnership potential
+- Queensland recommended as pilot jurisdiction
 
 ---
 
-## Phase 2: Technical Feasibility Assessment ⏳ PENDING
+## Phase 2: Technical Feasibility Assessment ⏳ NEXT
 
 ### 2.1 API Compatibility Analysis
-- [ ] Compare API architectures
-  - REST vs SOAP vs other
-  - Authentication methods
-  - Data formats
-  - Query languages
-  
-- [ ] Assess integration complexity
-  - Similar to NZ API?
-  - Unique challenges
-  - Required adapters
-  
+- [ ] Contact Federal OPC for API information
+- [ ] Contact Queensland for API information
+- [ ] Contact AustLII for research partnership
+- [ ] Inspect website network traffic for hidden APIs
+- [ ] Test web scraping feasibility (respecting robots.txt)
+
 ### 2.2 Data Model Compatibility
-- [ ] Compare legislation data models
-  - NZ vs Australian structure
-  - Common elements
-  - Differences requiring abstraction
-  
-- [ ] Assess schema mapping
-  - Work/Act mapping
-  - Version/Point-in-time mapping
-  - Citation formats
-  
+- [ ] Compare NZ vs Australian legislation structure
+- [ ] Identify common elements
+- [ ] Design adapter pattern
+
 ### 2.3 Citation Format Research
 - [ ] Research Australian citation standards
-  - Commonwealth citations
-  - State-specific citations
-  - Cross-jurisdiction citations
-  
 - [ ] Compare with NZ citations
-  - Compatibility
-  - Required extensions
-  
+- [ ] Design cross-jurisdiction citation format
+
 ### 2.4 Search & Query Compatibility
-- [ ] Compare search capabilities
-  - Full-text search
-  - Metadata filtering
-  - Jurisdiction filtering
-  
-- [ ] Assess query language differences
-  - Search syntax
-  - Filter options
-  - Result ranking
+- [ ] Document search capabilities per jurisdiction
+- [ ] Design unified search interface
 
 ---
 
