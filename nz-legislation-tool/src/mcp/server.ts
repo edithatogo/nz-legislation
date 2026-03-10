@@ -10,6 +10,25 @@ import { z } from 'zod';
 import { searchWorks, getWork, getWorkVersions } from '@client';
 import { getConfig, hasApiKey } from '@config';
 import { generateCitation, worksToCsv } from '@output';
+import { logger } from '@utils/logger';
+
+/**
+ * MCP request tracking for rate limiting and audit
+ */
+let mcpRequestCount = 0;
+const MCP_DAILY_LIMIT = 9000; // Respect API limits with 10% safety margin
+
+/**
+ * Helper to check and increment MCP request count
+ */
+function checkMcpRateLimit(): boolean {
+  if (mcpRequestCount >= MCP_DAILY_LIMIT) {
+    logger.warn('MCP rate limit exceeded', { count: mcpRequestCount });
+    return false;
+  }
+  mcpRequestCount++;
+  return true;
+}
 
 /**
  * Create MCP server instance
@@ -45,12 +64,41 @@ function registerSearchTool(server: McpServer): void {
       query: z.string().describe('Search query text'),
       type: z.enum(['act', 'bill', 'regulation', 'instrument']).optional().describe('Filter by legislation type'),
       status: z.string().optional().describe('Filter by status (e.g., in-force, repealed)'),
-      from: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('Filter from date (YYYY-MM-DD)'),
-      to: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe('Filter to date (YYYY-MM-DD)'),
+      from: z.string()
+        .regex(/^\d{4}-\d{2}-\d{2}$/)
+        .transform((val) => {
+          const date = new Date(val);
+          if (isNaN(date.getTime())) throw new Error('Invalid date format');
+          return val;
+        })
+        .optional()
+        .describe('Filter from date (YYYY-MM-DD)'),
+      to: z.string()
+        .regex(/^\d{4}-\d{2}-\d{2}$/)
+        .transform((val) => {
+          const date = new Date(val);
+          if (isNaN(date.getTime())) throw new Error('Invalid date format');
+          return val;
+        })
+        .optional()
+        .describe('Filter to date (YYYY-MM-DD)'),
       limit: z.number().min(1).max(100).default(25).describe('Maximum results (1-100)'),
     },
     async (params) => {
       try {
+        // Check MCP rate limit
+        if (!checkMcpRateLimit()) {
+          return {
+            content: [
+              {
+                type: 'text',
+                text: 'MCP rate limit exceeded. Please try again later.',
+                isError: true,
+              },
+            ],
+          };
+        }
+
         const results = await searchWorks({
           query: params.query,
           type: params.type,
@@ -65,7 +113,7 @@ function registerSearchTool(server: McpServer): void {
             {
               type: 'text',
               text: `Found ${results.total} results (showing ${results.results.length}):\n\n` +
-                results.results.map((work) => 
+                results.results.map((work) =>
                   `• **${work.title}** (${work.type}, ${work.status})\n  ID: ${work.id}\n  Date: ${work.date}`
                 ).join('\n\n'),
             },
@@ -98,6 +146,19 @@ function registerGetTool(server: McpServer): void {
     },
     async (params) => {
       try {
+        // Check MCP rate limit
+        if (!checkMcpRateLimit()) {
+          return {
+            content: [
+              {
+                type: 'text',
+                text: 'MCP rate limit exceeded. Please try again later.',
+                isError: true,
+              },
+            ],
+          };
+        }
+
         const work = await getWork(params.workId);
 
         return {
@@ -142,6 +203,19 @@ function registerGetVersionsTool(server: McpServer): void {
     },
     async (params) => {
       try {
+        // Check MCP rate limit
+        if (!checkMcpRateLimit()) {
+          return {
+            content: [
+              {
+                type: 'text',
+                text: 'MCP rate limit exceeded. Please try again later.',
+                isError: true,
+              },
+            ],
+          };
+        }
+
         const versions = await getWorkVersions(params.workId);
 
         return {
@@ -149,7 +223,7 @@ function registerGetVersionsTool(server: McpServer): void {
             {
               type: 'text',
               text: `**Versions for ${params.workId}** (${versions.length} versions):\n\n` +
-                versions.map((v) => 
+                versions.map((v) =>
                   `• **Version ${v.version}** (${v.type})\n  ` +
                   `Date: ${v.date} | ` +
                   `Current: ${v.isCurrent ? 'Yes' : 'No'}\n  ` +
@@ -186,6 +260,19 @@ function registerCitationTool(server: McpServer): void {
     },
     async (params) => {
       try {
+        // Check MCP rate limit
+        if (!checkMcpRateLimit()) {
+          return {
+            content: [
+              {
+                type: 'text',
+                text: 'MCP rate limit exceeded. Please try again later.',
+                isError: true,
+              },
+            ],
+          };
+        }
+
         const work = await getWork(params.workId);
         const citation = generateCitation(work, params.style);
 
@@ -226,6 +313,19 @@ function registerExportTool(server: McpServer): void {
     },
     async (params) => {
       try {
+        // Check MCP rate limit
+        if (!checkMcpRateLimit()) {
+          return {
+            content: [
+              {
+                type: 'text',
+                text: 'MCP rate limit exceeded. Please try again later.',
+                isError: true,
+              },
+            ],
+          };
+        }
+
         const results = await searchWorks({
           query: params.query,
           limit: params.limit,
@@ -246,7 +346,7 @@ function registerExportTool(server: McpServer): void {
             content: [
               {
                 type: 'text',
-                text: `**CSV Export** (${results.results.length} results):\n\n\`\`\`csv\n${csv}\n\`\`\``,
+                text: `**CSV Export** (${results.results.length} results)\nHeaders: id, title, shortTitle, type, status, date, url, versionCount\n\n\`\`\`csv\n${csv}\n\`\`\``,
               },
             ],
           };

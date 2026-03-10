@@ -134,6 +134,18 @@ Each track represents a high-level unit of work (feature, bug fix, or research t
 
 ---
 
+### [~] Track 11: Advanced Automation & Hardening
+**Link:** [./tracks/track-11-advanced-automation/](./tracks/track-11-advanced-automation/)
+
+**Status:** 🔄 **IN PROGRESS**
+
+**Summary:** Implement advanced automation, security hardening, and repository maturation to minimize manual maintenance while maximizing quality and responsiveness.
+
+**Date Created:** 2026-03-09
+**Estimated Effort:** 5 phases covering legal/compliance, quality automation, release automation, security hardening, and responsiveness automation
+
+---
+
 ### [ ] Track 12: Australian Legislation API Integration Feasibility
 **Link:** [./tracks/track-12-australian-expansion/](./tracks/track-12-australian-expansion/)
 
