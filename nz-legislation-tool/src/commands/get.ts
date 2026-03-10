@@ -7,6 +7,8 @@ import ora from 'ora';
 
 import { getWork, getWorkVersions } from '@client';
 import { printWorkDetail, printVersionsTable, printJson, versionsToCsv } from '@output';
+import { logger } from '@utils/logger';
+import { validateWorkId, sanitizeInput } from '@utils/validation';
 
 interface GetOptions {
   versions?: boolean;
@@ -23,9 +25,26 @@ export const getCommand = new Command()
     const spinner = ora('Retrieving legislation...').start();
 
     try {
+      // Sanitize and validate work ID
+      const sanitizedWorkId = sanitizeInput(workId);
+      const validation = validateWorkId(sanitizedWorkId);
+      
+      if (!validation.valid) {
+        spinner.stop();
+        logger.error('Work ID validation failed', undefined, { workId, errors: validation.errors });
+        console.error('❌ Invalid work ID format:');
+        validation.errors?.forEach((err) => {
+          console.error(`  - ${err.message}`);
+        });
+        console.error('\nExpected format: type/year/number (e.g., act/2020/67)');
+        process.exit(3);
+      }
+
+      logger.debug('Work ID validated', { workId: sanitizedWorkId });
+
       if (options.versions) {
         // Get version history
-        const versions = await getWorkVersions(workId);
+        const versions = await getWorkVersions(sanitizedWorkId);
         spinner.stop();
 
         switch (options.format.toLowerCase()) {
@@ -42,7 +61,7 @@ export const getCommand = new Command()
         }
       } else {
         // Get work details
-        const work = await getWork(workId);
+        const work = await getWork(sanitizedWorkId);
         spinner.stop();
 
         switch (options.format.toLowerCase()) {
@@ -61,8 +80,9 @@ export const getCommand = new Command()
       }
     } catch (error) {
       spinner.stop();
+      logger.error('Failed to retrieve legislation', error instanceof Error ? error : undefined, { workId });
       if (error instanceof Error) {
-        console.error(`Error: ${error.message}`);
+        console.error(`❌ Error: ${error.message}`);
         process.exit(1);
       }
       throw error;

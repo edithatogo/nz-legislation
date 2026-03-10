@@ -7,6 +7,8 @@ import ora from 'ora';
 
 import { searchWorks } from '@client';
 import { printTable, printJson, worksToCsv } from '@output';
+import { logger } from '@utils/logger';
+import { validateSearchParams, sanitizeInput } from '@utils/validation';
 
 interface SearchOptions {
   query: string;
@@ -34,22 +36,44 @@ export const searchCommand = new Command()
     const spinner = ora('Searching legislation...').start();
 
     try {
-      const limit = Math.min(parseInt(options.limit, 10), 100);
-      const offset = parseInt(options.offset, 10);
+      // Sanitize inputs
+      const sanitizedOptions = {
+        ...options,
+        query: sanitizeInput(options.query),
+        type: options.type ? sanitizeInput(options.type) : undefined,
+        status: options.status ? sanitizeInput(options.status) : undefined,
+        from: options.from ? sanitizeInput(options.from) : undefined,
+        to: options.to ? sanitizeInput(options.to) : undefined,
+      };
+
+      // Validate parameters
+      const validation = validateSearchParams(sanitizedOptions);
+      if (!validation.valid || !validation.data) {
+        spinner.stop();
+        logger.error('Validation failed', undefined, { errors: validation.errors });
+        console.error('❌ Validation errors:');
+        validation.errors?.forEach((err) => {
+          console.error(`  - ${err.field}: ${err.message}`);
+        });
+        process.exit(3);
+      }
+
+      const validatedParams = validation.data;
+      logger.debug('Search parameters validated', validatedParams);
 
       const results = await searchWorks({
-        query: options.query,
-        type: options.type,
-        status: options.status,
-        from: options.from,
-        to: options.to,
-        limit,
-        offset,
+        query: validatedParams.query,
+        type: validatedParams.type,
+        status: validatedParams.status,
+        from: validatedParams.from,
+        to: validatedParams.to,
+        limit: validatedParams.limit,
+        offset: validatedParams.offset,
       });
 
       spinner.stop();
 
-      switch (options.format.toLowerCase()) {
+      switch (validatedParams.format.toLowerCase()) {
         case 'json':
           printJson(results);
           break;
@@ -63,8 +87,9 @@ export const searchCommand = new Command()
       }
     } catch (error) {
       spinner.stop();
+      logger.error('Search failed', error instanceof Error ? error : undefined, { options });
       if (error instanceof Error) {
-        console.error(`Error: ${error.message}`);
+        console.error(`❌ Error: ${error.message}`);
         process.exit(1);
       }
       throw error;
