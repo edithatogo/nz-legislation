@@ -95,19 +95,6 @@ Each track represents a high-level unit of work (feature, bug fix, or research t
 
 ---
 
-### [x] Track: Documentation Optimization & Humanization
-**Link:** [./tracks/documentation-optimization/](./tracks/documentation-optimization/)
-
-**Status:** ✅ **COMPLETED**
-
-**Summary:** Optimize, humanize, and simplify all project documentation to make it accessible, engaging, and useful for diverse audiences including researchers, developers, and end users.
-
-**Date Created:** 2026-03-09
-**Estimated Effort:** 80+ tasks across 11 phases
-**Key Deliverables:** Rewritten README, user guides, developer docs, visual diagrams, tutorials, documentation site
-
----
-
 ### [ ] Track: Performance & Scalability
 **Link:** [./tracks/performance-scalability/](./tracks/performance-scalability/)
 
@@ -149,7 +136,17 @@ Each track represents a high-level unit of work (feature, bug fix, or research t
 
 ## Archive
 
-*No archived tracks yet.*
+### [x] Track: Documentation Optimization & Humanization
+**Link:** [./archive/documentation-optimization/](./archive/documentation-optimization/)
+
+**Status:** ✅ **COMPLETED & ARCHIVED**
+
+**Summary:** Optimize, humanize, and simplify all project documentation to make it accessible, engaging, and useful for diverse audiences including researchers, developers, and end users.
+
+**Date Created:** 2026-03-09
+**Date Completed:** 2026-03-10
+**Date Archived:** 2026-03-10
+**Key Deliverables:** 17 documentation files (~78,000 words), 18 Mermaid diagrams, FAQ (36 questions), Glossary (26 terms), API Reference, Error Reference, WCAG 2.1 AA compliance, Documentation & Communication Standards in product guidelines
 
 ---
 
@@ -163,4 +160,4 @@ Each track represents a high-level unit of work (feature, bug fix, or research t
 ---
 
 **Last Updated:** 2026-03-10
-**Total Tracks:** 12 (6 completed, 5 pending, 1 archived)
+**Total Tracks:** 11 (6 completed, 5 pending, 1 archived)
