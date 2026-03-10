@@ -54,6 +54,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@stryker-mutator/core": "^9.6.0",
     "@types/benchmark": "^2.1.5",
     "@types/node": "^20.14.11",
     "@typescript-eslint/eslint-plugin": "^8.56.1",
@@ -62,8 +63,11 @@
     "eslint": "^8.57.1",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
+    "execa": "^9.6.1",
+    "fast-check": "^4.6.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.3.2",
+    "msw": "^2.12.10",
     "prettier": "^3.8.1",
     "tsx": "^4.16.2",
     "typescript": "^5.5.3",

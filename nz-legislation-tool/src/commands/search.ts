@@ -5,8 +5,8 @@
 import { Command } from 'commander';
 import ora from 'ora';
 
-import { searchWorks } from '../client.js';
-import { printTable, printJson, worksToCsv } from '../output/index.js';
+import { searchWorks } from '@client';
+import { printTable, printJson, worksToCsv } from '@output';
 
 interface SearchOptions {
   query: string;

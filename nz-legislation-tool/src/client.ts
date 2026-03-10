@@ -6,11 +6,11 @@
 import got from 'got';
 import { z } from 'zod';
 
-import { getConfig } from './config.js';
+import { getConfig } from '@config';
 import {
   createApiError,
   NetworkError,
-} from './errors.js';
+} from '@errors';
 import {
   LegislationVersionSchema,
   SearchResultsSchema,
@@ -20,7 +20,7 @@ import {
   type SearchResults,
   type Version,
   type Work,
-} from './models/index.js';
+} from '@models';
 
 // Rate limit state
 const rateLimitState = {

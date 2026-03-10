@@ -4,26 +4,17 @@ import type { Work, SearchResults } from '../src/models/index.js';
 
 describe('Output Formatters', () => {
   const mockWork: Work = {
-    work_id: 'act_public_1989_18',
-    legislation_type: 'act',
-    legislation_status: 'in_force',
-    administering_agencies: ['Department of Conservation'],
-    latest_matching_version: {
-      formats: [
-        { type: 'html', url: 'https://www.legislation.govt.nz/act/public/1989/18/en/latest/' },
-        { type: 'pdf', url: 'https://www.legislation.govt.nz/act/public/1989/18/en/latest.pdf' },
-      ],
-      is_latest_version: true,
-      title: 'Trade in Endangered Species Act 1989',
-      version_id: 'act_public_1989_18_en_2026-03-05',
-    },
-    publisher: 'Parliamentary Counsel Office',
+    id: 'act_public_1989_18',
+    title: 'Trade in Endangered Species Act 1989',
+    type: 'act',
+    status: 'in-force',
+    date: '1989-10-15',
+    url: 'https://www.legislation.govt.nz/act/public/1989/18/en/latest/',
+    versionCount: 12,
   };
 
   const mockResults: SearchResults = {
     results: [mockWork],
-    page: 1,
-    per_page: 20,
     total: 1,
   };
 

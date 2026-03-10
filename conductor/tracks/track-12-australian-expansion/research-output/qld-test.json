@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+    <head>
+      <title>Queensland Legislation API Service - Queensland Legislation - Queensland Government</title>
+
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta data-server-time="20260310100338"/>
+      <meta data-lit-support-url="https://legislationqld.timg.com/printOndemand/Welcome.aspx"/>
+
+      <meta name="keywords" content="PCO, Parliamentary Counsel's Office, QLD PCO,
+        QLD Parliamentary Counsel's Office, Legislation, Bills of Parliament,
+        Act, Acts, amendment, amendments, assent, Bill, Bills, by-law, by-laws,
+        legislative database, draft, legal drafting, drafts, electronic
+        legislation, explanatory notes, gazettal, Gazette, Government
+        Information Service, law, laws, legal advice, legal, legislation,
+        legislative, legal opinion, legal opinions, Parliament, Parliamentary,
+        PCO, principal, proclamation, proclamations, legislative publications,
+        legal publishing, regulations, statutory instruments, subordinate legislation" />
+
+      <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+
+
+      <link rel="stylesheet" href="/css/bootstrap.7762.css" integrity="sha384-4DLkSzWgGauTh2hQaBSK5Q3+xCMAzQ7W68ECRL3DNmF4nHV2BCZ0keDA1OV/sUr7" type="text/css" />
+      <link rel="stylesheet" href="/css/bootstrap-overrides.7762.css" integrity="sha384-1wDE4Oz9t7KXPTVvvAitFCroB+AZB2Rz/+NU68uXu9XewCPM0l6Rk1/BnVAlVW9K" type="text/css" />
+      <link rel="stylesheet" href="/css/oqpc_boot.7762.css" integrity="sha384-C/vMaAt6+F0AQjz2K6LwTcrTAIVl/fNU7ysH68tsVoTYiCZXFp4mFZodNlKHgUAe" type="text/css" />
+      <link rel="stylesheet" href="/css/datatables.7762.css" integrity="sha384-WKGoHeZW634R6Wxx/XvctdOccVPG+NpIHcdOq1+i/NFsyvVqH/9xfJrhPftZpId2" type="text/css" />
+      <link rel="stylesheet" href="/css/font-awesome.7762.css" integrity="sha384-acGNjq0ZO3YC8YdbDezfdh+P9JYzpbVLNKWULhNFraiKnRIhnbcb75B7Jvzqf3hA" type="text/css" />
+      <link rel="stylesheet" href="/css/datepicker3.7762.css" integrity="sha384-hjkV3/SdDh7zwcYyh5OAqE3js5KDwTrQHJvqLEiqg5GnX2xJl7lBE66rGUOzYQdf" type="text/css" />
+      <link rel="stylesheet" href="/css/jquery-ui.7762.css" integrity="sha384-BBWhXPyVIhrJU4BggrQbAkdR4MkhpO1SRGBng4GHiLrga+Co4wsRqro2VDshLg0K" type="text/css" />
+      <link rel="stylesheet" href="/css/jquery-ui-overrides.7762.css" integrity="sha384-7Qucwx/FB9Vs217orceSktSLmP7yoZlBrwTUiMcxDqIAlz8nZiJy4Byj8qSbnJDt" type="text/css" />
+      <link rel="stylesheet" href="/jstree/style.min.css" type="text/css" />
+      <link rel="stylesheet" href="/css/toc_view.7762.css" integrity="sha384-X+aTujTnB2wtUjpscENTDpR7LybevA89sC+ZBCTvWNcMQGpvmvEYH53LHVXqoDGF" type="text/css" />
+
+      
+
+      <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+      <!--[if lt IE 9]>
+       <script>
+         var g_ie8 = true;
+      </script>
+      <script src="/js/html5shiv.7762.js" integrity="sha384-0WZMOUz4R7wvM/nA8jgV2h82dz63kmQuggoVrGMCa1WU7Gr+WIJ9bj9C/d1macVK"></script>
+      <script src="/js/respond.min.7762.js" integrity="sha384-/th30s5++D1Rytq4Za1VZdXWdbLI+djv9S9sKyHM/B+pRbuEzldxeLvEgMyAGluu"></script>
+      <![endif]-->
+
+      <link rel="alternate" type="application/atom+xml" title="Queensland Legislation - What&#39;s New" href="/feed?id=whatsnew"/>
+<link rel="alternate" type="application/atom+xml" title="Queensland Legislation - What&#39;s New - In force" href="/feed?id=newinforce"/>
+<link rel="alternate" type="application/atom+xml" title="Queensland Legislation - What&#39;s New - Acts and subordinate legislation" href="/feed?id=newlegislation"/>
+<link rel="alternate" type="application/atom+xml" title="Queensland Legislation - What&#39;s New - Bills" href="/feed?id=newbills"/>
+<link rel="alternate" type="application/atom+xml" title="Queensland Legislation - Repealed legislation" href="/feed?id=repealed"/>
+<link rel="alternate" type="application/atom+xml" title="Queensland Legislation - Notifications" href="/feed?id=epub"/>
+
+
+      <script src="/js/DALCore.7762.js" integrity="sha384-xvyGYj05UdMhIH7KnCryk+QpxpD2BHqCyrWUIZWLHLztVvEkahpDVpMVWPwNKjcw"></script>
+      <script src="/js/jquery.min.7762.js" integrity="sha384-DBJq/Y18IQJ1riVfkhcolvypPCF0HRFb9iPENNqi7hGVqU1UnHI1Rg7BoDq0rsGz"></script>
+      <script src="/js/bootstrap.7762.js" integrity="sha384-GgdH9aqF9mKjChNlsM3WgSM//K6dOtJSBXA47v1OLd1l0sNiOUocZ2HUMl37+5pl"></script>
+      <script src="/js/jquery.dataTables.7762.js" integrity="sha384-vEcvOaQCJIiQcGSsqCxgdfrXEJIZW2tf41KIMAJbAXsE7evCgDULQTlTA62rYKh7"></script>
+      <script src="/js/datatables.7762.js" integrity="sha384-uTUtbvge48R2drpySSDke/ztXRZhhOah5Pe/z7aQDdNSasYgNUF9tm3/Io/hyjM4"></script>
+      <script src="/js/jquery.address.7762.js" integrity="sha384-euwtygcSY/fXwjrRXkRp+4rKcP05jXYDTtKTd9dsGgqOm16Z9KQtOKhTBHlOV0HF"></script>
+      <script src="/js/DALAutoComplete.7762.js" integrity="sha384-uJ80Woh5Ghu/SOC5SkdLDq4uqYoYrcEIMjJeD5Qz83/Pp/kswd20YOSErJX0F53W"></script>
+      <script src="/js/jquery-ui.7762.js" integrity="sha384-6D5WD3VKFttNe0sc7REkK9faDTBtcjk+8AcFPQY4qRfh013S2pSMOdwm/v/4Uuhj"></script>
+      <script src="/js/consolelog.7762.js" integrity="sha384-w7sDw1IZDwX3YE4zks7l42E8kbheWeqaNFRSn7r/Nr3IQLZEYMkGxE1rdFNwit4e"></script>
+      <script src="/js/bootbox.min.7762.js" integrity="sha384-qcQfjuadRTAfuyLmo6Qid0M+GMoxscLfvEJ76CHjEM4ucQ5yh61b5I4mWMTcX+Ri"></script>
+      <script src="/js/website-commons.7762.js" integrity="sha384-IRBCYY8GkyBn4Jn0SNWqPg/YKFxTe8+JVLFAkoXciwfNSkHTu38lzlVy9XV4GsvX"></script>
+      <script src="/js/record-commons.7762.js" integrity="sha384-zrNdHOBlz2Ra1TB9Uj8kuRJySxfKpu8pdAxADF7Jk+aIErEbKCVy2m/tsQ8+UyEH"></script>
+      <script src="/jstree/jstree.min.js"></script>
+      <script src="/js/toc-tree.7762.js" integrity="sha384-tmR8bOikmuC5M+9XAI7Og5YfgrXtAocRvR3twj5mR3/P4WpMP/fEbR+rSkGm5FhM"></script>
+      <script type="text/javascript" src="https://www.browsealoud.com/plus/scripts/3.1.0/ba.js" crossorigin="anonymous" integrity="sha256-VCrJcQdV3IbbIVjmUyF7DnCqBbWD1BcZ/1sda2KWeFc= sha384-k2OQFn+wNFrKjU9HiaHAcHlEvLbfsVfvOnpmKBGWVBrpmGaIleDNHnnCJO4z2Y2H sha512-gxDfysgvGhVPSHDTieJ/8AlcIEjFbF3MdUgZZL2M5GXXDdIXCcX0CpH7Dh6jsHLOLOjRzTFdXASWZtxO+eMgyQ=="></script>
+
+      <script src="/js/restapi.7762.js" integrity="sha384-zw+GR4nwr6yYAOaHm5vrowdGW/OdfjPGaAXblbz5Wrsc6H9ItmmEUzDEuwQtCIjV"></script>
+                               <script src="/js/pwstrength-bootstrap.min.7762.js" integrity="sha384-Zj2qlWyRWXtL7kaG2rkwxgTp/MaxJDDwe3QjwD86CclJ2f5YFlcRYFcP1Oh/OnDm"></script>
+      <!--HASHES:""-->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-VLYH3JX2NS"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-VLYH3JX2NS');
+</script>
+    </head>
+
+    <body id="qld-gov-au">
+        <button type="button" id="skipStart" class="sr-only sr-only-focusable btn btn-default">Skip to main content</button>
+<div id="wrap">
+<div id="quills-navbar" class="navbar navbar-inverse navbar-static-top fullbackground" role="navigation">
+  <img class="fullbackground" src="/images/header.jpg" alt="Banner Header Background" role="presentation" />
+  <div class="container-fluid banner">
+    <div class="row">
+	  <h2 id="landmark-label-1">Site header</h2>
+      <div id="qg-logo" class="col-md-3 logo">
+        <a href="https://www.qld.gov.au" target="_blank">
+        <img src="/images/logo.png" alt="Queensland Government Crest" title="Click here for Queensland Government portal">
+        </a>
+        <br/>
+        <a id="site-name" href="/"><img src="/images/site_name.png" alt="Queensland Legislation Header"></a>
+      </div>
+
+      <div class="col-md-9">
+        <div class="searchbar-div">
+          <ul id="tools" class="list-inline inline">
+            
+            <!--<li class="banner-link"><a href="/glossary">Glossary</a></li>-->
+            <li class="banner-link"><a href="/about" title="About this website">About</a></li>
+            <li class="banner-link"><a href="/sitemap">Site map</a></li>
+            <li class="banner-link"><a href="/relatedlinks" title="Links to related sites">Related links</a></li>
+            <li class="banner-link"><a href="/contact" accesskey="4" title="Contact OQPC">Contact us</a></li>
+            <li class="banner-last-link"><a href="/help" title="FAQs">Help</a></li>
+          </ul>
+
+          <form id="search-form" method="get" action="/search" class="form-inline inline" role="form">
+              <label class="sr-only" for="search-query">Search</label>
+              <input aria-label="Search" accesskey="5" title="Enter search term here" name="query" type="text" class="form-control input-sm" id="search-query" size="27" required>
+            <button type="submit" id="quicksearch-button" class="btn btn-default btn-sm" title="Search"><span class="fa fa-search"/></button>
+          </form>
+
+        <div id="agency-logo">
+            <a href="https://oqpc.qld.gov.au">
+                <img src="/images/agency_name.png" alt="Office of the Queensland Parliamentary Counsel Logo" />
+            </a>
+        </div>
+
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="container" id="navbar-main">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div id="nav-site" class="navbar-collapse collapse">
+      <h2 id="landmark-label-2">Site navigation</h2>
+      <ul class="nav navbar-nav">
+            <li><a href="/" accesskey="2">Home</a></li>
+            <li><a href="/browse/inforce">In force legislation</a></li>
+            <li><a href="/browse/aspassed">Acts as passed</a></li>
+            <li><a href="/browse/asmade">SL as made</a></li>
+            <li><a href="/browse/bills">Bills</a></li>
+            <li><a href="/browse/repealed">Repealed legislation</a></li>
+            <li><a href="/tables">Legislative tables</a></li>
+            <li><a href="/epub">Notifications</a></li>
+            <li><a href="/information">Information</a></li>
+            <li><a href="/historicalinformation">Historical information</a></li>
+            <li><a href="/search/inforce">Search</a></li>
+            <li class="feedback"><a href="mailto:legislation.queries@oqpc.qld.gov.au" id="skipEnd">Feedback</a></li>
+            <li class="mobileMenu"><br /></li>
+            
+		    <!--<li class="mobileMenu"><a href="/glossary">Glossary</a></li>-->
+		    <li class="mobileMenu"><a href="/about" title="About this website">About</a></li>
+		    <li class="mobileMenu"><a href="/sitemap">Site map</a></li>
+		    <li class="mobileMenu"><a href="/relatedlinks" title="Links to related sites">Related links</a></li>
+		    <li class="mobileMenu"><a href="/contact" accesskey="4" title="Contact OQPC">Contact us</a></li>
+		    <li class="mobileMenu"><a href="/help" title="Help using this website">Help</a></li>
+            
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+        <div id="main" class="container">
+  
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+      <h2 id="landmark-label-3">You are here:</h2><ol id="breadcrumbs" class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li class='active'>Queensland Legislation API Service</li>
+      </ol>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+      <div id="access-toolbar" class="btn-group float-right">
+        <button title="Print" type="button" class="btn btn-default btn-tooltip"
+                data-toggle="tooltip" data-placement="bottom" data-container="body">
+          <span class="glyphicon glyphicon-print"></span>
+        </button>
+        <button title="Decrease font size" type="button" class="btn btn-default btn-tooltip" id="resizeDown"
+                data-toggle="tooltip" data-placement="bottom" data-container="body">
+          <span>A</span>
+        </button>
+        <button title="Increase font size" type="button" class="btn btn-default btn-tooltip" id="resizeUp"
+                data-toggle="tooltip" data-placement="bottom" data-container="body">
+          <span class="glyphicon glyphicon-font"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <a name="0"></a><div id="parsewrapper">
+<div id="page-wrapper">
+<h1>Queensland Legislation API Service</h1>
+<h2 data-renderer-start-pos="1" id="Getting-Started">Getting
+Started</h2>
+<p data-renderer-start-pos="18">The Queensland Legislation
+website's free application programming interface (API) service
+allows programmatical&#160;access to the Queensland legislation
+website's&#160;legislative documents and associated information. To gain
+access to this service you must register for an account. Please
+read the <a href="/api/usage-guidelines">terms and conditions of
+use</a>&#160;statement before registering for this service.</p>
+<p data-renderer-start-pos="127">To request access to the API
+service, please register here:&#160;<a data-renderer-mark="true" href="/api/signup" title="/api/signup">https://api.legislation.qld.gov.au/api/signup</a><br></b>
+
+&#160;</p>
+<h2 data-renderer-start-pos="242" id="Key-Information">Key
+Information</h2>
+<h3 data-renderer-start-pos="259" id="Base-URL">Base URL</h3>
+<p data-renderer-start-pos="269">The base URL for the Queensland
+Legislation API is&#160;<em><a data-renderer-mark="true" href="https://api.legislation.qld.gov.au/" title="https://api.legislation.qld.gov.au/">https://api.legislation.qld.gov.au/</a></em><br></b>
+
+&#160;</p>
+<h2 data-renderer-start-pos="524" id="Requests">Requests</h2>
+<p data-renderer-start-pos="534">For more information on the
+available requests, please see the Swagger documentation using the
+base URL above.<br></b>
+&#160;</p>
+<h2 data-renderer-start-pos="646" id="Response-Format">Response
+Format</h2>
+<p data-renderer-start-pos="663">Responses are formatted in many
+types —&#160;JSON, XML, HTML and PDF.<br></b>
+&#160;</p>
+<h2>Unsubscribe</h2>
+<p>To unsubscribe from this service, please send an email to the
+<a href="mailto:webmaster@oqpc.qld.gov.au"><u>Webmaster</u></a>
+requesting removal from the Queensland legislation API service. To
+assist us, please identify the email address you used for
+registration.</p>
+</div>
+</div>
+  <br /><p id='document-properties'></p>
+  
+  
+</div> <!-- /Container -->
+
+<!-- The two lines below is required for a sticky footer -->
+  <div id="push"></div>
+</div> <!-- close <div id='wrap'> from top.html -->
+<!-- /The two lines below is required for a sticky footer -->
+
+        <div id="top-link-block">
+            <a href="#" class="well well-sm" aria-label="Return to the top of the page">
+                  <span class="glyphicon glyphicon-chevron-up"></span>
+            </a>
+        </div>
+
+        <div id="footer">
+    <h2 id="landmark-label-4">Site footer</h2>
+    <div class="container" id="footer-menu">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="navbar-collapse upperFooter">
+                <ul class="nav navbar-nav">
+                <li>
+                    <a href="/copyright">Copyright</a>
+                </li>
+                <li>
+                    <a href="/disclaimer">Disclaimer</a>
+                </li>
+                <li>
+                    <a href="/privacy">Privacy</a>
+                </li>
+                <!--<li>
+                    <a href="/righttoinformation">Right to information</a>
+                </li>-->
+                <li>
+                    <a href="/accessibility">Accessibility</a>
+                </li>
+                <li>
+                    <a href="http://smartjobs.qld.gov.au/">Jobs in Queensland Government</a>
+                </li>
+                <li>
+                    <span id="languages"> <a href="https://www.qld.gov.au/languages" target="_blank">Other languages</a> </span>
+                </li>
+                </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="banner lowerFooter">      
+        <div class="container">
+            <div class="rowBottom">
+                <div class="col-md-12">
+                    <span id="footer-copyright">&copy; The State of Queensland (Office of the Queensland Parliamentary Counsel) 2014-2026 (Ver. 2.7.21 Rev. 7762)</span>
+                </div>
+                <div class="col-md-12">
+                    <a id="qldLink" href="https://www.qld.gov.au" accesskey="1" target="_blank">Queensland Government</a>
+                </div>
+                <!--<div class="col-md-12">
+                    <p><img class="tagline" src="/images/qg-tagline-footer.png" alt="Great state. Great opportunity."></p>
+                </div>-->
+            </div>  
+        </div>
+    </div>
+</div>      
+    <script type="text/javascript" src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=1&cb=1384990051" async></script></body>
+</html>

@@ -11,7 +11,18 @@
     "declaration": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "@models/*": ["src/models/*"],
+      "@commands/*": ["src/commands/*"],
+      "@utils/*": ["src/utils/*"],
+      "@output/*": ["src/output/*"],
+      "@mcp/*": ["src/mcp/*"],
+      "@client": ["src/client"],
+      "@config": ["src/config"],
+      "@errors": ["src/errors"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
