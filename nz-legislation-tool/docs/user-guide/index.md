@@ -83,8 +83,10 @@ This guide will help you get the most out of the NZ Legislation Tool. Whether yo
 
 - **[FAQ](./faq.md)** - Common questions answered
 - **[Troubleshooting](./troubleshooting.md)** - Step-by-step fixes
+- **[Glossary](./glossary.md)** - Technical terms explained simply
+- **[Accessibility](./accessibility-search.md)** - Accessibility features & search tips
 - **[Command Reference](./commands/)** - Detailed command documentation
-- **[GitHub Discussions](https://github.com/dylanmordaunt/nz-legislation-tool/discussions)** - Ask the community
+- **[GitHub Discussions](https://github.com/edithatogo/nz-legislation-tool/discussions)** - Ask the community
 
 ---
 
@@ -100,7 +102,7 @@ This documentation aims to meet WCAG 2.1 AA standards for accessibility.
 - ✅ Clear heading hierarchy
 - ✅ Plain language (Grade 8-10 reading level)
 
-**Issues?** If you encounter accessibility barriers, please [open an issue](https://github.com/dylanmordaunt/nz-legislation-tool/issues) or [contact us](mailto:dylan.mordaunt@vuw.ac.nz).
+**Issues?** If you encounter accessibility barriers, please [open an issue](https://github.com/edithatogo/nz-legislation-tool/issues) or [contact us](mailto:dylan.mordaunt@vuw.ac.nz).
 
 ---
 

@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Rust](https://img.shields.io/badge/Rust-1.75+-orange.svg)](https://www.rust-lang.org)
-[![Status](https://img.shields.io/badge/status-alpha-yellow.svg)](https://github.com/dylanmordaunt/nz-legislation)
+[![Status](https://img.shields.io/badge/status-alpha-yellow.svg)](https://github.com/edithatogo/nz-legislation)
 
 **A robust, type-safe command-line tool for accessing New Zealand legislation data.**
 
@@ -43,7 +43,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 ```bash
 # Clone the repository
-git clone https://github.com/dylanmordaunt/nz-legislation
+git clone https://github.com/edithatogo/nz-legislation
 cd nz-legislation
 
 # Build in release mode
@@ -304,8 +304,8 @@ Contributions welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) first.
 
 ## Support
 
-- **Issues:** [GitHub Issues](https://github.com/dylanmordaunt/nz-legislation/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/dylanmordaunt/nz-legislation/discussions)
+- **Issues:** [GitHub Issues](https://github.com/edithatogo/nz-legislation/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/edithatogo/nz-legislation/discussions)
 - **Email:** dylan.mordaunt@vuw.ac.nz
 
 ---

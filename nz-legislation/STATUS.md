@@ -237,7 +237,7 @@ Rust is not currently installed on your system. See INSTALL.md for installation 
 - **Installation:** See INSTALL.md
 - **Usage:** See README.md
 - **Contributing:** See CONTRIBUTING.md
-- **Issues:** https://github.com/dylanmordaunt/nz-legislation/issues
+- **Issues:** https://github.com/edithatogo/nz-legislation/issues
 
 ---
 

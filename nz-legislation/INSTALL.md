@@ -237,7 +237,7 @@ Once installed:
 ## Getting Help
 
 - **Documentation:** See `README.md`
-- **Issues:** https://github.com/dylanmordaunt/nz-legislation/issues
+- **Issues:** https://github.com/edithatogo/nz-legislation/issues
 - **Email:** dylan.mordaunt@vuw.ac.nz
 
 ---

@@ -25,7 +25,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 # Fork on GitHub, then:
 git clone https://github.com/YOUR_USERNAME/nz-legislation
 cd nz-legislation
-git remote add upstream https://github.com/dylanmordaunt/nz-legislation
+git remote add upstream https://github.com/edithatogo/nz-legislation
 ```
 
 ### 3. Set Up Development Environment
@@ -203,8 +203,8 @@ cargo doc
 ## 🎯 Good First Issues
 
 Look for issues labeled:
-- [`good first issue`](https://github.com/dylanmordaunt/nz-legislation/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
-- [`help wanted`](https://github.com/dylanmordaunt/nz-legislation/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
+- [`good first issue`](https://github.com/edithatogo/nz-legislation/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+- [`help wanted`](https://github.com/edithatogo/nz-legislation/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
 
 ### Example First Contributions
 

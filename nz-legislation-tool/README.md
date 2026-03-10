@@ -453,7 +453,7 @@ npx nz-legislation-tool search --query "health"
 ### Option 3: From Source (For contributors)
 
 ```bash
-git clone https://github.com/dylanmordaunt/nz-legislation-tool
+git clone https://github.com/edithatogo/nz-legislation-tool
 cd nz-legislation-tool
 npm install
 npm run build
@@ -481,7 +481,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for how to get started.
 
 ```bash
 # Clone the repo
-git clone https://github.com/dylanmordaunt/nz-legislation-tool
+git clone https://github.com/edithatogo/nz-legislation-tool
 cd nz-legislation-tool
 
 # Install dependencies
@@ -539,8 +539,8 @@ See [MAINTENANCE_GUIDE.md](MAINTENANCE_GUIDE.md) for details.
 
 Need help? We're here for you.
 
-- 🐛 **Found a bug?** [Open an issue](https://github.com/dylanmordaunt/nz-legislation-tool/issues)
-- 💬 **Have a question?** [Start a discussion](https://github.com/dylanmordaunt/nz-legislation-tool/discussions)
+- 🐛 **Found a bug?** [Open an issue](https://github.com/edithatogo/nz-legislation-tool/issues)
+- 💬 **Have a question?** [Start a discussion](https://github.com/edithatogo/nz-legislation-tool/discussions)
 - 📧 **Email:** dylan.mordaunt@vuw.ac.nz
 - 📖 **API docs:** https://api.legislation.govt.nz/docs/
 
