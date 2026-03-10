@@ -1,0 +1,503 @@
+/**
+ * Batch Processing Utilities
+ *
+ * Provides request batching for bulk operations to optimize API usage and improve performance.
+ */
+
+import { EventEmitter } from 'events';
+import { searchWorks, getWork, getWorkVersions, getVersion, getFromCache, setInCache } from '@client';
+import type { SearchResults, Work, Version, LegislationVersion } from '@models';
+
+function assertNever(value: never): never {
+  throw new Error(`Unknown request type: ${String(value)}`);
+}
+
+/**
+ * Batch request types
+ */
+export type BatchRequestType = 'search' | 'getWork' | 'getVersions' | 'getVersion';
+
+/**
+ * Cache TTL configuration for batch operations
+ */
+const BATCH_CACHE_TTL = {
+  search: 30 * 60 * 1000,      // 30 minutes
+  getWork: 2 * 60 * 60 * 1000, // 2 hours
+  getVersions: 60 * 60 * 1000, // 1 hour
+  getVersion: 60 * 60 * 1000,  // 1 hour
+};
+
+/**
+ * Generate cache key for batch request
+ */
+function generateCacheKey(request: BatchRequest): string {
+  const params = JSON.stringify(request.params);
+  return `batch:${request.type}:${params}`;
+}
+
+/**
+ * Type-safe batch request parameters
+ */
+export type BatchRequestParams = {
+  search: { query: string; limit?: number; offset?: number };
+  getWork: { id: string };
+  getVersions: { workId: string };
+  getVersion: { versionId: string };
+};
+
+/**
+ * Individual batch request
+ */
+export type BatchRequest =
+  | {
+      id: string;
+      type: 'search';
+      params: BatchRequestParams['search'];
+      priority?: number;
+    }
+  | {
+      id: string;
+      type: 'getWork';
+      params: BatchRequestParams['getWork'];
+      priority?: number;
+    }
+  | {
+      id: string;
+      type: 'getVersions';
+      params: BatchRequestParams['getVersions'];
+      priority?: number;
+    }
+  | {
+      id: string;
+      type: 'getVersion';
+      params: BatchRequestParams['getVersion'];
+      priority?: number;
+    };
+
+/**
+ * Batch request result
+ */
+export interface BatchResult<T = unknown> {
+  id: string;
+  success: boolean;
+  data?: T;
+  error?: Error;
+  cached: boolean;
+  duration: number;
+}
+
+/**
+ * Batch execution options
+ */
+export interface BatchOptions {
+  concurrency?: number;        // Max concurrent requests (default: 5)
+  retryFailed?: boolean;       // Auto-retry failed requests (default: false)
+  maxRetries?: number;         // Max retry attempts (default: 3)
+  timeout?: number;           // Request timeout in ms (default: 30000)
+  stopOnError?: boolean;      // Stop batch on first error (default: false)
+}
+
+/**
+ * Batch progress event
+ */
+export interface BatchProgress {
+  total: number;
+  completed: number;
+  failed: number;
+  cached: number;
+  percent: number;
+  estimatedTimeRemaining?: number;
+}
+
+/**
+ * Batch executor with progress tracking
+ */
+export class BatchExecutor extends EventEmitter {
+  private concurrency: number;
+  private retryFailed: boolean;
+  private maxRetries: number;
+  private timeout: number;
+  private stopOnError: boolean;
+
+  constructor(options: BatchOptions = {}) {
+    super();
+    this.concurrency = options.concurrency ?? 5;
+    this.retryFailed = options.retryFailed ?? false;
+    this.maxRetries = options.maxRetries ?? 3;
+    this.timeout = options.timeout ?? 30000;
+    this.stopOnError = options.stopOnError ?? false;
+  }
+
+  /**
+   * Execute multiple requests with controlled concurrency
+   */
+  async execute(requests: BatchRequest[]): Promise<BatchResult[]> {
+    const startTime = Date.now();
+    const results: BatchResult[] = [];
+    let completed = 0;
+    let failed = 0;
+    let cached = 0;
+
+    this.emit('start', { total: requests.length });
+
+    // Process in batches based on concurrency
+    const batches = this.chunkArray(requests, this.concurrency);
+
+    for (const batch of batches) {
+      if (this.stopOnError && failed > 0) {
+        break;
+      }
+
+      const batchPromises = batch.map(req => this.executeRequest(req));
+      const batchResults = await Promise.allSettled(batchPromises);
+
+      for (const result of batchResults) {
+        if (result.status === 'fulfilled') {
+          const batchResult = result.value;
+          results.push(batchResult);
+          completed++;
+          if (batchResult.cached) cached++;
+          if (!batchResult.success) failed++;
+        } else {
+          // Promise rejected
+          results.push({
+            id: 'unknown',
+            success: false,
+            error: result.reason as Error,
+            cached: false,
+            duration: 0,
+          });
+          failed++;
+        }
+      }
+
+      // Emit progress
+      const progress: BatchProgress = {
+        total: requests.length,
+        completed,
+        failed,
+        cached,
+        percent: Math.round((completed / requests.length) * 100),
+        estimatedTimeRemaining: this.calculateETA(startTime, completed, requests.length),
+      };
+
+      this.emit('progress', progress);
+    }
+
+    this.emit('complete', {
+      total: requests.length,
+      completed,
+      failed,
+      cached,
+      duration: Date.now() - startTime,
+      results,
+    });
+
+    return results;
+  }
+
+  /**
+   * Execute a single batch request
+   */
+  private async executeRequest(request: BatchRequest): Promise<BatchResult> {
+    const startTime = Date.now();
+    
+    // Generate cache key and check cache first
+    const cacheKey = generateCacheKey(request);
+    const cachedData = getFromCache(cacheKey);
+    
+    if (cachedData !== null) {
+      return {
+        id: request.id,
+        success: true,
+        data: cachedData,
+        cached: true,
+        duration: Date.now() - startTime,
+      } as BatchResult;
+    }
+
+    let cached = false;
+
+    try {
+      const timeoutPromise = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error(`Request timeout after ${this.timeout}ms`)), this.timeout)
+      );
+
+      const executePromise = (async () => {
+        let data: unknown;
+
+        switch (request.type) {
+          case 'search':
+            data = await searchWorks(request.params as BatchRequestParams['search']);
+            break;
+
+          case 'getWork':
+            data = await getWork((request.params as BatchRequestParams['getWork']).id);
+            break;
+
+          case 'getVersions':
+            data = await getWorkVersions((request.params as BatchRequestParams['getVersions']).workId);
+            break;
+
+          case 'getVersion':
+            data = await getVersion((request.params as BatchRequestParams['getVersion']).versionId);
+            break;
+
+          default:
+            throw new Error('Unknown request type');
+        }
+
+        // Cache the result for future requests
+        const ttl = BATCH_CACHE_TTL[request.type];
+        setInCache(cacheKey, data, ttl);
+
+        return {
+          id: request.id,
+          success: true,
+          data,
+          cached: false,
+          duration: Date.now() - startTime,
+        } as BatchResult;
+      })();
+
+      const result = await Promise.race([executePromise, timeoutPromise]);
+      return result as BatchResult;
+    } catch (error) {
+      // Retry logic
+      if (this.retryFailed) {
+        for (let attempt = 1; attempt <= this.maxRetries; attempt++) {
+          try {
+            await new Promise(resolve => setTimeout(resolve, 1000 * attempt)); // Exponential backoff
+            const retryResult = await this.executeRequest(request);
+            if (retryResult.success) {
+              return retryResult;
+            }
+          } catch {
+            // Continue to next retry
+          }
+        }
+      }
+
+      return {
+        id: request.id,
+        success: false,
+        error: error instanceof Error ? error : new Error('Unknown error'),
+        cached: false,
+        duration: Date.now() - startTime,
+      };
+    }
+  }
+
+  /**
+   * Chunk array into smaller arrays
+   */
+  private chunkArray<T>(array: T[], size: number): T[][] {
+    const chunks: T[][] = [];
+    for (let i = 0; i < array.length; i += size) {
+      chunks.push(array.slice(i, i + size));
+    }
+    return chunks;
+  }
+
+  /**
+   * Calculate estimated time remaining
+   */
+  private calculateETA(startTime: number, completed: number, total: number): number | undefined {
+    if (completed === 0) return undefined;
+    
+    const elapsed = Date.now() - startTime;
+    const avgTimePerRequest = elapsed / completed;
+    const remaining = total - completed;
+    
+    return Math.round(avgTimePerRequest * remaining);
+  }
+}
+
+/**
+ * Create batch requests from search results
+ */
+export function createBatchFromSearch(
+  searchResults: SearchResults,
+  requestType: 'getWork' | 'getVersions' = 'getWork'
+): BatchRequest[] {
+  return searchResults.results.map((work, index) => {
+    if (requestType === 'getWork') {
+      return {
+        id: work.id,
+        type: 'getWork',
+        params: { id: work.id },
+        priority: index,
+      };
+    }
+
+    return {
+      id: work.id,
+      type: 'getVersions',
+      params: { workId: work.id },
+      priority: index,
+    };
+  });
+}
+
+/**
+ * Create batch requests from ID list
+ */
+export function createBatchFromIds(
+  ids: string[],
+  requestType: BatchRequestType
+): BatchRequest[] {
+  return ids.map((id, index) => {
+    switch (requestType) {
+      case 'search':
+        return {
+          id,
+          type: 'search' as const,
+          params: { query: id },
+          priority: index,
+        } as BatchRequest;
+      case 'getWork':
+        return {
+          id,
+          type: 'getWork' as const,
+          params: { id },
+          priority: index,
+        } as BatchRequest;
+      case 'getVersions':
+        return {
+          id,
+          type: 'getVersions' as const,
+          params: { workId: id },
+          priority: index,
+        } as BatchRequest;
+      case 'getVersion':
+        return {
+          id,
+          type: 'getVersion' as const,
+          params: { versionId: id },
+          priority: index,
+        } as BatchRequest;
+    }
+  });
+}
+
+/**
+ * Create batch requests from CSV/file input
+ */
+export function createBatchFromFile(
+  rows: Array<Record<string, string>>,
+  requestType: BatchRequestType,
+  idColumn: string
+): BatchRequest[] {
+  return rows.map((row, index) => {
+    const id = row[idColumn];
+    if (!id) {
+      throw new Error(`Missing ID column "${idColumn}" in row ${index}`);
+    }
+
+    switch (requestType) {
+      case 'search':
+        return {
+          id,
+          type: 'search' as const,
+          params: { query: id },
+          priority: index,
+        } as BatchRequest;
+      case 'getWork':
+        return {
+          id,
+          type: 'getWork' as const,
+          params: { id },
+          priority: index,
+        } as BatchRequest;
+      case 'getVersions':
+        return {
+          id,
+          type: 'getVersions' as const,
+          params: { workId: id },
+          priority: index,
+        } as BatchRequest;
+      case 'getVersion':
+        return {
+          id,
+          type: 'getVersion' as const,
+          params: { versionId: id },
+          priority: index,
+        } as BatchRequest;
+    }
+  });
+}
+
+/**
+ * Format batch results for output
+ */
+export function formatBatchResults<T>(results: BatchResult<T>[]): {
+  successful: BatchResult<T>[];
+  failed: BatchResult<T>[];
+  cached: BatchResult<T>[];
+  summary: {
+    total: number;
+    successRate: number;
+    cacheHitRate: number;
+    averageDuration: number;
+    totalDuration: number;
+  };
+} {
+  const successful = results.filter(r => r.success);
+  const failed = results.filter(r => !r.success);
+  const cached = results.filter(r => r.cached);
+
+  const totalDuration = results.reduce((sum, r) => sum + r.duration, 0);
+
+  return {
+    successful,
+    failed,
+    cached,
+    summary: {
+      total: results.length,
+      successRate: results.length > 0 
+        ? Math.round((successful.length / results.length) * 100) 
+        : 0,
+      cacheHitRate: results.length > 0 
+        ? Math.round((cached.length / results.length) * 100) 
+        : 0,
+      averageDuration: results.length > 0 
+        ? Math.round(totalDuration / results.length) 
+        : 0,
+      totalDuration,
+    },
+  };
+}
+
+/**
+ * Save batch results to file
+ */
+export function saveBatchResults(
+  results: BatchResult[],
+  outputPath: string,
+  format: 'json' | 'csv' = 'json'
+): void {
+  const { writeFileSync } = require('fs');
+  
+  if (format === 'json') {
+    const output = {
+      exportedAt: new Date().toISOString(),
+      total: results.length,
+      results: results.map(r => ({
+        id: r.id,
+        success: r.success,
+        data: r.data,
+        error: r.error?.message,
+        cached: r.cached,
+        duration: r.duration,
+      })),
+    };
+    writeFileSync(outputPath, JSON.stringify(output, null, 2));
+  } else {
+    // CSV format - simplified
+    const csvLines = ['id,success,cached,duration,error'];
+    for (const result of results) {
+      csvLines.push(`${result.id},${result.success},${result.cached},${result.duration},"${result.error?.message || ''}"`);
+    }
+    writeFileSync(outputPath, csvLines.join('\n'));
+  }
+}

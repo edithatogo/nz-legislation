@@ -20,16 +20,16 @@ export const pluginCommand = new Command()
       .name('list')
       .description('List installed plugins')
       .option('-v, --verbose', 'Show detailed information')
-      .action((options) => {
+      .action(async (options) => {
         const loader = getGlobalPluginLoader(CORE_VERSION);
         const report = loader.getStatusReport();
-        
+
         console.log(formatPluginStatus(report));
-        
+
         if (options.verbose) {
           const registry = loader.getRegistry();
-          const dashboard = registry.getHealthDashboard();
-          
+          const dashboard = await registry.getHealthDashboard();
+
           console.log('\nPlugin Health:');
           for (const item of dashboard) {
             const icon = item.healthy ? '✅' : '❌';
