@@ -8,6 +8,7 @@ import chalk from 'chalk';
 import { Command } from 'commander';
 
 import { citeCommand } from './commands/cite.js';
+import { cacheCommand } from './commands/cache.js';
 import { configCommand } from './commands/config.js';
 import { exportCommand } from './commands/export.js';
 import { getCommand } from './commands/get.js';
@@ -60,7 +61,8 @@ program
   .addCommand(getCommand)
   .addCommand(exportCommand)
   .addCommand(citeCommand)
-  .addCommand(configCommand);
+  .addCommand(configCommand)
+  .addCommand(cacheCommand);
 
 // Pre-command hook to check configuration
 program.hook('preAction', (thisCommand, actionCommand) => {
