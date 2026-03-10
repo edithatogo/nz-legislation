@@ -8,6 +8,9 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: read
+
 jobs:
   # Test and build with coverage
   test-and-build:
@@ -29,7 +32,6 @@ jobs:
 
       - name: Run tests with coverage
         run: pnpm test:coverage
-        continue-on-error: true
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
@@ -42,9 +44,9 @@ jobs:
 
       - name: Build
         run: pnpm build
-        continue-on-error: true
 
       - name: Upload build artifacts
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: dist

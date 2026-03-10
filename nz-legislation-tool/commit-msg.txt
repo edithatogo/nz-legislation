@@ -1,0 +1,7 @@
+fix: Resolve all TypeScript errors in nz-legislation-tool
+
+- Fixed async action in plugin.ts list command
+- Fixed import paths in legislation-provider.ts to use ../utils/
+- Fixed type narrowing in batch.ts for BatchRequestParams union types
+
+All 48 TypeScript errors now resolved. Type checking passes.

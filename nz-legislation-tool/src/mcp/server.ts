@@ -142,7 +142,7 @@ function registerGetTool(server: McpServer): void {
     'get_legislation',
     'Get details of a specific legislation work by ID',
     {
-      workId: z.string().describe('Work ID (e.g., act/2020/67)'),
+      workId: z.string().describe('Work ID (e.g., act_public_1989_18)'),
     },
     async (params) => {
       try {
@@ -199,7 +199,7 @@ function registerGetVersionsTool(server: McpServer): void {
     'get_legislation_versions',
     'Get all versions of a specific legislation work',
     {
-      workId: z.string().describe('Work ID (e.g., act/2020/67)'),
+      workId: z.string().describe('Work ID (e.g., act_public_1989_18)'),
     },
     async (params) => {
       try {
@@ -255,8 +255,8 @@ function registerCitationTool(server: McpServer): void {
     'generate_citation',
     'Generate citation for legislation in various styles',
     {
-      workId: z.string().describe('Work ID (e.g., act/2020/67)'),
-      style: z.enum(['nzmj', 'bibtex', 'ris', 'apa']).default('nzmj').describe('Citation style'),
+      workId: z.string().describe('Work ID (e.g., act_public_1989_18)'),
+      style: z.enum(['nzmj', 'bibtex', 'ris', 'enw', 'apa']).default('nzmj').describe('Citation style'),
     },
     async (params) => {
       try {
@@ -458,7 +458,7 @@ function registerLegislationResource(server: McpServer): void {
 /**
  * Start MCP server with stdio transport
  */
-export async function startServer(): Promise<void> {
+export async function startServer(): Promise<McpServer> {
   const server = createServer();
   const transport = new StdioServerTransport();
 
@@ -470,4 +470,6 @@ export async function startServer(): Promise<void> {
   console.error('Tools available: search_legislation, get_legislation, get_legislation_versions, generate_citation, export_legislation, get_config');
   // eslint-disable-next-line no-console
   console.error('Resources available: legislation://{workId}');
+
+  return server;
 }

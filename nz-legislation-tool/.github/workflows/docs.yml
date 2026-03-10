@@ -41,11 +41,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Install TypeDoc
-        run: pnpm add -D typedoc
-
       - name: Build API documentation
-        run: pnpm exec typedoc
+        run: pnpm run docs
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

@@ -7,7 +7,6 @@
   "excludeProtected": false,
   "excludeExternals": true,
   "includeVersion": true,
-  "includeCompilerOptions": true,
   "readme": "README.md",
   "name": "NZ Legislation Tool API",
   "plugin": [],
@@ -35,6 +34,21 @@
     "notDocumented": false
   },
   "treatValidationWarningsAsErrors": false,
+  "intentionallyNotExported": ["configSchema", "HttpClientFactory", "CacheMetrics"],
+  "highlightLanguages": [
+    "bash",
+    "console",
+    "csv",
+    "css",
+    "html",
+    "javascript",
+    "json",
+    "jsonc",
+    "json5",
+    "yaml",
+    "tsx",
+    "typescript"
+  ],
   "searchInComments": true,
   "useTsLinkResolution": true
 }

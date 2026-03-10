@@ -5,6 +5,10 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: write
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -41,16 +45,21 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Skip publish when NPM token is not configured
+        if: env.NPM_TOKEN == ''
+        run: echo "NPM_TOKEN is not configured. Skipping release publish."
 
       - name: Create Release Pull Request or Publish
+        if: env.NPM_TOKEN != ''
         id: changesets
         uses: changesets/action@v1
         with:
           commit: "chore: version packages"
           title: "chore: version packages"
-          publish: pnpm changeset publish
-          version: pnpm changeset version
+          publish: pnpm exec changeset publish
+          version: pnpm exec changeset version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

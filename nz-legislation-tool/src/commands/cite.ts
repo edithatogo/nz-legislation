@@ -16,8 +16,8 @@ interface CiteOptions {
 export const citeCommand = new Command()
   .name('cite')
   .description('Generate citation for legislation')
-  .argument('<id>', 'Work ID (e.g., act/2020/67)')
-  .option('-s, --style <style>', 'Citation style (nzmj, bibtex, ris, apa)', 'nzmj')
+  .argument('<id>', 'Work ID (e.g., act_public_1989_18)')
+  .option('-s, --style <style>', 'Citation style (nzmj, bibtex, ris, enw, apa)', 'nzmj')
   .option('--copy', 'Copy to clipboard (not implemented)', false)
   .action(async (workId: string, options: CiteOptions) => {
     const spinner = ora('Generating citation...').start();

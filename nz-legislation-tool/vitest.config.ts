@@ -1,24 +1,25 @@
+import { fileURLToPath } from 'node:url';
+import { resolve } from 'node:path';
 import { defineConfig } from 'vitest/config';
-import path from 'path';
+
+const rootDir = fileURLToPath(new URL('.', import.meta.url));
+const srcDir = resolve(rootDir, 'src');
 
 export default defineConfig({
   resolve: {
-    alias: {
-      '@models/index': path.resolve(__dirname, './src/models/index.ts'),
-      '@models': path.resolve(__dirname, './src/models'),
-      '@commands': path.resolve(__dirname, './src/commands'),
-      '@utils/logger': path.resolve(__dirname, './src/utils/logger.ts'),
-      '@utils/secure-config': path.resolve(__dirname, './src/utils/secure-config.ts'),
-      '@utils/env-loader': path.resolve(__dirname, './src/utils/env-loader.ts'),
-      '@utils/validation': path.resolve(__dirname, './src/utils/validation.ts'),
-      '@utils': path.resolve(__dirname, './src/utils'),
-      '@output/index': path.resolve(__dirname, './src/output/index.ts'),
-      '@output': path.resolve(__dirname, './src/output'),
-      '@mcp': path.resolve(__dirname, './src/mcp'),
-      '@client': path.resolve(__dirname, './src/client.ts'),
-      '@config': path.resolve(__dirname, './src/config.ts'),
-      '@errors': path.resolve(__dirname, './src/errors.ts'),
-    },
+    alias: [
+      { find: /^@models$/, replacement: resolve(srcDir, 'models', 'index.ts') },
+      { find: /^@models\/(.*)$/, replacement: `${resolve(srcDir, 'models')}/$1` },
+      { find: /^@utils$/, replacement: resolve(srcDir, 'utils', 'index.ts') },
+      { find: /^@utils\/(.*)$/, replacement: `${resolve(srcDir, 'utils')}/$1` },
+      { find: /^@output$/, replacement: resolve(srcDir, 'output', 'index.ts') },
+      { find: /^@output\/(.*)$/, replacement: `${resolve(srcDir, 'output')}/$1` },
+      { find: /^@commands\/(.*)$/, replacement: `${resolve(srcDir, 'commands')}/$1` },
+      { find: /^@mcp\/(.*)$/, replacement: `${resolve(srcDir, 'mcp')}/$1` },
+      { find: /^@client$/, replacement: resolve(srcDir, 'client.ts') },
+      { find: /^@config$/, replacement: resolve(srcDir, 'config.ts') },
+      { find: /^@errors$/, replacement: resolve(srcDir, 'errors.ts') },
+    ],
   },
   test: {
     globals: true,
@@ -45,5 +46,8 @@ export default defineConfig({
     },
     testTimeout: 30000,
     setupFiles: ['./tests/setup.ts'],
+  },
+  ssr: {
+    noExternal: ['winston', 'winston-daily-rotate-file'],
   },
 });

@@ -13,6 +13,9 @@ import { configCommand } from './commands/config.js';
 import { exportCommand } from './commands/export.js';
 import { getCommand } from './commands/get.js';
 import { searchCommand } from './commands/search.js';
+import { batchCommand } from './commands/batch.js';
+import { streamCommand } from './commands/stream.js';
+import { pluginCommand } from './commands/plugin.js';
 import { createInteractiveHelpCommand, createContextualHelpCommand } from './commands/help.js';
 import { createGenerateCommand } from './commands/generate.js';
 import { getConfig } from './config.js';
@@ -42,11 +45,18 @@ program
     `
 Examples:
   $ nzlegislation search --query "health" --type act
-  $ nzlegislation get "act/2020/67"
-  $ nzlegislation get "act/2020/67" --versions
+  $ nzlegislation get "act/1986/132"
+  $ nzlegislation get "act/1986/132" --versions
   $ nzlegislation export --query "health" --output health.csv
-  $ nzlegislation cite "act/2020/67" --style nzmj
+  $ nzlegislation stream --query "health" --output health.csv  # Stream large exports
+  $ nzlegislation batch --ids "act/1986/132,act/1989/18" --type getWork --output results.json
+  $ nzlegislation batch --file works.csv --type getWork --output results.json
+  $ nzlegislation plugin list  # List installed plugins
+  $ nzlegislation plugin discover  # Discover available plugins
+  $ nzlegislation plugin install @nz-legislation/queensland  # Install plugin
+  $ nzlegislation cite "act/1986/132" --style bibtex
   $ nzlegislation config --show
+  $ nzlegislation cache --stats
 
 Documentation: https://github.com/dylanmordaunt/nz-legislation-tool
 API Documentation: https://api.legislation.govt.nz/docs/`
@@ -65,6 +75,9 @@ program
   .addCommand(citeCommand)
   .addCommand(configCommand)
   .addCommand(cacheCommand)
+  .addCommand(batchCommand)
+  .addCommand(streamCommand)
+  .addCommand(pluginCommand)
   .addCommand(createInteractiveHelpCommand())
   .addCommand(createContextualHelpCommand())
   .addCommand(createGenerateCommand());
@@ -170,7 +183,7 @@ function displayErrorWithSuggestions(error: ApplicationError): void {
     case ErrorCode.VALIDATION_INVALID_ID:
       console.error(chalk.white('  1. Check the format of your input'));
       console.error(chalk.white('  2. Use ') + chalk.cyan('--help') + chalk.white(' to see valid options'));
-      console.error(chalk.white('  3. Example: ') + chalk.cyan('nzlegislation get "act/2020/67"'));
+      console.error(chalk.white('  3. Example: ') + chalk.cyan('nzlegislation get "act_public_1989_18"'));
       break;
 
     default:

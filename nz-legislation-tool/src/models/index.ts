@@ -43,6 +43,11 @@ const LatestMatchingVersionSchema = z.object({
   formats: z.array(ApiFormatSchema).optional(),
 });
 
+function extractDateFromVersionId(versionId: string): string {
+  const match = versionId.match(/(\d{4}-\d{2}-\d{2})[A-Z]?$/);
+  return match ? match[1] : '1900-01-01';
+}
+
 function mapLegislationType(apiType: string): WorkType {
   switch (apiType) {
     case 'act':
@@ -103,17 +108,13 @@ export const WorkSchema = ApiWorkSchema.transform((raw) => {
   const htmlFormat = version.formats?.find((format) => format.type === 'html');
   const status = raw.legislation_status || raw.act_status || raw.bill_status || raw.instrument_status;
 
-  const versionParts = version.version_id.split('_');
-  const dateCandidate = versionParts[versionParts.length - 1];
-  const date = /^\d{4}-\d{2}-\d{2}$/.test(dateCandidate) ? dateCandidate : '1900-01-01';
-
   return {
     id: raw.work_id,
     title: version.title,
     shortTitle: undefined as string | undefined,
     type: mapLegislationType(raw.legislation_type),
     status: mapLegislationStatus(status),
-    date,
+    date: extractDateFromVersionId(version.version_id),
     url: htmlFormat?.url || `https://www.legislation.govt.nz/${raw.work_id.replace(/_/g, '/')}/`,
     versionCount: 0,
   };
@@ -137,17 +138,33 @@ const ApiVersionSchema = z.object({
 }).passthrough();
 
 /**
+ * Version item promoted to a normalized work, used when the API does not expose
+ * a dedicated single-work endpoint.
+ */
+export const WorkFromVersionSchema = ApiVersionSchema.transform((raw) => {
+  const htmlFormat = raw.formats?.find((format) => format.type === 'html');
+  const status = raw.legislation_status || raw.act_status;
+
+  return {
+    id: raw.work_id,
+    title: raw.title,
+    shortTitle: undefined as string | undefined,
+    type: mapLegislationType(raw.legislation_type || 'instrument'),
+    status: mapLegislationStatus(status),
+    date: extractDateFromVersionId(raw.version_id),
+    url: htmlFormat?.url || `https://www.legislation.govt.nz/${raw.work_id.replace(/_/g, '/')}/`,
+    versionCount: 0,
+  };
+});
+
+/**
  * Version model — normalized from API response.
  */
 export const VersionSchema = ApiVersionSchema.transform((raw) => {
-  const versionParts = raw.version_id.split('_');
-  const dateCandidate = versionParts[versionParts.length - 1];
-  const date = /^\d{4}-\d{2}-\d{2}$/.test(dateCandidate) ? dateCandidate : '1900-01-01';
-
   return {
     id: raw.version_id,
     version: 1,
-    date,
+    date: extractDateFromVersionId(raw.version_id),
     isCurrent: raw.is_latest_version || false,
     type: raw.legislation_type || raw.act_type || 'unknown',
     formats: (raw.formats || []).map((format) => format.url),
@@ -169,16 +186,12 @@ export type FormatInfo = z.infer<typeof FormatInfoSchema>;
  * Legislation Version with full content — normalized from API response.
  */
 export const LegislationVersionSchema = ApiVersionSchema.transform((raw) => {
-  const versionParts = raw.version_id.split('_');
-  const dateCandidate = versionParts[versionParts.length - 1];
-  const date = /^\d{4}-\d{2}-\d{2}$/.test(dateCandidate) ? dateCandidate : '1900-01-01';
-
   return {
     id: raw.version_id,
     workId: raw.work_id,
     title: raw.title,
     version: 1,
-    date,
+    date: extractDateFromVersionId(raw.version_id),
     isCurrent: raw.is_latest_version || false,
     content: undefined as string | undefined,
     formats: (raw.formats || []).map((format) => ({ format: format.type, url: format.url })),
@@ -217,7 +230,7 @@ export type SearchResults = z.infer<typeof SearchResultsSchema>;
  */
 export const CitationSchema = z.object({
   workId: z.string(),
-  style: z.enum(['nzmj', 'bibtex', 'ris', 'apa']),
+  style: z.enum(['nzmj', 'bibtex', 'ris', 'enw', 'apa']),
   citation: z.string(),
 });
 export type Citation = z.infer<typeof CitationSchema>;

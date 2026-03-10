@@ -1,0 +1,27 @@
+{
+  "name": "@nz-legislation/queensland",
+  "version": "1.0.0",
+  "description": "Queensland legislation plugin for NZ Legislation Tool",
+  "type": "module",
+  "main": "dist/QueenslandProvider.js",
+  "exports": {
+    ".": "./dist/QueenslandProvider.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "keywords": ["queensland", "legislation", "australia", "plugin"],
+  "author": "NZ Legislation Team",
+  "license": "Apache-2.0",
+  "peerDependencies": {
+    "nz-legislation-tool": "^2.0.0"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "lru-cache": "^11.0.0"
+  },
+  "pluginType": "official",
+  "pluginStatus": "stable",
+  "provides": "au-qld"
+}

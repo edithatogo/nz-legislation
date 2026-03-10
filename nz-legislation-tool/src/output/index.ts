@@ -179,14 +179,16 @@ export function versionsToCsv(versions: Version[]): string {
  * Generate citation in different styles
  */
 export function generateCitation(work: Work, style: string = 'nzmj'): string {
+  const year = extractCitationYear(work);
+
   switch (style.toLowerCase()) {
     case 'nzmj':
-      return `${work.title}, ${work.type === 'act' ? 'Public Act' : work.type} ${work.date.substring(0, 4)} (NZ).`;
+      return `${work.title}, ${work.type === 'act' ? 'Public Act' : work.type} ${year} (NZ).`;
 
     case 'bibtex':
       return `@legislation{${work.id.replace(/\//g, '-')},
   title = {${work.title}},
-  year = {${work.date.substring(0, 4)}},
+  year = {${year}},
   type = {${work.type}},
   status = {${work.status}},
   url = {${work.url}}
@@ -196,14 +198,39 @@ export function generateCitation(work: Work, style: string = 'nzmj'): string {
       return `TY - LEG
 ID - ${work.id}
 TI - ${work.title}
-PY - ${work.date.substring(0, 4)}
+PY - ${year}
+M3 - ${work.type === 'act' ? 'Public Act' : work.type}
+CY - New Zealand
 UR - ${work.url}
 ER - `;
 
+    case 'enw':
+      return `%0 Statute
+%A New Zealand
+%D ${year}
+%T ${work.title}
+%9 ${work.type === 'act' ? 'Public Act' : work.type}
+%U ${work.url}
+%Z ${work.id}`;
+
     case 'apa':
-      return `${work.title}. (${work.date.substring(0, 4)}). ${work.type === 'act' ? 'Public Act' : work.type} (New Zealand). ${work.url}`;
+      return `${work.title}. (${year}). ${work.type === 'act' ? 'Public Act' : work.type} (New Zealand). ${work.url}`;
 
     default:
       return `Unknown citation style: ${style}`;
   }
+}
+
+function extractCitationYear(work: Work): string {
+  const idMatch = work.id.match(/(?:^|[_/])((?:19|20)\d{2})(?:[_/]|$)/);
+  if (idMatch) {
+    return idMatch[1];
+  }
+
+  const titleMatch = work.title.match(/\b((?:19|20)\d{2})\b/);
+  if (titleMatch) {
+    return titleMatch[1];
+  }
+
+  return work.date.substring(0, 4);
 }

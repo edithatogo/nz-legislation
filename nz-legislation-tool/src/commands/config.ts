@@ -5,6 +5,7 @@
 import { Command } from 'commander';
 
 import { clearConfig, getConfig, getConfigPath, hasApiKey, setApiKey } from '@config';
+import { maskApiKey } from '@utils/secure-config';
 
 interface ConfigOptions {
   show?: boolean;
@@ -37,7 +38,7 @@ export const configCommand = new Command()
       const config = getConfig();
       console.log('Current Configuration:');
       console.log('─'.repeat(50));
-      console.log(`API Key: ${config.apiKey ? '***' + config.apiKey.slice(-4) : 'Not set'}`);
+      console.log(`API Key: ${config.apiKey ? maskApiKey(config.apiKey) : 'Not set'}`);
       console.log(`Base URL: ${config.baseUrl}`);
       console.log(`Timeout: ${config.timeout}ms`);
       console.log(`Cache: ${config.cacheEnabled ? 'Enabled' : 'Disabled'}`);

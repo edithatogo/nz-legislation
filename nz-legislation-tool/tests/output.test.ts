@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { worksToCsv, generateCitation } from '../src/output/index.js';
-import type { Work, SearchResults } from '../src/models/index.js';
+import { worksToCsv, generateCitation } from '../src/output/index.ts';
+import type { Work, SearchResults } from '../src/models/index.ts';
 
 describe('Output Formatters', () => {
   const mockWork: Work = {
@@ -21,7 +21,7 @@ describe('Output Formatters', () => {
   describe('worksToCsv', () => {
     it('should generate CSV with correct headers', () => {
       const csv = worksToCsv(mockResults);
-      expect(csv).toContain('work_id,title,type,status,date,url,publisher');
+      expect(csv).toContain('id,title,shortTitle,type,status,date,url,versionCount');
     });
 
     it('should include work data in CSV', () => {
@@ -29,16 +29,13 @@ describe('Output Formatters', () => {
       expect(csv).toContain('act_public_1989_18');
       expect(csv).toContain('Trade in Endangered Species Act 1989');
       expect(csv).toContain('act');
-      expect(csv).toContain('in_force');
+      expect(csv).toContain('in-force');
     });
 
     it('should escape quotes in titles', () => {
       const workWithQuotes: Work = {
         ...mockWork,
-        latest_matching_version: {
-          ...mockWork.latest_matching_version,
-          title: 'Test "Quoted" Act 1989',
-        },
+        title: 'Test "Quoted" Act 1989',
       };
 
       const csv = worksToCsv({ ...mockResults, results: [workWithQuotes] });
@@ -66,7 +63,28 @@ describe('Output Formatters', () => {
       expect(citation).toContain('TY - LEG');
       expect(citation).toContain('ID - act_public_1989_18');
       expect(citation).toContain('TI - Trade in Endangered Species Act 1989');
+      expect(citation).toContain('CY - New Zealand');
       expect(citation).toContain('ER -');
+    });
+
+    it('should generate ENW citation', () => {
+      const citation = generateCitation(mockWork, 'enw');
+      expect(citation).toContain('%0 Statute');
+      expect(citation).toContain('%D 1989');
+      expect(citation).toContain('%T Trade in Endangered Species Act 1989');
+      expect(citation).toContain('%Z act_public_1989_18');
+    });
+
+    it('should prefer the legislation year encoded in the work ID over the latest version date', () => {
+      const citation = generateCitation(
+        {
+          ...mockWork,
+          date: '2026-03-05',
+        },
+        'bibtex',
+      );
+
+      expect(citation).toContain('year = {1989}');
     });
 
     it('should generate APA citation', () => {
