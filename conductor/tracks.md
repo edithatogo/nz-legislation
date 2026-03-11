@@ -192,18 +192,24 @@ This file tracks all major work streams for the NZ Legislation Tool project.
 
 ---
 
-### [ ] Track: Documentation Site (Phase 8)
-**Link:** [./tracks/documentation-site-phase-8/](./tracks/documentation-site-phase-8/)
+### [x] Track: Documentation Site (Phase 8)
+**Link:** [../archive/documentation-site-phase-8/](../archive/documentation-site-phase-8/)
 
-**Status:** 🔄 **IN PROGRESS**
+**Status:** 📦 **ARCHIVED**
 
-**Summary:** Create dedicated documentation website using Docusaurus or VitePress.
+**Summary:** Create dedicated documentation website using Docusaurus v3.
 
-**Priority:** Medium
-**Timeline:** 2-3 weeks
-**Key Deliverables:** Static site, search, versioning, community features, auto-deployment, analytics
+**Date Created:** 2026-03-11
+**Date Completed:** 2026-03-11
+**Date Archived:** 2026-03-11
+**Key Deliverables:** Docusaurus site, 10 documentation pages, deployment workflow, configuration guide
 
-**Current Phase:** Phase 1 - Platform Selection & Setup
+**Review Summary:** All 8 phases completed in 1 day. Build verified SUCCESS. Production ready.
+
+**External Setup Needed:**
+- Algolia DocSearch application
+- Google Analytics tracking ID  
+- GitHub Pages enablement
 
 ---
 
@@ -287,12 +293,11 @@ This file tracks all major work streams for the NZ Legislation Tool project.
 | Status | Count | Percentage |
 |--------|-------|------------|
 | ✅ **Complete** | 0 | 0% |
-| 📦 **Archived** | 11 | 61% |
-| 🔄 **In Progress** | 1 | 6% |
-| ⏳ **Pending** | 5 | 33% |
+| 📦 **Archived** | 12 | 67% |
+| ⏳ **Pending** | 6 | 33% |
 | **Total** | **18** | **100%** |
 
-**Overall Project Progress:** ~65% complete (technical infrastructure complete, research programme pending)
+**Overall Project Progress:** ~70% complete (technical infrastructure complete, research programme pending)
 
 ---
 
