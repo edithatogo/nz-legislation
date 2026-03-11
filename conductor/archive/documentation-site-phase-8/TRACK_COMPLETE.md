@@ -8,12 +8,7 @@
 
 ## Summary
 
-All 8 phases of the Documentation Site track have been completed successfully. The Docusaurus v3 site is production-ready with:
-
-- 10 documentation pages migrated
-- Custom NZ government branding
-- GitHub Actions deployment workflow
-- Complete configuration guide for remaining features
+All 8 phases of the Documentation Site track have been completed successfully. The Docusaurus v3 site is production-ready and integrated with the existing GitHub Pages deployment workflow.
 
 ---
 
@@ -39,8 +34,9 @@ All 8 phases of the Documentation Site track have been completed successfully. T
 - Configuration ready
 
 ### Phase 5: CI/CD & Deployment ✅
-- GitHub Actions workflow created
-- GitHub Pages deployment configured
+- **Integrated with existing GitHub Pages workflow**
+- Workflow updated: `.github/workflows/docs.yml`
+- Auto-deploys on push to main
 
 ### Phase 6: Analytics & Monitoring ✅
 - Google Analytics configuration documented
@@ -67,7 +63,7 @@ All 8 phases of the Documentation Site track have been completed successfully. T
 | `tsconfig.json` | TypeScript config |
 | `src/css/custom.css` | Custom branding |
 | `docs/*.md` | 10 documentation pages |
-| `.github/workflows/deploy-docs.yml` | Deployment workflow |
+| `.github/workflows/docs.yml` | GitHub Pages deployment (updated) |
 | `PHASES_3-8_SUMMARY.md` | Complete configuration guide |
 
 ---
@@ -78,18 +74,43 @@ All 8 phases of the Documentation Site track have been completed successfully. T
 ✅ npm run build - SUCCESS
 ✅ Static files generated in build/
 ✅ All pages linked correctly
+✅ GitHub Pages workflow integrated
 ```
 
 ---
 
-## Next Steps (External Setup Required)
+## Deployment
+
+### Automatic Deployment
+
+The documentation site will automatically deploy to GitHub Pages when:
+- Changes are pushed to `main` branch
+- Changes are in `nz-legislation-tool/documentation-site/**`
+
+### Manual Deployment
+
+Trigger deployment via GitHub Actions:
+1. Go to Actions → "Deploy Documentation"
+2. Click "Run workflow"
+3. Select `main` branch
+4. Click "Run workflow"
+
+### Live Site
+
+**URL:** https://edithatogo.github.io/nz-legislation/
+
+*(Note: Update this URL with the actual GitHub Pages URL once deployed)*
+
+---
+
+## Next Steps (Optional)
 
 1. **Algolia DocSearch**: Apply at https://docsearch.algolia.com/
 2. **Google Analytics**: Create account at analytics.google.com
-3. **GitHub Pages**: Enable in repository settings
-4. **First Deployment**: Run `npm run deploy` or push to main
+3. **Custom Domain**: Configure in repository settings if desired
 
 ---
 
 **Track Status:** COMPLETE ✅  
-**Ready for:** Production deployment
+**Deployment:** Integrated with GitHub Pages  
+**Ready for:** Production use
