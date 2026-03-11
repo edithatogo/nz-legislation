@@ -1,0 +1,45 @@
+{
+  "initiative": "NZ health legislation corpus publication programme",
+  "epics": [
+    {
+      "key": "P1_POLICY_WHIPLASH",
+      "name": "Policy whiplash and legislative instability",
+      "description": "How unstable is New Zealand health legislation across reform cycles?"
+    },
+    {
+      "key": "P2_ACCOUNTABILITY_DRIFT",
+      "name": "Responsibility and accountability drift",
+      "description": "How have responsibilities shifted across institutions after Pae Ora?"
+    },
+    {
+      "key": "P3_GOVERNANCE_LOAD",
+      "name": "Governance load and administrative burden",
+      "description": "Has governance burden increased in New Zealand health legislation?"
+    },
+    {
+      "key": "P4_RIGHTS_VS_COERCION",
+      "name": "Rights versus coercion in mental health law",
+      "description": "Has rights language displaced coercive language in mental health legislation?"
+    },
+    {
+      "key": "P5_MAORI_GOVERNANCE_EQUITY",
+      "name": "Maori governance and equity language",
+      "description": "How has Maori governance and equity language evolved in New Zealand health law?"
+    }
+  ],
+  "issue_template": {
+    "title_pattern": "[TRACK] task name",
+    "fields": [
+      "objective",
+      "deliverable",
+      "dependencies",
+      "definition_of_done"
+    ],
+    "labels": [
+      "health-policy",
+      "legislation-corpus",
+      "nzmj",
+      "election-2026"
+    ]
+  }
+}

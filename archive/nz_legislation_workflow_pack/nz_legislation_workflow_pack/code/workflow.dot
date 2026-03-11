@@ -1,0 +1,30 @@
+
+digraph workflow {
+  graph [rankdir=LR, bgcolor="white", nodesep=0.5, ranksep=0.8, pad=0.2];
+  node [shape=box, style="rounded,filled", color="#6B7280", fillcolor="#F8FAFC", fontname="Helvetica", fontsize=12, margin="0.14,0.08"];
+  edge [color="#94A3B8", penwidth=1.4, arrowsize=0.8];
+
+  A [label="Initiative setup", fillcolor="#E0F2FE"];
+  B [label="Notion programme hub", fillcolor="#F1F5F9"];
+  C [label="Linear initiative and issues", fillcolor="#F1F5F9"];
+  D [label="Figma workflow board", fillcolor="#F1F5F9"];
+  E [label="Select lead protocol", fillcolor="#FEF3C7"];
+  F [label="Define corpus boundaries"];
+  G [label="Query legislation API"];
+  H [label="Build versioned XML corpus"];
+  I [label="Create metadata table"];
+  J [label="Draft coding schema"];
+  K [label="Pilot coding and validation"];
+  L [label="Run full extraction and analysis", fillcolor="#DCFCE7"];
+  M [label="Generate tables, figures,\nand appendices", fillcolor="#DCFCE7"];
+  N [label="Draft NZMJ manuscript", fillcolor="#FCE7F3"];
+  O [label="Internal review and revision", fillcolor="#FCE7F3"];
+  P [label="Submission package", fillcolor="#FCE7F3"];
+  Q [label="Pre-election dissemination", fillcolor="#EDE9FE"];
+  R [label="Shared methods library", fillcolor="#F3E8FF"];
+
+  A -> B; A -> C; A -> D;
+  B -> E; C -> E; D -> E;
+  E -> F -> G -> H -> I -> J -> K -> L -> M -> N -> O -> P -> Q;
+  J -> R; K -> R; L -> R; M -> R; R -> N;
+}

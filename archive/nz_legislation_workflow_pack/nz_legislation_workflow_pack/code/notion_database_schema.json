@@ -1,0 +1,27 @@
+{
+  "projects": [
+    "Title",
+    "Short code",
+    "Status",
+    "Election relevance",
+    "NZMJ priority",
+    "Lead question",
+    "Owner",
+    "Next milestone"
+  ],
+  "decisions": [
+    "Date",
+    "Topic",
+    "Decision",
+    "Rationale",
+    "Affected protocols"
+  ],
+  "corpus_log": [
+    "Date",
+    "Instrument",
+    "Version",
+    "Source",
+    "Notes",
+    "Included"
+  ]
+}

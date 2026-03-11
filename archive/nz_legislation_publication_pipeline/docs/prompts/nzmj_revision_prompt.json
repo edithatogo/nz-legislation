@@ -1,0 +1,11 @@
+{
+  "name": "nzmj_manuscript_revision",
+  "purpose": "Revise a near-final manuscript for NZMJ using a humanizer pass while preserving factual content and caveats.",
+  "steps": [
+    "improve flow and cadence",
+    "remove generic signposting",
+    "tighten claims",
+    "retain all limitations",
+    "ensure broad readability"
+  ]
+}

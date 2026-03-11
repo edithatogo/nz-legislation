@@ -1,0 +1,13 @@
+programme:
+  name: NZ health legislation corpus programme
+  lead_sequence:
+    - P1 policy whiplash
+    - P2 accountability drift
+    - P3 governance load
+    - P4 rights vs coercion
+    - P5 maori governance and equity
+artefacts:
+  notion: programme hub, protocol pages, decisions, corpus log
+  linear: initiative, epics, issues, milestones
+  figma: workflow board, sequencing map, figure concepts
+  repo: corpus scripts, codebooks, tables, figures, manuscript drafts

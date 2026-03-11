@@ -1,0 +1,43 @@
+# .github/labeler.yml
+# Auto-label issues based on content
+
+# Component labels
+bug:
+  - head-branch: ['^fix', 'fix/']
+  - body: '/\b(bug|error|fail|issue|broken)\b/i'
+
+enhancement:
+  - head-branch: ['^feat', 'feat/', '^feature', 'feature/']
+  - body: '/\b(feature|enhancement|improve|add)\b/i'
+
+documentation:
+  - head-branch: ['^docs', 'docs/', '^doc', 'doc/']
+  - body: '/\b(docs|documentation|readme|typo)\b/i'
+
+security:
+  - body: '/\b(security|vulnerability|exploit|attack)\b/i'
+
+performance:
+  - head-branch: ['^perf', 'perf/', '^performance', 'performance/']
+  - body: '/\b(performance|slow|fast|optimize|benchmark)\b/i'
+
+testing:
+  - head-branch: ['^test', 'test/', '^tests', 'tests/']
+  - body: '/\b(test|testing|spec|coverage)\b/i'
+
+dependencies:
+  - head-branch: ['^deps', 'deps/', '^dependabot', 'dependabot/']
+  - body: '/\b(dependency|dependencies|upgrade|update)\b/i'
+
+# Priority labels based on severity
+priority: critical:
+  - body: '/\b(critical|urgent|emergency|blocking)\b/i'
+
+priority: high:
+  - body: '/\b(high|important|urgent)\b/i'
+
+priority: medium:
+  - body: '/\b(medium|normal)\b/i'
+
+priority: low:
+  - body: '/\b(low|minor|nice.to.have)\b/i'

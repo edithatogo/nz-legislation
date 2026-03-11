@@ -1,0 +1,49 @@
+# CODEOWNERS - Automatic Review Assignment
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# This file uses glob patterns to match files and directories to reviewers.
+# When a PR is created, the owners of the changed files will be automatically requested to review.
+
+# Syntax:
+# - Patterns follow glob rules
+# - Owners can be: @username, @org/team-name, or email addresses
+# - Last matching pattern wins
+
+# Default owners for the entire repository
+* @edithatogo
+
+# Core source code
+src/ @edithatogo
+
+# Tests
+tests/ @edithatogo
+**/*.test.ts @edithatogo
+
+# Configuration files
+package.json @edithatogo
+tsconfig.json @edithatogo
+.eslintrc.json @edithatogo
+.prettierrc @edithatogo
+
+# GitHub Actions workflows
+.github/workflows/ @edithatogo
+
+# Documentation
+*.md @edithatogo
+docs/ @edithatogo
+
+# MCP Server specific
+src/mcp/ @edithatogo
+src/mcp-cli.ts @edithatogo
+
+# CLI specific
+src/commands/ @edithatogo
+src/cli.ts @edithatogo
+
+# Build output (no review needed, but tracked for awareness)
+dist/ 
+
+# Dependencies (auto-managed by Renovate/Dependabot)
+node_modules/ 
+package-lock.json 
+pnpm-lock.yaml 

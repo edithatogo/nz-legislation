@@ -1,0 +1,56 @@
+name: 🔒 Security Issue
+description: Report a security vulnerability
+title: "[Security]: "
+labels: ["security", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Important:** If you've discovered a security vulnerability, please email us directly at dylan.mordaunt@vuw.ac.nz instead of using this form.
+        
+        For security issues, we appreciate your discretion while we work on a fix.
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How severe is the security issue?
+      options:
+        - Critical (remote code execution, authentication bypass)
+        - High (privilege escalation, data leakage)
+        - Medium (XSS, CSRF)
+        - Low (information disclosure)
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the security issue.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: How can this issue be reproduced?
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact
+      description: What is the potential impact of this vulnerability?
+    validations:
+      required: true
+
+  - type: textarea
+    id: mitigation
+    attributes:
+      label: Suggested Mitigation
+      description: Do you have suggestions for fixing this issue?
+    validations:
+      required: false

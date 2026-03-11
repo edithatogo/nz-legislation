@@ -1,0 +1,204 @@
+{
+  "issues": [
+    {
+      "title": "P1: finalise protocol",
+      "status": "Todo",
+      "labels": [
+        "p1",
+        "protocol"
+      ]
+    },
+    {
+      "title": "P1: define corpus boundaries",
+      "status": "Todo",
+      "labels": [
+        "p1",
+        "corpus"
+      ]
+    },
+    {
+      "title": "P1: draft coding schema",
+      "status": "Todo",
+      "labels": [
+        "p1",
+        "methods"
+      ]
+    },
+    {
+      "title": "P1: run pilot extraction",
+      "status": "Todo",
+      "labels": [
+        "p1",
+        "analysis"
+      ]
+    },
+    {
+      "title": "P1: draft NZMJ manuscript",
+      "status": "Todo",
+      "labels": [
+        "p1",
+        "manuscript"
+      ]
+    },
+    {
+      "title": "P2: finalise protocol",
+      "status": "Todo",
+      "labels": [
+        "p2",
+        "protocol"
+      ]
+    },
+    {
+      "title": "P2: define corpus boundaries",
+      "status": "Todo",
+      "labels": [
+        "p2",
+        "corpus"
+      ]
+    },
+    {
+      "title": "P2: draft coding schema",
+      "status": "Todo",
+      "labels": [
+        "p2",
+        "methods"
+      ]
+    },
+    {
+      "title": "P2: run pilot extraction",
+      "status": "Todo",
+      "labels": [
+        "p2",
+        "analysis"
+      ]
+    },
+    {
+      "title": "P2: draft NZMJ manuscript",
+      "status": "Todo",
+      "labels": [
+        "p2",
+        "manuscript"
+      ]
+    },
+    {
+      "title": "P3: finalise protocol",
+      "status": "Todo",
+      "labels": [
+        "p3",
+        "protocol"
+      ]
+    },
+    {
+      "title": "P3: define corpus boundaries",
+      "status": "Todo",
+      "labels": [
+        "p3",
+        "corpus"
+      ]
+    },
+    {
+      "title": "P3: draft coding schema",
+      "status": "Todo",
+      "labels": [
+        "p3",
+        "methods"
+      ]
+    },
+    {
+      "title": "P3: run pilot extraction",
+      "status": "Todo",
+      "labels": [
+        "p3",
+        "analysis"
+      ]
+    },
+    {
+      "title": "P3: draft NZMJ manuscript",
+      "status": "Todo",
+      "labels": [
+        "p3",
+        "manuscript"
+      ]
+    },
+    {
+      "title": "P4: finalise protocol",
+      "status": "Todo",
+      "labels": [
+        "p4",
+        "protocol"
+      ]
+    },
+    {
+      "title": "P4: define corpus boundaries",
+      "status": "Todo",
+      "labels": [
+        "p4",
+        "corpus"
+      ]
+    },
+    {
+      "title": "P4: draft coding schema",
+      "status": "Todo",
+      "labels": [
+        "p4",
+        "methods"
+      ]
+    },
+    {
+      "title": "P4: run pilot extraction",
+      "status": "Todo",
+      "labels": [
+        "p4",
+        "analysis"
+      ]
+    },
+    {
+      "title": "P4: draft NZMJ manuscript",
+      "status": "Todo",
+      "labels": [
+        "p4",
+        "manuscript"
+      ]
+    },
+    {
+      "title": "P5: finalise protocol",
+      "status": "Todo",
+      "labels": [
+        "p5",
+        "protocol"
+      ]
+    },
+    {
+      "title": "P5: define corpus boundaries",
+      "status": "Todo",
+      "labels": [
+        "p5",
+        "corpus"
+      ]
+    },
+    {
+      "title": "P5: draft coding schema",
+      "status": "Todo",
+      "labels": [
+        "p5",
+        "methods"
+      ]
+    },
+    {
+      "title": "P5: run pilot extraction",
+      "status": "Todo",
+      "labels": [
+        "p5",
+        "analysis"
+      ]
+    },
+    {
+      "title": "P5: draft NZMJ manuscript",
+      "status": "Todo",
+      "labels": [
+        "p5",
+        "manuscript"
+      ]
+    }
+  ]
+}

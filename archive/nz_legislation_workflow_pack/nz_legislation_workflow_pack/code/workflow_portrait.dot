@@ -1,0 +1,14 @@
+
+digraph workflow2 {
+  graph [rankdir=TB, bgcolor="white", nodesep=0.45, ranksep=0.55, pad=0.2];
+  node [shape=box, style="rounded,filled", color="#6B7280", fillcolor="#F8FAFC", fontname="Helvetica", fontsize=13, margin="0.18,0.12"];
+  edge [color="#94A3B8", penwidth=1.5, arrowsize=0.8];
+  A [label="1. Stand up the operating system\nNotion hub + Linear backlog + Figma board", fillcolor="#E0F2FE"];
+  B [label="2. Choose the lead protocol\nStart with policy whiplash", fillcolor="#FEF3C7"];
+  C [label="3. Build the shared corpus\nAPI discovery + XML + metadata tables", fillcolor="#DCFCE7"];
+  D [label="4. Create the shared methods layer\nCoding schemas + pilot validation", fillcolor="#F3E8FF"];
+  E [label="5. Run project-specific analysis\nTables + figures + interpretation notes", fillcolor="#FCE7F3"];
+  F [label="6. Draft the NZMJ paper\nShort core paper + technical supplement", fillcolor="#FDE68A"];
+  G [label="7. Review, submit, and disseminate\nPre-election briefings and visuals", fillcolor="#EDE9FE"];
+  A -> B -> C -> D -> E -> F -> G;
+}

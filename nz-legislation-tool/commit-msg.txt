@@ -1,7 +1,15 @@
-fix: Resolve all TypeScript errors in nz-legislation-tool
+docs: Prepare nz-legislation-tool for repository extraction
 
-- Fixed async action in plugin.ts list command
-- Fixed import paths in legislation-provider.ts to use ../utils/
-- Fixed type narrowing in batch.ts for BatchRequestParams union types
+Created comprehensive extraction documentation:
+- FUNCTION_MAP.md: Complete catalog of all 179+ functions, 27 classes, 52 interfaces
+- EXTRACTION_PLAN.md: Step-by-step extraction guide with git filter scripts
+- EXTRACTION_READY.md: Readiness summary with commit analysis and verification checklist
 
-All 48 TypeScript errors now resolved. Type checking passes.
+Tool Status:
+- 0 TypeScript errors (all 48 resolved)
+- 17 commits mapped and analyzed
+- 42 source files documented
+- 43 tests infrastructure ready
+- README.md already standalone (584 lines)
+
+Ready for Phase 2: Git Filter Creation

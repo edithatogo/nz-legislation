@@ -1,0 +1,207 @@
+name: Bundle Size & Performance Monitor
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
+jobs:
+  bundle-analysis:
+    name: Bundle Size Analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Install esbuild for analysis
+        run: pnpm add -D esbuild
+
+      - name: Analyze bundle
+        run: |
+          echo "## Bundle Size Analysis" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Get file sizes
+          echo "### Output Files" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| File | Size | Gzipped |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|------|---------|" >> $GITHUB_STEP_SUMMARY
+          
+          for file in dist/*.js; do
+            if [ -f "$file" ]; then
+              size=$(wc -c < "$file")
+              gzip_size=$(gzip -c "$file" | wc -c)
+              echo "| $(basename $file) | $(numfmt --to=iec-i --suffix=B $size) | $(numfmt --to=iec-i --suffix=B $gzip_size) |" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Performance Budget" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Check against budget (e.g., 500KB max per file)
+          BUDGET=524288  # 500KB in bytes
+          OVER_BUDGET=false
+          
+          for file in dist/*.js; do
+            if [ -f "$file" ]; then
+              size=$(wc -c < "$file")
+              if [ $size -gt $BUDGET ]; then
+                echo "❌ $(basename $file) exceeds budget ($(numfmt --to=iec-i --suffix=B $size) > 500KB)" >> $GITHUB_STEP_SUMMARY
+                OVER_BUDGET=true
+              else
+                echo "✅ $(basename $file) within budget ($(numfmt --to=iec-i --suffix=B $size))" >> $GITHUB_STEP_SUMMARY
+              fi
+            fi
+          done
+          
+          if [ "$OVER_BUDGET" = true ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**⚠️ Warning:** Some bundles exceed the size budget. Consider code splitting or optimization." >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
+      - name: Upload bundle artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-analysis
+          path: dist/
+          retention-days: 7
+
+  performance-benchmarks:
+    name: Performance Benchmarks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run benchmarks
+        run: |
+          echo "## Performance Benchmarks" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          pnpm bench >> $GITHUB_STEP_SUMMARY 2>&1 || echo "Benchmarks failed or not available" >> $GITHUB_STEP_SUMMARY
+        continue-on-error: true
+
+  coverage-report:
+    name: Coverage Report
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [bundle-analysis]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run tests with coverage
+        run: pnpm test:coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-coverage
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true
+
+      - name: Generate coverage summary
+        run: |
+          echo "## Test Coverage Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f coverage/coverage-summary.json ]; then
+            echo "### Coverage Summary" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            cat coverage/coverage-summary.json | jq -r '
+              | "Metric | Coverage | Covered | Total",
+              | "--------|----------|---------|------",
+              | "Lines | \(.total.lines.pct)% | \(.total.lines.covered) | \(.total.lines.total)",
+              | "Statements | \(.total.statements.pct)% | \(.total.statements.covered) | \(.total.statements.total)",
+              | "Functions | \(.total.functions.pct)% | \(.total.functions.covered) | \(.total.functions.total)",
+              | "Branches | \(.total.branches.pct)% | \(.total.branches.covered) | \(.total.branches.total)"
+            ' >> $GITHUB_STEP_SUMMARY
+          else
+            echo "Coverage summary not available" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Check coverage threshold (e.g., 80%)
+          THRESHOLD=80
+          if [ -f coverage/coverage-summary.json ]; then
+            COVERAGE=$(cat coverage/coverage-summary.json | jq -r '.total.lines.pct' | cut -d. -f1)
+            if [ "$COVERAGE" -lt "$THRESHOLD" ]; then
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "**⚠️ Warning:** Coverage ($COVERAGE%) is below threshold ($THRESHOLD%)" >> $GITHUB_STEP_SUMMARY
+              exit 1
+            else
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "✅ Coverage ($COVERAGE%) meets threshold ($THRESHOLD%)" >> $GITHUB_STEP_SUMMARY
+            fi
+          fi
+
+      - name: Upload coverage artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 7
