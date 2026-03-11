@@ -81,7 +81,6 @@ jobs:
           publish: pnpm exec changeset publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Summarize skipped publish
         if: steps.publish_mode.outputs.enabled != 'true'
