@@ -49,6 +49,7 @@
     "type": "git",
     "url": "https://github.com/edithatogo/nz-legislation.git"
   },
+  "packageManager": "pnpm@10.29.3",
   "bugs": {
     "url": "https://github.com/edithatogo/nz-legislation/issues"
   },
