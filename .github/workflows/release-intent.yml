@@ -1,0 +1,59 @@
+name: Release Intent
+
+on:
+  pull_request:
+    branches: [main, next]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  require-changeset:
+    name: Require changeset for user-facing changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Determine whether a changeset is required
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git fetch origin "${{ github.base_ref }}" --depth=1
+          CHANGED_FILES="$(git diff --name-only "origin/${{ github.base_ref }}...HEAD")"
+
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+
+          if echo "$CHANGED_FILES" | grep -qE '^\.changeset/.+\.md$'; then
+            echo "Changeset found."
+            exit 0
+          fi
+
+          REQUIRES_CHANGESET=0
+
+          while IFS= read -r file; do
+            [ -z "$file" ] && continue
+
+            case "$file" in
+              docs/*|conductor/*|.github/*|README.md|RELEASE_POLICY.md|SUPPORT_POLICY.md)
+                ;;
+              *)
+                REQUIRES_CHANGESET=1
+                ;;
+            esac
+          done <<< "$CHANGED_FILES"
+
+          if [ "$REQUIRES_CHANGESET" -eq 1 ]; then
+            echo "A user-facing or code change was detected without a changeset."
+            echo "Add a changeset with 'pnpm changeset' or explicitly reduce the change to release-neutral governance/docs scope."
+            exit 1
+          fi
+
+          echo "Docs/governance-only change detected. Changeset not required."

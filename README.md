@@ -24,6 +24,39 @@ The GitHub repository "Packages" area is populated by GitHub Packages publishes,
 
 ---
 
+## 🚪 Choose Your Interface
+
+### CLI
+
+Use the CLI if you want direct terminal access for search, retrieval, export, and citation.
+
+```bash
+npm install -g nz-legislation-tool
+nzlegislation search --query "health act"
+```
+
+### MCP Server
+
+Use the MCP server if you want to connect the tool to an AI assistant or tool-calling environment.
+
+```bash
+npm install -g nz-legislation-tool
+nzlegislation-mcp
+```
+
+Example MCP command configuration:
+
+```json
+{
+  "command": "nzlegislation-mcp",
+  "env": {
+    "NZ_LEGISLATION_API_KEY": "your-api-key"
+  }
+}
+```
+
+---
+
 ## ✨ What You Can Do
 
 - 🔍 **Search** - Find legislation by keyword, type, status, or date range

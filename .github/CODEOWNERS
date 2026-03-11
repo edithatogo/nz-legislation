@@ -12,8 +12,24 @@
 # Default owners for the entire repository
 * @edithatogo
 
+# Release and repository governance
+.github/workflows/ @edithatogo
+.github/CODEOWNERS @edithatogo
+.github/pull_request_template.md @edithatogo
+.changeset/ @edithatogo
+RELEASE_POLICY.md @edithatogo
+SUPPORT_POLICY.md @edithatogo
+
 # Core source code
 src/ @edithatogo
+
+# CLI surface
+src/cli.ts @edithatogo
+src/commands/ @edithatogo
+
+# MCP surface
+src/mcp/ @edithatogo
+src/mcp-cli.ts @edithatogo
 
 # Tests
 tests/ @edithatogo
@@ -21,24 +37,14 @@ tests/ @edithatogo
 
 # Configuration files
 package.json @edithatogo
+pnpm-lock.yaml @edithatogo
 tsconfig.json @edithatogo
 .eslintrc.json @edithatogo
 .prettierrc @edithatogo
 
-# GitHub Actions workflows
-.github/workflows/ @edithatogo
-
 # Documentation
-*.md @edithatogo
+README.md @edithatogo
 docs/ @edithatogo
-
-# MCP Server specific
-src/mcp/ @edithatogo
-src/mcp-cli.ts @edithatogo
-
-# CLI specific
-src/commands/ @edithatogo
-src/cli.ts @edithatogo
 
 # Build output (no review needed, but tracked for awareness)
 dist/ 

@@ -7,6 +7,7 @@
 <!-- Provide a clear and concise description of what this PR does. -->
 
 **Type of Change:**
+
 - [ ] 🐛 Bug fix (non-breaking change that fixes an issue)
 - [ ] ✨ New feature (non-breaking change that adds functionality)
 - [ ] 💥 Breaking change (fix or feature that would cause existing functionality to change)
@@ -24,9 +25,35 @@
 Fixes #
 Related to #
 
+## 🚦 Release Intent
+
+- [ ] `release-neutral`
+- [ ] `patch`
+- [ ] `minor`
+- [ ] `major`
+- [ ] `prerelease-only`
+
+**Public surfaces affected:**
+
+- [ ] CLI
+- [ ] MCP
+- [ ] Future HTTP/OpenAPI adapter
+- [ ] Packaging or install behavior
+- [ ] Documentation only
+
+**Changeset status:**
+
+- [ ] A changeset is included
+- [ ] No changeset is needed and I explain why below
+
+**If no changeset is included, explain why:**
+
+<!-- release-neutral rationale -->
+
 ## ✅ Checklist
 
 ### Code Quality
+
 - [ ] My code follows the project's style guidelines
 - [ ] I have performed a self-review of my code
 - [ ] I have commented my code, particularly in hard-to-understand areas
@@ -36,17 +63,20 @@ Related to #
 - [ ] I have run `pnpm format` to ensure consistent formatting
 
 ### Testing
+
 - [ ] I have added tests that prove my fix is effective or that my feature works
 - [ ] All tests pass locally (`pnpm test:run`)
 - [ ] I have updated test documentation if needed
 - [ ] Test coverage has not decreased (or decrease is justified)
 
 ### Documentation
+
 - [ ] I have updated the README.md if needed
 - [ ] I have updated CHANGESETS.md if this affects versioning
 - [ ] I have added a changeset for this PR (run `pnpm changeset`)
 
 ### Security
+
 - [ ] My changes do not introduce security vulnerabilities
 - [ ] I have not committed any secrets, API keys, or credentials
 - [ ] I have followed secure coding practices
@@ -61,6 +91,7 @@ Related to #
 -->
 
 ### Setup
+
 ```bash
 # Install dependencies
 pnpm install
@@ -70,11 +101,13 @@ pnpm build
 ```
 
 ### Test Steps
-1. 
-2. 
-3. 
+
+1.
+2.
+3.
 
 ### Expected Behavior
+
 <!-- Describe what should happen when testing -->
 
 ## 📊 Screenshots/Recordings (if applicable)
@@ -99,6 +132,7 @@ pnpm build
 ## 🔬 For Maintainers
 
 ### Review Checklist
+
 - [ ] Code quality and style approved
 - [ ] Tests are comprehensive and passing
 - [ ] Documentation is updated
@@ -107,6 +141,7 @@ pnpm build
 - [ ] Performance impact assessed (if applicable)
 
 ### Pre-Merge Actions
+
 - [ ] Squash commits if needed
 - [ ] Ensure commit message follows conventional commits
 - [ ] Add to milestone (if applicable)
@@ -115,6 +150,7 @@ pnpm build
 ---
 
 **By submitting this PR, I confirm that:**
+
 - I have read and agree to the project's [Contributing Guidelines](CONTRIBUTING.md)
 - My contributions are licensed under the project's [Apache 2.0 License](LICENSE)
 - This PR does not contain any third-party code without proper attribution

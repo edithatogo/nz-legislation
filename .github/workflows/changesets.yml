@@ -1,8 +1,6 @@
-name: Changesets Version and Release
+name: Legacy Changesets Release (Manual Only)
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -56,8 +54,8 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         with:
-          commit: "chore: version packages"
-          title: "chore: version packages"
+          commit: 'chore: version packages'
+          title: 'chore: version packages'
           publish: pnpm exec changeset publish
           version: pnpm exec changeset version
         env:
@@ -82,7 +80,7 @@ jobs:
           script: |
             const packages = process.env.PUBLISHED_PACKAGES || '';
             console.log(`Released packages: ${packages}`);
-            
+
             // You can add Slack/Discord notifications here
             // For example, using a webhook:
             // await fetch(process.env.SLACK_WEBHOOK_URL, {

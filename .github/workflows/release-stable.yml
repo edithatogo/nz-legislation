@@ -1,0 +1,68 @@
+name: Release Stable
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+concurrency:
+  group: release-stable-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  release:
+    name: Version and publish stable release
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Run release gate checks
+        run: |
+          pnpm lint
+          pnpm typecheck
+          pnpm test:run
+          pnpm build
+
+      - name: Create release PR or publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          commit: 'chore: version packages'
+          title: 'chore: version packages'
+          version: pnpm exec changeset version
+          publish: pnpm exec changeset publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Summarize published packages
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          echo "Published packages:"
+          echo "${{ steps.changesets.outputs.published_packages }}"
