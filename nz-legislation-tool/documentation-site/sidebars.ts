@@ -5,7 +5,18 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Getting Started',
-      items: ['quick-start', 'index'],
+      items: ['index', 'quick-start', 'installation', 'configuration'],
+    },
+    {
+      type: 'category',
+      label: 'User Guide',
+      items: [
+        'user-guide/index',
+        'user-guide/searching',
+        'user-guide/exporting',
+        'user-guide/citations',
+        'user-guide/research-workflow',
+      ],
     },
   ],
 };
