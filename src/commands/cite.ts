@@ -5,8 +5,8 @@
 import { Command } from 'commander';
 import ora from 'ora';
 
-import { getWork } from '@client';
-import { generateCitation } from '@output';
+import { getWork } from '../client.js';
+import { generateCitation } from '../output/index.js';
 
 interface CiteOptions {
   style: string;

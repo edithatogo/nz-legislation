@@ -7,8 +7,8 @@
 import { EventEmitter } from 'events';
 import { writeFileSync } from 'fs';
 
-import { searchWorks, getWork, getWorkVersions, getVersion } from '@client';
-import type { SearchResults } from '@models';
+import { searchWorks, getWork, getWorkVersions, getVersion } from '../client.js';
+import type { SearchResults } from '../models/index.js';
 
 /**
  * Batch request types

@@ -4,8 +4,8 @@
 
 import { Command } from 'commander';
 
-import { clearCache, getCacheStats } from '@client';
-import { logger } from '@utils/logger';
+import { clearCache, getCacheStats } from '../client.js';
+import { logger } from '../utils/logger.js';
 
 interface CacheOptions {
   clear?: boolean;

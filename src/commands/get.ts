@@ -5,10 +5,10 @@
 import { Command } from 'commander';
 import ora from 'ora';
 
-import { getWork, getWorkVersions } from '@client';
-import { printWorkDetail, printVersionsTable, printJson, versionsToCsv } from '@output';
-import { logger } from '@utils/logger';
-import { validateWorkId, sanitizeInput } from '@utils/validation';
+import { getWork, getWorkVersions } from '../client.js';
+import { printWorkDetail, printVersionsTable, printJson, versionsToCsv } from '../output/index.js';
+import { logger } from '../utils/logger.js';
+import { validateWorkId, sanitizeInput } from '../utils/validation.js';
 
 interface GetOptions {
   versions?: boolean;
