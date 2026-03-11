@@ -1,5 +1,15 @@
 # nz-legislation-tool
 
+## 1.2.0
+
+### Minor Changes
+
+- Add a stable MCP server surface alongside the CLI.
+
+  This release publishes the `nzlegislation-mcp` entrypoint and the MCP tool layer for search,
+  retrieval, export, citation, and configuration workflows without breaking the existing CLI
+  interface.
+
 ## 1.1.0
 
 ### Minor Changes
