@@ -1,0 +1,16 @@
+{
+  "trackId": "documentation-site-phase-8",
+  "title": "Documentation Site (Phase 8)",
+  "description": "Create dedicated documentation website using Docusaurus or VitePress",
+  "status": "pending",
+  "priority": "medium",
+  "timeline": "2-3 weeks",
+  "created": "2026-03-11",
+  "completed": null,
+  "archived": null,
+  "phases": 8,
+  "totalTasks": 35,
+  "completedTasks": 0,
+  "reviewStatus": "not-reviewed",
+  "tags": ["documentation", "website", "optional", "phase-8"]
+}
