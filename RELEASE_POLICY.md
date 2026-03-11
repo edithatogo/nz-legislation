@@ -205,6 +205,15 @@ Evaluated for v3 scope:
 - OpenAPI contract surface at `/openapi.json`
 - Implementation: FastAPI recommended for automatic OpenAPI generation
 
+Any future HTTP or OpenAPI surface must enter through the governed prerelease
+lane first. It should not be treated as stable until all of the following are
+true:
+
+- route and schema contracts are documented
+- OpenAPI output is generated automatically and checked in CI
+- response metadata includes source attribution and contract-stable identifiers
+- CLI and MCP compatibility implications are reviewed explicitly
+
 ---
 
 ## Product vs Research Boundary
