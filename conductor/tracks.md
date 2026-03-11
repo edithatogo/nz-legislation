@@ -179,6 +179,21 @@ This file tracks all major work streams for the NZ Legislation Tool project.
 
 ## ⏳ Pending Tracks
 
+### [ ] Track: Documentation Site Completion
+**Link:** [./tracks/documentation-site-completion/](./tracks/documentation-site-completion/)
+
+**Status:** ⏳ **PENDING**
+
+**Summary:** Complete documentation site with remaining content migration, search, versioning, deployment, and launch.
+
+**Priority:** 🟡 **MEDIUM**
+**Timeline:** 1-2 weeks
+**Key Deliverables:** API Reference, Developer Guide, Troubleshooting docs, DocSearch, auto-deployment, analytics, site launch
+
+**Parent Track:** Documentation Site (Phase 8) - Phases 1-2 completed, Phases 3-8 remaining
+
+---
+
 ### [ ] Track: Release Governance Modernization
 **Link:** [./tracks/release-governance-modernization/](./tracks/release-governance-modernization/)
 
@@ -208,7 +223,7 @@ This file tracks all major work streams for the NZ Legislation Tool project.
 
 **External Setup Needed:**
 - Algolia DocSearch application
-- Google Analytics tracking ID  
+- Google Analytics tracking ID
 - GitHub Pages enablement
 
 ---
@@ -293,11 +308,11 @@ This file tracks all major work streams for the NZ Legislation Tool project.
 | Status | Count | Percentage |
 |--------|-------|------------|
 | ✅ **Complete** | 0 | 0% |
-| 📦 **Archived** | 12 | 67% |
-| ⏳ **Pending** | 6 | 33% |
-| **Total** | **18** | **100%** |
+| 📦 **Archived** | 12 | 63% |
+| ⏳ **Pending** | 7 | 37% |
+| **Total** | **19** | **100%** |
 
-**Overall Project Progress:** ~70% complete (technical infrastructure complete, research programme pending)
+**Overall Project Progress:** ~68% complete (technical infrastructure complete, research programme pending)
 
 ---
 
@@ -313,4 +328,4 @@ This file tracks all major work streams for the NZ Legislation Tool project.
 ---
 
 **Last Updated:** 2026-03-11
-**Total Tracks:** 17 (0 completed, 11 archived, 6 pending)
+**Total Tracks:** 19 (0 completed, 12 archived, 7 pending)
