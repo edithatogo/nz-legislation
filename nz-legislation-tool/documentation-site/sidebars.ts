@@ -5,7 +5,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Getting Started',
-      items: ['index', 'quick-start', 'installation', 'configuration'],
+      items: ['index', 'quick-start', 'installation', 'configuration', 'deployment-guide'],
     },
     {
       type: 'category',
@@ -18,8 +18,36 @@ const sidebars: SidebarsConfig = {
         'user-guide/research-workflow',
       ],
     },
-    // Note: API Reference, Developer Guide, and Troubleshooting
-    // categories will be added when documentation is migrated
+    {
+      type: 'category',
+      label: 'API Reference',
+      items: [
+        'api-reference/index',
+        'api-reference/client',
+        'api-reference/models',
+        'api-reference/errors',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Developer Guide',
+      items: [
+        'developer-guide/index',
+        'developer-guide/architecture',
+        'developer-guide/testing',
+        'developer-guide/contributing',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Troubleshooting',
+      items: [
+        'troubleshooting/index',
+        'troubleshooting/common-issues',
+        'troubleshooting/error-reference',
+        'troubleshooting/faq',
+      ],
+    },
   ],
 };
 

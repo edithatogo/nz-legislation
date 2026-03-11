@@ -39,8 +39,24 @@ const config: Config = {
           editUrl:
             'https://github.com/edithatogo/nz-legislation/tree/main/nz-legislation-tool/',
           routeBasePath: '/',
+          // Versioning configuration
+          versions: {
+            current: {
+              label: 'Development 🔧',
+            },
+            '1.0': {
+              label: 'v1.0 (Stable)',
+            },
+          },
         },
         blog: false,
+        // Google Analytics configuration
+        // To enable: Create account at analytics.google.com, get your Measurement ID (G-XXXXXXXXXX)
+        // Then add to .env: GA_TRACKING_ID=G-XXXXXXXXXX
+        // googleAnalytics: {
+        //   trackingID: process.env.GA_TRACKING_ID || 'G-XXXXXXXXXX',
+        //   anonymizeIP: true,
+        // },
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -63,8 +79,18 @@ const config: Config = {
           label: 'Documentation',
         },
         {
+          type: 'docsVersionDropdown',
+          position: 'right',
+          dropdownActiveClass: 'dropdown-active',
+        },
+        {
           href: 'https://github.com/edithatogo/nz-legislation',
           label: 'GitHub',
+          position: 'right',
+        },
+        // DocSearch search bar (enabled after approval)
+        {
+          type: 'search',
           position: 'right',
         },
       ],
@@ -116,13 +142,27 @@ const config: Config = {
       additionalLanguages: ['bash', 'json', 'typescript'],
     },
     // Algolia DocSearch configuration
-    // To enable search, apply at https://docsearch.algolia.com/ and add credentials:
-    // algolia: {
-    //   appId: process.env.ALGOLIA_APP_ID,
-    //   apiKey: process.env.ALGOLIA_API_KEY,
-    //   indexName: 'nz-legislation',
-    //   contextualSearch: true,
-    // },
+    // Apply at https://docsearch.algolia.com/ for free open source search
+    algolia: {
+      // DocSearch credentials (apply at https://docsearch.algolia.com/)
+      appId: process.env.ALGOLIA_APP_ID || 'temp_app_id',
+      apiKey: process.env.ALGOLIA_API_KEY || 'temp_api_key',
+      indexName: 'nz-legislation',
+      contextualSearch: true,
+      
+      // Optional: Algolia insights
+      insights: false,
+      
+      // Optional: Replace with a function to determine if search results should be displayed
+      // transformItems(items) {
+      //   return items.map(item => {
+      //     return {
+      //       ...item,
+      //       url: item.url.replace('https://edithatogo.github.io', 'https://edithatogo.github.io/nz-legislation'),
+      //     };
+      //   });
+      // },
+    },
   } satisfies Preset.ThemeConfig,
 };
 

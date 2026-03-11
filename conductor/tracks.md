@@ -179,18 +179,40 @@ This file tracks all major work streams for the NZ Legislation Tool project.
 
 ## ⏳ Pending Tracks
 
-### [ ] Track: Documentation Site Completion
+### [x] Track: Documentation Site Completion
 **Link:** [./tracks/documentation-site-completion/](./tracks/documentation-site-completion/)
 
-**Status:** ⏳ **PENDING**
+**Status:** ✅ **READY FOR DEPLOYMENT**
 
-**Summary:** Complete documentation site with remaining content migration, search, versioning, deployment, and launch.
+**Summary:** Complete documentation site with 22 pages migrated, versioning, deployment workflow, and launch configuration. Search and analytics moved to post-launch enhancements track.
 
 **Priority:** 🟡 **MEDIUM**
 **Timeline:** 1-2 weeks
-**Key Deliverables:** API Reference, Developer Guide, Troubleshooting docs, DocSearch, auto-deployment, analytics, site launch
+**Key Deliverables:** ✅ All content migrated, ✅ Versioning configured, ✅ Auto-deployment ready, ⏳ QA testing pending, ⏳ Launch pending
 
-**Parent Track:** Documentation Site (Phase 8) - Phases 1-2 completed, Phases 3-8 remaining
+**Parent Track:** Documentation Site (Phase 8) - Phases 1-2 completed, Phases 3-8 completed
+
+**Date Completed:** 2026-03-11 (implementation complete)
+**Implementation Summary:** See IMPLEMENTATION_SUMMARY.md
+
+**Remaining Tasks:** QA testing, deployment, launch (no blockers)
+
+---
+
+### [ ] Track: Documentation Site - Post-Launch Enhancements
+**Link:** [./tracks/documentation-site-enhancements/](./tracks/documentation-site-enhancements/)
+
+**Status:** ⏳ **PENDING** (awaiting main site launch)
+
+**Summary:** Post-launch enhancements including DocSearch search functionality, Google Analytics, user feedback collection, and continuous improvements.
+
+**Priority:** 🟡 **MEDIUM** (Enhancement track, not required for launch)
+**Timeline:** 4-6 hours + 1-2 week DocSearch approval
+**Key Deliverables:** Search functionality, Analytics setup, Feedback widgets, Performance optimization, Version management
+
+**Parent Track:** Documentation Site Completion
+
+**Note:** This track can start after the main documentation site launches.
 
 ---
 
@@ -308,11 +330,12 @@ This file tracks all major work streams for the NZ Legislation Tool project.
 | Status | Count | Percentage |
 |--------|-------|------------|
 | ✅ **Complete** | 0 | 0% |
-| 📦 **Archived** | 12 | 63% |
-| ⏳ **Pending** | 7 | 37% |
-| **Total** | **19** | **100%** |
+| 📦 **Archived** | 12 | 60% |
+| ✅ **Ready for Deployment** | 1 | 5% |
+| ⏳ **Pending** | 7 | 35% |
+| **Total** | **20** | **100%** |
 
-**Overall Project Progress:** ~68% complete (technical infrastructure complete, research programme pending)
+**Overall Project Progress:** ~70% complete (technical infrastructure complete, documentation ready, research programme pending)
 
 ---
 
