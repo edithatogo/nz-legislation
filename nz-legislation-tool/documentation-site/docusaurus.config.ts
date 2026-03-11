@@ -115,12 +115,14 @@ const config: Config = {
       darkTheme: prismThemes.dracula,
       additionalLanguages: ['bash', 'json', 'typescript'],
     },
-    algolia: {
-      appId: 'YOUR_APP_ID',
-      apiKey: 'YOUR_SEARCH_API_KEY',
-      indexName: 'nz-legislation',
-      contextualSearch: true,
-    },
+    // Algolia DocSearch configuration
+    // To enable search, apply at https://docsearch.algolia.com/ and add credentials:
+    // algolia: {
+    //   appId: process.env.ALGOLIA_APP_ID,
+    //   apiKey: process.env.ALGOLIA_API_KEY,
+    //   indexName: 'nz-legislation',
+    //   contextualSearch: true,
+    // },
   } satisfies Preset.ThemeConfig,
 };
 
