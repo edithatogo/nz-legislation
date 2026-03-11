@@ -1,0 +1,9 @@
+{
+  "extends": "@docusaurus/tsconfig",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "module": "ESNext",
+    "moduleResolution": "bundler"
+  },
+  "exclude": ["node_modules"]
+}

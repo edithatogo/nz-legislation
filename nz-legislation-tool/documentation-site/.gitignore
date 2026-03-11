@@ -1,0 +1,14 @@
+# Docusaurus build artifacts
+.docusaurus/
+build/
+.node-cache/
+
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local

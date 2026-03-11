@@ -1,0 +1,164 @@
+/**
+ * Custom CSS for NZ Legislation Tool Documentation
+ */
+
+:root {
+  /* Brand Colors */
+  --nzlt-primary: #003956; /* NZ Government blue */
+  --nzlt-secondary: #0074c2; /* Lighter blue */
+  --nzlt-accent: #8dc63f; /* Green accent */
+  
+  /* Docusaurus defaults */
+  --ifm-color-primary: var(--nzlt-secondary);
+  --ifm-color-primary-dark: #0066aa;
+  --ifm-color-primary-darker: #005c99;
+  --ifm-color-primary-darkest: #004d80;
+  --ifm-color-primary-light: #0082da;
+  --ifm-color-primary-lighter: #0091f0;
+  --ifm-color-primary-lightest: #00aaff;
+  
+  /* Typography */
+  --ifm-font-size-base: 16px;
+  --ifm-line-height-base: 1.65;
+  
+  /* Spacing */
+  --ifm-spacing-horizontal: 1.5rem;
+  
+  /* Code blocks */
+  --ifm-code-font-size: 90%;
+  --ifm-code-border-radius: 4px;
+}
+
+/* Hero section */
+.hero {
+  background: linear-gradient(135deg, var(--nzlt-primary) 0%, var(--nzlt-secondary) 100%);
+  color: white;
+  padding: 4rem 2rem;
+}
+
+.hero__title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.hero__subtitle {
+  font-size: 1.5rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+}
+
+/* Feature cards */
+.feature {
+  padding: 2rem;
+  border-radius: 8px;
+  background: var(--ifm-background-surface-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.feature:hover {
+  transform: translateY(-4px);
+}
+
+/* Code blocks */
+.code-block {
+  border: 1px solid var(--ifm-color-emphasis-200);
+}
+
+/* Navigation improvements */
+.menu__link--active {
+  font-weight: 600;
+}
+
+/* Footer */
+.footer {
+  background: var(--nzlt-primary);
+  color: white;
+}
+
+.footer__title {
+  color: white;
+  opacity: 0.9;
+}
+
+.footer__link-item {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.footer__link-item:hover {
+  color: white;
+}
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
+.badge-primary {
+  background: var(--nzlt-primary);
+  color: white;
+}
+
+.badge-success {
+  background: var(--nzlt-accent);
+  color: white;
+}
+
+/* Alert customizations */
+.alert {
+  border-left: 4px solid var(--ifm-color-primary);
+}
+
+.alert--info {
+  border-left-color: var(--ifm-color-info);
+}
+
+.alert--success {
+  border-left-color: var(--ifm-color-success);
+}
+
+.alert--warning {
+  border-left-color: var(--ifm-color-warning);
+}
+
+.alert--danger {
+  border-left-color: var(--ifm-color-danger);
+}
+
+/* Table improvements */
+table {
+  font-size: 0.95rem;
+}
+
+table th {
+  background: var(--ifm-color-emphasis-100);
+  font-weight: 600;
+}
+
+/* Search bar */
+.DocSearch {
+  --docsearch-primary-color: var(--nzlt-primary);
+  --docsearch-searchbox-background: white;
+  --docsearch-searchbox-focus-background: white;
+}
+
+/* Dark mode support */
+[data-theme='dark'] {
+  --ifm-background-color: #1a1a1a;
+  --ifm-background-surface-color: #242424;
+}
+
+[data-theme='dark'] .hero {
+  background: linear-gradient(135deg, #002233 0%, #004466 100%);
+}
+
+[data-theme='dark'] .feature {
+  background: #2a2a2a;
+}
