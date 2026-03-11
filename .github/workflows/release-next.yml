@@ -22,6 +22,7 @@ jobs:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    environment: prerelease
 
     steps:
       - name: Check out repository
@@ -41,6 +42,11 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
+
+      - name: Upgrade npm for trusted publishing
+        run: |
+          npm install -g npm@11.5.1
+          npm --version
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
@@ -100,10 +106,25 @@ jobs:
           git push origin HEAD:next
 
       - name: Publish prerelease package
+        id: publish
         if: steps.publish_mode.outputs.enabled == 'true'
-        run: pnpm exec changeset publish
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        shell: bash
+        run: |
+          package_name=$(node -p "JSON.parse(require('fs').readFileSync('package.json', 'utf8')).name")
+          package_version=$(node -p "JSON.parse(require('fs').readFileSync('package.json', 'utf8')).version")
+          published_version=$(npm view "$package_name@$package_version" version 2>/dev/null || true)
+
+          echo "package_name=$package_name" >> "$GITHUB_OUTPUT"
+          echo "package_version=$package_version" >> "$GITHUB_OUTPUT"
+
+          if [[ "$package_version" == "$published_version" ]]; then
+            echo "published=false" >> "$GITHUB_OUTPUT"
+            echo "Package $package_name@$package_version is already published."
+            exit 0
+          fi
+
+          npm publish --provenance --access public --tag next
+          echo "published=true" >> "$GITHUB_OUTPUT"
 
       - name: Leave prerelease mode
         if: always() && steps.publish_mode.outputs.enabled == 'true'
@@ -115,3 +136,9 @@ jobs:
           echo "Skipping npm prerelease publish on this run."
           echo "Reason: ${{ steps.publish_mode.outputs.reason }}"
           echo "Use workflow_dispatch after npm publishing access is confirmed."
+
+      - name: Summarize published prerelease
+        if: steps.publish.outputs.published == 'true'
+        run: |
+          echo "Published prerelease package:"
+          echo "${{ steps.publish.outputs.package_name }}@${{ steps.publish.outputs.package_version }}"
