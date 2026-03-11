@@ -10,6 +10,7 @@
 6. Verify npm `latest` after publish.
 7. Verify GitHub release notes and attached metadata.
 8. Verify the GitHub Packages mirror path if that workflow is enabled remotely.
+9. If automated npm publish is disabled, use `workflow_dispatch` after verifying npm publisher access or trusted publishing configuration.
 
 ## Prerelease
 
@@ -19,6 +20,7 @@
 4. Run or allow `Release Next`.
 5. Verify npm `next` dist-tag only.
 6. Confirm no stable users are told to install the prerelease build.
+7. If automated npm publish is disabled, use `workflow_dispatch` after verifying npm publisher access or trusted publishing configuration.
 
 ## After release
 

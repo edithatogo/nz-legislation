@@ -55,21 +55,41 @@ jobs:
           pnpm test:run
           pnpm build
 
+      - name: Decide publish mode
+        id: publish_mode
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+            echo "reason=manual workflow dispatch" >> "$GITHUB_OUTPUT"
+          elif [[ "${{ vars.ENABLE_AUTOMATED_NPM_PUBLISH }}" == "true" ]]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+            echo "reason=repository variable ENABLE_AUTOMATED_NPM_PUBLISH=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "reason=automated npm publish is disabled until npm publisher access is verified" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Configure git author
+        if: steps.publish_mode.outputs.enabled == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Enter prerelease mode
+        if: steps.publish_mode.outputs.enabled == 'true'
         run: pnpm exec changeset pre enter next || true
 
       - name: Version prerelease packages
+        if: steps.publish_mode.outputs.enabled == 'true'
         run: pnpm exec changeset version
 
       - name: Refresh lockfile
+        if: steps.publish_mode.outputs.enabled == 'true'
         run: pnpm install --no-frozen-lockfile
 
       - name: Commit prerelease versions
+        if: steps.publish_mode.outputs.enabled == 'true'
         run: |
           if git diff --quiet; then
             echo "No prerelease version changes to commit."
@@ -80,10 +100,18 @@ jobs:
           git push origin HEAD:next
 
       - name: Publish prerelease package
+        if: steps.publish_mode.outputs.enabled == 'true'
         run: pnpm exec changeset publish
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Leave prerelease mode
-        if: always()
+        if: always() && steps.publish_mode.outputs.enabled == 'true'
         run: pnpm exec changeset pre exit || true
+
+      - name: Summarize skipped publish
+        if: steps.publish_mode.outputs.enabled != 'true'
+        run: |
+          echo "Skipping npm prerelease publish on this run."
+          echo "Reason: ${{ steps.publish_mode.outputs.reason }}"
+          echo "Use workflow_dispatch after npm publishing access is confirmed."
