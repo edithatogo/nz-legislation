@@ -37,7 +37,7 @@ export const streamCommand = new Command()
   .option('--no-metadata', 'Exclude metadata from output')
   .action(async (options: StreamOptions) => {
     const spinner = ora('Starting stream export...').start();
-    
+
     try {
       // Validate format
       if (!['csv', 'json', 'ndjson'].includes(options.format)) {
@@ -83,15 +83,17 @@ export const streamCommand = new Command()
       let lastPercent = 0;
       const startTime = Date.now();
 
-      const result = await exporter.export(searchParams, (progress) => {
+      const result = await exporter.export(searchParams, progress => {
         // Only show progress every 10%
         if (progress.percent - lastPercent >= 10) {
           const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
-          const eta = progress.estimatedTimeRemaining 
-            ? `${(progress.estimatedTimeRemaining / 1000).toFixed(0)}s` 
+          const eta = progress.estimatedTimeRemaining
+            ? `${(progress.estimatedTimeRemaining / 1000).toFixed(0)}s`
             : 'Calculating...';
-          
-          console.log(`  ${progress.percent}% | ${progress.processed} items | ${elapsed}s elapsed | ETA: ${eta}`);
+
+          console.log(
+            `  ${progress.percent}% | ${progress.processed} items | ${elapsed}s elapsed | ETA: ${eta}`
+          );
           lastPercent = progress.percent;
         }
       });
@@ -108,23 +110,22 @@ export const streamCommand = new Command()
       console.log(`  Format:         ${options.format.toUpperCase()}`);
 
       // Performance stats
-      const itemsPerSecond = (result.processed / (Date.now() - startTime) * 1000).toFixed(2);
+      const itemsPerSecond = ((result.processed / (Date.now() - startTime)) * 1000).toFixed(2);
       console.log(`  Throughput:     ${itemsPerSecond} items/sec`);
 
       // Memory usage
       const memoryUsage = process.memoryUsage();
       console.log(`  Memory Used:    ${(memoryUsage.heapUsed / 1024 / 1024).toFixed(2)} MB`);
-
     } catch (error) {
       spinner.fail('Stream export failed');
       console.error('\nError: Stream export failed.');
-      
+
       if (error instanceof Error && error.message.includes('EACCES')) {
         console.log('\nHint: Check file permissions and ensure the output directory exists.');
       } else if (error instanceof Error && error.message.includes('ENOSPC')) {
         console.log('\nHint: Disk space is full. Free up space and try again.');
       }
-      
+
       process.exit(1);
     }
   });

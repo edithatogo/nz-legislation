@@ -8,14 +8,14 @@
 
 ## Quick Fix Finder
 
-| Problem | Quick Fix |
-|---------|-----------|
-| API key errors | [Reset API key](#api-key-errors) |
+| Problem             | Quick Fix                            |
+| ------------------- | ------------------------------------ |
+| API key errors      | [Reset API key](#api-key-errors)     |
 | Rate limit exceeded | [Wait and retry](#rate-limit-errors) |
-| Not found errors | [Check ID format](#not-found-errors) |
-| Network errors | [Check connection](#network-errors) |
-| Installation issues | [Reinstall](#installation-issues) |
-| Output looks wrong | [Check terminal](#output-issues) |
+| Not found errors    | [Check ID format](#not-found-errors) |
+| Network errors      | [Check connection](#network-errors)  |
+| Installation issues | [Reinstall](#installation-issues)    |
+| Output looks wrong  | [Check terminal](#output-issues)     |
 
 ---
 
@@ -26,6 +26,7 @@
 **What it means:** The tool can't find your API key.
 
 **Quick fix:**
+
 ```bash
 nzlegislation config --key YOUR_API_KEY
 ```
@@ -33,6 +34,7 @@ nzlegislation config --key YOUR_API_KEY
 **Still not working?**
 
 1. **Check if it's set:**
+
    ```bash
    nzlegislation config --show
    ```
@@ -43,13 +45,14 @@ nzlegislation config --key YOUR_API_KEY
    - All lowercase
 
 3. **Try environment variable instead:**
+
    ```bash
    # Linux/macOS
    export NZ_LEGISLATION_API_KEY=YOUR_KEY
-   
+
    # Windows PowerShell
    $env:NZ_LEGISLATION_API_KEY="YOUR_KEY"
-   
+
    # Windows Command Prompt
    set NZ_LEGISLATION_API_KEY=YOUR_KEY
    ```
@@ -61,6 +64,7 @@ nzlegislation config --key YOUR_API_KEY
 **What it means:** Your API key is being rejected by the server.
 
 **Common causes:**
+
 - ❌ Typo in the API key
 - ❌ Key expired (rare)
 - ❌ Wrong key copied (partial key)
@@ -69,20 +73,24 @@ nzlegislation config --key YOUR_API_KEY
 **Fix it step-by-step:**
 
 **Step 1: Find your original email**
+
 - Search for "NZ Legislation API" or "PCO"
 - The key should be in the welcome email
 
 **Step 2: Copy carefully**
+
 - Select the entire key
 - No spaces before or after
 - Paste into a text editor first to verify
 
 **Step 3: Reconfigure**
+
 ```bash
 nzlegislation config --key YOUR_KEY
 ```
 
 **Step 4: Test**
+
 ```bash
 nzlegislation search --query "test" --limit 1
 ```
@@ -98,10 +106,12 @@ nzlegislation search --query "test" --limit 1
 **What it means:** You've made too many requests too quickly.
 
 **The limits:**
+
 - **Daily:** 10,000 requests per day
 - **Burst:** 2,000 requests per 5 minutes
 
 **When you see this:**
+
 ```
 Error: Rate limit exceeded. Please wait 300 seconds before retrying.
 ```
@@ -109,10 +119,12 @@ Error: Rate limit exceeded. Please wait 300 seconds before retrying.
 **Fix it:**
 
 **Option 1: Wait it out**
+
 - Burst limit resets after 5 minutes
 - Daily limit resets at midnight local time
 
 **Option 2: Reduce request frequency**
+
 ```bash
 # Instead of one big request, split into chunks
 nzlegislation search --query "health" --limit 100 --offset 0
@@ -123,6 +135,7 @@ nzlegislation search --query "health" --limit 100 --offset 200
 **Prevent it:**
 
 **Add delays in scripts:**
+
 ```bash
 #!/bin/bash
 for i in {0..10}; do
@@ -133,6 +146,7 @@ done
 ```
 
 **Use smaller batch sizes:**
+
 ```bash
 # Export in chunks of 1000
 nzlegislation export --query "health" --limit 1000 --output part1.csv
@@ -148,11 +162,13 @@ nzlegislation export --query "health" --limit 1000 --offset 1000 --output part2.
 **What it means:** The ID you provided doesn't exist.
 
 **Common causes:**
+
 - ❌ Wrong ID format
 - ❌ Typo in the ID
 - ❌ Legislation doesn't exist
 
 **ID Format:**
+
 ```
 ✅ Correct: act/2020/67
 ❌ Wrong: 2020-67
@@ -163,11 +179,13 @@ nzlegislation export --query "health" --limit 1000 --offset 1000 --output part2.
 **Fix it:**
 
 **Step 1: Search to find the correct ID**
+
 ```bash
 nzlegislation search --query "health act"
 ```
 
 **Step 2: Copy the exact ID from results**
+
 ```
 ┌────────────────────┬──────────────────────────────────────────┬────────┬──────────┬────────────┐
 │ ID                 │ Title                                    │ Type   │ Status   │ Date       │
@@ -178,6 +196,7 @@ nzlegislation search --query "health act"
 ```
 
 **Step 3: Try again**
+
 ```bash
 nzlegislation get "act/2020/67"
 ```
@@ -191,6 +210,7 @@ nzlegislation get "act/2020/67"
 **What it means:** Can't connect to the API server.
 
 **Common causes:**
+
 - ❌ No internet connection
 - ❌ API server is down
 - ❌ Firewall blocking the connection
@@ -199,6 +219,7 @@ nzlegislation get "act/2020/67"
 **Fix it step-by-step:**
 
 **Step 1: Check your internet**
+
 ```bash
 # Try pinging a website
 ping google.com
@@ -212,17 +233,20 @@ Visit: [https://api.legislation.govt.nz/](https://api.legislation.govt.nz/)
 If the website doesn't load, the API might be down.
 
 **Step 3: Test the connection**
+
 ```bash
 # Try with verbose output
 nzlegislation search --query "test" --verbose
 ```
 
 **Step 4: Check firewall/proxy**
+
 - Corporate firewall might block API access
 - Contact your IT department
 - Try from a different network (e.g., mobile hotspot)
 
 **Step 5: Increase timeout**
+
 ```bash
 # Set longer timeout (in milliseconds)
 export NZ_LEGISLATION_TIMEOUT=60000
@@ -236,6 +260,7 @@ nzlegislation search --query "health"
 **What it means:** The server actively rejected the connection.
 
 **Possible causes:**
+
 - API server is down for maintenance
 - Your IP has been blocked (rare)
 - Wrong API URL configured
@@ -259,6 +284,7 @@ nzlegislation search --query "health"
 **For npm install:**
 
 **Windows:**
+
 ```bash
 # Reinstall with admin privileges
 npm install -g nz-legislation-tool
@@ -267,6 +293,7 @@ npm install -g nz-legislation-tool
 ```
 
 **macOS/Linux:**
+
 ```bash
 # May need sudo
 sudo npm install -g nz-legislation-tool
@@ -278,11 +305,13 @@ sudo npm install -g nz-legislation-tool
 **Find where it's installed:**
 
 **Windows:**
+
 ```
 C:\Users\YOUR_NAME\AppData\Roaming\npm\
 ```
 
 **macOS/Linux:**
+
 ```
 ~/.npm-global/bin/
 # or
@@ -292,6 +321,7 @@ C:\Users\YOUR_NAME\AppData\Roaming\npm\
 **Add to PATH:**
 
 **macOS/Linux:**
+
 ```bash
 # Add to ~/.bashrc or ~/.zshrc
 export PATH=$HOME/.npm-global/bin:$PATH
@@ -322,6 +352,7 @@ source ~/.bashrc  # or source ~/.zshrc
 ### Installation fails with errors
 
 **Common causes:**
+
 - Outdated npm
 - Permission issues
 - Corrupted cache
@@ -329,21 +360,25 @@ source ~/.bashrc  # or source ~/.zshrc
 **Fix it:**
 
 **Step 1: Update npm**
+
 ```bash
 npm install -g npm@latest
 ```
 
 **Step 2: Clear cache**
+
 ```bash
 npm cache clean --force
 ```
 
 **Step 3: Try again**
+
 ```bash
 npm install -g nz-legislation-tool
 ```
 
 **Still failing?** Try npx instead:
+
 ```bash
 npx nz-legislation-tool search --query "health"
 ```
@@ -359,16 +394,19 @@ npx nz-legislation-tool search --query "health"
 **Fix it:**
 
 **Option 1: Use JSON or CSV format**
+
 ```bash
 nzlegislation search --query "health" --format json
 nzlegislation search --query "health" --format csv
 ```
 
 **Option 2: Change terminal font**
+
 - Use a monospace font (Consolas, Monaco, Courier New)
 - Avoid proportional fonts
 
 **Option 3: Widen your terminal**
+
 - Make the window wider
 - Some tables need 100+ characters width
 
@@ -381,6 +419,7 @@ nzlegislation search --query "health" --format csv
 **Fix it:**
 
 **Force color output:**
+
 ```bash
 # Some terminals support this
 export FORCE_COLOR=1
@@ -388,6 +427,7 @@ nzlegislation search --query "health"
 ```
 
 **Or use no-color mode:**
+
 ```bash
 export NO_COLOR=1
 nzlegislation search --query "health"
@@ -412,12 +452,14 @@ nzlegislation search --query "health"
 **Method 2: Change file association**
 
 **Windows:**
+
 1. Right-click the `.csv` file
 2. Choose "Open with"
 3. Select Excel
 4. Check "Always use this app"
 
 **macOS:**
+
 1. Right-click the `.csv` file
 2. Choose "Get Info"
 3. Under "Open with", select Excel
@@ -430,6 +472,7 @@ nzlegislation search --query "health"
 ### Tool is slow
 
 **Common causes:**
+
 - Large result sets
 - Slow internet connection
 - API server busy
@@ -437,6 +480,7 @@ nzlegislation search --query "health"
 **Fix it:**
 
 **Use smaller limits:**
+
 ```bash
 # Instead of 1000 results at once
 nzlegislation search --query "health" --limit 1000
@@ -447,11 +491,13 @@ nzlegislation search --query "health" --limit 100 --offset 100
 ```
 
 **Use JSON format (faster than table):**
+
 ```bash
 nzlegislation search --query "health" --format json
 ```
 
 **Check your internet:**
+
 ```bash
 # Test connection speed
 speedtest-cli  # Install first: npm install -g speedtest-cli
@@ -466,6 +512,7 @@ speedtest-cli  # Install first: npm install -g speedtest-cli
 **Fix it:**
 
 **Split into chunks:**
+
 ```bash
 # Instead of one big export
 nzlegislation export --query "health" --output all.csv --limit 10000
@@ -477,6 +524,7 @@ nzlegislation export --query "health" --limit 1000 --offset 2000 --output part3.
 ```
 
 **Then combine:**
+
 ```bash
 # Linux/macOS
 cat part1.csv part2.csv part3.csv > all.csv
@@ -532,6 +580,7 @@ nzlegislation search --query "health" --limit 500
 ```
 
 **For large exports, use offset:**
+
 ```bash
 nzlegislation search --query "health" --limit 100 --offset 0
 nzlegislation search --query "health" --limit 100 --offset 100
@@ -581,6 +630,7 @@ Before asking for help, try these:
 4. **Email:** dylan.mordaunt@vuw.ac.nz
 
 **When asking for help, include:**
+
 - The exact command you ran
 - The full error message
 - Your operating system
@@ -593,6 +643,7 @@ Before asking for help, try these:
 This documentation aims to meet WCAG 2.1 AA standards. If you encounter accessibility barriers, please [open an issue](https://github.com/edithatogo/nz-legislation-tool/issues) or [contact us](mailto:dylan.mordaunt@vuw.ac.nz).
 
 **Features:**
+
 - ✅ Screen reader compatible
 - ✅ Keyboard navigation supported
 - ✅ High contrast text

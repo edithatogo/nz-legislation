@@ -81,7 +81,7 @@ describe('Output Formatters', () => {
           ...mockWork,
           date: '2026-03-05',
         },
-        'bibtex',
+        'bibtex'
       );
 
       expect(citation).toContain('year = {1989}');

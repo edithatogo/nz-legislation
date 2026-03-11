@@ -35,6 +35,7 @@ Please be respectful and constructive in your interactions. We're committed to p
 ### Setup
 
 1. **Fork the repository**
+
    ```bash
    # Click "Fork" on GitHub, then clone your fork
    git clone https://github.com/YOUR_USERNAME/nz-legislation.git
@@ -42,11 +43,13 @@ Please be respectful and constructive in your interactions. We're committed to p
    ```
 
 2. **Install dependencies**
+
    ```bash
    pnpm install
    ```
 
 3. **Set up environment**
+
    ```bash
    cp .env.example .env
    # Edit .env with your NZ Legislation API key
@@ -99,11 +102,13 @@ pnpm changeset
 ```
 
 Follow the prompts to:
+
 - Select the package (nz-legislation-tool)
 - Choose version bump type (major/minor/patch)
 - Add a descriptive message
 
 **Examples:**
+
 - Patch: "Fix rate limiting configuration error"
 - Minor: "Add CSV export format for search results"
 - Major: "Change authentication method from query param to header"
@@ -124,6 +129,7 @@ git commit -m "test: add integration tests for search API"
 ```
 
 **Commit Types:**
+
 - `feat:` - New feature
 - `fix:` - Bug fix
 - `docs:` - Documentation
@@ -141,12 +147,14 @@ git commit -m "test: add integration tests for search API"
 ### Before Submitting
 
 1. **Update your branch**
+
    ```bash
    git fetch origin
    git rebase origin/main
    ```
 
 2. **Run quality checks**
+
    ```bash
    pnpm lint
    pnpm typecheck
@@ -162,6 +170,7 @@ git commit -m "test: add integration tests for search API"
 ### Submitting the PR
 
 1. **Push your branch**
+
    ```bash
    git push origin feature/your-feature-name
    ```
@@ -173,9 +182,10 @@ git commit -m "test: add integration tests for search API"
    - Fill out the PR template completely
 
 3. **PR Title Format**
+
    ```
    type: description
-   
+
    Examples:
    feat: add CSV export functionality
    fix: resolve rate limiting issue
@@ -200,6 +210,7 @@ git commit -m "test: add integration tests for search API"
 - Use async/await for asynchronous code
 
 **Example:**
+
 ```typescript
 // ✅ Good
 export interface SearchParams {
@@ -224,6 +235,7 @@ export async function searchWorks(params: any): Promise<any> {
 - Log errors with appropriate context
 
 **Example:**
+
 ```typescript
 // ✅ Good
 export class APIError extends Error {
@@ -247,6 +259,7 @@ throw new APIError('Rate limit exceeded', 429, 'Wait 60 seconds before retrying'
 - Keep files focused and reasonably sized (<500 lines)
 
 **Example:**
+
 ```typescript
 import { searchWorks } from '@client';
 import { formatAsCSV } from '@output/formatters';
@@ -281,6 +294,7 @@ pnpm test src/client.test.ts
 - Use descriptive test names
 
 **Example:**
+
 ```typescript
 import { describe, it, expect } from 'vitest';
 import { searchWorks } from '../client';
@@ -288,7 +302,7 @@ import { searchWorks } from '../client';
 describe('searchWorks', () => {
   it('should return works matching the query', async () => {
     const results = await searchWorks({ query: 'health', limit: 5 });
-    
+
     expect(results).toBeDefined();
     expect(results.works).toBeInstanceOf(Array);
     expect(results.works.length).toBeLessThanOrEqual(5);
@@ -309,6 +323,7 @@ describe('searchWorks', () => {
 ### README Updates
 
 Update the README.md if you:
+
 - Add new features or commands
 - Change installation steps
 - Modify configuration options
@@ -321,6 +336,7 @@ Update the README.md if you:
 - Document parameters and return values
 
 **Example:**
+
 ```typescript
 /**
  * Search for legislation works matching the query.

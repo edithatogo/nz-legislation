@@ -45,18 +45,21 @@ See `RELEASE_v1.1.0.md` for full release notes.
 ## What's New in v1.1.0
 
 ### New Commands
+
 - `nzlegislation batch` - Bulk operations
 - `nzlegislation stream` - Streaming exports
 - `npm run bench:audit` - Performance audit
 - `npx tsx scripts/bundle-analyze.ts` - Bundle analysis
 
 ### Performance Improvements
+
 - API optimization (pooling, retry, deduplication)
 - Load testing infrastructure (k6)
 - Performance monitoring dashboard
 - Comprehensive scorecards
 
 ### Documentation
+
 - Performance dashboard
 - Scorecards system
 - Metrics interpretation guide

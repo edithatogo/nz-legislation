@@ -9,6 +9,7 @@
 This guide walks you through setting up a professional documentation website for the NZ Legislation Tool using Docusaurus v2, a modern static site generator optimized for documentation.
 
 **Why Docusaurus?**
+
 - ✅ Built for documentation
 - ✅ Markdown support
 - ✅ Full-text search
@@ -59,6 +60,7 @@ npm run start
 ### Recommended: Docusaurus v2
 
 **Pros:**
+
 - Built by Meta (Facebook)
 - Excellent documentation features
 - Built-in search (Algolia)
@@ -68,6 +70,7 @@ npm run start
 - Active community
 
 **Cons:**
+
 - React-based (learning curve if unfamiliar)
 - Build time for large sites
 
@@ -76,12 +79,14 @@ npm run start
 ### Alternative: VitePress
 
 **Pros:**
+
 - Faster build times
 - Vue-based
 - Simpler configuration
 - Great for smaller sites
 
 **Cons:**
+
 - Fewer features than Docusaurus
 - Less mature ecosystem
 
@@ -90,6 +95,7 @@ npm run start
 ### Decision
 
 **We recommend Docusaurus** because:
+
 1. Better suited for large documentation sets
 2. More features (versioning, search, i18n)
 3. Better for technical documentation
@@ -188,14 +194,12 @@ const config = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to be your repository's URL
-          editUrl:
-            'https://github.com/edithatogo/nz-legislation-tool/tree/main/docs-site/',
+          editUrl: 'https://github.com/edithatogo/nz-legislation-tool/tree/main/docs-site/',
         },
         blog: {
           showReadingTime: true,
           // Please change this to be your repository's URL
-          editUrl:
-            'https://github.com/edithatogo/nz-legislation-tool/tree/main/docs-site/',
+          editUrl: 'https://github.com/edithatogo/nz-legislation-tool/tree/main/docs-site/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -315,7 +319,7 @@ const sidebars = {
       ],
     },
   ],
-  
+
   developerGuideSidebar: [
     {
       type: 'category',
@@ -392,7 +396,7 @@ Create `docs-site/src/css/custom.css`:
   border-radius: 8px;
   padding: 20px;
   margin: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 ```
 
@@ -499,6 +503,7 @@ npm run docs:deploy
 ### Algolia DocSearch (Free for Open Source)
 
 **Apply for DocSearch:**
+
 1. Visit: https://docsearch.algolia.com/apply/
 2. Fill out application form
 3. Wait for approval (1-2 weeks)
@@ -512,10 +517,10 @@ themeConfig: {
     apiKey: 'YOUR_API_KEY',
     indexName: 'nz-legislation-tool',
     contextualSearch: true,
-    
+
     // Optional: Algolia search parameters
     searchParameters: {},
-    
+
     // Optional: path for search page
     searchPagePath: 'search',
   },
@@ -555,16 +560,14 @@ import HomepageFeatures from '@site/src/components/HomepageFeatures';
 import styles from './index.module.css';
 
 function HomepageHeader() {
-  const {siteConfig} = useDocusaurusContext();
+  const { siteConfig } = useDocusaurusContext();
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
         <h1 className="hero__title">{siteConfig.title}</h1>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <div className={styles.buttons}>
-          <Link
-            className="button button--secondary button--lg"
-            to="/docs/user-guide">
+          <Link className="button button--secondary button--lg" to="/docs/user-guide">
             Get Started (5 min)
           </Link>
         </div>
@@ -574,11 +577,9 @@ function HomepageHeader() {
 }
 
 export default function Home() {
-  const {siteConfig} = useDocusaurusContext();
+  const { siteConfig } = useDocusaurusContext();
   return (
-    <Layout
-      title={`Documentation`}
-      description="Search and retrieve New Zealand legislation data">
+    <Layout title={`Documentation`} description="Search and retrieve New Zealand legislation data">
       <HomepageHeader />
       <main>
         <HomepageFeatures />
@@ -659,6 +660,7 @@ npm run build -- --fail-on-missing-links
 **Error:** `Module not found`
 
 **Solution:**
+
 ```bash
 cd docs-site
 rm -rf node_modules package-lock.json
@@ -669,6 +671,7 @@ npm run build
 ### Search Not Working
 
 **Check:**
+
 1. Algolia credentials are correct
 2. Site is indexed (takes 24-48 hours)
 3. Build completed successfully
@@ -676,6 +679,7 @@ npm run build
 ### Deployment Fails
 
 **GitHub Pages:**
+
 ```bash
 # Clear deployment cache
 cd docs-site
@@ -688,16 +692,19 @@ npm run deploy
 ## Resources
 
 ### Documentation
+
 - [Docusaurus Docs](https://docusaurus.io/docs)
 - [Docusaurus API](https://docusaurus.io/docs/api)
 - [Docusaurus Themes](https://docusaurus.io/docs/styling-layout)
 
 ### Community
+
 - [Docusaurus Discord](https://discord.gg/docusaurus)
 - [Stack Overflow](https://stackoverflow.com/questions/tagled/docusaurus)
 - [GitHub Discussions](https://github.com/facebook/docusaurus/discussions)
 
 ### Tools
+
 - [Algolia DocSearch](https://docsearch.algolia.com/)
 - [Netlify](https://netlify.com/)
 - [Vercel](https://vercel.com/)

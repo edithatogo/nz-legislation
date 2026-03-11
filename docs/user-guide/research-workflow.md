@@ -30,6 +30,7 @@ nzlegislation search --query "health" --type act --status in-force
 ```
 
 **What you'll see:**
+
 ```
 ┌────────────────────┬──────────────────────────────────────────┬────────┬──────────┬────────────┐
 │ ID                 │ Title                                    │ Type   │ Status   │ Date       │
@@ -68,11 +69,13 @@ nzlegislation search --query "public health" --status in-force
 ### Step 1.3: Review Results
 
 Look through the results and note:
+
 - Relevant Acts (copy the IDs)
 - Date ranges (when were key laws enacted?)
 - Gaps (what's missing from your search?)
 
 **Example IDs to note:**
+
 - `act/2020/67` - Health Act 2020
 - `act/1981/118` - Mental Health Act 1981
 - `act/2000/7` - New Zealand Public Health and Disability Act 2000
@@ -91,6 +94,7 @@ nzlegislation export --query "health" --type act --status in-force --output heal
 ```
 
 **What you get:**
+
 - CSV file with all search results
 - Metadata including search timestamp, query, and API version
 - Ready to open in Excel, R, Python, or SPSS
@@ -140,11 +144,13 @@ EOF
 ### Step 3.1: Open in Excel
 
 **For CSV files:**
+
 1. Double-click the `.csv` file
 2. Excel opens automatically
 3. Data is ready to sort, filter, and analyze
 
 **Columns you'll have:**
+
 - `id` - Unique identifier
 - `title` - Full title
 - `shortTitle` - Short title
@@ -159,6 +165,7 @@ EOF
 ### Step 3.2: Analyze in R or Python
 
 **In R:**
+
 ```r
 # Load the data
 health_acts <- read.csv("health_acts.csv")
@@ -177,6 +184,7 @@ ggplot(health_acts, aes(x = substr(date, 1, 4))) +
 ```
 
 **In Python:**
+
 ```python
 import pandas as pd
 
@@ -211,6 +219,7 @@ nzlegislation get "act/2020/67" --versions --format json > health_act_versions.j
 ```
 
 **Analyze:**
+
 - How many amendments?
 - What sections changed?
 - When were major reforms enacted?
@@ -235,11 +244,13 @@ nzlegislation cite "act/2020/67" --style bibtex
 ```
 
 **Example output (NZMJ):**
+
 ```
 Health Act 2020 (NZ) 2020/67.
 ```
 
 **Example output (APA):**
+
 ```
 Health Act 2020, Public Act 2020/67 (New Zealand).
 ```
@@ -258,6 +269,7 @@ nzlegislation cite "act/2000/7" --style bibtex >> references.bib
 ```
 
 **Then in LaTeX:**
+
 ```latex
 \bibliographystyle{plain}
 \bibliography{references}
@@ -272,8 +284,8 @@ For reproducibility, include:
 ```markdown
 ## Data Sources
 
-Legislation data was retrieved from the NZ Legislation API 
-(https://api.legislation.govt.nz/) using the NZ Legislation Tool 
+Legislation data was retrieved from the NZ Legislation API
+(https://api.legislation.govt.nz/) using the NZ Legislation Tool
 (version 1.2.3) on 2026-03-10.
 
 Search query: "health" --type act --status in-force
@@ -317,6 +329,7 @@ echo "  - health_act_versions.json (version history)"
 ```
 
 **Run it:**
+
 ```bash
 bash research-workflow.sh
 ```
@@ -339,6 +352,7 @@ nzlegislation search --query "public health" --type act
 ```
 
 **Key Acts to cite:**
+
 - Health Act 2020 (`act/2020/67`)
 - Mental Health Act 1981 (`act/1981/118`)
 - New Zealand Public Health and Disability Act 2000 (`act/2000/7`)
@@ -380,6 +394,7 @@ nzlegislation get "act/1981/118" --versions
 ### "I'm not finding relevant results"
 
 **Try:**
+
 - Broader search terms (e.g., "health" instead of "health reform")
 - Removing filters (search all types, not just Acts)
 - Checking spelling (use Māori and English terms)
@@ -389,6 +404,7 @@ nzlegislation get "act/1981/118" --versions
 ### "I hit the rate limit"
 
 **Solution:**
+
 - Wait 5 minutes for burst limit to reset
 - Or wait until midnight for daily limit
 - Reduce batch sizes (export 100 at a time)
@@ -398,6 +414,7 @@ nzlegislation get "act/1981/118" --versions
 ### "The CSV won't open in Excel"
 
 **Fix it:**
+
 1. Open Excel first
 2. Go to Data → From Text/CSV
 3. Select your file
@@ -412,9 +429,9 @@ nzlegislation get "act/1981/118" --versions
 
 - [FAQ](./faq.md) - Common questions answered
 - [Troubleshooting](./troubleshooting.md) - Step-by-step fixes for 21+ error scenarios
-- [Export for Analysis](./export-for-analysis.md) *(Coming Soon)*
-- [Citation Guide](./citation-guide.md) *(Coming Soon)*
-- [Automation Scripts](./tutorials/automation-scripts.md) *(Coming Soon)*
+- [Export for Analysis](./export-for-analysis.md) _(Coming Soon)_
+- [Citation Guide](./citation-guide.md) _(Coming Soon)_
+- [Automation Scripts](./tutorials/automation-scripts.md) _(Coming Soon)_
 
 **Need help?**
 
@@ -428,6 +445,7 @@ nzlegislation get "act/1981/118" --versions
 This documentation aims to meet WCAG 2.1 AA standards. If you encounter accessibility barriers, please [open an issue](https://github.com/edithatogo/nz-legislation-tool/issues) or [contact us](mailto:dylan.mordaunt@vuw.ac.nz).
 
 **Features:**
+
 - ✅ Screen reader compatible
 - ✅ Keyboard navigation supported
 - ✅ High contrast text

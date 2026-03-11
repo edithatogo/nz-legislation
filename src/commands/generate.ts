@@ -25,7 +25,7 @@ interface GenerateOptions {
 function generateCommandTemplate({ name, output }: GenerateOptions): void {
   const commandName = name.toLowerCase();
   const className = name.charAt(0).toUpperCase() + name.slice(1);
-  
+
   const template = `import { Command } from 'commander';
 import { logger } from '../utils/logger.js';
 
@@ -58,11 +58,11 @@ ${commandName}Command
 
   const commandsDir = path.join(projectRoot, 'src', 'commands');
   const outputPath = output || path.join(commandsDir, `${commandName}.ts`);
-  
+
   if (!fs.existsSync(commandsDir) && !output) {
     fs.mkdirSync(commandsDir, { recursive: true });
   }
-  
+
   fs.writeFileSync(outputPath, template);
   console.log(chalk.green(`✓ Generated command: ${outputPath}`));
 }
@@ -73,7 +73,7 @@ ${commandName}Command
 function generateModelTemplate({ name, output }: GenerateOptions): void {
   const modelName = name.charAt(0).toUpperCase() + name.slice(1);
   const fileName = name.toLowerCase();
-  
+
   const template = `import { z } from 'zod';
 
 /**
@@ -113,11 +113,11 @@ export function parse${modelName}(data: unknown): ${modelName} {
 
   const modelsDir = path.join(projectRoot, 'src', 'models');
   const outputPath = output || path.join(modelsDir, `${fileName}.ts`);
-  
+
   if (!fs.existsSync(modelsDir) && !output) {
     fs.mkdirSync(modelsDir, { recursive: true });
   }
-  
+
   fs.writeFileSync(outputPath, template);
   console.log(chalk.green(`✓ Generated model: ${outputPath}`));
 }
@@ -128,7 +128,7 @@ export function parse${modelName}(data: unknown): ${modelName} {
 function generateTestTemplate({ name, output }: GenerateOptions): void {
   const testName = name.toLowerCase();
   const className = name.charAt(0).toUpperCase() + name.slice(1);
-  
+
   const template = `import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { ${className}Schema } from '../src/models/${testName}.js';
 
@@ -184,11 +184,11 @@ describe('${className}', () => {
 
   const testsDir = path.join(projectRoot, 'tests');
   const outputPath = output || path.join(testsDir, `${testName}.test.ts`);
-  
+
   if (!fs.existsSync(testsDir) && !output) {
     fs.mkdirSync(testsDir, { recursive: true });
   }
-  
+
   fs.writeFileSync(outputPath, template);
   console.log(chalk.green(`✓ Generated test: ${outputPath}`));
 }
@@ -199,7 +199,7 @@ describe('${className}', () => {
 function generateDocsTemplate({ name, output }: GenerateOptions): void {
   const docName = name.toLowerCase();
   const className = name.charAt(0).toUpperCase() + name.slice(1);
-  
+
   const template = `# ${className}
 
 > Auto-generated documentation template
@@ -293,11 +293,11 @@ nzlegislation ${docName} --verbose
 
   const docsDir = path.join(projectRoot, 'docs');
   const outputPath = output || path.join(docsDir, `${docName}.md`);
-  
+
   if (!fs.existsSync(docsDir) && !output) {
     fs.mkdirSync(docsDir, { recursive: true });
   }
-  
+
   fs.writeFileSync(outputPath, template);
   console.log(chalk.green(`✓ Generated documentation: ${outputPath}`));
 }
@@ -307,11 +307,9 @@ nzlegislation ${docName} --verbose
  */
 export function createGenerateCommand(): Command {
   const cmd = new Command();
-  
-  cmd
-    .name('generate')
-    .description('Generate code templates');
-  
+
+  cmd.name('generate').description('Generate code templates');
+
   // Generate command subcommand
   const commandCmd = new Command('command');
   commandCmd
@@ -321,7 +319,7 @@ export function createGenerateCommand(): Command {
     .action((name: string, options: { output?: string }) => {
       generateCommandTemplate({ name, output: options.output });
     });
-  
+
   // Generate model subcommand
   const modelCmd = new Command('model');
   modelCmd
@@ -331,7 +329,7 @@ export function createGenerateCommand(): Command {
     .action((name: string, options: { output?: string }) => {
       generateModelTemplate({ name, output: options.output });
     });
-  
+
   // Generate test subcommand
   const testCmd = new Command('test');
   testCmd
@@ -341,7 +339,7 @@ export function createGenerateCommand(): Command {
     .action((name: string, options: { output?: string }) => {
       generateTestTemplate({ name, output: options.output });
     });
-  
+
   // Generate docs subcommand
   const docsCmd = new Command('docs');
   docsCmd
@@ -351,12 +349,8 @@ export function createGenerateCommand(): Command {
     .action((name: string, options: { output?: string }) => {
       generateDocsTemplate({ name, output: options.output });
     });
-  
-  cmd
-    .addCommand(commandCmd)
-    .addCommand(modelCmd)
-    .addCommand(testCmd)
-    .addCommand(docsCmd);
-  
+
+  cmd.addCommand(commandCmd).addCommand(modelCmd).addCommand(testCmd).addCommand(docsCmd);
+
   return cmd;
 }

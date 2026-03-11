@@ -39,48 +39,52 @@ Search for legislation works matching the query parameters.
 
 **Parameters:**
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `params` | `SearchParams` | Yes | Search parameters object |
+| Name     | Type           | Required | Description              |
+| -------- | -------------- | -------- | ------------------------ |
+| `params` | `SearchParams` | Yes      | Search parameters object |
 
 **SearchParams Interface:**
+
 ```typescript
 interface SearchParams {
-  query: string;           // Search query (required)
+  query: string; // Search query (required)
   type?: 'act' | 'bill' | 'regulation' | 'instrument';
-  status?: string;         // e.g., 'in-force', 'repealed'
-  from?: string;           // ISO date: YYYY-MM-DD
-  to?: string;             // ISO date: YYYY-MM-DD
-  limit?: number;          // 1-100, default: 25
-  offset?: number;         // For pagination, default: 0
+  status?: string; // e.g., 'in-force', 'repealed'
+  from?: string; // ISO date: YYYY-MM-DD
+  to?: string; // ISO date: YYYY-MM-DD
+  limit?: number; // 1-100, default: 25
+  offset?: number; // For pagination, default: 0
 }
 ```
 
 **Returns:** `Promise<SearchResults>`
 
 **SearchResults Interface:**
+
 ```typescript
 interface SearchResults {
-  total: number;           // Total matching results
-  offset: number;          // Current offset
-  limit: number;           // Results per page
-  works: Work[];           // Array of matching works
+  total: number; // Total matching results
+  offset: number; // Current offset
+  limit: number; // Results per page
+  works: Work[]; // Array of matching works
 }
 ```
 
 **Throws:**
+
 - `ApiError` - If API request fails
 - `ValidationError` - If parameters are invalid
 - `RateLimitError` - If rate limit exceeded
 
 **Example:**
+
 ```typescript
 import { searchWorks } from '@client';
 
 // Basic search
 const results = await searchWorks({
   query: 'health',
-  limit: 25
+  limit: 25,
 });
 
 console.log(`Found ${results.total} results`);
@@ -93,16 +97,18 @@ const filtered = await searchWorks({
   status: 'in-force',
   from: '2020-01-01',
   to: '2024-12-31',
-  limit: 50
+  limit: 50,
 });
 ```
 
 **Caching:**
+
 - Results cached for 30 minutes
 - Cache key includes all parameters
 - LRU eviction (max 500 entries)
 
 **Rate Limiting:**
+
 - Checks daily limit (10,000 requests)
 - Checks burst limit (2,000 requests/5min)
 - Includes 10% safety margin
@@ -115,22 +121,24 @@ Get detailed information about a specific work by ID.
 
 **Parameters:**
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `workId` | `string` | Yes | Work ID (e.g., 'act/2020/67') |
-| `options` | `GetWorkOptions` | No | Additional options |
+| Name      | Type             | Required | Description                   |
+| --------- | ---------------- | -------- | ----------------------------- |
+| `workId`  | `string`         | Yes      | Work ID (e.g., 'act/2020/67') |
+| `options` | `GetWorkOptions` | No       | Additional options            |
 
 **GetWorkOptions Interface:**
+
 ```typescript
 interface GetWorkOptions {
-  includeVersions?: boolean;  // Include version history
-  format?: 'json' | 'table';  // Output format
+  includeVersions?: boolean; // Include version history
+  format?: 'json' | 'table'; // Output format
 }
 ```
 
 **Returns:** `Promise<Work>`
 
 **Work Interface:**
+
 ```typescript
 interface Work {
   id: string;
@@ -150,10 +158,12 @@ interface Work {
 ```
 
 **Throws:**
+
 - `ApiError` - If work not found (404)
 - `ValidationError` - If workId format invalid
 
 **Example:**
+
 ```typescript
 import { getWork } from '@client';
 
@@ -163,12 +173,13 @@ console.log(work.title);
 
 // Include version history
 const workWithVersions = await getWork('act/2020/67', {
-  includeVersions: true
+  includeVersions: true,
 });
 console.log(`Has ${work.versionCount} versions`);
 ```
 
 **Caching:**
+
 - Work details cached for 2 hours
 - Version history cached for 1 hour
 
@@ -180,13 +191,14 @@ Get all versions of a specific work.
 
 **Parameters:**
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `workId` | `string` | Yes | Work ID |
+| Name     | Type     | Required | Description |
+| -------- | -------- | -------- | ----------- |
+| `workId` | `string` | Yes      | Work ID     |
 
 **Returns:** `Promise<Version[]>`
 
 **Version Interface:**
+
 ```typescript
 interface Version {
   id: string;
@@ -199,6 +211,7 @@ interface Version {
 ```
 
 **Example:**
+
 ```typescript
 import { getWorkVersions } from '@client';
 
@@ -218,15 +231,16 @@ Export search results to a file.
 
 **Parameters:**
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `params` | `ExportParams` | Yes | Export parameters |
+| Name     | Type           | Required | Description       |
+| -------- | -------------- | -------- | ----------------- |
+| `params` | `ExportParams` | Yes      | Export parameters |
 
 **ExportParams Interface:**
+
 ```typescript
 interface ExportParams {
   query: string;
-  output: string;        // File path
+  output: string; // File path
   format?: 'csv' | 'json';
   type?: string;
   status?: string;
@@ -240,10 +254,12 @@ interface ExportParams {
 **Returns:** `Promise<void>`
 
 **Side Effects:**
+
 - Creates file at specified path
 - Overwrites existing files
 
 **Example:**
+
 ```typescript
 import { exportWorks } from '@client';
 
@@ -252,7 +268,7 @@ await exportWorks({
   query: 'health',
   output: 'health_acts.csv',
   format: 'csv',
-  limit: 1000
+  limit: 1000,
 });
 
 // Export to JSON with metadata
@@ -260,11 +276,12 @@ await exportWorks({
   query: 'health',
   output: 'health_acts.json',
   format: 'json',
-  includeMetadata: true
+  includeMetadata: true,
 });
 ```
 
 **Metadata (when includeMetadata: true):**
+
 ```json
 {
   "exportedAt": "2026-03-10T12:00:00Z",
@@ -283,12 +300,13 @@ Generate a citation for a specific work.
 
 **Parameters:**
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `workId` | `string` | Yes | Work ID |
-| `style` | `CitationStyle` | No | Citation style (default: 'nzmj') |
+| Name     | Type            | Required | Description                      |
+| -------- | --------------- | -------- | -------------------------------- |
+| `workId` | `string`        | Yes      | Work ID                          |
+| `style`  | `CitationStyle` | No       | Citation style (default: 'nzmj') |
 
 **CitationStyle Type:**
+
 ```typescript
 type CitationStyle = 'nzmj' | 'apa' | 'bibtex' | 'ris';
 ```
@@ -296,6 +314,7 @@ type CitationStyle = 'nzmj' | 'apa' | 'bibtex' | 'ris';
 **Returns:** `Promise<string>` - Formatted citation
 
 **Example:**
+
 ```typescript
 import { generateCitation } from '@client';
 
@@ -337,6 +356,7 @@ CLI command implementations.
 Search command configuration and handler.
 
 **Options:**
+
 ```typescript
 interface SearchOptions {
   query: string;
@@ -352,11 +372,13 @@ interface SearchOptions {
 ```
 
 **Usage:**
+
 ```bash
 nzlegislation search --query "health" --type act --limit 50
 ```
 
 **Handler:**
+
 ```typescript
 async function searchHandler(options: SearchOptions) {
   try {
@@ -367,9 +389,9 @@ async function searchHandler(options: SearchOptions) {
       from: options.from,
       to: options.to,
       limit: options.limit,
-      offset: options.offset
+      offset: options.offset,
     });
-    
+
     console.log(formatOutput(results, options.format));
   } catch (error) {
     handleError(error);
@@ -386,6 +408,7 @@ async function searchHandler(options: SearchOptions) {
 Get command configuration and handler.
 
 **Options:**
+
 ```typescript
 interface GetOptions {
   id: string;
@@ -396,6 +419,7 @@ interface GetOptions {
 ```
 
 **Usage:**
+
 ```bash
 nzlegislation get "act/2020/67" --versions
 ```
@@ -409,6 +433,7 @@ nzlegislation get "act/2020/67" --versions
 Export command configuration and handler.
 
 **Options:**
+
 ```typescript
 interface ExportOptions {
   query: string;
@@ -422,6 +447,7 @@ interface ExportOptions {
 ```
 
 **Usage:**
+
 ```bash
 nzlegislation export --query "health" --output results.csv --include-metadata
 ```
@@ -435,6 +461,7 @@ nzlegislation export --query "health" --output results.csv --include-metadata
 Cite command configuration and handler.
 
 **Options:**
+
 ```typescript
 interface CiteOptions {
   id: string;
@@ -443,6 +470,7 @@ interface CiteOptions {
 ```
 
 **Usage:**
+
 ```bash
 nzlegislation cite "act/2020/67" --style apa
 ```
@@ -456,6 +484,7 @@ nzlegislation cite "act/2020/67" --style apa
 Configuration command configuration and handler.
 
 **Options:**
+
 ```typescript
 interface ConfigOptions {
   show?: boolean;
@@ -465,6 +494,7 @@ interface ConfigOptions {
 ```
 
 **Usage:**
+
 ```bash
 # Show current config
 nzlegislation config --show
@@ -493,6 +523,7 @@ TypeScript types and Zod schemas for validation.
 Schema for validating work objects.
 
 **Definition:**
+
 ```typescript
 import { z } from 'zod';
 
@@ -505,17 +536,20 @@ export const WorkSchema = z.object({
   date: z.string(),
   url: z.string().url(),
   versionCount: z.number().optional(),
-  latestVersion: z.object({
-    id: z.string(),
-    title: z.string(),
-    date: z.string()
-  }).optional()
+  latestVersion: z
+    .object({
+      id: z.string(),
+      title: z.string(),
+      date: z.string(),
+    })
+    .optional(),
 });
 
 export type Work = z.infer<typeof WorkSchema>;
 ```
 
 **Validation:**
+
 ```typescript
 import { WorkSchema } from '@models';
 
@@ -538,15 +572,22 @@ if (!result.success) {
 Schema for validating search parameters.
 
 **Definition:**
+
 ```typescript
 export const SearchParamsSchema = z.object({
   query: z.string().min(1, 'Query is required'),
   type: z.enum(['act', 'bill', 'regulation', 'instrument']).optional(),
   status: z.string().optional(),
-  from: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format').optional(),
-  to: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format').optional(),
+  from: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format')
+    .optional(),
+  to: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format')
+    .optional(),
   limit: z.number().min(1).max(100).default(25),
-  offset: z.number().min(0).default(0)
+  offset: z.number().min(0).default(0),
 });
 ```
 
@@ -559,12 +600,13 @@ export const SearchParamsSchema = z.object({
 Schema for validating search results.
 
 **Definition:**
+
 ```typescript
 export const SearchResultsSchema = z.object({
   total: z.number(),
   offset: z.number(),
   limit: z.number(),
-  works: z.array(WorkSchema)
+  works: z.array(WorkSchema),
 });
 ```
 
@@ -577,6 +619,7 @@ export const SearchResultsSchema = z.object({
 Schema for validating configuration.
 
 **Definition:**
+
 ```typescript
 export const ConfigSchema = z.object({
   apiKey: z.string().min(1, 'API key is required'),
@@ -584,7 +627,7 @@ export const ConfigSchema = z.object({
   timeout: z.number().positive().default(30000),
   dailyLimit: z.number().positive().default(10000),
   burstLimit: z.number().positive().default(2000),
-  safetyMargin: z.number().min(0).max(1).default(0.1)
+  safetyMargin: z.number().min(0).max(1).default(0.1),
 });
 ```
 
@@ -604,13 +647,14 @@ Format search results as a pretty table.
 
 **Parameters:**
 
-| Name | Type | Description |
-|------|------|-------------|
+| Name      | Type            | Description              |
+| --------- | --------------- | ------------------------ |
 | `results` | `SearchResults` | Search results to format |
 
 **Returns:** `string` - Formatted table
 
 **Example:**
+
 ```typescript
 import { formatAsTable } from '@output/formatters';
 
@@ -619,6 +663,7 @@ console.log(table);
 ```
 
 **Output:**
+
 ```
 ┌────────────────────┬──────────────────────────────────────────┬────────┬──────────┬────────────┐
 │ ID                 │ Title                                    │ Type   │ Status   │ Date       │
@@ -635,13 +680,14 @@ Format search results as JSON.
 
 **Parameters:**
 
-| Name | Type | Description |
-|------|------|-------------|
+| Name      | Type            | Description              |
+| --------- | --------------- | ------------------------ |
 | `results` | `SearchResults` | Search results to format |
 
 **Returns:** `string` - JSON string
 
 **Example:**
+
 ```typescript
 import { formatAsJson } from '@output/formatters';
 
@@ -650,6 +696,7 @@ console.log(json);
 ```
 
 **Output:**
+
 ```json
 {
   "total": 42,
@@ -667,13 +714,14 @@ Format search results as CSV.
 
 **Parameters:**
 
-| Name | Type | Description |
-|------|------|-------------|
+| Name      | Type            | Description              |
+| --------- | --------------- | ------------------------ |
 | `results` | `SearchResults` | Search results to format |
 
 **Returns:** `string` - CSV string
 
 **Example:**
+
 ```typescript
 import { formatAsCsv } from '@output/formatters';
 
@@ -682,6 +730,7 @@ console.log(csv);
 ```
 
 **Output:**
+
 ```csv
 id,title,shortTitle,type,status,date,url,versionCount
 act/2020/67,Health Act 2020,Health Act 2020,act,in-force,2020-11-15,https://...,5
@@ -695,20 +744,22 @@ Generate a citation in the specified style.
 
 **Parameters:**
 
-| Name | Type | Description |
-|------|------|-------------|
-| `work` | `Work` | Work to cite |
+| Name    | Type            | Description    |
+| ------- | --------------- | -------------- |
+| `work`  | `Work`          | Work to cite   |
 | `style` | `CitationStyle` | Citation style |
 
 **Returns:** `string` - Formatted citation
 
 **Supported Styles:**
+
 - `nzmj` - New Zealand Medical Journal
 - `apa` - APA 7th edition
 - `bibtex` - BibTeX format
 - `ris` - RIS format
 
 **Example:**
+
 ```typescript
 import { generateCitation } from '@output/citations';
 
@@ -731,11 +782,13 @@ Error classes for error handling.
 **Base class for all application errors.**
 
 **Properties:**
+
 - `message: string` - Error message
 - `code: ErrorCode` - Error code
 - `suggestion?: string` - Suggested fix
 
 **Example:**
+
 ```typescript
 import { ApplicationError, ErrorCode } from '@errors';
 
@@ -755,9 +808,11 @@ throw new ApplicationError(
 **Extends:** `ApplicationError`
 
 **Properties:**
+
 - `statusCode?: number` - HTTP status code
 
 **Example:**
+
 ```typescript
 import { ApiError } from '@errors';
 
@@ -773,6 +828,7 @@ throw new ApiError('Authentication failed', 401);
 **Extends:** `ApplicationError`
 
 **Example:**
+
 ```typescript
 import { ConfigError } from '@errors';
 
@@ -788,6 +844,7 @@ throw new ConfigError('Configuration file not found');
 **Extends:** `ApplicationError`
 
 **Example:**
+
 ```typescript
 import { ValidationError } from '@errors';
 
@@ -803,16 +860,15 @@ throw new ValidationError('Invalid date format. Use YYYY-MM-DD');
 **Extends:** `ApplicationError`
 
 **Properties:**
+
 - `retryAfter?: number` - Seconds to wait
 
 **Example:**
+
 ```typescript
 import { RateLimitError } from '@errors';
 
-throw new RateLimitError(
-  'Rate limit exceeded. Please wait 300 seconds.',
-  300
-);
+throw new RateLimitError('Rate limit exceeded. Please wait 300 seconds.', 300);
 ```
 
 ---
@@ -826,28 +882,28 @@ enum ErrorCode {
   // Configuration errors (1000-1999)
   CONFIG_API_KEY_MISSING = 1001,
   CONFIG_NOT_FOUND = 1002,
-  
+
   // API errors (2000-2999)
   API_AUTHENTICATION_FAILED = 2001,
   API_NOT_FOUND = 2002,
   API_RATE_LIMIT_EXCEEDED = 2003,
   API_TIMEOUT = 2004,
   API_NETWORK_ERROR = 2005,
-  
+
   // Validation errors (3000-3999)
   VALIDATION_INVALID_FORMAT = 3001,
   VALIDATION_REQUIRED_FIELD = 3002,
   VALIDATION_INVALID_DATE = 3003,
-  
+
   // File errors (4000-4999)
   FILE_NOT_FOUND = 4001,
   FILE_WRITE_ERROR = 4002,
   FILE_READ_ERROR = 4003,
-  
+
   // Network errors (5000-5999)
   NETWORK_ERROR = 5001,
   NETWORK_TIMEOUT = 5002,
-  NETWORK_DNS_ERROR = 5003
+  NETWORK_DNS_ERROR = 5003,
 }
 ```
 
@@ -868,6 +924,7 @@ Get current configuration.
 **Returns:** `Promise<Config>`
 
 **Example:**
+
 ```typescript
 import { getConfig } from '@config';
 
@@ -884,18 +941,19 @@ Update configuration.
 
 **Parameters:**
 
-| Name | Type | Description |
-|------|------|-------------|
+| Name      | Type              | Description           |
+| --------- | ----------------- | --------------------- |
 | `updates` | `Partial<Config>` | Configuration updates |
 
 **Returns:** `Promise<Config>` - Updated configuration
 
 **Example:**
+
 ```typescript
 import { setConfig } from '@config';
 
 const config = await setConfig({
-  apiKey: 'nzlapi3f4dd302e30beef18911'
+  apiKey: 'nzlapi3f4dd302e30beef18911',
 });
 ```
 
@@ -908,6 +966,7 @@ Clear all configuration.
 **Returns:** `Promise<void>`
 
 **Example:**
+
 ```typescript
 import { clearConfig } from '@config';
 
@@ -923,8 +982,8 @@ Validate configuration object.
 
 **Parameters:**
 
-| Name | Type | Description |
-|------|------|-------------|
+| Name     | Type      | Description               |
+| -------- | --------- | ------------------------- |
 | `config` | `unknown` | Configuration to validate |
 
 **Returns:** `Config` - Validated configuration
@@ -932,6 +991,7 @@ Validate configuration object.
 **Throws:** `ConfigError` if validation fails
 
 **Example:**
+
 ```typescript
 import { validateConfig } from '@config';
 
@@ -955,9 +1015,9 @@ import { formatAsTable } from '@output/formatters';
 async function basicSearch() {
   const results = await searchWorks({
     query: 'health',
-    limit: 25
+    limit: 25,
   });
-  
+
   console.log(formatAsTable(results));
 }
 
@@ -979,9 +1039,9 @@ async function advancedSearch() {
     status: 'in-force',
     from: '2020-01-01',
     to: '2024-12-31',
-    limit: 100
+    limit: 100,
   });
-  
+
   console.log(formatAsJson(results));
 }
 
@@ -1001,9 +1061,9 @@ async function exportData() {
     output: 'health_acts.csv',
     format: 'csv',
     limit: 1000,
-    includeMetadata: true
+    includeMetadata: true,
   });
-  
+
   console.log('Export complete!');
 }
 
@@ -1019,7 +1079,7 @@ import { generateCitation } from '@client';
 
 async function createBibliography() {
   const works = ['act/1981/118', 'act/2020/67', 'act/2000/7'];
-  
+
   for (const workId of works) {
     const bibtex = await generateCitation(workId, 'bibtex');
     console.log(bibtex);

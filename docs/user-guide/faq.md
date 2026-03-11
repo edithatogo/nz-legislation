@@ -33,6 +33,7 @@ It's a command-line tool that helps you search, retrieve, export, and cite New Z
 ### How long does it take to set up?
 
 About **5 minutes**:
+
 - 2 minutes to get your API key
 - 1 minute to install the tool
 - 1 minute to configure your API key
@@ -47,6 +48,7 @@ See our [Quick Start Guide](../README.md#-quick-start-5-minutes) for step-by-ste
 **No!** You just need to copy and paste commands. If you can use a terminal or command prompt, you can use this tool.
 
 **Example:**
+
 ```bash
 nzlegislation search --query "health act"
 ```
@@ -60,6 +62,7 @@ That's it—no programming required.
 **Yes!** The tool itself is completely free (Apache 2.0 license).
 
 You'll also need a free API key from the NZ Legislation API team. They offer:
+
 - **Free tier:** 10,000 requests per day (plenty for most users)
 - **No credit card required**
 
@@ -83,6 +86,7 @@ You'll also need a free API key from the NZ Legislation API team. They offer:
 Check the welcome email from the Parliamentary Counsel Office (PCO). The subject line is usually something like "NZ Legislation API Key" or "API Access Granted".
 
 **Can't find it?** Try:
+
 1. Search your email for "legislation" or "API key"
 2. Check your spam/junk folder
 3. Request a new key from [the API website](https://api.legislation.govt.nz/docs/)
@@ -100,11 +104,13 @@ Check the welcome email from the Parliamentary Counsel Office (PCO). The subject
 ### My API key stopped working. What do I do?
 
 **Common causes:**
+
 - Typo when copying (check for extra spaces)
 - Key expired (rare, but happens)
 - Wrong key copied (check you got the full key)
 
 **Fix it:**
+
 1. Find your original email
 2. Copy the key carefully
 3. Run: `nzlegislation config --key YOUR_NEW_KEY`
@@ -119,10 +125,12 @@ Still not working? [Contact the API team](https://api.legislation.govt.nz/docs/c
 ### What do I need to install?
 
 Just two things:
+
 1. **Node.js 18+** ([Download here](https://nodejs.org/))
 2. **NZ Legislation Tool** (installs automatically)
 
 **Already have Node.js?** Then you only need one command:
+
 ```bash
 npm install -g nz-legislation-tool
 ```
@@ -144,11 +152,11 @@ npx nz-legislation-tool search --query "health"
 
 ### Which is better: npm or npx?
 
-| Use Case | Recommendation |
-|----------|---------------|
-| **First time / trying it out** | Use `npx` (no install) |
-| **Regular use (weekly+)** | Use `npm install -g` |
-| **Building an app** | Use `npm install` (local) |
+| Use Case                       | Recommendation            |
+| ------------------------------ | ------------------------- |
+| **First time / trying it out** | Use `npx` (no install)    |
+| **Regular use (weekly+)**      | Use `npm install -g`      |
+| **Building an app**            | Use `npm install` (local) |
 
 ---
 
@@ -159,6 +167,7 @@ npx nz-legislation-tool search --query "health"
 The tool might not be in your PATH. Try:
 
 **Windows:**
+
 ```bash
 npm install -g nz-legislation-tool
 ```
@@ -167,11 +176,13 @@ Then close and reopen your terminal.
 
 **macOS/Linux:**
 You might need sudo:
+
 ```bash
 sudo npm install -g nz-legislation-tool
 ```
 
 **Still not working?** Try the full path:
+
 ```bash
 # macOS/Linux
 ~/.npm-global/bin/nzlegislation search --query "health"
@@ -188,13 +199,13 @@ C:\Users\YOUR_NAME\AppData\Roaming\npm\nzlegislation search --query "health"
 
 Five main commands:
 
-| Command | What It Does | Example |
-|---------|-------------|---------|
-| `search` | Find legislation | `nzlegislation search --query "health"` |
-| `get` | Get details by ID | `nzlegislation get "act/2020/67"` |
-| `export` | Save to file | `nzlegislation export --query "health" --output results.csv` |
-| `cite` | Generate citations | `nzlegislation cite "act/2020/67"` |
-| `config` | Manage settings | `nzlegislation config --show` |
+| Command  | What It Does       | Example                                                      |
+| -------- | ------------------ | ------------------------------------------------------------ |
+| `search` | Find legislation   | `nzlegislation search --query "health"`                      |
+| `get`    | Get details by ID  | `nzlegislation get "act/2020/67"`                            |
+| `export` | Save to file       | `nzlegislation export --query "health" --output results.csv` |
+| `cite`   | Generate citations | `nzlegislation cite "act/2020/67"`                           |
+| `config` | Manage settings    | `nzlegislation config --show`                                |
 
 See the [README](../README.md#-commands-with-examples) for full details.
 
@@ -203,11 +214,13 @@ See the [README](../README.md#-commands-with-examples) for full details.
 ### How do I search for legislation?
 
 **Basic search:**
+
 ```bash
 nzlegislation search --query "health"
 ```
 
 **With filters:**
+
 ```bash
 # By type (act, bill, regulation, instrument)
 nzlegislation search --query "health" --type act
@@ -234,6 +247,7 @@ nzlegislation export --query "health" --type act --output health_acts.csv
 Then open `health_acts.csv` in Excel.
 
 **Want to include metadata?**
+
 ```bash
 nzlegislation export --query "health" --output results.csv --include-metadata
 ```
@@ -243,21 +257,25 @@ nzlegislation export --query "health" --output results.csv --include-metadata
 ### How do I cite legislation in my paper?
 
 **NZMJ style (default):**
+
 ```bash
 nzlegislation cite "act/2020/67"
 ```
 
 **APA style:**
+
 ```bash
 nzlegislation cite "act/2020/67" --style apa
 ```
 
 **BibTeX (for LaTeX):**
+
 ```bash
 nzlegislation cite "act/2020/67" --style bibtex
 ```
 
 **RIS (for EndNote, Mendeley, Zotero):**
+
 ```bash
 nzlegislation cite "act/2020/67" --style ris
 ```
@@ -269,6 +287,7 @@ nzlegislation cite "act/2020/67" --style ris
 **Yes!** The API supports te reo Māori searches.
 
 **Examples:**
+
 ```bash
 nzlegislation search --query "ture"  # "law" in Māori
 nzlegislation search --query "whakature"  # "legislation" in Māori
@@ -289,6 +308,7 @@ Three formats:
 3. **CSV** - For Excel, R, Python, SPSS
 
 **Change format:**
+
 ```bash
 # JSON
 nzlegislation search --query "health" --format json
@@ -302,17 +322,20 @@ nzlegislation search --query "health" --format csv
 ### How do I read the JSON output?
 
 **Example:**
+
 ```bash
 nzlegislation search --query "health" --format json
 ```
 
 **Output structure:**
+
 ```json
 {
-  "total": 42,           // Total matching results
-  "offset": 0,           // Current position (for pagination)
-  "limit": 25,           // Results per page
-  "results": [           // Array of legislation items
+  "total": 42, // Total matching results
+  "offset": 0, // Current position (for pagination)
+  "limit": 25, // Results per page
+  "results": [
+    // Array of legislation items
     {
       "id": "act/2020/67",
       "title": "Health Act 2020",
@@ -325,6 +348,7 @@ nzlegislation search --query "health" --format json
 ```
 
 **Parse in Node.js:**
+
 ```javascript
 const results = JSON.parse(output);
 console.log(`Found ${results.total} results`);
@@ -336,16 +360,16 @@ console.log(`Found ${results.total} results`);
 
 CSV includes these columns:
 
-| Column | Description |
-|--------|-------------|
-| `id` | Unique identifier (e.g., `act/2020/67`) |
-| `title` | Full title |
-| `shortTitle` | Short title |
-| `type` | Type (act, bill, regulation, instrument) |
-| `status` | Status (in-force, repealed, etc.) |
-| `date` | Date enacted |
-| `url` | API URL |
-| `versionCount` | Number of versions |
+| Column         | Description                              |
+| -------------- | ---------------------------------------- |
+| `id`           | Unique identifier (e.g., `act/2020/67`)  |
+| `title`        | Full title                               |
+| `shortTitle`   | Short title                              |
+| `type`         | Type (act, bill, regulation, instrument) |
+| `status`       | Status (in-force, repealed, etc.)        |
+| `date`         | Date enacted                             |
+| `url`          | API URL                                  |
+| `versionCount` | Number of versions                       |
 
 **Open in Excel:** Just double-click the `.csv` file.
 
@@ -358,11 +382,13 @@ CSV includes these columns:
 ### "API key not configured"
 
 **Quick fix:**
+
 ```bash
 nzlegislation config --key YOUR_API_KEY
 ```
 
 **Check it's set:**
+
 ```bash
 nzlegislation config --show
 ```
@@ -374,11 +400,13 @@ nzlegislation config --show
 **What it means:** Your API key isn't being accepted.
 
 **Common causes:**
+
 - Typo in the key
 - Key expired
 - Wrong key copied
 
 **Fix it:**
+
 1. Find your original email
 2. Copy the key carefully (no extra spaces)
 3. Run: `nzlegislation config --key YOUR_KEY`
@@ -391,14 +419,17 @@ nzlegislation config --show
 **What happened:** You've made too many requests too quickly.
 
 **Limits:**
+
 - 10,000 requests per day
 - 2,000 requests per 5 minutes (burst)
 
 **Fix it:**
+
 - Wait 5 minutes for burst limit
 - Or wait until midnight for daily limit
 
 **Prevent it:**
+
 - Add pauses between bulk requests
 - Use `--limit` to reduce batch sizes
 - Export in chunks (e.g., 1000 at a time)
@@ -410,11 +441,13 @@ nzlegislation config --show
 **What it means:** The ID you provided doesn't exist.
 
 **Common causes:**
+
 - Wrong ID format (should be like `act/2020/67`)
 - Typo in the ID
 - Legislation doesn't exist
 
 **Fix it:**
+
 1. Search first to find the correct ID:
    ```bash
    nzlegislation search --query "health"
@@ -429,6 +462,7 @@ nzlegislation config --show
 **What happened:** Can't connect to the API.
 
 **Fix it:**
+
 1. Check your internet connection
 2. Try the API website: https://api.legislation.govt.nz
 3. If the API is down, wait and try later
@@ -440,11 +474,13 @@ nzlegislation config --show
 ### The output looks weird / broken
 
 **Possible causes:**
+
 - Terminal window too narrow
 - Font doesn't support box-drawing characters
 - Output redirected to a file
 
 **Fix it:**
+
 1. Widen your terminal window
 2. Try a different font (Consolas, Monaco, or other monospace)
 3. Use `--format json` or `--format csv` instead
@@ -455,10 +491,10 @@ nzlegislation config --show
 
 ### What are the rate limits?
 
-| Limit | Value | Reset |
-|-------|-------|-------|
-| **Daily** | 10,000 requests | Midnight local time |
-| **Burst** | 2,000 requests per 5 minutes | Rolling window |
+| Limit     | Value                        | Reset               |
+| --------- | ---------------------------- | ------------------- |
+| **Daily** | 10,000 requests              | Midnight local time |
+| **Burst** | 2,000 requests per 5 minutes | Rolling window      |
 
 **Don't worry**—the CLI automatically handles rate limiting and will tell you when to try again.
 
@@ -468,12 +504,12 @@ nzlegislation config --show
 
 **Typical usage:**
 
-| Activity | Requests |
-|----------|----------|
-| Single search | 1 request |
-| Export 100 results | 1-2 requests |
-| Get details for one Act | 1 request |
-| Generate citation | 1 request |
+| Activity                | Requests     |
+| ----------------------- | ------------ |
+| Single search           | 1 request    |
+| Export 100 results      | 1-2 requests |
+| Get details for one Act | 1 request    |
+| Generate citation       | 1 request    |
 
 **Example:** If you search 10 times and export 5 times per day, that's ~15 requests. You'd need to make **667 searches per day** to hit the limit!
 
@@ -505,6 +541,7 @@ We welcome contributions! Here's how:
 ### Do I need to be a developer to contribute?
 
 **No!** We especially need help with:
+
 - Documentation improvements
 - Bug reports from real users
 - Feature suggestions
@@ -519,6 +556,7 @@ If you've used the tool and have feedback, that's valuable!
 **Best way:** [Open an issue on GitHub](https://github.com/edithatogo/nz-legislation-tool/issues)
 
 **Include:**
+
 1. What you were trying to do
 2. What command you ran
 3. What error you got (copy the full message)
@@ -526,6 +564,7 @@ If you've used the tool and have feedback, that's valuable!
 5. Tool version (`nzlegislation --version`)
 
 **Example:**
+
 ```
 I tried to export results to CSV but got an authentication error.
 
@@ -558,12 +597,14 @@ I've already tried re-setting my API key.
 ### Where can I learn more?
 
 **Documentation:**
+
 - [README](../README.md) - Quick start and commands
 - [User Guide](./user-guide/) - Detailed workflows
 - [Troubleshooting](./troubleshooting.md) - Step-by-step fixes
 - [Developer Guide](../docs/developer-guide/) - For contributors
 
 **External:**
+
 - [NZ Legislation API](https://api.legislation.govt.nz/)
 - [Node.js Download](https://nodejs.org/)
 - [npm Documentation](https://docs.npmjs.com/)
@@ -592,6 +633,7 @@ I've already tried re-setting my API key.
 This documentation aims to meet WCAG 2.1 AA standards. If you encounter accessibility barriers, please [open an issue](https://github.com/edithatogo/nz-legislation-tool/issues) or [contact us](mailto:dylan.mordaunt@vuw.ac.nz).
 
 **Features:**
+
 - ✅ Screen reader compatible
 - ✅ Keyboard navigation supported
 - ✅ High contrast text

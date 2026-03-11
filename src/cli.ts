@@ -18,11 +18,7 @@ import { createInteractiveHelpCommand, createContextualHelpCommand } from './com
 import { searchCommand } from './commands/search.js';
 import { streamCommand } from './commands/stream.js';
 import { getConfig } from './config.js';
-import {
-  ApplicationError,
-  ErrorCode,
-  getUserFriendlyMessage,
-} from './errors.js';
+import { ApplicationError, ErrorCode, getUserFriendlyMessage } from './errors.js';
 import { logger } from './utils/logger.js';
 
 // Get package version from package.json
@@ -136,21 +132,37 @@ function displayErrorWithSuggestions(error: ApplicationError): void {
   switch (error.code) {
     case ErrorCode.CONFIG_API_KEY_MISSING:
     case ErrorCode.CONFIG_NOT_FOUND:
-      console.error(chalk.white('  1. Run ') + chalk.cyan('nzlegislation config') + chalk.white(' to set up your API key'));
-      console.error(chalk.white('  2. Or set environment variable ') + chalk.cyan('NZ_LEGISLATION_API_KEY'));
+      console.error(
+        chalk.white('  1. Run ') +
+          chalk.cyan('nzlegislation config') +
+          chalk.white(' to set up your API key')
+      );
+      console.error(
+        chalk.white('  2. Or set environment variable ') + chalk.cyan('NZ_LEGISLATION_API_KEY')
+      );
       console.error(chalk.white('  3. Get your API key from https://api.legislation.govt.nz'));
       break;
 
     case ErrorCode.API_AUTHENTICATION_FAILED:
       console.error(chalk.white('  1. Check your API key is correct'));
-      console.error(chalk.white('  2. Run ') + chalk.cyan('nzlegislation config --show') + chalk.white(' to verify'));
+      console.error(
+        chalk.white('  2. Run ') +
+          chalk.cyan('nzlegislation config --show') +
+          chalk.white(' to verify')
+      );
       console.error(chalk.white('  3. Contact API support if the issue persists'));
       break;
 
     case ErrorCode.API_NOT_FOUND:
       console.error(chalk.white('  1. Check the work ID is correct'));
-      console.error(chalk.white('  2. Use ') + chalk.cyan('nzlegislation search') + chalk.white(' to find the correct ID'));
-      console.error(chalk.white('  3. Verify the legislation exists on the NZ Legislation website'));
+      console.error(
+        chalk.white('  2. Use ') +
+          chalk.cyan('nzlegislation search') +
+          chalk.white(' to find the correct ID')
+      );
+      console.error(
+        chalk.white('  3. Verify the legislation exists on the NZ Legislation website')
+      );
       break;
 
     case ErrorCode.API_RATE_LIMIT_EXCEEDED:
@@ -163,7 +175,10 @@ function displayErrorWithSuggestions(error: ApplicationError): void {
     case ErrorCode.NETWORK_OFFLINE:
     case ErrorCode.NETWORK_CONNECTION_REFUSED:
       console.error(chalk.white('  1. Check your internet connection'));
-      console.error(chalk.white('  2. Verify the API is accessible at ') + chalk.cyan('https://api.legislation.govt.nz'));
+      console.error(
+        chalk.white('  2. Verify the API is accessible at ') +
+          chalk.cyan('https://api.legislation.govt.nz')
+      );
       console.error(chalk.white('  3. Try again in a few moments'));
       break;
 
@@ -177,12 +192,18 @@ function displayErrorWithSuggestions(error: ApplicationError): void {
     case ErrorCode.VALIDATION_FAILED:
     case ErrorCode.VALIDATION_INVALID_ID:
       console.error(chalk.white('  1. Check the format of your input'));
-      console.error(chalk.white('  2. Use ') + chalk.cyan('--help') + chalk.white(' to see valid options'));
-      console.error(chalk.white('  3. Example: ') + chalk.cyan('nzlegislation get "act_public_1989_18"'));
+      console.error(
+        chalk.white('  2. Use ') + chalk.cyan('--help') + chalk.white(' to see valid options')
+      );
+      console.error(
+        chalk.white('  3. Example: ') + chalk.cyan('nzlegislation get "act_public_1989_18"')
+      );
       break;
 
     default:
-      console.error(chalk.white('  1. Run with ') + chalk.cyan('--verbose') + chalk.white(' for more details'));
+      console.error(
+        chalk.white('  1. Run with ') + chalk.cyan('--verbose') + chalk.white(' for more details')
+      );
       console.error(chalk.white('  2. Check the log file: ') + chalk.gray(logger.getLogFile()));
       console.error(chalk.white('  3. Report the issue on GitHub with the error details'));
       break;
@@ -216,7 +237,7 @@ function getExitCode(code: ErrorCode): number {
 
 // Set up global error handler
 process.on('uncaughtException', handleError);
-process.on('unhandledRejection', (reason) => {
+process.on('unhandledRejection', reason => {
   handleError(reason instanceof Error ? reason : new Error(String(reason)));
 });
 

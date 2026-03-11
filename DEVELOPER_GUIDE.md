@@ -143,10 +143,12 @@ npm run dev -- search --query "health"
 ### Log Files
 
 Error logs are stored at:
+
 - **Linux/macOS:** `~/.nz-legislation-tool/logs/error-YYYY-MM-DD.log`
 - **Windows:** `%USERPROFILE%\.nz-legislation-tool\logs\error-YYYY-MM-DD.log`
 
 View recent logs:
+
 ```bash
 cat ~/.nz-legislation-tool/logs/error-*.log
 ```
@@ -183,6 +185,7 @@ npx clinic doctor -- node dist/cli.js search --query "health"
 ```
 
 **Types:**
+
 - `feat:` New feature
 - `fix:` Bug fix
 - `docs:` Documentation
@@ -193,6 +196,7 @@ npx clinic doctor -- node dist/cli.js search --query "health"
 - `perf:` Performance
 
 **Examples:**
+
 ```bash
 feat: Add rate limit configuration
 fix: Handle API timeout errors gracefully
@@ -205,32 +209,38 @@ chore: Update dependencies
 ### Pull Request Process
 
 1. **Create branch**
+
    ```bash
    git checkout -b feature/your-feature
    ```
 
 2. **Make changes** with hot reload
+
    ```bash
    npm run dev -- <command>
    ```
 
 3. **Run tests**
+
    ```bash
    npm test
    ```
 
 4. **Type check**
+
    ```bash
    npm run typecheck
    ```
 
 5. **Lint and format**
+
    ```bash
    npm run lint:fix
    npm run format
    ```
 
 6. **Commit** (pre-commit hooks run automatically)
+
    ```bash
    git add .
    git commit -m "feat: Your feature description"
@@ -244,6 +254,7 @@ chore: Update dependencies
 ### Pre-commit Hooks
 
 This project uses Husky with lint-staged. On every commit:
+
 - ESLint runs on staged `.ts` files with auto-fix
 - TypeScript type checking runs
 - Prettier formats `.json` and `.md` files

@@ -28,12 +28,12 @@ export const getCommand = new Command()
       // Sanitize and validate work ID
       const sanitizedWorkId = sanitizeInput(workId);
       const validation = validateWorkId(sanitizedWorkId);
-      
+
       if (!validation.valid) {
         spinner.stop();
         logger.error('Work ID validation failed', undefined, { workId, errors: validation.errors });
         console.error('❌ Invalid work ID format:');
-        validation.errors?.forEach((err) => {
+        validation.errors?.forEach(err => {
           console.error(`  - ${err.message}`);
         });
         console.error('\nExpected format: API work ID (e.g., act_public_1989_18)');
@@ -80,7 +80,9 @@ export const getCommand = new Command()
       }
     } catch (error) {
       spinner.stop();
-      logger.error('Failed to retrieve legislation', error instanceof Error ? error : undefined, { workId });
+      logger.error('Failed to retrieve legislation', error instanceof Error ? error : undefined, {
+        workId,
+      });
       if (error instanceof Error) {
         console.error(`❌ Error: ${error.message}`);
         process.exit(1);

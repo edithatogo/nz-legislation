@@ -9,6 +9,7 @@
 The NZ Legislation Tool is a TypeScript-based command-line interface (CLI) that provides programmatic access to New Zealand legislation data through the official NZ Legislation API.
 
 **Key Design Principles:**
+
 - **Type Safety** - Full TypeScript with strict mode
 - **Modularity** - Separated concerns (CLI, API client, formatters)
 - **Error Handling** - Comprehensive error boundaries
@@ -103,10 +104,12 @@ nz-legislation-tool/
 **Responsibility:** Parse command-line arguments and route to appropriate commands.
 
 **Dependencies:**
+
 - `commander` - CLI framework
 - Command modules from `./commands/`
 
 **Key Functions:**
+
 ```typescript
 // Main entry point
 import { Command } from 'commander';
@@ -115,10 +118,7 @@ import { getCommand } from './commands/get';
 // ... other commands
 
 const program = new Command();
-program
-  .name('nzlegislation')
-  .description('Search and retrieve NZ legislation')
-  .version('1.0.0');
+program.name('nzlegislation').description('Search and retrieve NZ legislation').version('1.0.0');
 
 // Register commands
 program.addCommand(searchCommand);
@@ -135,6 +135,7 @@ program.parse();
 **Responsibility:** Handle all HTTP communication with the NZ Legislation API.
 
 **Features:**
+
 - HTTP requests with `got`
 - Rate limiting (10,000/day, 2,000/5min burst)
 - Response caching (LRU cache, 500 entries)
@@ -142,19 +143,20 @@ program.parse();
 - Request batching
 
 **Key Functions:**
+
 ```typescript
 // Search for legislation
 export async function searchWorks(params: SearchParams): Promise<SearchResults> {
   // Check cache first
   const cached = cache.get(cacheKey);
   if (cached) return cached;
-  
+
   // Check rate limits
   checkRateLimit();
-  
+
   // Make API request
   const response = await got.get(url, { searchParams });
-  
+
   // Cache and return
   cache.set(cacheKey, response);
   return response;
@@ -172,6 +174,7 @@ export async function getWorkVersions(workId: string): Promise<Version[]> {
 ```
 
 **Caching Strategy:**
+
 - Search results: 30 minutes TTL
 - Work details: 2 hours TTL
 - Versions: 1 hour TTL
@@ -184,11 +187,13 @@ export async function getWorkVersions(workId: string): Promise<Version[]> {
 **Responsibility:** Manage application configuration and API keys.
 
 **Storage:**
+
 - Primary: `conf` package (JSON file in user config directory)
 - Override: Environment variables
 - Default: Hardcoded defaults
 
 **Configuration Schema:**
+
 ```typescript
 import { z } from 'zod';
 
@@ -205,6 +210,7 @@ export type Config = z.infer<typeof configSchema>;
 ```
 
 **Priority Order:**
+
 1. Environment variables (`NZ_LEGISLATION_*`)
 2. Config file (`~/.config/nz-legislation-tool/config.json`)
 3. Default values
@@ -216,6 +222,7 @@ export type Config = z.infer<typeof configSchema>;
 **Responsibility:** Define error hierarchy and handle errors gracefully.
 
 **Error Classes:**
+
 ```typescript
 // Base error class
 export class ApplicationError extends Error {
@@ -227,20 +234,23 @@ export class ApplicationError extends Error {
     super(message);
     this.name = 'ApplicationError';
   }
-  
+
   toJSON() {
     return {
       name: this.name,
       message: this.message,
       code: this.code,
-      suggestion: this.suggestion
+      suggestion: this.suggestion,
     };
   }
 }
 
 // Specific error types
 export class ApiError extends ApplicationError {
-  constructor(message: string, public statusCode?: number) {
+  constructor(
+    message: string,
+    public statusCode?: number
+  ) {
     super(message, ErrorCode.API_ERROR);
   }
 }
@@ -259,29 +269,30 @@ export class ValidationError extends ApplicationError {
 ```
 
 **Error Codes:**
+
 ```typescript
 export enum ErrorCode {
   // Configuration errors (1000-1999)
   CONFIG_API_KEY_MISSING = 1001,
   CONFIG_NOT_FOUND = 1002,
-  
+
   // API errors (2000-2999)
   API_AUTHENTICATION_FAILED = 2001,
   API_NOT_FOUND = 2002,
   API_RATE_LIMIT_EXCEEDED = 2003,
   API_TIMEOUT = 2004,
-  
+
   // Validation errors (3000-3999)
   VALIDATION_INVALID_FORMAT = 3001,
   VALIDATION_REQUIRED_FIELD = 3002,
-  
+
   // File errors (4000-4999)
   FILE_NOT_FOUND = 4001,
   FILE_WRITE_ERROR = 4002,
-  
+
   // Network errors (5000-5999)
   NETWORK_ERROR = 5001,
-  NETWORK_TIMEOUT = 5002
+  NETWORK_TIMEOUT = 5002,
 }
 ```
 
@@ -292,6 +303,7 @@ export enum ErrorCode {
 **Responsibility:** Implement individual CLI commands.
 
 **Pattern:**
+
 ```typescript
 import { Command } from 'commander';
 import { searchWorks } from '../client';
@@ -305,15 +317,15 @@ export const searchCommand = new Command()
   .option('-s, --status <status>', 'Filter by status')
   .option('-l, --limit <number>', 'Maximum results', '25')
   .option('-f, --format <format>', 'Output format', 'table')
-  .action(async (options) => {
+  .action(async options => {
     try {
       const results = await searchWorks({
         query: options.query,
         type: options.type,
         status: options.status,
-        limit: parseInt(options.limit)
+        limit: parseInt(options.limit),
       });
-      
+
       console.log(formatOutput(results, options.format));
     } catch (error) {
       handleError(error);
@@ -322,6 +334,7 @@ export const searchCommand = new Command()
 ```
 
 **Commands:**
+
 - `search` - Search for legislation
 - `get` - Get legislation by ID
 - `export` - Export results to file
@@ -335,6 +348,7 @@ export const searchCommand = new Command()
 **Responsibility:** Define TypeScript types and Zod schemas for validation.
 
 **Example Schema:**
+
 ```typescript
 import { z } from 'zod';
 
@@ -347,7 +361,7 @@ export const WorkSchema = z.object({
   status: z.string().optional(),
   date: z.string(),
   url: z.string().url(),
-  versionCount: z.number().optional()
+  versionCount: z.number().optional(),
 });
 
 export type Work = z.infer<typeof WorkSchema>;
@@ -357,10 +371,16 @@ export const SearchParamsSchema = z.object({
   query: z.string().min(1),
   type: z.enum(['act', 'bill', 'regulation', 'instrument']).optional(),
   status: z.string().optional(),
-  from: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-  to: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  from: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
+  to: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
   limit: z.number().min(1).max(100).default(25),
-  offset: z.number().min(0).default(0)
+  offset: z.number().min(0).default(0),
 });
 
 export type SearchParams = z.infer<SearchParamsSchema>;
@@ -373,30 +393,32 @@ export type SearchParams = z.infer<SearchParamsSchema>;
 **Responsibility:** Format and display results.
 
 **Formatters:**
+
 - **Table** - Pretty terminal tables with `cli-table3`
 - **JSON** - Structured JSON output
 - **CSV** - CSV for spreadsheets
 
 **Example:**
+
 ```typescript
 import Table from 'cli-table3';
 
 export function formatAsTable(results: SearchResults): string {
   const table = new Table({
     head: ['ID', 'Title', 'Type', 'Status', 'Date'],
-    colWidths: [20, 50, 10, 10, 12]
+    colWidths: [20, 50, 10, 10, 12],
   });
-  
+
   results.works.forEach(work => {
     table.push([
       work.id,
       work.title.substring(0, 47) + '...',
       work.type,
       work.status || '-',
-      work.date
+      work.date,
     ]);
   });
-  
+
   return table.toString() + `\n\nTotal: ${results.total} results`;
 }
 
@@ -406,10 +428,8 @@ export function formatAsJson(results: SearchResults): string {
 
 export function formatAsCsv(results: SearchResults): string {
   const headers = ['id', 'title', 'type', 'status', 'date', 'url'];
-  const rows = results.works.map(work => 
-    headers.map(h => work[h as keyof Work]).join(',')
-  );
-  
+  const rows = results.works.map(work => headers.map(h => work[h as keyof Work]).join(','));
+
   return [headers.join(','), ...rows].join('\n');
 }
 ```
@@ -556,6 +576,7 @@ Command Execution
 ### Mocking Strategy
 
 **API Mocking (MSW):**
+
 ```typescript
 import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
@@ -564,7 +585,7 @@ const server = setupServer(
   http.get('https://api.legislation.govt.nz/v0/works', ({ request }) => {
     const url = new URL(request.url);
     const query = url.searchParams.get('q');
-    
+
     return HttpResponse.json({
       total: 1,
       results: [{ id: 'act/2020/67', title: 'Health Act 2020', ... }]
@@ -584,26 +605,27 @@ afterAll(() => server.close());
 ### Caching
 
 **LRU Cache Implementation:**
+
 ```typescript
 class LRUCache<K, V> {
   private cache: Map<K, V>;
   private maxEntries: number;
-  
+
   constructor(maxEntries: number = 500) {
     this.cache = new Map();
     this.maxEntries = maxEntries;
   }
-  
+
   get(key: K): V | undefined {
     if (!this.cache.has(key)) return undefined;
-    
+
     // Move to end (most recently used)
     const value = this.cache.get(key)!;
     this.cache.delete(key);
     this.cache.set(key, value);
     return value;
   }
-  
+
   set(key: K, value: V): void {
     if (this.cache.has(key)) {
       this.cache.delete(key);
@@ -620,6 +642,7 @@ class LRUCache<K, V> {
 ### Rate Limiting
 
 **Token Bucket Algorithm:**
+
 ```typescript
 class RateLimiter {
   private dailyLimit: number;
@@ -627,24 +650,24 @@ class RateLimiter {
   private dailyCount = 0;
   private burstCount = 0;
   private lastBurstReset = Date.now();
-  
+
   checkLimit(): void {
     // Reset burst if 5 minutes passed
     if (Date.now() - this.lastBurstReset > 300000) {
       this.burstCount = 0;
       this.lastBurstReset = Date.now();
     }
-    
+
     // Check daily limit
     if (this.dailyCount >= this.dailyLimit) {
       throw new Error('Daily rate limit exceeded');
     }
-    
+
     // Check burst limit
     if (this.burstCount >= this.burstLimit) {
       throw new Error('Burst rate limit exceeded');
     }
-    
+
     this.dailyCount++;
     this.burstCount++;
   }
@@ -677,13 +700,13 @@ function maskApiKey(key: string): string {
 // ✅ Good: Validate all inputs
 const params = SearchParamsSchema.parse({
   query: userInput,
-  limit: userLimit
+  limit: userLimit,
 });
 
 // ❌ Bad: Trust user input
 const params = {
-  query: userInput,  // Could be malicious
-  limit: userLimit   // Could be 999999
+  query: userInput, // Could be malicious
+  limit: userLimit, // Could be 999999
 };
 ```
 
@@ -748,6 +771,7 @@ npm run build -- --minify
 For interactive Mermaid diagrams and detailed flowcharts, see [Visual Diagrams](./visual-diagrams.md).
 
 **Available Diagrams:**
+
 - High-Level Architecture
 - Search Command Flow (Sequence Diagram)
 - Configuration Flow

@@ -7,6 +7,7 @@
 ## Welcome!
 
 This guide is for developers who want to:
+
 - Contribute to the NZ Legislation Tool
 - Integrate the API into their own applications
 - Understand the architecture and codebase
@@ -19,22 +20,26 @@ This guide is for developers who want to:
 ## 📚 What's Inside
 
 ### Getting Started
+
 - [Development Setup](./development-setup.md) - Set up your dev environment
 - [Architecture Overview](./architecture.md) - System design and structure
 - [Code Style Guide](./code-style.md) - Coding standards and conventions
 
 ### API Reference
+
 - [API Reference](./api-reference.md) - Complete API documentation
 - [Error Reference](./error-reference.md) - Error messages and solutions
 - [Models & Types](./api-reference.md#models--types) - TypeScript types and schemas
 - [Output Formatters](./api-reference.md#output-formatters) - Formatting utilities
 
 ### Contributing
+
 - [Contributing Guide](./contributing.md) - How to contribute
 - [Testing Guide](./testing.md) - Running and writing tests
 - [Code Review](./code-review.md) - Review process and standards
 
 ### Advanced Topics
+
 - [Module Documentation](./modules/) - Detailed module docs
 - [MCP Server](./mcp-server.md) - Model Context Protocol integration
 - [Performance](./performance.md) - Optimization tips
@@ -130,7 +135,7 @@ const results = await searchWorks({
   query: 'health',
   type: 'act',
   status: 'in-force',
-  limit: 25
+  limit: 25,
 });
 
 console.log(`Found ${results.total} results`);
@@ -227,11 +232,13 @@ npm run clean        # Clean build artifacts
 **VS Code (Recommended):**
 
 Install these extensions:
+
 - ESLint
 - Prettier
 - Vitest UI
 
 **Settings:**
+
 ```json
 {
   "editor.formatOnSave": true,
@@ -251,6 +258,7 @@ We welcome contributions! Here's how to get started:
 ### 1. Find an Issue
 
 Look for issues labeled:
+
 - [`good first issue`](https://github.com/edithatogo/nz-legislation-tool/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 - [`help wanted`](https://github.com/edithatogo/nz-legislation-tool/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
 
@@ -287,11 +295,13 @@ For complete contributing guide, see [Contributing Guide](./contributing.md).
 ## 📚 Related Documentation
 
 ### User Documentation
+
 - [User Guide](../user-guide/) - For end users
 - [FAQ](../user-guide/faq.md) - Common questions
 - [Troubleshooting](../user-guide/troubleshooting.md) - Error fixes
 
 ### External Resources
+
 - [NZ Legislation API](https://api.legislation.govt.nz/)
 - [TypeScript Documentation](https://www.typescriptlang.org/)
 - [Node.js Documentation](https://nodejs.org/)
@@ -303,6 +313,7 @@ For complete contributing guide, see [Contributing Guide](./contributing.md).
 ## 📬 Need Help?
 
 **Developer Questions:**
+
 - 🐛 **Found a bug?** [Open an issue](https://github.com/edithatogo/nz-legislation-tool/issues)
 - 💡 **Suggest a feature** - [Start a discussion](https://github.com/edithatogo/nz-legislation-tool/discussions)
 - 📧 **Email:** dylan.mordaunt@vuw.ac.nz
@@ -316,6 +327,7 @@ For complete contributing guide, see [Contributing Guide](./contributing.md).
 This documentation aims to meet WCAG 2.1 AA standards. If you encounter accessibility barriers, please [open an issue](https://github.com/edithatogo/nz-legislation-tool/issues) or [contact us](mailto:dylan.mordaunt@vuw.ac.nz).
 
 **Features:**
+
 - ✅ Screen reader compatible
 - ✅ Keyboard navigation supported
 - ✅ High contrast text

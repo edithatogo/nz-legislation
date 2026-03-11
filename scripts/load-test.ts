@@ -1,12 +1,12 @@
 /**
  * Load Testing Script with k6
- * 
+ *
  * Performance and load testing for NZ Legislation CLI API client.
- * 
+ *
  * Prerequisites:
  * - Install k6: https://k6.io/docs/getting-started/installation/
  * - Set API key: export NZ_LEGISLATION_API_KEY=your_key
- * 
+ *
  * Run with: k6 run scripts/load-test.ts
  */
 
@@ -32,35 +32,35 @@ export const options = {
     gracefulStop: '30s',
     tags: { test_type: 'smoke' },
   },
-  
+
   // Scenario 2: Load test (5 min)
   load: {
     executor: 'ramping-vus',
     startVUs: 0,
     stages: [
-      { duration: '1m', target: 20 },  // Ramp up to 20 VUs
-      { duration: '3m', target: 20 },  // Stay at 20 VUs
-      { duration: '1m', target: 0 },   // Ramp down
+      { duration: '1m', target: 20 }, // Ramp up to 20 VUs
+      { duration: '3m', target: 20 }, // Stay at 20 VUs
+      { duration: '1m', target: 0 }, // Ramp down
     ],
     gracefulStop: '30s',
     tags: { test_type: 'load' },
     startTime: '1m', // Start after smoke test
   },
-  
+
   // Scenario 3: Stress test (3 min)
   stress: {
     executor: 'ramping-vus',
     startVUs: 0,
     stages: [
-      { duration: '1m', target: 50 },  // Ramp up to 50 VUs
-      { duration: '1m', target: 50 },  // Stay at 50 VUs
-      { duration: '1m', target: 0 },   // Ramp down
+      { duration: '1m', target: 50 }, // Ramp up to 50 VUs
+      { duration: '1m', target: 50 }, // Stay at 50 VUs
+      { duration: '1m', target: 0 }, // Ramp down
     ],
     gracefulStop: '30s',
     tags: { test_type: 'stress' },
     startTime: '7m', // Start after load test
   },
-  
+
   // Thresholds
   thresholds: {
     http_req_duration: ['p(50)<500', 'p(95)<1000', 'p(99)<2000'], // 50% < 500ms, 95% < 1s, 99% < 2s
@@ -72,20 +72,14 @@ export const options = {
 };
 
 // Test data
-const TEST_QUERIES = [
-  'health',
-  'companies',
-  'resource management',
-  'employment',
-  'privacy',
-];
+const TEST_QUERIES = ['health', 'companies', 'resource management', 'employment', 'privacy'];
 
 const TEST_WORK_IDS = [
-  'act/1986/132',  // Companies Act 1986
-  'act/1989/18',   // Resource Management Act 1989
-  'act/2003/34',   // Employment Relations Act 2003
-  'act/1993/28',   // Privacy Act 1993
-  'act/2020/3',    // COVID-19 Public Health Response Act 2020
+  'act/1986/132', // Companies Act 1986
+  'act/1989/18', // Resource Management Act 1989
+  'act/2003/34', // Employment Relations Act 2003
+  'act/1993/28', // Privacy Act 1993
+  'act/2020/3', // COVID-19 Public Health Response Act 2020
 ];
 
 // Get API key from environment
@@ -122,7 +116,7 @@ function searchTest() {
   const url = `${BASE_URL}/v0/works`;
   const params = {
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
     },
     qs: {
       api_key: API_KEY,
@@ -133,14 +127,14 @@ function searchTest() {
 
   apiCalls.add(1);
   const response = http.get(url, params);
-  
+
   const success = check(response, {
-    'search: status is 200': (r) => r.status === 200,
-    'search: has results': (r) => {
+    'search: status is 200': r => r.status === 200,
+    'search: has results': r => {
       const body = JSON.parse(r.body);
       return body.results && body.results.length > 0;
     },
-    'search: response time < 1000ms': (r) => r.timings.duration < 1000,
+    'search: response time < 1000ms': r => r.timings.duration < 1000,
   });
 
   searchSuccessRate.add(success);
@@ -165,7 +159,7 @@ function getWorkTest() {
   const url = `${BASE_URL}/v0/works/${workId}`;
   const params = {
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
     },
     qs: {
       api_key: API_KEY,
@@ -174,14 +168,14 @@ function getWorkTest() {
 
   apiCalls.add(1);
   const response = http.get(url, params);
-  
+
   const success = check(response, {
-    'getWork: status is 200': (r) => r.status === 200,
-    'getWork: has work_id': (r) => {
+    'getWork: status is 200': r => r.status === 200,
+    'getWork: has work_id': r => {
       const body = JSON.parse(r.body);
       return body.work_id === workId;
     },
-    'getWork: response time < 800ms': (r) => r.timings.duration < 800,
+    'getWork: response time < 800ms': r => r.timings.duration < 800,
   });
 
   getWorkSuccessRate.add(success);
@@ -196,7 +190,7 @@ function getVersionsTest() {
   const url = `${BASE_URL}/v0/works/${workId}/versions`;
   const params = {
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
     },
     qs: {
       api_key: API_KEY,
@@ -205,10 +199,10 @@ function getVersionsTest() {
 
   apiCalls.add(1);
   const response = http.get(url, params);
-  
+
   const success = check(response, {
-    'getVersions: status is 200': (r) => r.status === 200,
-    'getVersions: has results': (r) => {
+    'getVersions: status is 200': r => r.status === 200,
+    'getVersions: has results': r => {
       const body = JSON.parse(r.body);
       return body.results && Array.isArray(body.results);
     },
@@ -226,25 +220,31 @@ export function summary(data: any) {
   console.log('\n' + '='.repeat(60));
   console.log('LOAD TEST SUMMARY');
   console.log('='.repeat(60));
-  
+
   console.log(`\nTotal API Calls: ${apiCalls.sum}`);
   console.log(`Cache Hits: ${cacheHits.sum}`);
-  
-  console.log(`\nSearch Success Rate: ${(data.metrics.search_success_rate?.values?.rate || 0) * 100}%`);
-  console.log(`Get Work Success Rate: ${(data.metrics.get_work_success_rate?.values?.rate || 0) * 100}%`);
-  
+
+  console.log(
+    `\nSearch Success Rate: ${(data.metrics.search_success_rate?.values?.rate || 0) * 100}%`
+  );
+  console.log(
+    `Get Work Success Rate: ${(data.metrics.get_work_success_rate?.values?.rate || 0) * 100}%`
+  );
+
   console.log(`\nSearch Response Time:`);
   console.log(`  Average: ${(data.metrics.search_response_time?.values?.avg || 0).toFixed(0)}ms`);
   console.log(`  P95: ${(data.metrics.search_response_time?.values?.['p(95)'] || 0).toFixed(0)}ms`);
-  
+
   console.log(`\nGet Work Response Time:`);
   console.log(`  Average: ${(data.metrics.get_work_response_time?.values?.avg || 0).toFixed(0)}ms`);
-  console.log(`  P95: ${(data.metrics.get_work_response_time?.values?.['p(95)'] || 0).toFixed(0)}ms`);
-  
+  console.log(
+    `  P95: ${(data.metrics.get_work_response_time?.values?.['p(95)'] || 0).toFixed(0)}ms`
+  );
+
   console.log(`\nHTTP Request Duration:`);
   console.log(`  Average: ${(data.metrics.http_req_duration?.values?.avg || 0).toFixed(0)}ms`);
   console.log(`  P95: ${(data.metrics.http_req_duration?.values?.['p(95)'] || 0).toFixed(0)}ms`);
   console.log(`  P99: ${(data.metrics.http_req_duration?.values?.['p(99)'] || 0).toFixed(0)}ms`);
-  
+
   console.log('\n' + '='.repeat(60));
 }

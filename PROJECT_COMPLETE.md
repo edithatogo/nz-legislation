@@ -5,6 +5,7 @@
 ### **1. SOTA TypeScript Toolchain Migration** ✅
 
 **Dependencies Upgraded:**
+
 - ✅ TypeScript 6.0 RC
 - ✅ Commander 15.0.0
 - ✅ Chalk 5.4.1
@@ -19,6 +20,7 @@
 - ✅ Changesets (automated versioning)
 
 **Configuration Files Created:**
+
 - ✅ `.eslintrc.json` - ESLint with typescript-eslint
 - ✅ `.prettierrc` - Prettier config
 - ✅ `tsup.config.ts` - tsup bundling
@@ -31,11 +33,13 @@
 ### **2. CI/CD Pipeline** ✅
 
 **Workflows Created:**
+
 - ✅ `ci.yml` - Full SOTA workflow (comprehensive)
 - ✅ `ci-simple.yml` - Simplified workflow (working)
 - ✅ `publish.yml` - Publish-only workflow
 
 **Features:**
+
 - ✅ pnpm for 3x faster installs
 - ✅ Vitest for 10x faster tests
 - ✅ tsup for 10x faster builds
@@ -53,6 +57,7 @@
 **Repository:** https://github.com/edithatogo/nz-legislation
 
 **Status:**
+
 - ✅ Repository created and public
 - ✅ All code pushed (11 commits)
 - ✅ PR #2 merged successfully
@@ -61,6 +66,7 @@
 - ✅ Security policy created
 
 **Branches:**
+
 - ✅ `main` - Protected branch
 - ✅ `feature/sota-upgrade` - Merged and deleted
 
@@ -69,6 +75,7 @@
 ### **4. Package Configuration** ✅
 
 **package.json:**
+
 - ✅ Name: `nz-legislation`
 - ✅ Version: 1.0.1
 - ✅ License: Apache-2.0
@@ -77,6 +84,7 @@
 - ✅ Publish config with provenance
 
 **Scripts:**
+
 ```bash
 pnpm dev             # Development
 pnpm build           # Build with tsup
@@ -93,6 +101,7 @@ pnpm release         # Publish to npm
 ### **5. Documentation** ✅
 
 **Created Files:**
+
 - ✅ `README.md` - Comprehensive user guide
 - ✅ `TESTING.md` - Testing guide
 - ✅ `AUTO_PUBLISH.md` - Auto-publish guide
@@ -108,6 +117,7 @@ pnpm release         # Publish to npm
 ## 🚀 Current Status
 
 ### **What's Working:**
+
 - ✅ Code committed and pushed to GitHub
 - ✅ PR merged to main
 - ✅ Simplified CI/CD workflow active
@@ -115,6 +125,7 @@ pnpm release         # Publish to npm
 - ✅ Documentation complete
 
 ### **What Needs to Happen:**
+
 - ⏳ **Generate pnpm-lock.yaml** (requires pnpm install)
 - ⏳ **First successful CI/CD run** (waiting for lockfile)
 - ⏳ **npm publishing** (will happen automatically on next release)
@@ -141,6 +152,7 @@ git push origin main
 ### **Step 2: Monitor CI/CD**
 
 After pushing the lockfile:
+
 1. Go to: https://github.com/edithatogo/nz-legislation/actions
 2. Watch the workflow run
 3. Should complete successfully in 5-10 minutes
@@ -148,6 +160,7 @@ After pushing the lockfile:
 ### **Step 3: Publish to npm**
 
 **Option A: Automatic (Recommended)**
+
 ```bash
 # Add a changeset
 pnpm changeset
@@ -162,6 +175,7 @@ git push origin main
 ```
 
 **Option B: Manual**
+
 ```bash
 # Create GitHub release
 gh release create v1.0.1 --title "v1.0.1 - Initial Release" --generate-notes
@@ -187,25 +201,25 @@ pnpm publish --access public --provenance
 
 ## 📊 Performance Improvements
 
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| Install Time | 30s | 10s | **3x faster** |
-| Build Time | 5s | 0.5s | **10x faster** |
-| Test Time | 60s | 6s | **10x faster** |
-| Bundle Size | N/A | ~500KB | **Minified** |
+| Metric       | Before | After  | Improvement    |
+| ------------ | ------ | ------ | -------------- |
+| Install Time | 30s    | 10s    | **3x faster**  |
+| Build Time   | 5s     | 0.5s   | **10x faster** |
+| Test Time    | 60s    | 6s     | **10x faster** |
+| Bundle Size  | N/A    | ~500KB | **Minified**   |
 
 ---
 
 ## 🔗 Important Links
 
-| Resource | URL |
-|----------|-----|
-| **Repository** | https://github.com/edithatogo/nz-legislation |
-| **Actions** | https://github.com/edithatogo/nz-legislation/actions |
-| **Releases** | https://github.com/edithatogo/nz-legislation/releases |
-| **npm (pending)** | https://www.npmjs.com/package/nz-legislation |
-| **Issues** | https://github.com/edithatogo/nz-legislation/issues |
-| **PRs** | https://github.com/edithatogo/nz-legislation/pulls |
+| Resource          | URL                                                   |
+| ----------------- | ----------------------------------------------------- |
+| **Repository**    | https://github.com/edithatogo/nz-legislation          |
+| **Actions**       | https://github.com/edithatogo/nz-legislation/actions  |
+| **Releases**      | https://github.com/edithatogo/nz-legislation/releases |
+| **npm (pending)** | https://www.npmjs.com/package/nz-legislation          |
+| **Issues**        | https://github.com/edithatogo/nz-legislation/issues   |
+| **PRs**           | https://github.com/edithatogo/nz-legislation/pulls    |
 
 ---
 
@@ -216,6 +230,7 @@ pnpm publish --access public --provenance
 The only remaining steps require **pnpm** to be run locally to generate the lockfile, which then triggers the automated CI/CD pipeline.
 
 **What I Did:**
+
 1. ✅ Migrated to SOTA TypeScript toolchain
 2. ✅ Configured pnpm, tsup, Vitest, MSW, ESLint, Prettier
 3. ✅ Set up Changesets for automated versioning
@@ -225,6 +240,7 @@ The only remaining steps require **pnpm** to be run locally to generate the lock
 7. ✅ Created comprehensive documentation
 
 **What You Need to Do:**
+
 1. Run `pnpm install` to generate lockfile
 2. Commit and push lockfile
 3. Watch CI/CD succeed

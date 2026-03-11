@@ -4,7 +4,7 @@
 
 **Release:** v1.0.1  
 **Created:** Just now  
-**Status:** ⏳ Workflow Running  
+**Status:** ⏳ Workflow Running
 
 ---
 
@@ -27,25 +27,28 @@ The CI/CD workflow is currently:
 ## Monitor Progress
 
 ### **Watch the Workflow:**
+
 https://github.com/edithatogo/nz-legislation/actions
 
 ### **Release Page:**
+
 https://github.com/edithatogo/nz-legislation/releases/tag/v1.0.1
 
 ### **npm Package (when ready):**
+
 https://www.npmjs.com/package/nz-legislation
 
 ---
 
 ## Expected Timeline
 
-| Step | Duration | Status |
-|------|----------|--------|
-| **Workflow Queue** | 1-2 min | ⏳ Pending |
-| **Tests (9 combinations)** | 5-10 min | ⏳ Running |
-| **Build** | 1-2 min | ⏳ Pending |
-| **NPM Publish** | 1-2 min | ⏳ Pending |
-| **Total** | **10-15 min** | ⏳ In Progress |
+| Step                       | Duration      | Status         |
+| -------------------------- | ------------- | -------------- |
+| **Workflow Queue**         | 1-2 min       | ⏳ Pending     |
+| **Tests (9 combinations)** | 5-10 min      | ⏳ Running     |
+| **Build**                  | 1-2 min       | ⏳ Pending     |
+| **NPM Publish**            | 1-2 min       | ⏳ Pending     |
+| **Total**                  | **10-15 min** | ⏳ In Progress |
 
 ---
 
@@ -105,6 +108,7 @@ gh release create v1.0.2 --title "v1.0.2 - Bug Fix" --generate-notes
 ### **After 15-20 minutes:**
 
 **Check npm:**
+
 ```bash
 npm view nz-legislation
 ```
@@ -113,6 +117,7 @@ npm view nz-legislation
 https://www.npmjs.com/package/nz-legislation
 
 **Test installation:**
+
 ```bash
 npm install -g nz-legislation
 nzlegislation --version
@@ -123,6 +128,7 @@ nzlegislation --version
 ## What's Included in v1.0.1
 
 ### **Features:**
+
 - ✅ Search legislation (filters, pagination)
 - ✅ Retrieve by ID
 - ✅ Export (CSV, JSON, with metadata)
@@ -132,12 +138,14 @@ nzlegislation --version
 - ✅ Version management
 
 ### **Testing:**
+
 - ✅ 43+ comprehensive tests
 - ✅ Cross-platform (Ubuntu, Windows, macOS)
 - ✅ Node.js matrix (18, 20, 22)
 - ✅ Mutation testing configured
 
 ### **Security:**
+
 - ✅ Branch protection
 - ✅ Dependabot auto-updates
 - ✅ Security policy
@@ -149,6 +157,7 @@ nzlegislation --version
 ## Next Steps After Publishing
 
 ### **1. Verify Installation**
+
 ```bash
 npm install -g nz-legislation
 nzlegislation --version
@@ -156,17 +165,20 @@ nzlegislation search --query "health" --limit 5
 ```
 
 ### **2. Share the News**
+
 - Post on LinkedIn/Twitter
 - Share with research networks
 - Email NZ Legislation API team
 - Add to academic profiles
 
 ### **3. Monitor Usage**
+
 - npm downloads: https://www.npmjs.com/package/nz-legislation?activeTab=versions
 - GitHub stars: https://github.com/edithatogo/nz-legislation/stargazers
 - GitHub issues: https://github.com/edithatogo/nz-legislation/issues
 
 ### **4. Plan Next Release**
+
 - Collect user feedback
 - Monitor issues/PRs
 - Plan v1.1.0 features
@@ -178,7 +190,7 @@ nzlegislation search --query "health" --limit 5
 
 **Release:** v1.0.1 ✅ Created  
 **Workflow:** ⏳ Running  
-**npm:** ⏳ Publishing Soon  
+**npm:** ⏳ Publishing Soon
 
 **Estimated completion:** 10-15 minutes from release creation
 

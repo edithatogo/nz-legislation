@@ -13,69 +13,70 @@
 ### A
 
 **API (Application Programming Interface)**  
-*Like a waiter in a restaurant* - You tell the waiter what you want, they take your order to the kitchen, and bring back your food. An API works the same way: you send a request, it fetches data from a server, and brings back the response.
+_Like a waiter in a restaurant_ - You tell the waiter what you want, they take your order to the kitchen, and bring back your food. An API works the same way: you send a request, it fetches data from a server, and brings back the response.
 
 **API Key**  
-*Like a password or ID card* - A special code that proves who you are and lets you use the API. Keep it secret, just like your password!
+_Like a password or ID card_ - A special code that proves who you are and lets you use the API. Keep it secret, just like your password!
 
 **Authentication**  
-*Proving who you are* - The process of checking your API key to make sure you're allowed to access the data.
+_Proving who you are_ - The process of checking your API key to make sure you're allowed to access the data.
 
 ---
 
 ### B
 
 **Batch Processing**  
-*Doing things in groups* - Instead of making 100 separate requests one by one, you group them together to be more efficient. Like doing all your laundry at once instead of one sock at a time.
+_Doing things in groups_ - Instead of making 100 separate requests one by one, you group them together to be more efficient. Like doing all your laundry at once instead of one sock at a time.
 
 **Burst Limit**  
-*Short-term speed limit* - The maximum number of requests you can make in a short time (5 minutes). Think of it like a highway speed limit that prevents traffic jams.
+_Short-term speed limit_ - The maximum number of requests you can make in a short time (5 minutes). Think of it like a highway speed limit that prevents traffic jams.
 
 ---
 
 ### C
 
 **Cache / Caching**  
-*Temporary storage for faster access* - Like keeping your favorite snacks in the pantry instead of going to the store every time you're hungry. The tool stores recent API responses so it doesn't have to fetch them again.
+_Temporary storage for faster access_ - Like keeping your favorite snacks in the pantry instead of going to the store every time you're hungry. The tool stores recent API responses so it doesn't have to fetch them again.
 
 **CLI (Command-Line Interface)**  
-*Typing commands instead of clicking* - A way to interact with computers by typing text commands instead of using a mouse and buttons.
+_Typing commands instead of clicking_ - A way to interact with computers by typing text commands instead of using a mouse and buttons.
 
 **CSV (Comma-Separated Values)**  
-*Simple table format* - A way to store data in a plain text file where columns are separated by commas. Excel loves these!
+_Simple table format_ - A way to store data in a plain text file where columns are separated by commas. Excel loves these!
 
 ---
 
 ### D
 
 **Daily Limit**  
-*Your daily allowance* - The maximum number of API requests you can make in one day (10,000). Resets at midnight.
+_Your daily allowance_ - The maximum number of API requests you can make in one day (10,000). Resets at midnight.
 
 ---
 
 ### E
 
 **Endpoint**  
-*A specific address for data* - A URL where the API listens for requests. Like different phone numbers for different departments in a company.
+_A specific address for data_ - A URL where the API listens for requests. Like different phone numbers for different departments in a company.
 
 **Export**  
-*Saving data to a file* - Taking the search results and saving them to a file (CSV or JSON) that you can open in Excel or other programs.
+_Saving data to a file_ - Taking the search results and saving them to a file (CSV or JSON) that you can open in Excel or other programs.
 
 ---
 
 ### H
 
 **HTTP**  
-*The language of the web* - The protocol computers use to talk to each other over the internet. When you visit a website, you're using HTTP.
+_The language of the web_ - The protocol computers use to talk to each other over the internet. When you visit a website, you're using HTTP.
 
 ---
 
 ### J
 
 **JSON (JavaScript Object Notation)**  
-*A way to organize data* - A format for storing information that's easy for both humans and computers to read. Looks like a structured list with labels.
+_A way to organize data_ - A format for storing information that's easy for both humans and computers to read. Looks like a structured list with labels.
 
 **Example:**
+
 ```json
 {
   "name": "Health Act 2020",
@@ -89,72 +90,72 @@
 ### L
 
 **LRU Cache (Least Recently Used)**  
-*Smart memory that forgets old stuff* - A caching system that automatically removes the oldest items when it gets full, like cleaning out your fridge to make room for new groceries.
+_Smart memory that forgets old stuff_ - A caching system that automatically removes the oldest items when it gets full, like cleaning out your fridge to make room for new groceries.
 
 ---
 
 ### M
 
 **Module**  
-*A self-contained piece of code* - Like a Lego block that does one specific job. You can snap modules together to build bigger things.
+_A self-contained piece of code_ - Like a Lego block that does one specific job. You can snap modules together to build bigger things.
 
 ---
 
 ### N
 
 **Node.js**  
-*JavaScript outside the browser* - A program that lets you run JavaScript code on your computer (not just in a web browser). Our tool is built with this.
+_JavaScript outside the browser_ - A program that lets you run JavaScript code on your computer (not just in a web browser). Our tool is built with this.
 
 **npm (Node Package Manager)**  
-*An app store for code* - A place where developers can share and download code packages. Like an app store, but for programming tools.
+_An app store for code_ - A place where developers can share and download code packages. Like an app store, but for programming tools.
 
 ---
 
 ### P
 
 **Pagination**  
-*Breaking results into pages* - When you get too many results to show at once, they're split into pages. Like Google search results: "Page 1 of 10".
+_Breaking results into pages_ - When you get too many results to show at once, they're split into pages. Like Google search results: "Page 1 of 10".
 
 ---
 
 ### Q
 
 **Query**  
-*A search request* - What you're searching for. When you type `--query "health"`, you're asking: "Show me all legislation about health."
+_A search request_ - What you're searching for. When you type `--query "health"`, you're asking: "Show me all legislation about health."
 
 ---
 
 ### R
 
 **Rate Limiting**  
-*Speed control* - A system that prevents you from making too many requests too quickly. Like a traffic light that keeps cars from all going at once.
+_Speed control_ - A system that prevents you from making too many requests too quickly. Like a traffic light that keeps cars from all going at once.
 
 **Repository (Repo)**  
-*A project folder* - Where all the code for a project is stored, usually on GitHub. Like a filing cabinet for your project.
+_A project folder_ - Where all the code for a project is stored, usually on GitHub. Like a filing cabinet for your project.
 
 ---
 
 ### S
 
 **Schema**  
-*A template for data* - A blueprint that defines what information should look like. Like a form with specific fields you need to fill in.
+_A template for data_ - A blueprint that defines what information should look like. Like a form with specific fields you need to fill in.
 
 **Search Parameters**  
-*Filters for your search* - Extra options you add to narrow down results, like `--type act` or `--status in-force`.
+_Filters for your search_ - Extra options you add to narrow down results, like `--type act` or `--status in-force`.
 
 ---
 
 ### T
 
 **TypeScript**  
-*JavaScript with safety features* - A version of JavaScript that checks for errors before you run the code. Like spell-check, but for programming.
+_JavaScript with safety features_ - A version of JavaScript that checks for errors before you run the code. Like spell-check, but for programming.
 
 ---
 
 ### Z
 
 **Zod**  
-*A validation tool* - A library that checks if your data matches the expected format. Like a bouncer checking IDs at a club.
+_A validation tool_ - A library that checks if your data matches the expected format. Like a bouncer checking IDs at a club.
 
 ---
 
@@ -246,6 +247,7 @@
 ### Why Do I Need an API Key? (Simple Version)
 
 Think of the API like a members-only club:
+
 - **API Key** = Your membership card
 - **Without it** = Sorry, you can't come in!
 - **With it** = Welcome! Here's what you can do...
@@ -277,10 +279,12 @@ You: See a nice table with all results
 ### Why Does It Sometimes Say "Rate Limit Exceeded"? (Simple Version)
 
 Imagine you're at an all-you-can-eat buffet:
+
 - **Normal:** Take food at a reasonable pace ✅
 - **Rate Limit:** Don't take 50 plates in 1 minute! ❌
 
 The API has rules to make sure everyone gets fair access:
+
 - **10,000 requests per day** = That's like 416 per hour!
 - **2,000 requests per 5 minutes** = Don't go crazy all at once
 
@@ -292,18 +296,18 @@ The API has rules to make sure everyone gets fair access:
 
 ### API is Like...
 
-| Technical Term | Real-World Analogy |
-|---------------|-------------------|
-| **API** | Waiter at a restaurant |
-| **API Key** | Password or ID card |
-| **Endpoint** | Phone number for a department |
-| **Request** | Placing an order |
-| **Response** | Getting your food |
-| **Rate Limit** | Speed limit on highway |
-| **Cache** | Memorizing phone numbers |
-| **Database** | Organized library |
-| **Query** | Search question |
-| **Export** | Saving to a file |
+| Technical Term | Real-World Analogy            |
+| -------------- | ----------------------------- |
+| **API**        | Waiter at a restaurant        |
+| **API Key**    | Password or ID card           |
+| **Endpoint**   | Phone number for a department |
+| **Request**    | Placing an order              |
+| **Response**   | Getting your food             |
+| **Rate Limit** | Speed limit on highway        |
+| **Cache**      | Memorizing phone numbers      |
+| **Database**   | Organized library             |
+| **Query**      | Search question               |
+| **Export**     | Saving to a file              |
 
 ---
 

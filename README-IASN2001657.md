@@ -60,11 +60,13 @@ nzlegislation search --query "health"
 ### Configure the CLI
 
 **Option 1: Interactive setup (recommended)**
+
 ```bash
 nzlegislation config --key YOUR_API_KEY
 ```
 
 **Option 2: Environment variable**
+
 ```bash
 # Linux/macOS
 export NZ_LEGISLATION_API_KEY=your_api_key_here
@@ -77,6 +79,7 @@ set NZ_LEGISLATION_API_KEY=your_api_key_here
 ```
 
 **Option 3: .env file**
+
 ```bash
 # Create .env file in your project directory
 NZ_LEGISLATION_API_KEY=your_api_key_here
@@ -87,11 +90,13 @@ NZ_LEGISLATION_API_KEY=your_api_key_here
 ## ⚙️ Configuration
 
 ### View Configuration
+
 ```bash
 nzlegislation config --show
 ```
 
 ### Configure Rate Limits
+
 Control API usage to match your needs:
 
 ```bash
@@ -106,11 +111,13 @@ nzlegislation config --safety-margin 0.2
 ```
 
 **Use Cases:**
+
 - **Casual user:** `--daily-limit 1000 --safety-margin 0.2`
 - **Power user:** `--daily-limit 10000 --safety-margin 0.05`
 - **Shared API key:** `--daily-limit 2000 --burst-limit 500`
 
 ### Verbose Mode
+
 Enable detailed logging for debugging:
 
 ```bash
@@ -124,12 +131,15 @@ Logs are saved to `~/.nz-legislation-tool/logs/`
 ## 🔍 Troubleshooting
 
 ### Check for Updates
+
 The CLI automatically checks for updates. Manual check:
+
 ```bash
 nzlegislation --version
 ```
 
 If update available, you'll see:
+
 ```
 ╔═══════════════════════════════════════════════════════════╗
 ║  ⚠️  New version available!                               ║
@@ -139,6 +149,7 @@ If update available, you'll see:
 ```
 
 ### View Error Logs
+
 ```bash
 # Windows
 notepad %USERPROFILE%\.nz-legislation-tool\logs\error-*.log
@@ -175,6 +186,7 @@ nzlegislation search --query "health" --limit 50 --offset 100
 ```
 
 **Options:**
+
 - `-q, --query <text>` - Search query (required)
 - `-t, --type <type>` - Filter by type: act, bill, regulation, instrument
 - `-s, --status <status>` - Filter by status: in-force, repealed, etc.
@@ -198,9 +210,11 @@ nzlegislation get "act/2020/67" --format json
 ```
 
 **Arguments:**
+
 - `<id>` - Work ID (e.g., `act/2020/67`)
 
 **Options:**
+
 - `--versions` - Show version history
 - `--format <format>` - Output format: table, json, csv (default: table)
 
@@ -218,6 +232,7 @@ nzlegislation export --query "mental health" --type act --status in-force --outp
 ```
 
 **Options:**
+
 - `-q, --query <text>` - Search query (required)
 - `-o, --output <file>` - Output file path (required)
 - `-f, --format <format>` - Output format: csv, json (default: csv)
@@ -245,9 +260,11 @@ nzlegislation cite "act/2020/67" --style apa
 ```
 
 **Arguments:**
+
 - `<id>` - Work ID (e.g., `act/2020/67`)
 
 **Options:**
+
 - `-s, --style <style>` - Citation style: nzmj, bibtex, ris, apa (default: nzmj)
 
 ### `config` - View and manage configuration
@@ -264,6 +281,7 @@ nzlegislation config --clear
 ```
 
 **Options:**
+
 - `--show` - Show current configuration
 - `--key <key>` - Set API key
 - `--clear` - Clear all configuration
@@ -316,6 +334,7 @@ nzlegislation search --query "health" --status repealed
 ## 🎨 Output Formats
 
 ### Table (Default)
+
 ```
 ┌────────────────────┬──────────────────────────────────────────┬────────┬──────────┬────────────┐
 │ ID                 │ Title                                    │ Type   │ Status   │ Date       │
@@ -328,6 +347,7 @@ Total: 42 results (showing 25)
 ```
 
 ### JSON
+
 ```json
 {
   "total": 42,
@@ -346,6 +366,7 @@ Total: 42 results (showing 25)
 ```
 
 ### CSV
+
 ```csv
 id,title,shortTitle,type,status,date,url,versionCount
 act/2020/67,Health Act 2020,Health Act 2020,act,in-force,2020-11-15,https://api.legislation.govt.nz/v0/works/act/2020/67,5
@@ -362,11 +383,11 @@ act/2020/67,Health Act 2020,Health Act 2020,act,in-force,2020-11-15,https://api.
 
 ### Environment Variables
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `NZ_LEGISLATION_API_KEY` | Your API key | - |
-| `NZ_LEGISLATION_BASE_URL` | API base URL | `https://api.legislation.govt.nz` |
-| `NZ_LEGISLATION_TIMEOUT` | Request timeout (ms) | `30000` |
+| Variable                  | Description          | Default                           |
+| ------------------------- | -------------------- | --------------------------------- |
+| `NZ_LEGISLATION_API_KEY`  | Your API key         | -                                 |
+| `NZ_LEGISLATION_BASE_URL` | API base URL         | `https://api.legislation.govt.nz` |
+| `NZ_LEGISLATION_TIMEOUT`  | Request timeout (ms) | `30000`                           |
 
 ---
 
@@ -387,11 +408,13 @@ The CLI automatically handles rate limiting and will show helpful error messages
 ### "API key not configured"
 
 **Solution:**
+
 ```bash
 nzlegislation config --key YOUR_API_KEY
 ```
 
 Or set environment variable:
+
 ```bash
 export NZ_LEGISLATION_API_KEY=your_key_here
 ```
@@ -399,16 +422,19 @@ export NZ_LEGISLATION_API_KEY=your_key_here
 ### "Authentication failed"
 
 **Causes:**
+
 - Invalid API key
 - Expired API key
 
 **Solution:**
+
 1. Check your API key in the email from PCO
 2. Re-run: `nzlegislation config --key YOUR_NEW_KEY`
 
 ### "Rate limit exceeded"
 
 **Solution:**
+
 - Wait 5 minutes for burst limit to reset
 - Or wait until midnight for daily limit to reset
 - Reduce request frequency
@@ -416,10 +442,12 @@ export NZ_LEGISLATION_API_KEY=your_key_here
 ### "Resource not found"
 
 **Causes:**
+
 - Incorrect work ID format
 - Work doesn't exist
 
 **Solution:**
+
 - Check work ID format (e.g., `act/2020/67`)
 - Search first to find correct ID: `nzlegislation search --query "health"`
 
@@ -428,16 +456,19 @@ export NZ_LEGISLATION_API_KEY=your_key_here
 ## 📦 Installation Options
 
 ### npm (Recommended)
+
 ```bash
 npm install -g nz-legislation
 ```
 
 ### npx (No install)
+
 ```bash
 npx nz-legislation search --query "health"
 ```
 
 ### From Source
+
 ```bash
 git clone https://github.com/edithatogo/nz-legislation
 cd nz-legislation

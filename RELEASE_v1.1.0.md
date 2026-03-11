@@ -27,6 +27,7 @@ nzlegislation batch --file works.csv --type getVersions --retry
 ```
 
 **Features:**
+
 - Configurable concurrency (default: 5)
 - Automatic retry with exponential backoff
 - CSV and JSON input support
@@ -45,6 +46,7 @@ nzlegislation stream --query "health" --output health.json --format json
 ```
 
 **Features:**
+
 - <50MB memory usage regardless of export size
 - CSV, JSON, NDJSON formats
 - Real-time progress tracking with ETA
@@ -60,6 +62,7 @@ npm run bench:audit
 ```
 
 **Measures:**
+
 - CLI startup time (cold/warm)
 - API response times
 - Memory usage
@@ -75,6 +78,7 @@ npx tsx scripts/bundle-analyze.ts
 ```
 
 **Features:**
+
 - Dependency size breakdown
 - Treeshaking analysis
 - Optimization recommendations
@@ -88,6 +92,7 @@ k6 run scripts/load-test.ts
 ```
 
 **Scenarios:**
+
 - Smoke test (5 VUs, 1 min)
 - Load test (20 VUs, 5 min)
 - Stress test (50 VUs, 3 min)
@@ -121,6 +126,7 @@ k6 run scripts/load-test.ts
 ## Documentation
 
 New documentation files:
+
 - `docs/PERFORMANCE_DASHBOARD.md` - Performance tracking dashboard
 - `docs/PERFORMANCE_SCORECARDS.md` - Scoring system documentation
 - `docs/PERFORMANCE_METRICS_GUIDE.md` - Metrics interpretation guide
@@ -148,25 +154,25 @@ No new production dependencies added.
 
 ### New Commands
 
-| Command | Description |
-|---------|-------------|
-| `nzlegislation batch` | Execute bulk operations |
-| `nzlegislation stream` | Stream large exports |
+| Command                | Description             |
+| ---------------------- | ----------------------- |
+| `nzlegislation batch`  | Execute bulk operations |
+| `nzlegislation stream` | Stream large exports    |
 
 ---
 
 ## Performance Targets
 
-| Metric | Target | Status |
-|--------|--------|--------|
-| Cache hit rate | >80% | ✅ Infrastructure ready |
-| Bulk operations | 10x faster | ✅ Implemented |
-| Streaming exports | 1GB+ without OOM | ✅ Implemented |
-| API response time | <500ms p95 | ✅ Optimized |
-| CLI startup time | <200ms | ✅ Profiling ready |
-| Bundle size | <5MB | ✅ Analysis ready |
-| Memory usage | <256MB | ✅ Streaming ready |
-| Load test | 100 concurrent | ✅ k6 ready |
+| Metric            | Target           | Status                  |
+| ----------------- | ---------------- | ----------------------- |
+| Cache hit rate    | >80%             | ✅ Infrastructure ready |
+| Bulk operations   | 10x faster       | ✅ Implemented          |
+| Streaming exports | 1GB+ without OOM | ✅ Implemented          |
+| API response time | <500ms p95       | ✅ Optimized            |
+| CLI startup time  | <200ms           | ✅ Profiling ready      |
+| Bundle size       | <5MB             | ✅ Analysis ready       |
+| Memory usage      | <256MB           | ✅ Streaming ready      |
+| Load test         | 100 concurrent   | ✅ k6 ready             |
 
 ---
 
@@ -183,11 +189,13 @@ No migration required. All existing commands and configurations continue to work
 ### Getting Started with New Features
 
 1. **Run performance audit:**
+
    ```bash
    npm run bench:audit
    ```
 
 2. **Try batch processing:**
+
    ```bash
    nzlegislation batch --ids "act/1986/132" --type getWork
    ```
@@ -207,9 +215,9 @@ No migration required. All existing commands and configurations continue to work
 
 ## Checksums
 
-| File | SHA256 |
-|------|--------|
-| nz-legislation-tool-v1.1.0.tar.gz | TBD |
+| File                              | SHA256 |
+| --------------------------------- | ------ |
+| nz-legislation-tool-v1.1.0.tar.gz | TBD    |
 
 ---
 

@@ -9,29 +9,31 @@ Successfully migrated the NZ Legislation CLI to state-of-the-art TypeScript tool
 ## 🆕 New Dependencies
 
 ### **Core Dependencies**
+
 ```json
 {
-  "typescript": "^6.0.0-rc",           // TypeScript 6.0 RC
-  "commander": "^15.0.0",              // Latest CLI framework
-  "chalk": "^5.4.1",                   // Terminal styling
-  "axios": "^1.13.6",                  // HTTP client
-  "xml2js": "^0.6.2",                  // XML parsing
-  "inquirer": "^13.3.0"                // Interactive prompts
+  "typescript": "^6.0.0-rc", // TypeScript 6.0 RC
+  "commander": "^15.0.0", // Latest CLI framework
+  "chalk": "^5.4.1", // Terminal styling
+  "axios": "^1.13.6", // HTTP client
+  "xml2js": "^0.6.2", // XML parsing
+  "inquirer": "^13.3.0" // Interactive prompts
 }
 ```
 
 ### **Dev Dependencies**
+
 ```json
 {
-  "tsup": "^8.0.0",                    // Bundling (replaces tsc)
-  "vitest": "^2.0.4",                  // Fast testing
-  "msw": "^2.0.0",                     // API mocking
-  "eslint": "^10.0.3",                 // Linting
-  "prettier": "^3.8.1",                // Formatting
-  "@typescript-eslint/*": "^8.0.0",   // TypeScript ESLint
-  "@changesets/cli": "^2.27.0",       // Automated versioning
-  "@vitest/coverage-v8": "^2.0.4",    // Coverage
-  "tsx": "^4.16.2"                     // Runtime
+  "tsup": "^8.0.0", // Bundling (replaces tsc)
+  "vitest": "^2.0.4", // Fast testing
+  "msw": "^2.0.0", // API mocking
+  "eslint": "^10.0.3", // Linting
+  "prettier": "^3.8.1", // Formatting
+  "@typescript-eslint/*": "^8.0.0", // TypeScript ESLint
+  "@changesets/cli": "^2.27.0", // Automated versioning
+  "@vitest/coverage-v8": "^2.0.4", // Coverage
+  "tsx": "^4.16.2" // Runtime
 }
 ```
 
@@ -40,6 +42,7 @@ Successfully migrated the NZ Legislation CLI to state-of-the-art TypeScript tool
 ## 🔧 Updated Configuration Files
 
 ### **Created:**
+
 - ✅ `.eslintrc.json` - ESLint config with typescript-eslint
 - ✅ `.prettierrc` - Prettier config
 - ✅ `tsup.config.ts` - tsup bundling config
@@ -48,6 +51,7 @@ Successfully migrated the NZ Legislation CLI to state-of-the-art TypeScript tool
 - ✅ `CHANGSETS_GUIDE.md` - Changesets documentation
 
 ### **Updated:**
+
 - ✅ `package.json` - All dependencies updated
 - ✅ `.github/workflows/ci.yml` - Full SOTA workflow
 - ✅ `vitest.config.ts` - Vitest configuration
@@ -100,12 +104,14 @@ Successfully migrated the NZ Legislation CLI to state-of-the-art TypeScript tool
 ## 📦 Package Manager: pnpm
 
 **Benefits:**
+
 - ⚡ 2-3x faster than npm
 - 💾 Disk space efficient
 - 🔒 Strict dependency resolution
 - 📋 Better lockfile
 
 **Commands:**
+
 ```bash
 pnpm install          # Install dependencies
 pnpm dev             # Development mode
@@ -123,12 +129,14 @@ pnpm release         # Publish
 ## 🧪 Testing with Vitest
 
 **Benefits:**
+
 - ⚡ 10-100x faster than Jest
 - 🎯 Built-in coverage
 - 🔧 Native ESM support
 - 🎨 Rich UI with `--ui`
 
 **Commands:**
+
 ```bash
 pnpm test            # Watch mode
 pnpm test:run        # Run once
@@ -141,6 +149,7 @@ pnpm test:ui         # Interactive UI
 ## 📦 Bundling with tsup
 
 **Benefits:**
+
 - ⚡ 20x faster than esbuild
 - 🎯 Zero config
 - 📦 Tree shaking
@@ -148,6 +157,7 @@ pnpm test:ui         # Interactive UI
 - 📝 DTS generation
 
 **Output:**
+
 ```bash
 pnpm build
 # Creates dist/cli.js with:
@@ -162,6 +172,7 @@ pnpm build
 ## 🔄 Automated Versioning (Changesets)
 
 **Workflow:**
+
 1. Developer adds changeset: `pnpm changeset`
 2. PR merged to main
 3. Release PR created automatically
@@ -169,6 +180,7 @@ pnpm build
 5. GitHub release created
 
 **Version Types:**
+
 - **patch** - Bug fixes
 - **minor** - New features
 - **major** - Breaking changes
@@ -178,11 +190,13 @@ pnpm build
 ## 📊 Code Quality Integration
 
 ### **Codecov**
+
 - Coverage reports on every PR
 - Flags per OS/Node version
 - Threshold enforcement
 
 ### **SonarCloud**
+
 - Code quality scoring
 - Bug detection
 - Security hotspot detection
@@ -231,6 +245,7 @@ changesets/action@v1        # Automated releases
 ## 🚀 Next Steps
 
 ### **Immediate:**
+
 1. ❌ Temporarily disable branch protection
 2. ✅ Push these changes
 3. ✅ Run `pnpm install` to generate lockfile
@@ -239,6 +254,7 @@ changesets/action@v1        # Automated releases
 6. ✅ Trigger release
 
 ### **After Publishing:**
+
 1. Install with: `pnpm add -g nz-legislation`
 2. Test: `nzlegislation --version`
 3. Monitor Codecov dashboard
@@ -248,12 +264,12 @@ changesets/action@v1        # Automated releases
 
 ## 📈 Performance Improvements
 
-| Task | Before | After | Improvement |
-|------|--------|-------|-------------|
-| **Install** | ~30s (npm) | ~10s (pnpm) | **3x faster** |
-| **Build** | ~5s (tsc) | ~0.5s (tsup) | **10x faster** |
-| **Test** | ~60s (Jest) | ~6s (Vitest) | **10x faster** |
-| **Typecheck** | ~5s (tsc) | ~2s (tsc --noEmit) | **2.5x faster** |
+| Task          | Before      | After              | Improvement     |
+| ------------- | ----------- | ------------------ | --------------- |
+| **Install**   | ~30s (npm)  | ~10s (pnpm)        | **3x faster**   |
+| **Build**     | ~5s (tsc)   | ~0.5s (tsup)       | **10x faster**  |
+| **Test**      | ~60s (Jest) | ~6s (Vitest)       | **10x faster**  |
+| **Typecheck** | ~5s (tsc)   | ~2s (tsc --noEmit) | **2.5x faster** |
 
 ---
 
@@ -265,7 +281,7 @@ changesets/action@v1        # Automated releases
 ✅ **Code Quality** - ESLint 10, SonarCloud, Codecov  
 ✅ **Modern Stack** - TypeScript 6, pnpm, tsup, Vitest  
 ✅ **Multi-Platform** - Binaries for all platforms  
-✅ **Provenance** - NPM provenance enabled  
+✅ **Provenance** - NPM provenance enabled
 
 ---
 

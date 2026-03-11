@@ -37,6 +37,7 @@ This documentation aims to meet **WCAG 2.1 AA (Web Content Accessibility Guideli
 - ✅ **Skip Links** - Jump to main content (when hosted online)
 
 **Example:**
+
 ```markdown
 ✅ Good: [Download the installer](...)
 ❌ Bad: [Click here](...)
@@ -50,6 +51,7 @@ This documentation aims to meet **WCAG 2.1 AA (Web Content Accessibility Guideli
 - ✅ **No Keyboard Traps** - Can navigate away from all elements
 
 **Keyboard Shortcuts:**
+
 - `Tab` - Move to next interactive element
 - `Shift + Tab` - Move to previous element
 - `Enter` - Activate button/link
@@ -64,6 +66,7 @@ This documentation aims to meet **WCAG 2.1 AA (Web Content Accessibility Guideli
 - ✅ **No Text in Images** - Information is in text format
 
 **Contrast Ratios:**
+
 - Normal text: **4.5:1** minimum
 - Large text (18pt+): **3:1** minimum
 - UI components: **3:1** minimum
@@ -108,6 +111,7 @@ Despite our best efforts, some content may not be fully accessible:
 We welcome your feedback on the accessibility of our documentation.
 
 **Contact Us:**
+
 - 📧 **Email:** dylan.mordaunt@vuw.ac.nz
 - 🐛 **GitHub Issues:** [Open an accessibility issue](https://github.com/edithatogo/nz-legislation-tool/issues)
 - 💬 **Discussions:** [Start a discussion](https://github.com/edithatogo/nz-legislation-tool/discussions)
@@ -154,11 +158,13 @@ This documentation was assessed using:
 #### 1. Use Specific Keywords
 
 **Good:**
+
 - `API key`
 - `export CSV`
 - `rate limit`
 
 **Too Broad:**
+
 - `help`
 - `search`
 - `command`
@@ -190,34 +196,39 @@ type:troubleshooting export
 
 #### Quick Reference
 
-| What You're Looking For | Where to Search |
-|------------------------|-----------------|
-| **Common questions** | [FAQ](./user-guide/faq.md) |
-| **Error messages** | [Troubleshooting](./user-guide/troubleshooting.md) |
-| **Technical terms** | [Glossary](./user-guide/glossary.md) |
-| **How to do something** | [User Guide](./user-guide/index.md) |
-| **Research workflows** | [Research Workflow](./user-guide/research-workflow.md) |
-| **Code examples** | [Developer Guide](./developer-guide/index.md) |
-| **Architecture** | [Architecture](./developer-guide/architecture.md) |
-| **Diagrams** | [Visual Diagrams](./developer-guide/visual-diagrams.md) |
+| What You're Looking For | Where to Search                                         |
+| ----------------------- | ------------------------------------------------------- |
+| **Common questions**    | [FAQ](./user-guide/faq.md)                              |
+| **Error messages**      | [Troubleshooting](./user-guide/troubleshooting.md)      |
+| **Technical terms**     | [Glossary](./user-guide/glossary.md)                    |
+| **How to do something** | [User Guide](./user-guide/index.md)                     |
+| **Research workflows**  | [Research Workflow](./user-guide/research-workflow.md)  |
+| **Code examples**       | [Developer Guide](./developer-guide/index.md)           |
+| **Architecture**        | [Architecture](./developer-guide/architecture.md)       |
+| **Diagrams**            | [Visual Diagrams](./developer-guide/visual-diagrams.md) |
 
 ---
 
 ### Search by Task
 
 #### "I want to search for legislation"
+
 → [Quick Start Guide](../../README.md#-quick-start-5-minutes)
 
 #### "I want to export data"
+
 → [Research Workflow - Stage 2](./user-guide/research-workflow.md#stage-2-data-collection)
 
 #### "I want to cite legislation"
+
 → [Research Workflow - Stage 4](./user-guide/research-workflow.md#stage-4-citation--writing)
 
 #### "I'm getting an error"
+
 → [Troubleshooting Guide](./user-guide/troubleshooting.md)
 
 #### "I don't understand a term"
+
 → [Glossary](./user-guide/glossary.md)
 
 ---
@@ -245,6 +256,7 @@ type:troubleshooting export
 4. Type your query
 
 **Advanced GitHub Search:**
+
 ```
 # Search in documentation files
 path:docs API key
@@ -285,12 +297,14 @@ For code blocks and tables, rotate your device to landscape mode for better visi
 #### 2. Bookmark Frequently Used Pages
 
 **iOS Safari:**
+
 1. Tap the Share button
 2. Tap "Add Bookmark"
 3. Name it (e.g., "NZ Leg Docs")
 4. Tap "Save"
 
 **Android Chrome:**
+
 1. Tap the three dots menu
 2. Tap the star icon
 3. Name it
@@ -301,10 +315,12 @@ For code blocks and tables, rotate your device to landscape mode for better visi
 Most browsers have a "Reader Mode" that removes distractions:
 
 **iOS Safari:**
+
 - Tap the "aA" icon in the address bar
 - Tap "Show Reader"
 
 **Android Chrome:**
+
 - Tap the three dots menu
 - Tap "Reader Mode" (if available)
 
@@ -313,6 +329,7 @@ Most browsers have a "Reader Mode" that removes distractions:
 **For offline reading:**
 
 **iOS:**
+
 1. Tap Share
 2. Tap "Print"
 3. Pinch out on the preview
@@ -320,6 +337,7 @@ Most browsers have a "Reader Mode" that removes distractions:
 5. Tap "Save to Files"
 
 **Android:**
+
 1. Tap three dots menu
 2. Tap "Share"
 3. Tap "Print"
@@ -332,13 +350,13 @@ Most browsers have a "Reader Mode" that removes distractions:
 
 **Quick Access:**
 
-| Task | How To |
-|------|--------|
-| **Search** | Use browser's Find feature (Ctrl+F / Cmd+F) |
-| **Navigate** | Use table of contents at top of pages |
-| **Go Home** | Tap logo or title at top |
-| **Go Back** | Use browser back button |
-| **Share** | Use browser share menu |
+| Task         | How To                                      |
+| ------------ | ------------------------------------------- |
+| **Search**   | Use browser's Find feature (Ctrl+F / Cmd+F) |
+| **Navigate** | Use table of contents at top of pages       |
+| **Go Home**  | Tap logo or title at top                    |
+| **Go Back**  | Use browser back button                     |
+| **Share**    | Use browser share menu                      |
 
 ---
 
@@ -352,11 +370,13 @@ Most browsers have a "Reader Mode" that removes distractions:
 - ✅ **Alt Text** - Images have descriptions
 
 **VoiceOver (iOS):**
+
 - Swipe right/left to navigate
 - Double-tap to activate
 - Three-finger swipe up/down to adjust settings
 
 **TalkBack (Android):**
+
 - Swipe right/left to navigate
 - Double-tap to activate
 - Two-finger swipe to scroll
@@ -386,11 +406,13 @@ Most browsers have a "Reader Mode" that removes distractions:
 **Technical optimizations:**
 
 1. **Compress Images**
+
    ```bash
    # Use tools like ImageOptim, TinyPNG
    ```
 
 2. **Enable Caching**
+
    ```nginx
    # Nginx example
    location ~* \.(md|pdf|png)$ {
@@ -400,6 +422,7 @@ Most browsers have a "Reader Mode" that removes distractions:
    ```
 
 3. **Minify CSS/JS**
+
    ```bash
    # Use build tools like webpack, esbuild
    ```
@@ -411,7 +434,7 @@ Most browsers have a "Reader Mode" that removes distractions:
 
 5. **Lazy Load Images**
    ```html
-   <img src="diagram.png" loading="lazy" alt="...">
+   <img src="diagram.png" loading="lazy" alt="..." />
    ```
 
 ---
@@ -420,12 +443,12 @@ Most browsers have a "Reader Mode" that removes distractions:
 
 **Target Load Times:**
 
-| Metric | Target | Status |
-|--------|--------|--------|
-| **First Contentful Paint** | <1.5s | ✅ |
-| **Time to Interactive** | <3.5s | ✅ |
-| **Total Page Size** | <500KB | ✅ |
-| **Number of Requests** | <50 | ✅ |
+| Metric                     | Target | Status |
+| -------------------------- | ------ | ------ |
+| **First Contentful Paint** | <1.5s  | ✅     |
+| **Time to Interactive**    | <3.5s  | ✅     |
+| **Total Page Size**        | <500KB | ✅     |
+| **Number of Requests**     | <50    | ✅     |
 
 ---
 
@@ -438,30 +461,35 @@ Most browsers have a "Reader Mode" that removes distractions:
 ### Planned Video Tutorials
 
 #### Getting Started (5 minutes)
+
 - What is the NZ Legislation Tool?
 - Installation (2 methods)
 - API key setup
 - Your first search
 
 #### Basic Commands (10 minutes)
+
 - Search command
 - Get command
 - Export command
 - Cite command
 
 #### Research Workflow (15 minutes)
+
 - Complete research workflow example
 - Export to Excel
 - Data analysis in R/Python
 - Generate citations
 
 #### Troubleshooting (10 minutes)
+
 - Common errors and fixes
 - API key issues
 - Installation problems
 - Rate limiting
 
 #### Advanced Topics (20 minutes)
+
 - Automation scripts
 - API integration
 - Performance optimization
@@ -542,11 +570,13 @@ Videos will be hosted on:
 ### Manual Testing
 
 **Keyboard Navigation:**
+
 1. Try to navigate entire site using only Tab, Enter, and Arrow keys
 2. Check that focus is visible on all interactive elements
 3. Verify no keyboard traps (can't get stuck)
 
 **Screen Reader Testing:**
+
 1. Test with NVDA (Windows, free)
 2. Test with VoiceOver (macOS/iOS, built-in)
 3. Test with TalkBack (Android, built-in)
@@ -554,6 +584,7 @@ Videos will be hosted on:
 5. Check link descriptions make sense
 
 **Visual Testing:**
+
 1. Zoom to 200% - verify no horizontal scrolling
 2. Check color contrast with WebAIM Contrast Checker
 3. Test with high contrast mode enabled

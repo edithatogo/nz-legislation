@@ -15,6 +15,7 @@ The NZ Legislation Tool uses a comprehensive testing strategy with **43+ tests**
 ## Running Tests
 
 ### All Tests
+
 ```bash
 # Run all tests
 npm run test:all
@@ -24,6 +25,7 @@ npm run test:coverage
 ```
 
 ### By Category
+
 ```bash
 # Unit tests
 npm test
@@ -70,6 +72,7 @@ tests/
 ## Writing Tests
 
 ### Unit Tests
+
 ```typescript
 import { describe, it, expect } from 'vitest';
 import { worksToCsv } from '../src/output/index.js';
@@ -83,13 +86,14 @@ describe('Output Formatters', () => {
 ```
 
 ### Integration Tests (with MSW)
+
 ```typescript
 import { http, HttpResponse } from 'msw';
 
 const server = setupServer(
   http.get('https://api.legislation.govt.nz/v0/works', () => {
     return HttpResponse.json(mockSearchResponse);
-  }),
+  })
 );
 
 it('should search for legislation', async () => {
@@ -99,21 +103,23 @@ it('should search for legislation', async () => {
 ```
 
 ### Property-Based Tests (with fast-check)
+
 ```typescript
 import * as fc from 'fast-check';
 
 it('should always generate valid CSV', () => {
   fc.assert(
-    fc.property(searchResultsArbitrary, (results) => {
+    fc.property(searchResultsArbitrary, results => {
       const csv = worksToCsv(results);
       expect(csv.split('\n')[0]).toBe('work_id,title,type');
     }),
-    { numRuns: 100 },
+    { numRuns: 100 }
   );
 });
 ```
 
 ### E2E Tests (with execa)
+
 ```typescript
 import { execa } from 'execa';
 
@@ -133,12 +139,15 @@ it('should display help text', async () => {
 Mutation testing introduces small bugs ("mutants") into your code to verify that your tests catch them. A high mutation score indicates effective tests.
 
 ### Running Mutation Tests
+
 ```bash
 npm run test:mutation
 ```
 
 ### Configuration
+
 See `stryker.conf.json`:
+
 ```json
 {
   "thresholds": {
@@ -149,6 +158,7 @@ See `stryker.conf.json`:
 ```
 
 ### Target Score
+
 - **>80%** - Excellent (target)
 - **60-80%** - Good
 - **<60%** - Needs improvement
@@ -179,11 +189,14 @@ coverage: {
 ## CI/CD Integration
 
 Tests run automatically on:
+
 - **Push to main:** All tests + mutation testing
 - **Pull Request:** All tests (mutation testing optional)
 
 ### GitHub Actions Workflow
+
 See `.github/workflows/ci.yml`:
+
 - Tests run on Node.js 18, 20, 22
 - Coverage uploaded to Codecov
 - Mutation report uploaded as artifact
@@ -193,6 +206,7 @@ See `.github/workflows/ci.yml`:
 ## Test Best Practices
 
 ### ✅ DO:
+
 - Use descriptive test names
 - Test edge cases and error scenarios
 - Use property-based testing for invariants
@@ -200,6 +214,7 @@ See `.github/workflows/ci.yml`:
 - Mock external dependencies (API, file system)
 
 ### ❌ DON'T:
+
 - Test implementation details
 - Skip test cleanup
 - Hardcode API keys in tests
@@ -211,6 +226,7 @@ See `.github/workflows/ci.yml`:
 ## Troubleshooting
 
 ### Tests Fail Randomly
+
 ```bash
 # Run tests sequentially
 npm run test:run --no-parallel
@@ -220,6 +236,7 @@ npm run test:run --testTimeout=60000
 ```
 
 ### Coverage Not Generated
+
 ```bash
 # Clear cache
 rm -rf node_modules/.vite
@@ -229,6 +246,7 @@ npm run test:coverage
 ```
 
 ### Mutation Score Low
+
 1. Run mutation report: `npm run test:mutation`
 2. Open `reports/mutation/mutation.html`
 3. Find surviving mutants
@@ -238,19 +256,20 @@ npm run test:coverage
 
 ## Test Dependencies
 
-| Package | Purpose |
-|---------|---------|
-| **vitest** | Test runner |
-| **fast-check** | Property-based testing |
-| **@stryker-mutator/core** | Mutation testing |
-| **msw** | API mocking (integration tests) |
-| **execa** | Command execution (E2E tests) |
+| Package                   | Purpose                         |
+| ------------------------- | ------------------------------- |
+| **vitest**                | Test runner                     |
+| **fast-check**            | Property-based testing          |
+| **@stryker-mutator/core** | Mutation testing                |
+| **msw**                   | API mocking (integration tests) |
+| **execa**                 | Command execution (E2E tests)   |
 
 ---
 
 ## Quality Gates
 
 Before merging a PR:
+
 - [ ] All tests passing
 - [ ] Coverage >60%
 - [ ] Mutation score >80% (target)

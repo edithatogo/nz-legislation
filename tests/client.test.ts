@@ -47,15 +47,21 @@ describe('Client error handling', () => {
     setHttpClientFactoryForTesting(() => ({
       get: (url: string) => ({
         json: async () => {
-          if (url.endsWith('/v0/works/act_public_1989_18') || url === 'v0/works/act_public_1989_18') {
+          if (
+            url.endsWith('/v0/works/act_public_1989_18') ||
+            url === 'v0/works/act_public_1989_18'
+          ) {
             throw makeHttpError(
               404,
               'Resource not found. Please check the ID.',
-              'https://api.legislation.govt.nz/v0/works/act_public_1989_18',
+              'https://api.legislation.govt.nz/v0/works/act_public_1989_18'
             );
           }
 
-          if (url.endsWith('/v0/works/act_public_1989_18/versions') || url === 'v0/works/act_public_1989_18/versions') {
+          if (
+            url.endsWith('/v0/works/act_public_1989_18/versions') ||
+            url === 'v0/works/act_public_1989_18/versions'
+          ) {
             return {
               results: [
                 {
@@ -66,7 +72,10 @@ describe('Client error handling', () => {
                   title: 'Trade in Endangered Species Act 1989',
                   version_id: 'act_public_1989_18_en_2026-03-05',
                   formats: [
-                    { type: 'html', url: 'https://www.legislation.govt.nz/act/public/1989/18/en/latest/' },
+                    {
+                      type: 'html',
+                      url: 'https://www.legislation.govt.nz/act/public/1989/18/en/latest/',
+                    },
                   ],
                 },
                 {
@@ -77,7 +86,10 @@ describe('Client error handling', () => {
                   title: 'Trade in Endangered Species Act 1989',
                   version_id: 'act_public_1989_18_en_2024-11-25',
                   formats: [
-                    { type: 'html', url: 'https://www.legislation.govt.nz/act/public/1989/18/en/2024-11-25/' },
+                    {
+                      type: 'html',
+                      url: 'https://www.legislation.govt.nz/act/public/1989/18/en/2024-11-25/',
+                    },
                   ],
                 },
               ],
@@ -104,7 +116,7 @@ describe('Client error handling', () => {
           throw makeHttpError(
             401,
             'Authentication failed. Please check your API key.',
-            'https://api.legislation.govt.nz/v0/works',
+            'https://api.legislation.govt.nz/v0/works'
           );
         },
       }),
@@ -123,7 +135,7 @@ describe('Client error handling', () => {
           throw makeHttpError(
             404,
             'Resource not found. Please check the ID.',
-            'https://api.legislation.govt.nz/v0/works/nonexistent-work-id',
+            'https://api.legislation.govt.nz/v0/works/nonexistent-work-id'
           );
         },
       }),
@@ -142,7 +154,7 @@ describe('Client error handling', () => {
           throw makeHttpError(
             429,
             'Rate limit exceeded. Please wait before making more requests.',
-            `https://api.legislation.govt.nz/${url.replace(/^\//, '')}`,
+            `https://api.legislation.govt.nz/${url.replace(/^\//, '')}`
           );
         },
       }),

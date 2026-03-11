@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
  * Performance Gate Checker
- * 
+ *
  * Checks performance metrics against thresholds for CI/CD.
  * Exits with code 1 if any critical gates fail.
- * 
+ *
  * Usage: node scripts/check-performance-gates.js
  */
 
@@ -20,7 +20,7 @@ console.log(`Threshold: ${PERFORMANCE_THRESHOLD}/100\n`);
 try {
   // Find latest baseline file
   const baselineFiles = glob.sync('performance-audit-results/performance-baseline-*.json');
-  
+
   if (baselineFiles.length === 0) {
     console.log('⚠️  No baseline files found. Skipping performance gate check.');
     console.log('   Run "npm run bench:audit" to create a baseline.\n');
@@ -34,25 +34,25 @@ try {
 
   // Check gates
   const gates = {
-    overall: { 
-      threshold: PERFORMANCE_THRESHOLD, 
+    overall: {
+      threshold: PERFORMANCE_THRESHOLD,
       value: baseline.scorecards?.overall || 0,
-      name: 'Overall Score'
+      name: 'Overall Score',
     },
-    api: { 
-      threshold: Math.max(50, PERFORMANCE_THRESHOLD - 10), 
+    api: {
+      threshold: Math.max(50, PERFORMANCE_THRESHOLD - 10),
       value: baseline.scorecards?.api || 0,
-      name: 'API Response Score'
+      name: 'API Response Score',
     },
-    memory: { 
-      threshold: Math.max(50, PERFORMANCE_THRESHOLD - 10), 
+    memory: {
+      threshold: Math.max(50, PERFORMANCE_THRESHOLD - 10),
       value: baseline.scorecards?.memory || 0,
-      name: 'Memory Score'
+      name: 'Memory Score',
     },
     startup: {
       threshold: Math.max(40, PERFORMANCE_THRESHOLD - 20),
       value: baseline.scorecards?.startup || 0,
-      name: 'Startup Score'
+      name: 'Startup Score',
     },
   };
 
@@ -65,9 +65,9 @@ try {
   for (const [, gate] of Object.entries(gates)) {
     const status = gate.value >= gate.threshold ? '✅ PASS' : '❌ FAIL';
     const isWarning = gate.value < gate.threshold + 10 && gate.value >= gate.threshold;
-    
+
     console.log(`${status} ${gate.name}: ${gate.value}/100 (threshold: ${gate.threshold})`);
-    
+
     if (!(gate.value >= gate.threshold)) {
       failed = true;
     } else if (isWarning) {

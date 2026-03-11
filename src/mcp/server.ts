@@ -62,29 +62,38 @@ function registerSearchTool(server: McpServer): void {
     'Search for New Zealand legislation by query',
     {
       query: z.string().describe('Search query text'),
-      type: z.enum(['act', 'bill', 'regulation', 'instrument']).optional().describe('Filter by legislation type'),
+      type: z
+        .enum(['act', 'bill', 'regulation', 'instrument'])
+        .optional()
+        .describe('Filter by legislation type'),
       status: z.string().optional().describe('Filter by status (e.g., in-force, repealed)'),
-      from: z.string()
+      from: z
+        .string()
         .regex(/^\d{4}-\d{2}-\d{2}$/)
-        .transform((val) => {
+        .transform(val => {
           const date = new Date(val);
-          if (isNaN(date.getTime())) {throw new Error('Invalid date format');}
+          if (isNaN(date.getTime())) {
+            throw new Error('Invalid date format');
+          }
           return val;
         })
         .optional()
         .describe('Filter from date (YYYY-MM-DD)'),
-      to: z.string()
+      to: z
+        .string()
         .regex(/^\d{4}-\d{2}-\d{2}$/)
-        .transform((val) => {
+        .transform(val => {
           const date = new Date(val);
-          if (isNaN(date.getTime())) {throw new Error('Invalid date format');}
+          if (isNaN(date.getTime())) {
+            throw new Error('Invalid date format');
+          }
           return val;
         })
         .optional()
         .describe('Filter to date (YYYY-MM-DD)'),
       limit: z.number().min(1).max(100).default(25).describe('Maximum results (1-100)'),
     },
-    async (params) => {
+    async params => {
       try {
         // Check MCP rate limit
         if (!checkMcpRateLimit()) {
@@ -112,10 +121,14 @@ function registerSearchTool(server: McpServer): void {
           content: [
             {
               type: 'text',
-              text: `Found ${results.total} results (showing ${results.results.length}):\n\n` +
-                results.results.map((work) =>
-                  `• **${work.title}** (${work.type}, ${work.status})\n  ID: ${work.id}\n  Date: ${work.date}`
-                ).join('\n\n'),
+              text:
+                `Found ${results.total} results (showing ${results.results.length}):\n\n` +
+                results.results
+                  .map(
+                    work =>
+                      `• **${work.title}** (${work.type}, ${work.status})\n  ID: ${work.id}\n  Date: ${work.date}`
+                  )
+                  .join('\n\n'),
             },
           ],
         };
@@ -130,7 +143,7 @@ function registerSearchTool(server: McpServer): void {
           ],
         };
       }
-    },
+    }
   );
 }
 
@@ -144,7 +157,7 @@ function registerGetTool(server: McpServer): void {
     {
       workId: z.string().describe('Work ID (e.g., act_public_1989_18)'),
     },
-    async (params) => {
+    async params => {
       try {
         // Check MCP rate limit
         if (!checkMcpRateLimit()) {
@@ -165,7 +178,8 @@ function registerGetTool(server: McpServer): void {
           content: [
             {
               type: 'text',
-              text: `**${work.title}**\n\n` +
+              text:
+                `**${work.title}**\n\n` +
                 `• **ID:** ${work.id}\n` +
                 `• **Type:** ${work.type}\n` +
                 `• **Status:** ${work.status}\n` +
@@ -187,7 +201,7 @@ function registerGetTool(server: McpServer): void {
           ],
         };
       }
-    },
+    }
   );
 }
 
@@ -201,7 +215,7 @@ function registerGetVersionsTool(server: McpServer): void {
     {
       workId: z.string().describe('Work ID (e.g., act_public_1989_18)'),
     },
-    async (params) => {
+    async params => {
       try {
         // Check MCP rate limit
         if (!checkMcpRateLimit()) {
@@ -222,13 +236,17 @@ function registerGetVersionsTool(server: McpServer): void {
           content: [
             {
               type: 'text',
-              text: `**Versions for ${params.workId}** (${versions.length} versions):\n\n` +
-                versions.map((v) =>
-                  `• **Version ${v.version}** (${v.type})\n  ` +
-                  `Date: ${v.date} | ` +
-                  `Current: ${v.isCurrent ? 'Yes' : 'No'}\n  ` +
-                  `Formats: ${v.formats.join(', ')}`
-                ).join('\n\n'),
+              text:
+                `**Versions for ${params.workId}** (${versions.length} versions):\n\n` +
+                versions
+                  .map(
+                    v =>
+                      `• **Version ${v.version}** (${v.type})\n  ` +
+                      `Date: ${v.date} | ` +
+                      `Current: ${v.isCurrent ? 'Yes' : 'No'}\n  ` +
+                      `Formats: ${v.formats.join(', ')}`
+                  )
+                  .join('\n\n'),
             },
           ],
         };
@@ -243,7 +261,7 @@ function registerGetVersionsTool(server: McpServer): void {
           ],
         };
       }
-    },
+    }
   );
 }
 
@@ -256,9 +274,12 @@ function registerCitationTool(server: McpServer): void {
     'Generate citation for legislation in various styles',
     {
       workId: z.string().describe('Work ID (e.g., act_public_1989_18)'),
-      style: z.enum(['nzmj', 'bibtex', 'ris', 'enw', 'apa']).default('nzmj').describe('Citation style'),
+      style: z
+        .enum(['nzmj', 'bibtex', 'ris', 'enw', 'apa'])
+        .default('nzmj')
+        .describe('Citation style'),
     },
-    async (params) => {
+    async params => {
       try {
         // Check MCP rate limit
         if (!checkMcpRateLimit()) {
@@ -295,7 +316,7 @@ function registerCitationTool(server: McpServer): void {
           ],
         };
       }
-    },
+    }
   );
 }
 
@@ -311,7 +332,7 @@ function registerExportTool(server: McpServer): void {
       format: z.enum(['csv', 'json']).default('csv').describe('Export format'),
       limit: z.number().min(1).max(100).default(25).describe('Maximum results'),
     },
-    async (params) => {
+    async params => {
       try {
         // Check MCP rate limit
         if (!checkMcpRateLimit()) {
@@ -362,7 +383,7 @@ function registerExportTool(server: McpServer): void {
           ],
         };
       }
-    },
+    }
   );
 }
 
@@ -384,7 +405,8 @@ function registerConfigTool(server: McpServer): void {
           content: [
             {
               type: 'text',
-              text: '**NZ Legislation API Configuration:**\n\n' +
+              text:
+                '**NZ Legislation API Configuration:**\n\n' +
                 `• **API Key:** ${hasKey ? 'Configured ✓' : 'Not configured ✗'}\n` +
                 `• **Base URL:** ${config.baseUrl}\n` +
                 `• **Timeout:** ${config.timeout}ms\n` +
@@ -404,7 +426,7 @@ function registerConfigTool(server: McpServer): void {
           ],
         };
       }
-    },
+    }
   );
 }
 
@@ -412,47 +434,43 @@ function registerConfigTool(server: McpServer): void {
  * Register legislation resource template
  */
 function registerLegislationResource(server: McpServer): void {
-  server.resource(
-    'legislation',
-    'legislation://{workId}',
-    async (uri, workId) => {
-      if (!workId || typeof workId !== 'string') {
-        return {
-          contents: [
-            {
-              uri: uri.href,
-              text: 'Error: Work ID required',
-              mimeType: 'text/plain',
-            },
-          ],
-        };
-      }
+  server.resource('legislation', 'legislation://{workId}', async (uri, workId) => {
+    if (!workId || typeof workId !== 'string') {
+      return {
+        contents: [
+          {
+            uri: uri.href,
+            text: 'Error: Work ID required',
+            mimeType: 'text/plain',
+          },
+        ],
+      };
+    }
 
-      try {
-        const work = await getWork(workId);
-        
-        return {
-          contents: [
-            {
-              uri: uri.href,
-              text: JSON.stringify(work, null, 2),
-              mimeType: 'application/json',
-            },
-          ],
-        };
-      } catch (error) {
-        return {
-          contents: [
-            {
-              uri: uri.href,
-              text: `Error: ${error instanceof Error ? error.message : 'Failed to fetch legislation'}`,
-              mimeType: 'text/plain',
-            },
-          ],
-        };
-      }
-    },
-  );
+    try {
+      const work = await getWork(workId);
+
+      return {
+        contents: [
+          {
+            uri: uri.href,
+            text: JSON.stringify(work, null, 2),
+            mimeType: 'application/json',
+          },
+        ],
+      };
+    } catch (error) {
+      return {
+        contents: [
+          {
+            uri: uri.href,
+            text: `Error: ${error instanceof Error ? error.message : 'Failed to fetch legislation'}`,
+            mimeType: 'text/plain',
+          },
+        ],
+      };
+    }
+  });
 }
 
 /**
@@ -463,11 +481,13 @@ export async function startServer(): Promise<void> {
   const transport = new StdioServerTransport();
 
   await server.connect(transport);
-  
+
   // eslint-disable-next-line no-console
   console.error('NZ Legislation MCP Server running on stdio');
   // eslint-disable-next-line no-console
-  console.error('Tools available: search_legislation, get_legislation, get_legislation_versions, generate_citation, export_legislation, get_config');
+  console.error(
+    'Tools available: search_legislation, get_legislation, get_legislation_versions, generate_citation, export_legislation, get_config'
+  );
   // eslint-disable-next-line no-console
   console.error('Resources available: legislation://{workId}');
 }

@@ -15,11 +15,13 @@ Each performance category is scored from 0-100 based on how well it meets target
 **Target:** <200ms average, <300ms p95
 
 **Calculation:**
+
 ```
 startupScore = max(0, 100 - ((averageStartupMs - 200) / 10))
 ```
 
 **Interpretation:**
+
 - **100-90:** ✅ Excellent (<200ms)
 - **89-80:** ✅ Good (200-250ms)
 - **79-70:** ⚠️ Fair (250-300ms)
@@ -33,12 +35,14 @@ startupScore = max(0, 100 - ((averageStartupMs - 200) / 10))
 **Target:** <500ms p95 for all endpoints
 
 **Calculation:**
+
 ```
 apiP95 = max(searchP95, getWorkP95, getVersionsP95)
 apiScore = max(0, 100 - ((apiP95 - 500) / 10))
 ```
 
 **Interpretation:**
+
 - **100-90:** ✅ Excellent (<500ms)
 - **89-80:** ✅ Good (500-600ms)
 - **79-70:** ⚠️ Fair (600-700ms)
@@ -52,11 +56,13 @@ apiScore = max(0, 100 - ((apiP95 - 500) / 10))
 **Target:** <256MB peak usage
 
 **Calculation:**
+
 ```
 memoryScore = max(0, 100 - ((peakMemoryMB - 256) / 5))
 ```
 
 **Interpretation:**
+
 - **100-90:** ✅ Excellent (<256MB)
 - **89-80:** ✅ Good (256-300MB)
 - **79-70:** ⚠️ Fair (300-350MB)
@@ -70,11 +76,13 @@ memoryScore = max(0, 100 - ((peakMemoryMB - 256) / 5))
 **Target:** <5MB (5120KB) total
 
 **Calculation:**
+
 ```
 bundleScore = max(0, 100 - ((totalBundleKB - 5120) / 50))
 ```
 
 **Interpretation:**
+
 - **100-90:** ✅ Excellent (<5MB)
 - **89-80:** ✅ Good (5-6MB)
 - **79-70:** ⚠️ Fair (6-7MB)
@@ -97,6 +105,7 @@ overallScore = round(
 ```
 
 **Weights Rationale:**
+
 - **API Response (35%):** Most critical for user experience
 - **Startup Time (25%):** Important for CLI responsiveness
 - **Memory Usage (25%):** Important for system resource management
@@ -110,35 +119,39 @@ overallScore = round(
 
 **Period:** YYYY-MM-DD to YYYY-MM-DD
 
-| Category | Score | Previous | Change | Status |
-|----------|-------|----------|--------|--------|
-| **Overall** | TBD/100 | - | - | ⏳ |
-| Startup Time | TBD/100 | - | - | ⏳ |
-| API Response | TBD/100 | - | - | ⏳ |
-| Memory Usage | TBD/100 | - | - | ⏳ |
-| Bundle Size | TBD/100 | - | - | ⏳ |
+| Category     | Score   | Previous | Change | Status |
+| ------------ | ------- | -------- | ------ | ------ |
+| **Overall**  | TBD/100 | -        | -      | ⏳     |
+| Startup Time | TBD/100 | -        | -      | ⏳     |
+| API Response | TBD/100 | -        | -      | ⏳     |
+| Memory Usage | TBD/100 | -        | -      | ⏳     |
+| Bundle Size  | TBD/100 | -        | -      | ⏳     |
 
 ### Detailed Metrics
 
 #### Startup Time
+
 - Average: TBD ms
 - P95: TBD ms
 - Samples: TBD
 - Trend: ⏳
 
 #### API Response
-| Endpoint | Average | P95 | Samples |
-|----------|---------|-----|---------|
-| Search | TBD ms | TBD ms | TBD |
-| Get Work | TBD ms | TBD ms | TBD |
-| Get Versions | TBD ms | TBD ms | TBD |
+
+| Endpoint     | Average | P95    | Samples |
+| ------------ | ------- | ------ | ------- |
+| Search       | TBD ms  | TBD ms | TBD     |
+| Get Work     | TBD ms  | TBD ms | TBD     |
+| Get Versions | TBD ms  | TBD ms | TBD     |
 
 #### Memory Usage
+
 - Baseline: TBD MB
 - Peak: TBD MB
 - After GC: TBD MB
 
 #### Bundle Size
+
 - Total: TBD KB
 - Main Bundle: TBD KB
 - Dependencies: TBD KB
@@ -149,9 +162,9 @@ overallScore = round(
 
 ### Historical Scorecards
 
-| Period | Overall | Startup | API | Memory | Bundle |
-|--------|---------|---------|-----|--------|--------|
-| 2026-03-10 | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ |
+| Period     | Overall | Startup | API | Memory | Bundle |
+| ---------- | ------- | ------- | --- | ------ | ------ |
+| 2026-03-10 | ⏳      | ⏳      | ⏳  | ⏳     | ⏳     |
 
 ### Trend Analysis
 
@@ -168,25 +181,25 @@ These gates are used in CI/CD to prevent performance regressions:
 
 ### Critical Gates (Block Merge)
 
-| Metric | Threshold | Action |
-|--------|-----------|--------|
-| Overall Score | <50 | Block merge |
-| API Response Score | <60 | Block merge |
-| Memory Score | <60 | Block merge |
+| Metric             | Threshold | Action      |
+| ------------------ | --------- | ----------- |
+| Overall Score      | <50       | Block merge |
+| API Response Score | <60       | Block merge |
+| Memory Score       | <60       | Block merge |
 
 ### Warning Gates (Log Warning)
 
-| Metric | Threshold | Action |
-|--------|-----------|--------|
-| Overall Score | <70 | Log warning |
-| Startup Score | <70 | Log warning |
-| Bundle Score | <70 | Log warning |
+| Metric        | Threshold | Action      |
+| ------------- | --------- | ----------- |
+| Overall Score | <70       | Log warning |
+| Startup Score | <70       | Log warning |
+| Bundle Score  | <70       | Log warning |
 
 ### Info Gates (Track Only)
 
-| Metric | Threshold | Action |
-|--------|-----------|--------|
-| Any score drop >10 points | Any | Track trend |
+| Metric                    | Threshold | Action      |
+| ------------------------- | --------- | ----------- |
+| Any score drop >10 points | Any       | Track trend |
 
 ---
 
@@ -232,24 +245,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Build
         run: npm run build
-      
+
       - name: Run performance audit
         run: npm run bench:audit
-      
+
       - name: Check performance gates
         run: node scripts/check-performance-gates.js
-      
+
       - name: Upload results
         uses: actions/upload-artifact@v4
         with:
@@ -303,12 +316,12 @@ process.exit(0);
 
 Configure alerts in your monitoring system:
 
-| Alert | Condition | Severity | Notification |
-|-------|-----------|----------|--------------|
-| Performance Degradation | Overall score drops >20 points | High | Email + Slack |
-| API Slowdown | API score <70 | Medium | Slack |
-| Memory Leak Suspected | Memory score declining trend | High | Email |
-| Bundle Bloat | Bundle score <70 | Low | Slack |
+| Alert                   | Condition                      | Severity | Notification  |
+| ----------------------- | ------------------------------ | -------- | ------------- |
+| Performance Degradation | Overall score drops >20 points | High     | Email + Slack |
+| API Slowdown            | API score <70                  | Medium   | Slack         |
+| Memory Leak Suspected   | Memory score declining trend   | High     | Email         |
+| Bundle Bloat            | Bundle score <70               | Low      | Slack         |
 
 ### Alert Handlers
 

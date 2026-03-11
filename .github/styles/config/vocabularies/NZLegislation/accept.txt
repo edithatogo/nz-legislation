@@ -1,0 +1,13 @@
+CLI
+csv
+GitHub
+json
+MCP
+npm
+npx
+Prettier
+repo
+TypeScript
+Vitest
+nzlegislation
+nzlegislation-mcp

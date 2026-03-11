@@ -15,24 +15,28 @@ This guide will help you get the most out of the NZ Legislation Tool. Whether yo
 ## 📚 What's Inside
 
 ### For Researchers
+
 - [Research Workflow](./research-workflow.md) - Complete end-to-end workflow
-- [Export for Analysis](./export-for-analysis.md) *(Coming Soon)*
-- [Citation Guide](./citation-guide.md) *(Coming Soon)*
+- [Export for Analysis](./export-for-analysis.md) _(Coming Soon)_
+- [Citation Guide](./citation-guide.md) _(Coming Soon)_
 
 ### For Students
-- [Assignment Basics](./assignment-basics.md) *(Coming Soon)*
-- [Common Searches](./common-searches.md) *(Coming Soon)*
-- [Export to Excel](./export-to-excel.md) *(Coming Soon)*
+
+- [Assignment Basics](./assignment-basics.md) _(Coming Soon)_
+- [Common Searches](./common-searches.md) _(Coming Soon)_
+- [Export to Excel](./export-to-excel.md) _(Coming Soon)_
 
 ### For Developers
-- [JSON Parsing](./json-parsing.md) *(Coming Soon)*
-- [Automation Scripts](./automation-scripts.md) *(Coming Soon)*
-- [Integration Examples](./integration-examples.md) *(Coming Soon)*
+
+- [JSON Parsing](./json-parsing.md) _(Coming Soon)_
+- [Automation Scripts](./automation-scripts.md) _(Coming Soon)_
+- [Integration Examples](./integration-examples.md) _(Coming Soon)_
 
 ### For Administrators
-- [Team Setup](./team-setup.md) *(Coming Soon)*
-- [API Key Management](./api-key-management.md) *(Coming Soon)*
-- [Monitoring Usage](./monitoring-usage.md) *(Coming Soon)*
+
+- [Team Setup](./team-setup.md) _(Coming Soon)_
+- [API Key Management](./api-key-management.md) _(Coming Soon)_
+- [Monitoring Usage](./monitoring-usage.md) _(Coming Soon)_
 
 ---
 
@@ -40,42 +44,45 @@ This guide will help you get the most out of the NZ Legislation Tool. Whether yo
 
 ### Common Tasks
 
-| Task | Command | Example |
-|------|---------|---------|
-| **Search** | `nzlegislation search --query "..."` | `nzlegislation search --query "health"` |
-| **Get details** | `nzlegislation get "ID"` | `nzlegislation get "act/2020/67"` |
-| **Export to CSV** | `nzlegislation export --query "..." --output file.csv` | `nzlegislation export --query "health" --output results.csv` |
-| **Generate citation** | `nzlegislation cite "ID"` | `nzlegislation cite "act/2020/67"` |
-| **Check config** | `nzlegislation config --show` | (shows current settings) |
+| Task                  | Command                                                | Example                                                      |
+| --------------------- | ------------------------------------------------------ | ------------------------------------------------------------ |
+| **Search**            | `nzlegislation search --query "..."`                   | `nzlegislation search --query "health"`                      |
+| **Get details**       | `nzlegislation get "ID"`                               | `nzlegislation get "act/2020/67"`                            |
+| **Export to CSV**     | `nzlegislation export --query "..." --output file.csv` | `nzlegislation export --query "health" --output results.csv` |
+| **Generate citation** | `nzlegislation cite "ID"`                              | `nzlegislation cite "act/2020/67"`                           |
+| **Check config**      | `nzlegislation config --show`                          | (shows current settings)                                     |
 
 ### Filters
 
-| Filter | Option | Example |
-|--------|--------|---------|
-| **Type** | `--type` | `--type act` |
-| **Status** | `--status` | `--status in-force` |
-| **Date from** | `--from` | `--from 2020-01-01` |
-| **Date to** | `--to` | `--to 2024-12-31` |
-| **Limit** | `--limit` | `--limit 50` |
+| Filter        | Option     | Example             |
+| ------------- | ---------- | ------------------- |
+| **Type**      | `--type`   | `--type act`        |
+| **Status**    | `--status` | `--status in-force` |
+| **Date from** | `--from`   | `--from 2020-01-01` |
+| **Date to**   | `--to`     | `--to 2024-12-31`   |
+| **Limit**     | `--limit`  | `--limit 50`        |
 
 ---
 
 ## 🎓 Tutorials
 
 ### Beginner Tutorials
-1. [Your First Search](./tutorials/first-search.md) *(Coming Soon)*
-2. [Export to Excel](./tutorials/export-to-excel.md) *(Coming Soon)*
-3. [Create Citations](./tutorials/create-citations.md) *(Coming Soon)*
+
+1. [Your First Search](./tutorials/first-search.md) _(Coming Soon)_
+2. [Export to Excel](./tutorials/export-to-excel.md) _(Coming Soon)_
+3. [Create Citations](./tutorials/create-citations.md) _(Coming Soon)_
 
 ### Intermediate Tutorials
-1. [Advanced Filtering](./tutorials/advanced-filtering.md) *(Coming Soon)*
-2. [Batch Operations](./tutorials/batch-operations.md) *(Coming Soon)*
-3. [Working with Dates](./tutorials/working-with-dates.md) *(Coming Soon)*
+
+1. [Advanced Filtering](./tutorials/advanced-filtering.md) _(Coming Soon)_
+2. [Batch Operations](./tutorials/batch-operations.md) _(Coming Soon)_
+3. [Working with Dates](./tutorials/working-with-dates.md) _(Coming Soon)_
 
 ### Advanced Tutorials
-1. [Automation Scripts](./tutorials/automation-scripts.md) *(Coming Soon)*
-2. [API Integration](./tutorials/api-integration.md) *(Coming Soon)*
-3. [Performance Optimization](./tutorials/performance-optimization.md) *(Coming Soon)*
+
+1. [Automation Scripts](./tutorials/automation-scripts.md) _(Coming Soon)_
+2. [API Integration](./tutorials/api-integration.md) _(Coming Soon)_
+3. [Performance Optimization](./tutorials/performance-optimization.md) _(Coming Soon)_
 
 ---
 
@@ -95,6 +102,7 @@ This guide will help you get the most out of the NZ Legislation Tool. Whether yo
 This documentation aims to meet WCAG 2.1 AA standards for accessibility.
 
 **Features:**
+
 - ✅ Screen reader compatible structure
 - ✅ Keyboard navigation supported
 - ✅ High contrast text formatting
