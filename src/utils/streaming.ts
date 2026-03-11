@@ -9,8 +9,8 @@ import { createWriteStream, WriteStream } from 'fs';
 import { Readable } from 'stream';
 import { pipeline } from 'stream/promises';
 
-import { searchWorks, getWork } from '@client';
-import type { Work } from '@models';
+import { searchWorks, getWork } from '../client.js';
+import type { Work } from '../models/index.js';
 
 interface SearchParams {
   query: string;

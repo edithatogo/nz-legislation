@@ -5,10 +5,10 @@
 import { Command } from 'commander';
 import ora from 'ora';
 
-import { searchWorks } from '@client';
-import { printTable, printJson, worksToCsv } from '@output';
-import { logger } from '@utils/logger';
-import { validateSearchParams, sanitizeInput } from '@utils/validation';
+import { searchWorks } from '../client.js';
+import { printTable, printJson, worksToCsv } from '../output/index.js';
+import { logger } from '../utils/logger.js';
+import { validateSearchParams, sanitizeInput } from '../utils/validation.js';
 
 interface SearchOptions {
   query: string;

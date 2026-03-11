@@ -3,9 +3,10 @@
  * Runtime validation and health checks for configuration
  */
 
-import { ErrorCode, ValidationError } from '@errors';
-import { logger } from '@utils/logger';
-import { validateApiKeyFormat } from '@utils/secure-config';
+import { ErrorCode, ValidationError } from '../errors.js';
+
+import { logger } from './logger.js';
+import { validateApiKeyFormat } from './secure-config.js';
 
 /**
  * Configuration validation result

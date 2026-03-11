@@ -6,7 +6,7 @@
 import chalk from 'chalk';
 import Table from 'cli-table3';
 
-import type { SearchResults, Version, Work } from '@models';
+import type { SearchResults, Version, Work } from '../models/index.js';
 
 /**
  * Format work type for display

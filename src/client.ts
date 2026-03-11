@@ -7,8 +7,8 @@ import got from 'got';
 import { LRUCache } from 'lru-cache';
 import { z } from 'zod';
 
-import { getConfig } from '@config';
-import { ConfigError, createApiError, ErrorCode, NetworkError } from '@errors';
+import { getConfig } from './config.js';
+import { ConfigError, createApiError, ErrorCode, NetworkError } from './errors.js';
 import {
   LegislationVersionSchema,
   SearchResultsSchema,
@@ -19,8 +19,8 @@ import {
   type SearchResults,
   type Version,
   type Work,
-} from '@models';
-import { logger } from '@utils/logger';
+} from './models/index.js';
+import { logger } from './utils/logger.js';
 
 /**
  * Cache entry with metadata

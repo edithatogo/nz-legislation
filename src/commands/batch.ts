@@ -15,7 +15,7 @@ import {
   createBatchFromIds,
   formatBatchResults,
   saveBatchResults,
-} from '@utils/batch';
+} from '../utils/batch.js';
 
 interface BatchOptions {
   file?: string;

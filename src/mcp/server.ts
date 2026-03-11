@@ -7,10 +7,10 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
 
-import { searchWorks, getWork, getWorkVersions } from '@client';
-import { getConfig, hasApiKey } from '@config';
-import { generateCitation, worksToCsv } from '@output';
-import { logger } from '@utils/logger';
+import { searchWorks, getWork, getWorkVersions } from '../client.js';
+import { getConfig, hasApiKey } from '../config.js';
+import { generateCitation, worksToCsv } from '../output/index.js';
+import { logger } from '../utils/logger.js';
 
 /**
  * MCP request tracking for rate limiting and audit
