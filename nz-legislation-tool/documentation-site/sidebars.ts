@@ -18,6 +18,8 @@ const sidebars: SidebarsConfig = {
         'user-guide/research-workflow',
       ],
     },
+    // Note: API Reference, Developer Guide, and Troubleshooting
+    // categories will be added when documentation is migrated
   ],
 };
 

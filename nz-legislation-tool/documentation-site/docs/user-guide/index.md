@@ -31,15 +31,15 @@ Welcome to the NZ Legislation Tool User Guide. This section covers all features 
 - [NDJSON Export](./exporting.md#ndjson-format) - Streaming format
 
 ### Citations
-- [NZMJ Format](./citations.md#nzmj) - New Zealand Medical Journal
-- [APA Format](./citations.md#apa) - American Psychological Association
-- [BibTeX Format](./citations.md#bibtex) - LaTeX/BibTeX
-- [RIS Format](./citations.md#ris) - Reference manager format
+- [NZMJ Format](./citations.md) - New Zealand Medical Journal
+- [APA Format](./citations.md) - American Psychological Association
+- [BibTeX Format](./citations.md) - LaTeX/BibTeX
+- [RIS Format](./citations.md) - Reference manager format
 
 ### Research Workflow
 - [End-to-End Workflow](./research-workflow.md) - Complete research process
-- [Best Practices](./research-workflow.md#best-practices) - Tips and tricks
-- [Reproducibility](./research-workflow.md#reproducibility) - Ensure reproducible results
+- [Best Practices](./research-workflow.md) - Tips and tricks
+- [Reproducibility](./research-workflow.md) - Ensure reproducible results
 
 ## Command Reference
 
@@ -50,8 +50,8 @@ For detailed command documentation:
 - [`export`](../commands/export.md) - Export search results
 - [`cite`](../commands/cite.md) - Generate citations
 - [`config`](../commands/config.md) - Manage configuration
-- [`batch`](../commands/batch.md) - Batch operations
-- [`stream`](../commands/stream.md) - Stream large exports
+
+*Note: Additional commands (`batch`, `stream`) documentation coming soon.*
 
 ## Getting Help
 
