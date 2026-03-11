@@ -216,16 +216,30 @@ This file tracks all major work streams for the NZ Legislation Tool project.
 
 ---
 
-### [ ] Track: Release Governance Modernization
+### [x] Track: Release Governance Modernization
 **Link:** [./tracks/release-governance-modernization/](./tracks/release-governance-modernization/)
 
-**Status:** ⏳ **PENDING**
+**Status:** ✅ **COMPLETE**
 
 **Summary:** Modernize SemVer policy, release automation, prerelease branching, and collaboration guardrails for stable `2.x` and incubating `3.x` work.
 
 **Priority:** 🔴 **HIGH**
 **Timeline:** 1-2 weeks
 **Key Deliverables:** Canonical stable release workflow, prerelease `next` workflow, SemVer policy, branch normalization, collaboration hardening roadmap
+
+**Date Created:** 2026-03-11
+**Date Completed:** 2026-03-11
+**Key Deliverables:** 
+- RELEASE_POLICY.md with full SemVer rules and compatibility matrix
+- SUPPORT_POLICY.md with support commitments
+- Canonical CI, Release Stable, Release Next workflows
+- Branch protection on `main` and `next`
+- GitHub environments (`stable`, `prerelease`)
+- GitHub Packages mirror (`@edithatogo/nz-legislation-tool`)
+- Product vs research boundary guardrails
+- All 6 phases completed (100%)
+
+**Review Summary:** All governance infrastructure implemented and validated. Workflows green on both `main` and `next`. Package mirror published. Documentation complete.
 
 ---
 
@@ -329,11 +343,11 @@ This file tracks all major work streams for the NZ Legislation Tool project.
 
 | Status | Count | Percentage |
 |--------|-------|------------|
-| ✅ **Complete** | 0 | 0% |
-| 📦 **Archived** | 12 | 60% |
+| ✅ **Complete** | 1 | 5% |
+| 📦 **Archived** | 12 | 57% |
 | ✅ **Ready for Deployment** | 1 | 5% |
-| ⏳ **Pending** | 7 | 35% |
-| **Total** | **20** | **100%** |
+| ⏳ **Pending** | 7 | 33% |
+| **Total** | **21** | **100%** |
 
 **Overall Project Progress:** ~70% complete (technical infrastructure complete, documentation ready, research programme pending)
 

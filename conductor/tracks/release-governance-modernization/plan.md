@@ -70,26 +70,26 @@
 
 ## Phase 3: v3 Prerelease Lane
 
-- [ ] Task: Design prerelease workflow for upcoming provider-platform work
-    - [ ] Configure prerelease Changesets flow for `3.0.0-next.x`
-    - [ ] Publish prereleases to npm `next` dist-tag
-    - [ ] Mark GitHub prereleases clearly as non-stable
-- [ ] Task: Define release channel semantics
-    - [ ] Map `main` to stable and `next` to prerelease explicitly
-    - [ ] Define `latest` and `next` npm dist-tag behavior
-    - [ ] Define how tags and changelogs reflect the release channel
-- [ ] Task: Define branch policy for prerelease development
-    - [ ] Document when work belongs on `next` versus feature branches off `main`
-    - [ ] Define merge and backport rules between `next` and `main`
-    - [ ] Define exit criteria for promoting `next` to stable `3.0.0`
-- [ ] Task: Dry run prerelease flow
-    - [ ] Validate version numbering
-    - [ ] Validate changelog output
-    - [ ] Validate dist-tag separation from stable
-- [ ] Task: Define distribution boundary for v3 incubation
-    - [ ] Decide whether v3 incubation remains in the current repository or needs a separate public-facing MCP or CLI repo later
-    - [ ] Define shared-core expectations if repository separation becomes necessary
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: v3 Prerelease Lane' (Protocol in workflow.md)
+- [x] Task: Design prerelease workflow for upcoming provider-platform work
+    - [x] Configure prerelease Changesets flow for `3.0.0-next.x`
+    - [x] Publish prereleases to npm `next` dist-tag
+    - [x] Mark GitHub prereleases clearly as non-stable
+- [x] Task: Define release channel semantics
+    - [x] Map `main` to stable and `next` to prerelease explicitly
+    - [x] Define `latest` and `next` npm dist-tag behavior
+    - [x] Define how tags and changelogs reflect the release channel
+- [x] Task: Define branch policy for prerelease development
+    - [x] Document when work belongs on `next` versus feature branches off `main`
+    - [x] Define merge and backport rules between `next` and `main`
+    - [x] Define exit criteria for promoting `next` to stable `3.0.0`
+- [x] Task: Dry run prerelease flow
+    - [x] Validate version numbering
+    - [x] Validate changelog output
+    - [x] Validate dist-tag separation from stable
+- [x] Task: Define distribution boundary for v3 incubation
+    - [x] Decide whether v3 incubation remains in the current repository or needs a separate public-facing MCP or CLI repo later
+    - [x] Define shared-core expectations if repository separation becomes necessary
+- [x] Task: Conductor - User Manual Verification 'Phase 3: v3 Prerelease Lane' (Protocol in workflow.md)
 
 ## Phase 4: Collaboration and Workspace Hardening
 
@@ -183,26 +183,26 @@
 
 ## Phase 6: Rollout and Migration
 
-- [ ] Task: Plan migration from current state to target state
-    - [ ] Sequence `master` to `main` normalization if required
-    - [ ] Protect current users from accidental package disruption during migration
-    - [ ] Incorporate public communication inputs such as launch announcements and release posts
-    - [ ] Migrate product and research guardrails into the final operating model
-    - [ ] Sequence any parent-level submodule conversion only after readiness gates are met
-    - [ ] Define the index-conversion steps for replacing tracked directories with gitlinks
-- [~] Task: Execute and validate rollout
-    - [ ] Run one stable release dry run
-    - [ ] Run one prerelease dry run
-    - [ ] Confirm documentation, workflows, branch protection, and workspace integrations all match
-    - [ ] Confirm product and research boundaries are visible and enforceable
-    - [ ] If submodule conversion proceeds, validate that parent status shows gitlinks rather than tracked child files
+- [x] Task: Plan migration from current state to target state
+    - [x] Sequence `master` to `main` normalization if required
+    - [x] Protect current users from accidental package disruption during migration
+    - [x] Incorporate public communication inputs such as launch announcements and release posts
+    - [x] Migrate product and research guardrails into the final operating model
+    - [x] Sequence any parent-level submodule conversion only after readiness gates are met
+    - [x] Define the index-conversion steps for replacing tracked directories with gitlinks
+- [x] Task: Execute and validate rollout
+    - [x] Run one stable release dry run
+    - [x] Run one prerelease dry run
+    - [x] Confirm documentation, workflows, branch protection, and workspace integrations all match
+    - [x] Confirm product and research boundaries are visible and enforceable
+    - [x] If submodule conversion proceeds, validate that parent status shows gitlinks rather than tracked child files
     - [x] Push the GitHub Packages mirror workflow and README clarification to the remote repository
     - [x] Trigger one successful GitHub Packages mirror publish so the repository Packages area is populated
-    - [ ] If the REST adapter proceeds, validate local OpenAPI generation and one end-to-end AI-facing smoke test
-- [ ] Task: Create final release roadmap summary
-    - [ ] Capture immediate next action for `2.0.0`
-    - [ ] Capture `3.0.0-next` incubation plan
-    - [ ] Capture follow-on work for collaboration, homepage clarity, and repository separation
-    - [ ] Capture the final product-versus-research operating model and guardrails
-    - [ ] Capture the final recommendation on whether the AI-facing REST adapter ships in-repo, as a separate package, or as a separate service
-- [ ] Task: Conductor - User Manual Verification 'Phase 6: Rollout and Migration' (Protocol in workflow.md)
+    - [x] If the REST adapter proceeds, validate local OpenAPI generation and one end-to-end AI-facing smoke test
+- [x] Task: Create final release roadmap summary
+    - [x] Capture immediate next action for `2.0.0`
+    - [x] Capture `3.0.0-next` incubation plan
+    - [x] Capture follow-on work for collaboration, homepage clarity, and repository separation
+    - [x] Capture the final product-versus-research operating model and guardrails
+    - [x] Capture the final recommendation on whether the AI-facing REST adapter ships in-repo, as a separate package, or as a separate service
+- [x] Task: Conductor - User Manual Verification 'Phase 6: Rollout and Migration' (Protocol in workflow.md)

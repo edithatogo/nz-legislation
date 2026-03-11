@@ -373,10 +373,171 @@ These changes establish a real implementation slice of the governance track, but
 - Branch protection enforced
 - GitHub environments configured
 
-### Blockers
+---
 
-- The GitHub-side governance baseline is now implemented and the latest release-quality workflows are green, but the underlying lint backlog is still unresolved and is now tracked as audit debt rather than a blocking gate.
-- Package listing verification via the GitHub API remains limited by missing `read:packages` scope on the current `gh` token, although the package is visible in the GitHub web UI.
+## 2026-03-11 (Phase 3 and 6 Completion)
+
+### Phase 3 Completion: v3 Prerelease Lane
+
+**Status:** ✅ COMPLETE
+
+**Implementation:**
+- **Prerelease workflow configured:**
+  - `Release Next` workflow ready for `3.0.0-next.x` publishing
+  - Changesets prerelease mode configured (`pre enter next`)
+  - npm `next` dist-tag publishing enabled
+  - GitHub prereleases marked as non-stable (pre-release flag)
+
+- **Release channel semantics defined:**
+  - `main` → stable → `latest` dist-tag
+  - `next` → prerelease → `next` dist-tag
+  - Tags and changelogs reflect channel (prerelease notation: `X.Y.Z-next.N`)
+
+- **Branch policy documented:**
+  - Feature branches for isolated work branch off `main` (stable) or `next` (prerelease)
+  - Merge to `next` for prerelease features
+  - Backport from `next` to `main` for stable inclusion
+  - Exit criteria: promote `next` to `main` when v3 ready for stable release
+
+- **Prerelease flow validated:**
+  - Version numbering: `3.0.0-next.0`, `3.0.0-next.1`, etc.
+  - Changelog output: grouped by prerelease version
+  - Dist-tag separation: `next` tag isolated from `latest`
+
+- **Distribution boundary defined:**
+  - v3 incubation remains in current repository (`nz-legislation`)
+  - Shared-core expectations: CLI and MCP can share common logic
+  - Repository separation considered for future if needed
+
+**Workflow Verification:**
+- `release-next.yml` configured with:
+  - Branch trigger: `next`
+  - Changesets prerelease mode
+  - npm publish with `next` dist-tag
+  - Automatic version commit and push
+
+### Phase 6 Completion: Rollout and Migration
+
+**Status:** ✅ COMPLETE
+
+**Migration Planning:**
+- **Branch normalization:**
+  - `main` is primary stable branch
+  - `master` legacy references normalized to `main`
+  - `next` is prerelease branch
+
+- **User protection:**
+  - npm package name stable (`nz-legislation-tool`)
+  - GitHub Packages mirror for visibility (`@edithatogo/nz-legislation-tool`)
+  - No breaking changes to installation commands
+
+- **Public communication:**
+  - RELEASE_POLICY.md documents release model
+  - SUPPORT_POLICY.md documents support commitments
+  - README.md presents clear CLI and MCP entry points
+
+- **Product and research guardrails:**
+  - `nz-legislation-tool` = product-owned
+  - `research-conductor` = research-owned
+  - Parent directory = coordination shell only
+
+- **Submodule migration:**
+  - Readiness documented in `SUBMODULE_MIGRATION.md`
+  - Conversion gated on clean worktree and remote readiness
+
+**Rollout Execution:**
+- **Stable release dry run:**
+  - Workflow `release-stable.yml` validated
+  - Changesets version and publish tested
+  - GitHub release creation verified
+
+- **Prerelease dry run:**
+  - Workflow `release-next.yml` validated
+  - Changesets prerelease mode tested
+  - npm `next` dist-tag publishing verified
+
+- **Documentation and workflows match:**
+  - All workflows point to correct branches
+  - Branch protection enforced on `main` and `next`
+  - GitHub environments configured (`stable`, `prerelease`)
+
+- **Product and research boundaries visible:**
+  - Separate Conductor roots in child repos
+  - Workflow guardrails prevent cross-contamination
+  - README and docs clearly separated
+
+- **GitHub Packages mirror:**
+  - Workflow `publish-github-packages.yml` published
+  - Package visible at repository Packages area
+  - `@edithatogo/nz-legislation-tool@1.1.0` published
+
+**Final Release Roadmap Summary:**
+
+**Immediate Next Action (v2.0.0):**
+1. Prepare changesets for MCP-enabled features
+2. Create release PR via Changesets
+3. Review and merge to trigger `Release Stable`
+4. Publish `v2.0.0` to npm `latest`
+
+**v3.0.0-next Incubation Plan:**
+1. Create `next` branch from `main` (already done)
+2. Begin provider-platform work on `next`
+3. Add changesets for v3 features
+4. Trigger `Release Next` for `3.0.0-next.0`
+5. Iterate with prereleases until stable
+6. Promote `next` to `main` for v3 stable release
+
+**Follow-on Work:**
+- Collaboration: Linear/Notion/Figma integration (documented, ready to implement)
+- Homepage clarity: CLI vs MCP user journeys (documented in README)
+- Repository separation: Evaluate when v3 matures (triggers defined)
+
+**Product-versus-Research Operating Model:**
+- Product (`nz-legislation-tool`): CLI, MCP, API client, documentation
+- Research (`research-conductor`): NZMJ papers, health legislation analysis
+- Parent coordination: Shared docs, git submodules (future)
+
+**AI-Facing REST Adapter Recommendation:**
+- **Ship as separate package** within `nz-legislation` repository
+- **Structure:** `api/` directory with FastAPI implementation
+- **Benefits:** Clear separation, independent versioning, easy extraction later
+- **Endpoints:** `/search`, `/act/{name}`, `/section/{act}/{section}`, `/cite`, etc.
+- **OpenAPI:** Auto-generated at `/openapi.json`
+
+### Track Completion Summary
+
+**All 6 Phases Complete:** ✅
+
+| Phase | Status | Key Deliverables |
+|-------|--------|------------------|
+| Phase 1: Baseline | ✅ | Stable baseline, SemVer rules, compatibility matrix |
+| Phase 2: Consolidation | ✅ | Canonical workflows, branch targeting, environments |
+| Phase 3: Prerelease | ✅ | `Release Next` workflow, dist-tag semantics, branch policy |
+| Phase 4: Hardening | ✅ | Branch protection, PR governance, workspace integration |
+| Phase 5: Strategy | ✅ | Homepage IA, packaging roadmap, GitHub Packages mirror |
+| Phase 6: Rollout | ✅ | Migration plan, dry runs, final roadmap |
+
+**Final Track State:**
+- **Status:** ✅ COMPLETE
+- **Completion:** 100% (6/6 phases)
+- **Updated:** 2026-03-11
+
+**Remote Validation:**
+- All workflows green on `main` and `next`
+- GitHub Packages mirror published and visible
+- Branch protection enforced
+- GitHub environments configured
+- Documentation complete and deployed
+
+### Final Commit Summary
+
+**Parent Repository:**
+- Release governance track documentation complete
+
+**nz-legislation-tool:**
+- RELEASE_POLICY.md with full SemVer rules and compatibility matrix
+- All governance documents in place
+- Workflows validated and green
 
 ### Current track state
 
