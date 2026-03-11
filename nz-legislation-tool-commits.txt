@@ -1,0 +1,133 @@
+commit cb376695bd787cbb32d0c4aaaaf6e8ee0ee911b0
+Author: Dylan Mordaunt <Dylan.Mordaunt@health.nsw.gov.au>
+Date:   Wed Mar 11 10:53:30 2026 +1100
+
+    feat: finalize MCP and plugin tooling updates
+
+commit be32a44ec9f3c210437762ec748b6f5d5ef6a33e
+Author: Dylan Mordaunt <Dylan.Mordaunt@health.nsw.gov.au>
+Date:   Wed Mar 11 10:50:52 2026 +1100
+
+    fix: Resolve all TypeScript errors in nz-legislation-tool
+    
+    - Fixed async action in plugin.ts list command
+    - Fixed import paths in legislation-provider.ts to use ../utils/
+    - Fixed type narrowing in batch.ts for BatchRequestParams union types
+    
+    All 48 TypeScript errors now resolved. Type checking passes.
+
+commit eef245cfed93da1c74f2ec0d393b1273fd33693e
+Author: Dylan Mordaunt <Dylan.Mordaunt@health.nsw.gov.au>
+Date:   Wed Mar 11 10:10:13 2026 +1100
+
+    fix(conductor): Apply review suggestions for Australian Legislation Implementation track
+
+commit fa13b7d758b72898375634883adff9598e9f6f81
+Author: Dylan Mordaunt <Dylan.Mordaunt@health.nsw.gov.au>
+Date:   Tue Mar 10 22:13:54 2026 +1100
+
+    fix: Fix vitest path alias resolution for Windows
+    
+    - Add path.resolve() with __dirname for all aliases
+    - Add explicit aliases for @utils/* modules (logger, secure-config, env-loader, validation)
+    - Add explicit aliases for @models/*, @output/* modules
+    - Resolve pre-existing test configuration issues
+
+commit 4fb3c56e77b574d0f967ab26cff9ddd5c43c5712
+Author: Dylan Mordaunt <Dylan.Mordaunt@health.nsw.gov.au>
+Date:   Tue Mar 10 21:53:16 2026 +1100
+
+    fix: sync package with remote API and CI updates
+
+commit dac78535c683873f8c2d78ea8c2e7edb97aa98aa
+Author: Dylan Mordaunt <Dylan.Mordaunt@health.nsw.gov.au>
+Date:   Tue Mar 10 21:47:29 2026 +1100
+
+    chore: sync local workspace and conductor status metadata
+
+commit cd24664baa9c2de76dd78c58d77b59c988c17fc1
+Author: Dylan Mordaunt <Dylan.Mordaunt@health.nsw.gov.au>
+Date:   Tue Mar 10 19:39:53 2026 +1100
+
+    chore(conductor): Complete Track 11 - Advanced Automation & Hardening
+    
+    Implemented advanced automation and security hardening:
+    
+    Workflows Added:
+    - bundle-size.yml: Bundle size tracking with PR comments
+    - dependency-review.yml: Dependency vulnerability scanning
+    - issue-labeler.yml: Auto-labeling for issues
+    - stale-issues.yml: Automatic stale issue/PR management
+    - auto-release.yml: Automated release notes and publishing
+    
+    Issue Templates:
+    - bug-report.yml: With auto-labeling and assignment
+    - feature-request.yml: With structured feedback
+    - docs-improvement.yml: For documentation requests
+    - security-issue.yml: For vulnerability reporting
+    
+    Configuration:
+    - labeler.yml: Auto-labeling rules
+    - Updated ci.yml: Added Codecov integration
+    
+    Track 11 is now complete with all automation features implemented.
+
+commit b053c6021f3b213d8d26c40290133e85cc2c025e
+Author: Dylan Mordaunt <Dylan.Mordaunt@health.nsw.gov.au>
+Date:   Tue Mar 10 19:29:54 2026 +1100
+
+    chore(conductor): Add Track 11 to registry and mark as in progress
+
+commit 11449f3951727721e74da1f8f1a42a64dd3158a0
+Author: Dylan Mordaunt <Dylan.Mordaunt@health.nsw.gov.au>
+Date:   Tue Mar 10 12:22:53 2026 +1100
+
+    docs: Current Schemas & Standards Analysis
+
+commit 1987959e80b7f2cb1e26b997c655d55372af4c2f
+Author: Dylan Mordaunt <Dylan.Mordaunt@health.nsw.gov.au>
+Date:   Tue Mar 10 12:10:52 2026 +1100
+
+    docs: Integrate Perplexity external research findings
+
+commit 2724e86fea7078e6203f4af4fd313c93dba34905
+Author: Dylan Mordaunt <Dylan.Mordaunt@health.nsw.gov.au>
+Date:   Tue Mar 10 12:00:50 2026 +1100
+
+    docs: Track 12 Action Summary - Clear Next Steps
+
+commit c77f719d41ec80c250053ce781b91b8b376913ed
+Author: Dylan Mordaunt <Dylan.Mordaunt@health.nsw.gov.au>
+Date:   Tue Mar 10 11:58:37 2026 +1100
+
+    docs: Track 12 Phase 2 Planning Documents
+
+commit 1a1718cc37981066def2463fe289726fbb302dcd
+Author: Dylan Mordaunt <Dylan.Mordaunt@health.nsw.gov.au>
+Date:   Tue Mar 10 11:20:25 2026 +1100
+
+    docs: Track 12 Phase 1 Research Complete - Australian API Documentation
+
+commit f346368219100fce2c8b24f351dc1639737093ed
+Author: Dylan Mordaunt <Dylan.Mordaunt@health.nsw.gov.au>
+Date:   Tue Mar 10 10:36:17 2026 +1100
+
+    feat: Add Track 12 - Australian Legislation API Integration Feasibility
+
+commit 76fd01ec0ccf146c68679ad8e4114be8972f6011
+Author: Dylan Mordaunt <Dylan.Mordaunt@health.nsw.gov.au>
+Date:   Mon Mar 9 23:25:26 2026 +1100
+
+    feat: Add track improvements and new DX/Performance tracks
+
+commit a29e2a77db7fee2da1ac22333f0687891e71fb2a
+Author: Dylan Mordaunt <Dylan.Mordaunt@health.nsw.gov.au>
+Date:   Mon Mar 9 22:37:40 2026 +1100
+
+    feat: Add 4 new tracks for CI/CD automation, code hardening, MCP server, and documentation
+
+commit 65ca0ea2623c06c8531a86de5dec1772a1dd7728
+Author: Dylan Mordaunt <Dylan.Mordaunt@health.nsw.gov.au>
+Date:   Mon Mar 9 01:04:20 2026 +1100
+
+    feat: Add production improvements (CI/CD, tests, logging, versioning, rate limits)
