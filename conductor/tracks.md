@@ -4,115 +4,137 @@ This file tracks all major work streams for the NZ Legislation Tool project.
 
 ---
 
-## ✅ Completed Tracks
+## 📦 Archived Tracks
 
 ### [x] Track: TypeScript CLI Implementation
-**Link:** [./tracks/typescript-cli-implementation/](./tracks/typescript-cli-implementation/)
+**Link:** [../archive/typescript-cli-implementation/](../archive/typescript-cli-implementation/)
 
-**Status:** ✅ **COMPLETE**
+**Status:** 📦 **ARCHIVED**
 
 **Summary:** Core CLI implementation with all commands (search, get, export, cite, config), API client, data models, and production features.
 
 **Date Created:** 2026-03-08
 **Date Completed:** 2026-03-08
+**Date Archived:** 2026-03-11
 **Key Deliverables:** CLI entry point, API client (got), Zod schemas, 4 output formatters, rate limiting, error logging
+
+**Review Summary:** Code review completed in commit 65ca0ea. All production features implemented and tested.
 
 ---
 
 ### [x] Track: Comprehensive Testing
-**Link:** [./tracks/comprehensive-testing/](./tracks/comprehensive-testing/)
+**Link:** [../archive/comprehensive-testing/](../archive/comprehensive-testing/)
 
-**Status:** ✅ **COMPLETE**
+**Status:** 📦 **ARCHIVED**
 
 **Summary:** Complete testing infrastructure with 43 tests across 5 test types (unit, integration, E2E, property-based, hypothesis).
 
 **Date Created:** 2026-03-08
 **Date Completed:** 2026-03-08
+**Date Archived:** 2026-03-11
 **Key Deliverables:** MSW integration tests, E2E tests, fast-check property tests, mutation testing config, CI/CD integration
+
+**Review Summary:** Test infrastructure validated through CI/CD integration. All 43 tests passing.
 
 ---
 
 ### [x] Track: Code Hardening & Maturation
-**Link:** [./tracks/code-hardening-maturation/](./tracks/code-hardening-maturation/)
+**Link:** [../archive/code-hardening-maturation/](../archive/code-hardening-maturation/)
 
-**Status:** ✅ **COMPLETE**
+**Status:** 📦 **ARCHIVED**
 
 **Summary:** Production-ready error handling, comprehensive logging, security hardening, and type safety improvements.
 
 **Date Created:** 2026-03-09
 **Date Completed:** 2026-03-10
+**Date Archived:** 2026-03-11
 **Key Deliverables:** Error hierarchy, Winston logger, input validation (Zod), secure config management, TypeScript path aliases
+
+**Review Summary:** Auto-review workflow completed with all phases reviewed and fixes applied.
 
 ---
 
 ### [x] Track: CI/CD & Automation Optimization
-**Link:** [./tracks/cicd-automation-optimization/](./tracks/cicd-automation-optimization/)
+**Link:** [../archive/cicd-automation-optimization/](../archive/cicd-automation-optimization/)
 
-**Status:** ✅ **COMPLETE**
+**Status:** 📦 **ARCHIVED**
 
 **Summary:** Full CI/CD pipeline with security scanning, automated releases, dependency management, and quality gates.
 
 **Date Created:** 2026-03-09
 **Date Completed:** 2026-03-10
+**Date Archived:** 2026-03-11
 **Key Deliverables:** GitHub Actions workflows, CodeQL, Dependabot, Changesets, TypeDoc, quality metrics dashboard
+
+**Review Summary:** Production improvements commit 65ca0ea. All workflows validated.
 
 ---
 
 ### [x] Track: Developer Experience Enhancement
-**Link:** [./tracks/developer-experience-enhancement/](./tracks/developer-experience-enhancement/)
+**Link:** [../archive/developer-experience-enhancement/](../archive/developer-experience-enhancement/)
 
-**Status:** ✅ **COMPLETE**
+**Status:** 📦 **ARCHIVED**
 
 **Summary:** VS Code extension with snippets, DevContainer setup, interactive help system, and code generation tools.
 
 **Date Created:** 2026-03-09
 **Date Completed:** 2026-03-10
+**Date Archived:** 2026-03-11
 **Key Deliverables:** 6 code snippets, 8 debug configs, DevContainer, interactive help, generate commands
+
+**Review Summary:** Production improvements commit 65ca0ea. All DX features delivered.
 
 ---
 
 ### [x] Track: Documentation Optimization
-**Link:** [./tracks/documentation-optimization/](./tracks/documentation-optimization/)
+**Link:** [../archive/documentation-optimization/](../archive/documentation-optimization/)
 
-**Status:** ✅ **COMPLETE** (Core - 75%)
+**Status:** 📦 **ARCHIVED**
 
 **Summary:** Comprehensive documentation with 78,000+ words across 17 files, WCAG 2.1 AA compliance, and accessibility features.
 
 **Date Created:** 2026-03-09
 **Date Completed:** 2026-03-10 (Phases 1-7.5)
+**Date Archived:** 2026-03-11
 **Key Deliverables:** README, User Guide, FAQ (36 Qs), Developer Guide, API Reference, Error Reference, Glossary (26 terms), 18 Mermaid diagrams
 
-**Pending:** Phase 8-10 (Documentation site - optional)
+**Review Summary:** REVIEW_FIXES_APPLIED.md documents all Phase 3 review fixes. Core documentation complete (75%).
+
+**Note:** Phase 8-10 (Documentation site) remains optional and can be started as a separate track if needed.
 
 ---
 
 ### [x] Track: Testing Warning Hardening
-**Link:** [./tracks/testing-warning-hardening/](./tracks/testing-warning-hardening/)
+**Link:** [../archive/testing-warning-hardening/](../archive/testing-warning-hardening/)
 
-**Status:** ✅ **COMPLETE**
+**Status:** 📦 **ARCHIVED**
 
 **Summary:** Resolved test runtime warnings and restored deterministic error-path coverage.
 
 **Date Created:** 2026-03-10
 **Date Completed:** 2026-03-10
+**Date Archived:** 2026-03-11
 **Key Deliverables:** Config isolation, error handling tests, validation path normalization
+
+**Review Summary:** All 5 phases completed with full test suite validation. Warnings resolved, tests passing.
 
 ---
 
 ### [x] Track: Australian Legislation Feasibility (Track 12)
-**Link:** [./tracks/track-12-australian-expansion/](./tracks/track-12-australian-expansion/)
+**Link:** [../archive/track-12-australian-expansion/](../archive/track-12-australian-expansion/)
 
-**Status:** ✅ **COMPLETE**
+**Status:** 📦 **ARCHIVED**
 
 **Summary:** Comprehensive feasibility study for Australian legislation expansion with GO recommendation.
 
 **Date Created:** 2026-03-09
 **Date Completed:** 2026-03-10
+**Date Archived:** 2026-03-11
 **Key Deliverables:** FEASIBILITY_REPORT.md, architecture design, 16-week implementation roadmap, legal assessment
 
----
+**Review Summary:** TRACK_COMPLETE.md with GO recommendation. All 7 phases reviewed and approved.
 
-## 📦 Archived Tracks
+---
 
 ### [x] Track: Performance & Scalability
 **Link:** [../archive/performance-scalability/](../archive/performance-scalability/)
@@ -136,7 +158,7 @@ This file tracks all major work streams for the NZ Legislation Tool project.
 - Memory <256MB ✅
 - Load test 100 concurrent ✅
 
-**Review Summary:** All code review fixes applied. 44 tests passing. Track archived after successful completion.
+**Review Summary:** Full code review with 6 fixes applied. 44 tests passing. Track archived after successful completion.
 
 ---
 
@@ -156,6 +178,19 @@ This file tracks all major work streams for the NZ Legislation Tool project.
 ---
 
 ## ⏳ Pending Tracks
+
+### [ ] Track: Release Governance Modernization
+**Link:** [./tracks/release-governance-modernization/](./tracks/release-governance-modernization/)
+
+**Status:** ⏳ **PENDING**
+
+**Summary:** Modernize SemVer policy, release automation, prerelease branching, and collaboration guardrails for stable `2.x` and incubating `3.x` work.
+
+**Priority:** 🔴 **HIGH**
+**Timeline:** 1-2 weeks
+**Key Deliverables:** Canonical stable release workflow, prerelease `next` workflow, SemVer policy, branch normalization, collaboration hardening roadmap
+
+---
 
 ### [ ] Track: Documentation Site (Phase 8)
 **Link:** [./tracks/documentation-optimization/](./tracks/documentation-optimization/) (Phase 8)
@@ -249,8 +284,8 @@ This file tracks all major work streams for the NZ Legislation Tool project.
 
 | Status | Count | Percentage |
 |--------|-------|------------|
-| ✅ **Complete** | 9 | 53% |
-| 📦 **Archived** | 2 | 12% |
+| ✅ **Complete** | 0 | 0% |
+| 📦 **Archived** | 11 | 65% |
 | ⏳ **Pending** | 6 | 35% |
 | **Total** | **17** | **100%** |
 
@@ -270,4 +305,4 @@ This file tracks all major work streams for the NZ Legislation Tool project.
 ---
 
 **Last Updated:** 2026-03-11
-**Total Tracks:** 16 (9 completed, 1 archived, 6 pending)
+**Total Tracks:** 17 (0 completed, 11 archived, 6 pending)
