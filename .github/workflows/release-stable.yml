@@ -3,6 +3,7 @@ name: Release Stable
 on:
   push:
     branches: [main]
+    tags: ['v*']
   workflow_dispatch:
 
 permissions:
@@ -22,6 +23,7 @@ jobs:
     name: Version and publish stable release
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    environment: stable
 
     steps:
       - name: Check out repository
@@ -41,6 +43,11 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
+
+      - name: Upgrade npm for trusted publishing
+        run: |
+          npm install -g npm@11.5.1
+          npm --version
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
@@ -70,17 +77,38 @@ jobs:
             echo "reason=automated npm publish is disabled until npm publisher access is verified" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Create release PR or publish
-        id: changesets
+      - name: Validate stable release shape
         if: steps.publish_mode.outputs.enabled == 'true'
-        uses: changesets/action@v1
-        with:
-          commit: 'chore: version packages'
-          title: 'chore: version packages'
-          version: pnpm exec changeset version
-          publish: pnpm exec changeset publish
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          pending_changesets=$(find .changeset -maxdepth 1 -name '*.md' ! -name 'README.md' | wc -l | tr -d ' ')
+          if [[ "$pending_changesets" != "0" ]]; then
+            echo "Pending changeset files detected."
+            echo "Stable trusted publishing is configured for already-versioned releases only."
+            echo "Version and commit the package before running the stable publish workflow."
+            exit 1
+          fi
+
+      - name: Publish stable package
+        id: publish
+        if: steps.publish_mode.outputs.enabled == 'true'
+        shell: bash
+        run: |
+          package_name=$(node -p "JSON.parse(require('fs').readFileSync('package.json', 'utf8')).name")
+          package_version=$(node -p "JSON.parse(require('fs').readFileSync('package.json', 'utf8')).version")
+          published_version=$(npm view "$package_name" version 2>/dev/null || true)
+
+          echo "package_name=$package_name" >> "$GITHUB_OUTPUT"
+          echo "package_version=$package_version" >> "$GITHUB_OUTPUT"
+
+          if [[ "$package_version" == "$published_version" ]]; then
+            echo "published=false" >> "$GITHUB_OUTPUT"
+            echo "Package $package_name@$package_version is already published."
+            exit 0
+          fi
+
+          npm publish --provenance --access public
+          echo "published=true" >> "$GITHUB_OUTPUT"
 
       - name: Summarize skipped publish
         if: steps.publish_mode.outputs.enabled != 'true'
@@ -90,7 +118,7 @@ jobs:
           echo "Use workflow_dispatch after npm publishing access is confirmed."
 
       - name: Summarize published packages
-        if: steps.changesets.outputs.published == 'true'
+        if: steps.publish.outputs.published == 'true'
         run: |
           echo "Published packages:"
-          echo "${{ steps.changesets.outputs.published_packages }}"
+          echo "${{ steps.publish.outputs.package_name }}@${{ steps.publish.outputs.package_version }}"
