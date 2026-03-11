@@ -226,6 +226,7 @@ The project should evaluate a lightweight HTTP or web-access surface specificall
 - the endpoints must be optimized for reliable retrieval and citation in downstream analysis tools and custom GPTs
 - the access layer must align with the compatibility matrix and release policy if it becomes a supported public surface
 - the track must determine whether this access layer belongs in v3 scope, a separate package, or a separate service
+- the access layer must be treated as a compatibility adapter over the existing legislation engine rather than a rewrite of the core retrieval and parsing system
 
 ### FR11.1: Core Navigation Endpoints
 
@@ -285,6 +286,34 @@ The access layer should support safe usage and operational introspection.
 - if cache-aware endpoints are introduced, they must be treated as operational interfaces rather than arbitrary internal leaks
 - the project must define rate-limit and caching strategy so GPT-style clients can use the surface safely
 
+### FR11.6: REST Adapter Architecture
+
+If the analysis-friendly access layer is implemented, it should use a minimal adapter architecture that preserves the existing engine.
+
+- the preferred implementation should be a lightweight REST adapter module such as `api/server.py`, `api/routes.py`, and `api/adapters.py`
+- the adapter should call existing legislation retrieval, parsing, and search logic internally wherever practical
+- the adapter must not require a rewrite of the core legislation engine in order to expose AI-facing HTTP endpoints
+- the architecture should explicitly describe the relationship between the legislation engine, CLI and MCP surfaces, and the REST layer
+- the project should evaluate FastAPI as the preferred implementation for automatic OpenAPI generation and predictable JSON contracts
+
+### FR11.7: AI Tool Ecosystem Compatibility
+
+The access layer should be explicitly designed for external AI tool ecosystems.
+
+- the API should work cleanly with GPT custom actions through OpenAPI discovery
+- the API should be suitable for Gemini tool integrations, RAG pipelines, LangChain tools, LlamaIndex tools, and similar agent ecosystems
+- responses should favor structured JSON, predictable field names, source metadata, and low-markup payloads over presentation-oriented output
+- the API should support use cases including legal search, contextual retrieval, citation support, and tool-based reasoning
+
+### FR11.8: OpenAPI and Local Development
+
+If the REST adapter is implemented, it must support standard local API operation and schema discovery.
+
+- the API should expose `/openapi.json`
+- local development should support a straightforward launch path such as `uvicorn api.server:app --reload`
+- the OpenAPI contract must be treated as a versioned public surface if published for third-party AI tools
+- endpoint and schema changes must be reflected in the compatibility matrix and release policy
+
 ### FR12: Domain Operating Model
 
 The project must define where product planning stops and research planning begins.
@@ -293,6 +322,17 @@ The project must define where product planning stops and research planning begin
 - the health research programme must be managed as a separate programme with its own publication lifecycle
 - the project must document how the research programme can consume the tool without becoming the owner of the tool roadmap
 - the project must define path-based and workflow-based guardrails so product-only changes and research-only changes are easy to distinguish
+
+### FR12.1: Workspace and Submodule Topology
+
+The parent workspace must support separate product and research repositories without collapsing them back into one planning or release lane.
+
+- the parent directory may remain a coordination workspace, but it must not be the implementation source of truth for both domains
+- `nz-legislation-tool` must remain an independently releasable Git repository with its own Conductor root
+- `research-conductor` must remain an independently managed Git repository with its own Conductor root
+- if parent-level Git submodules are adopted, the migration must be sequenced so tracked-directory replacement does not occur while parallel work is modifying those paths
+- submodule conversion must require an explicit readiness gate covering clean parent index state, coordinated contributor timing, and confirmed remotes
+- the operating model must document when work is performed inside the submodule versus in the parent coordination workspace
 
 ## Non-Functional Requirements
 
@@ -360,6 +400,13 @@ For domain separation, the preferred evaluation order is:
 2. enforce path-based CODEOWNERS, workflow filters, and documentation boundaries
 3. only then decide whether product and research need separate repositories or separate Conductor registries
 
+For workspace separation, the preferred operating model is:
+
+1. parent workspace as a coordination shell only
+2. standalone Git repositories for `nz-legislation-tool` and `research-conductor`, each with its own `conductor/`
+3. parent-level submodule wiring only after the parent index is ready and parallel work is coordinated
+4. no shared parent `conductor/` as the implementation source of truth for both child repositories
+
 If GPT-oriented analysis access becomes important, the preferred progression is:
 
 1. document the current CLI and MCP surfaces clearly
@@ -408,3 +455,4 @@ If GPT-oriented analysis access becomes important, the preferred progression is:
 - the roadmap evaluates whether to add stable analysis-friendly endpoints for GPT-style consumers
 - the roadmap prioritizes core legal navigation and interpretation endpoints ahead of investigation-specific or recommendation-specific endpoints
 - the roadmap defines guardrails that keep `nz-legislation-tool` separate from the health research programme
+- the roadmap defines readiness gates and a safe migration sequence for eventual parent-level submodule conversion

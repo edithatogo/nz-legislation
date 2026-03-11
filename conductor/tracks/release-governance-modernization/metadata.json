@@ -1,8 +1,11 @@
 {
   "track_id": "release-governance-modernization",
   "type": "feature",
-  "status": "new",
+  "status": "in_progress",
   "created_at": "2026-03-11T12:18:25+11:00",
-  "updated_at": "2026-03-11T12:18:25+11:00",
-  "description": "Modernize versioning, release automation, prerelease branching, collaboration guardrails, distribution strategy, and workspace integrations for the NZ Legislation Tool"
+  "updated_at": "2026-03-11T23:00:00+11:00",
+  "description": "Modernize versioning, release automation, prerelease branching, collaboration guardrails, distribution strategy, and workspace integrations for the NZ Legislation Tool",
+  "phases_completed": 4,
+  "phases_total": 6,
+  "completion_percentage": 67
 }

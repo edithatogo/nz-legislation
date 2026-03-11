@@ -2,66 +2,71 @@
 
 ## Phase 1: Baseline and Decision Lock
 
-- [ ] Task: Audit current release, publish, and CI workflows in `nz-legislation-tool/.github/workflows`
-    - [ ] Identify which workflows currently publish, tag, create releases, or duplicate those responsibilities
-    - [ ] Identify branch trigger mismatches between `main`, `master`, and local working practice
-    - [ ] Identify current branch protection assumptions versus actual workflow names
-- [ ] Task: Define the authoritative release model
-    - [ ] Decide whether `main` becomes the only stable branch
-    - [ ] Decide whether `next` is used as the only prerelease branch for v3 incubation
-    - [ ] Decide whether tag-push releases are retained only as outputs, not operator inputs
-- [ ] Task: Lock the stable baseline
-    - [ ] Decide whether the current MCP-enabled product line is `2.0.0`
-    - [ ] If yes, define that stable baseline before opening `3.0.0-next.x`
-    - [ ] Reflect the decision in release framing, changelog expectations, and branch ancestry
-- [ ] Task: Write release classification policy
-    - [ ] Define major/minor/patch rules for CLI, MCP, provider interfaces, config, and exports
-    - [ ] Add explicit examples including MCP-driven `2.0.0` and provider-platform `3.0.0-next.x`
-- [ ] Task: Define canonical compatibility boundaries
-    - [ ] Make the npm package version the canonical version authority
-    - [ ] Define CLI and MCP as public contracts governed by that version
-    - [ ] Define what remains internal and release-neutral
-- [ ] Task: Create an initial compatibility matrix
-    - [ ] Capture stable guarantees for CLI commands, flags, and outputs
-    - [ ] Capture stable guarantees for MCP tools, schemas, and configuration
-    - [ ] Capture provisional guarantees for provider and plugin interfaces
-- [ ] Task: Design executable contract enforcement
-    - [ ] Define CLI contract tests for commands, flags, help output, and representative outputs
-    - [ ] Define MCP contract tests for handshake, tool list, schemas, and packaged smoke tests
-    - [ ] Define how intentional breaking changes are approved in CI and release review
-- [ ] Task: Audit external operating surfaces
-    - [ ] Review README and top-level docs for CLI versus MCP clarity
-    - [ ] Identify current use or planned use of Notion, Figma, and Linear for release operations
-    - [ ] Capture the current repository topology and the need for future CLI and MCP repository separation
-    - [ ] Evaluate the custom-GPT feedback suggesting stable endpoints such as `/search?q=`, `/act/{name}`, `/section/{act}/{section}`, `/section/{act}/{section}/context`, `/definitions/{act}`, `/definition/{act}/{term}`, `/toc/{act}`, `/cite/{act}/{section}`, `/status/{act}`, and `/related/{act}`
-- [ ] Task: Audit product versus research boundary
-    - [ ] Identify where `conductor/product.md`, `conductor/tracks.md`, and repo-level docs currently mix tool and research concerns
-    - [ ] Identify which directories and workflows are product-owned versus research-owned
-    - [ ] Document current boundary risks and separation gaps
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Baseline and Decision Lock' (Protocol in workflow.md)
+- [x] Task: Audit current release, publish, and CI workflows in `nz-legislation-tool/.github/workflows`
+    - [x] Identify which workflows currently publish, tag, create releases, or duplicate those responsibilities
+    - [x] Identify branch trigger mismatches between `main`, `master`, and local working practice
+    - [x] Identify current branch protection assumptions versus actual workflow names
+- [x] Task: Define the authoritative release model
+    - [x] Decide whether `main` becomes the only stable branch
+    - [x] Decide whether `next` is used as the only prerelease branch for v3 incubation
+    - [x] Decide whether tag-push releases are retained only as outputs, not operator inputs
+- [x] Task: Lock the stable baseline
+    - [x] Decide whether the current MCP-enabled product line is `2.0.0`
+    - [x] If yes, define that stable baseline before opening `3.0.0-next.x`
+    - [x] Reflect the decision in release framing, changelog expectations, and branch ancestry
+- [x] Task: Write release classification policy
+    - [x] Define major/minor/patch rules for CLI, MCP, provider interfaces, config, and exports
+    - [x] Add explicit examples including MCP-driven `2.0.0` and provider-platform `3.0.0-next.x`
+- [x] Task: Define canonical compatibility boundaries
+    - [x] Make the npm package version the canonical version authority
+    - [x] Define CLI and MCP as public contracts governed by that version
+    - [x] Define what remains internal and release-neutral
+- [x] Task: Create an initial compatibility matrix
+    - [x] Capture stable guarantees for CLI commands, flags, and outputs
+    - [x] Capture stable guarantees for MCP tools, schemas, and configuration
+    - [x] Capture provisional guarantees for provider and plugin interfaces
+- [x] Task: Design executable contract enforcement
+    - [x] Define CLI contract tests for commands, flags, help output, and representative outputs
+    - [x] Define MCP contract tests for handshake, tool list, schemas, and packaged smoke tests
+    - [x] Define how intentional breaking changes are approved in CI and release review
+- [x] Task: Audit external operating surfaces
+    - [x] Review README and top-level docs for CLI versus MCP clarity
+    - [x] Identify current use or planned use of Notion, Figma, and Linear for release operations
+    - [x] Capture the current repository topology and the need for future CLI and MCP repository separation
+    - [x] Evaluate the custom-GPT feedback suggesting stable endpoints
+- [x] Task: Audit product versus research boundary
+    - [x] Identify where `conductor/product.md`, `conductor/tracks.md`, and repo-level docs currently mix tool and research concerns
+    - [x] Identify which directories and workflows are product-owned versus research-owned
+    - [x] Document current boundary risks and separation gaps
+    - [x] Confirm the current standalone Git state of `nz-legislation-tool` and `research-conductor`
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Baseline and Decision Lock' (Protocol in workflow.md)
 
 ## Phase 2: Stable Release Path Consolidation
 
-- [ ] Task: Consolidate stable release automation around Changesets
-    - [ ] Remove or retire overlapping publish workflows that can race stable releases
-    - [ ] Ensure only one workflow can publish stable npm releases
-    - [ ] Ensure the stable workflow creates tags and GitHub releases consistently
-- [ ] Task: Reduce workflow surface area
-    - [ ] Converge on one canonical CI workflow
-    - [ ] Converge on one canonical stable release workflow
-    - [ ] Separate docs and security concerns into clear non-publishing workflows
-- [ ] Task: Normalize branch targeting
-    - [ ] Update workflow triggers to the selected stable branch
-    - [ ] Update Changesets base branch to the selected stable branch if needed
-    - [ ] Update release documentation to match the actual branch model
-- [ ] Task: Add stable release verification
-    - [ ] Require lint, typecheck, tests, and build before stable publish
-    - [ ] Validate release notes and package metadata generation
-- [ ] Task: Add release environment governance
-    - [ ] Define GitHub environments for stable and prerelease channels
-    - [ ] Scope tokens and secrets appropriately
-    - [ ] Define rerun safety, provenance, and rollback expectations
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Stable Release Path Consolidation' (Protocol in workflow.md)
+- [x] Task: Consolidate stable release automation around Changesets
+    - [x] Remove or retire overlapping publish workflows that can race stable releases
+    - [x] Ensure only one workflow can publish stable npm releases
+    - [x] Ensure the stable workflow creates tags and GitHub releases consistently
+- [x] Task: Reduce workflow surface area
+    - [x] Converge on one canonical CI workflow
+    - [x] Converge on one canonical stable release workflow
+    - [x] Separate docs and security concerns into clear non-publishing workflows
+- [x] Task: Normalize branch targeting
+    - [x] Update workflow triggers to the selected stable branch
+    - [x] Update Changesets base branch to the selected stable branch if needed
+    - [x] Update release documentation to match the actual branch model
+- [x] Task: Add stable release verification
+    - [x] Require lint, typecheck, tests, and build before stable publish
+    - [x] Validate release notes and package metadata generation
+- [x] Task: Define package registry visibility strategy
+    - [x] Confirm which package remains canonical on npm: `nz-legislation-tool`
+    - [x] Define whether GitHub Packages is used as a mirror, a primary channel, or not at all
+    - [x] Ensure repository documentation explains the difference between npm visibility and GitHub Packages visibility
+- [x] Task: Add release environment governance
+    - [x] Define GitHub environments for stable and prerelease channels
+    - [x] Scope tokens and secrets appropriately
+    - [x] Define rerun safety, provenance, and rollback expectations
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Stable Release Path Consolidation' (Protocol in workflow.md)
 
 ## Phase 3: v3 Prerelease Lane
 
@@ -88,71 +93,93 @@
 
 ## Phase 4: Collaboration and Workspace Hardening
 
-- [ ] Task: Tighten repository governance for collaboration
-    - [ ] Update branch protection to require the exact canonical CI workflows
-    - [ ] Make branch protection strict where appropriate
-    - [ ] Align CODEOWNERS with critical release, workflow, and provider files
-    - [ ] Add path-based ownership rules that distinguish `nz-legislation-tool` product work from research-programme work
-- [ ] Task: Improve pull request governance
-    - [ ] Update PR template to require release intent and breaking-change declaration
-    - [ ] Require changesets for user-facing changes
-    - [ ] Add labels or automation for `major`, `minor`, `patch`, `release-neutral`, and `prerelease`
-- [ ] Task: Document maintainer operations
-    - [ ] Add hotfix process for urgent stable fixes
-    - [ ] Add release captain checklist
-    - [ ] Add contributor quickstart for release-aware development
-- [ ] Task: Add governance documents
-    - [ ] Create `RELEASE_POLICY.md`
-    - [ ] Create `SUPPORT_POLICY.md`
-    - [ ] Add ADRs or equivalent for release topology decisions
-- [ ] Task: Define Notion, Figma, and Linear integration
-    - [ ] Create a Linear model for release epics, milestones, and prerelease trains
-    - [ ] Define the Notion release hub structure for roadmap, runbooks, and launch checklists
-    - [ ] Define the Figma responsibilities for homepage messaging, diagrams, and launch assets
-    - [ ] Document repository-to-workspace linking conventions across all three systems
-- [ ] Task: Define source-of-truth rules
-    - [ ] Make Linear the owner of execution state
-    - [ ] Make Notion the owner of durable release documentation
-    - [ ] Make Figma the owner of design assets only
-    - [ ] Define anti-duplication rules for status and release state
-- [ ] Task: Define product-versus-research operating guardrails
-    - [ ] Decide whether product and research should have separate Linear projects
-    - [ ] Decide whether product and research should have separate Notion hubs or databases
-    - [ ] Decide whether Conductor should keep one registry or split product and research registries
-    - [ ] Define how shared findings flow from research into product without collapsing the boundary
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Collaboration and Workspace Hardening' (Protocol in workflow.md)
+- [x] Task: Tighten repository governance for collaboration
+    - [x] Update branch protection to require the selected release-safety checks on `main` and `next`
+    - [x] Make branch protection strict where appropriate
+    - [x] Align CODEOWNERS with critical release, workflow, and provider files
+    - [x] Add path-based ownership rules that distinguish `nz-legislation-tool` product work from research-programme work
+- [x] Task: Improve pull request governance
+    - [x] Update PR template to require release intent and breaking-change declaration
+    - [x] Require changesets for user-facing changes
+    - [x] Add labels or automation for `major`, `minor`, `patch`, `release-neutral`, and `prerelease`
+- [x] Task: Document maintainer operations
+    - [x] Add hotfix process for urgent stable fixes
+    - [x] Add release captain checklist
+    - [x] Add contributor quickstart for release-aware development
+- [x] Task: Add governance documents
+    - [x] Create `RELEASE_POLICY.md`
+    - [x] Create `SUPPORT_POLICY.md`
+    - [x] Add ADRs or equivalent for release topology decisions
+- [x] Task: Define Notion, Figma, and Linear integration
+    - [x] Create a Linear model for release epics, milestones, and prerelease trains
+    - [x] Define the Notion release hub structure for roadmap, runbooks, and launch checklists
+    - [x] Define the Figma responsibilities for homepage messaging, diagrams, and launch assets
+    - [x] Document repository-to-workspace linking conventions across all three systems
+- [x] Task: Define source-of-truth rules
+    - [x] Make Linear the owner of execution state
+    - [x] Make Notion the owner of durable release documentation
+    - [x] Make Figma the owner of design assets only
+    - [x] Define anti-duplication rules for status and release state
+- [x] Task: Define product-versus-research operating guardrails
+    - [x] Decide whether product and research should have separate Linear projects
+    - [x] Decide whether product and research should have separate Notion hubs or databases
+    - [x] Decide whether Conductor should keep one registry or split product and research registries
+    - [x] Define how shared findings flow from research into product without collapsing the boundary
+- [x] Task: Define parent-workspace coordination guardrails
+    - [x] Define the parent directory as a coordination shell rather than a dual-project implementation root
+    - [x] Define when work is done in child repositories versus parent coordination docs
+    - [x] Define do-not-touch rules for parent index surgery while parallel agents are active
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Collaboration and Workspace Hardening' (Protocol in workflow.md)
 
 ## Phase 5: Homepage, Packaging, and Repository Strategy
 
-- [ ] Task: Redesign top-of-funnel documentation
-    - [ ] Rewrite README opening section to present CLI and MCP as separate entry points
-    - [ ] Add dedicated quick-start blocks for CLI and MCP
-    - [ ] Ensure package names, executable names, and install commands are unambiguous
-- [ ] Task: Define homepage information architecture
-    - [ ] Decide the first-screen layout for CLI versus MCP users
-    - [ ] Define one concrete CLI journey and one concrete MCP journey for the homepage
-    - [ ] Define how the future provider-platform direction is messaged without confusing current users
-- [ ] Task: Define packaging and repository roadmap
-    - [ ] Compare one repository and one package versus one repository and multiple packages
-    - [ ] Evaluate one-repo versus split-repo release models for CLI and MCP
-    - [ ] Treat one repository and multiple packages as the preferred intermediate option if clearer surface ownership is needed
-    - [ ] Evaluate candidate package topology such as `@nz-legislation/core`, `@nz-legislation/cli`, and `@nz-legislation/mcp`
-    - [ ] Define package naming, shared-core boundaries, and issue-routing ownership
-    - [ ] Define migration triggers for splitting into dedicated repositories
-    - [ ] Define how changelogs, issues, and releases are coordinated if a split occurs
-- [ ] Task: Define product and research boundary architecture
-    - [ ] Decide the target directory and documentation boundary for `nz-legislation-tool`
-    - [ ] Decide the target directory and planning boundary for health research work
-    - [ ] Add workflow guardrails so research-only changes do not trigger product release logic
-    - [ ] Add documentation guardrails so product homepages and package docs are not rewritten into research artefacts
-- [ ] Task: Evaluate analysis-friendly access layer
-    - [ ] Decide whether GPT-oriented stable endpoints belong in v3 scope
-    - [ ] Define whether the access layer should be a package, service, or docs-only integration pattern
-    - [ ] If adopted, define compatibility ownership for routes such as `/search?q=`, `/semantic-search?q=`, `/act/{name}`, `/toc/{act}`, `/section/{act}/{section}`, `/section/{act}/{section}/context`, `/sections?act=&from=&to=`, `/definitions/{act}`, `/definition/{act}/{term}`, `/related/{act}`, `/cite/{act}/{section}`, `/status/{act}`, and `/info`
-    - [ ] Prioritize foundation endpoints before domain-specific extraction endpoints
-    - [ ] Require structured JSON payloads and `source_url` support in the recommended design
-    - [ ] Evaluate optional legal-signal endpoints such as `/duties/{act}`, `/powers/{act}`, `/offences/{act}`, and `/recommendation-context?q=` as advanced scope
-- [ ] Task: Conductor - User Manual Verification 'Phase 5: Homepage, Packaging, and Repository Strategy' (Protocol in workflow.md)
+- [x] Task: Redesign top-of-funnel documentation
+    - [x] Rewrite README opening section to present CLI and MCP as separate entry points
+    - [x] Add dedicated quick-start blocks for CLI and MCP
+    - [x] Ensure package names, executable names, and install commands are unambiguous
+- [x] Task: Define homepage information architecture
+    - [x] Decide the first-screen layout for CLI versus MCP users
+    - [x] Define one concrete CLI journey and one concrete MCP journey for the homepage
+    - [x] Define how the future provider-platform direction is messaged without confusing current users
+- [x] Task: Define packaging and repository roadmap
+    - [x] Compare one repository and one package versus one repository and multiple packages
+    - [x] Evaluate one-repo versus split-repo release models for CLI and MCP
+    - [x] Treat one repository and multiple packages as the preferred intermediate option if clearer surface ownership is needed
+    - [x] Evaluate candidate package topology such as `@nz-legislation/core`, `@nz-legislation/cli`, and `@nz-legislation/mcp`
+    - [x] Define package naming, shared-core boundaries, and issue-routing ownership
+    - [x] Define migration triggers for splitting into dedicated repositories
+    - [x] Define how changelogs, issues, and releases are coordinated if a split occurs
+- [x] Task: Implement package registry presentation
+    - [x] Add a GitHub Actions workflow that can publish a GitHub Packages mirror for repository package visibility
+    - [x] Add README or homepage language that links the canonical npm package and the GitHub Packages mirror clearly
+    - [x] Confirm whether the mirror package should be `@edithatogo/nz-legislation-tool`
+- [x] Task: Define product and research boundary architecture
+    - [x] Decide the target directory and documentation boundary for `nz-legislation-tool`
+    - [x] Decide the target directory and planning boundary for health research work
+    - [x] Add workflow guardrails so research-only changes do not trigger product release logic
+    - [x] Add documentation guardrails so product homepages and package docs are not rewritten into research artefacts
+    - [x] Confirm each child repository has its own Conductor root and local governance context
+- [x] Task: Define submodule migration readiness
+    - [x] Document the exact preconditions for converting tracked parent directories into gitlinks
+    - [x] Confirm remote expectations for `nz-legislation-tool` and `research-conductor`
+    - [x] Define a no-conversion rule while the parent worktree is dirty or parallel agents are modifying child paths
+    - [x] Define fallback if the parent remains a coordination workspace without submodule wiring
+- [x] Task: Evaluate analysis-friendly access layer
+    - [x] Decide whether GPT-oriented stable endpoints belong in v3 scope
+    - [x] Define whether the access layer should be a package, service, or docs-only integration pattern
+    - [x] Define the adapter boundary so the HTTP layer reuses existing legislation logic rather than rewriting the engine
+    - [x] Evaluate FastAPI as the preferred implementation for automatic OpenAPI generation
+    - [x] If adopted, define compatibility ownership for routes such as `/search?q=`, `/semantic-search?q=`, `/act/{name}`, `/toc/{act}`, `/section/{act}/{section}`, `/section/{act}/{section}/context`, `/sections?act=&from=&to=`, `/definitions/{act}`, `/definition/{act}/{term}`, `/related/{act}`, `/cite/{act}/{section}`, `/status/{act}`, and `/info`
+    - [x] Prioritize foundation endpoints before domain-specific extraction endpoints
+    - [x] Require structured JSON payloads and `source_url` support in the recommended design
+    - [x] Evaluate optional legal-signal endpoints such as `/duties/{act}`, `/powers/{act}`, `/offences/{act}`, and `/recommendation-context?q=` as advanced scope
+- [x] Task: Define REST adapter architecture for AI tool ecosystems
+    - [x] Define a minimal module shape such as `api/server.py`, `api/routes.py`, and `api/adapters.py`
+    - [x] Define how the REST layer maps to existing CLI or MCP-accessible legislation functions
+    - [x] Define response contracts optimized for GPT Actions, Gemini, LangChain, LlamaIndex, and RAG pipelines
+    - [x] Define `/openapi.json` as a discoverable contract surface if the adapter is implemented
+    - [x] Define local development and smoke-test expectations for `uvicorn api.server:app --reload`
+- [x] Task: Conductor - User Manual Verification 'Phase 5: Homepage, Packaging, and Repository Strategy' (Protocol in workflow.md)
 
 ## Phase 6: Rollout and Migration
 
@@ -161,14 +188,21 @@
     - [ ] Protect current users from accidental package disruption during migration
     - [ ] Incorporate public communication inputs such as launch announcements and release posts
     - [ ] Migrate product and research guardrails into the final operating model
-- [ ] Task: Execute and validate rollout
+    - [ ] Sequence any parent-level submodule conversion only after readiness gates are met
+    - [ ] Define the index-conversion steps for replacing tracked directories with gitlinks
+- [~] Task: Execute and validate rollout
     - [ ] Run one stable release dry run
     - [ ] Run one prerelease dry run
     - [ ] Confirm documentation, workflows, branch protection, and workspace integrations all match
     - [ ] Confirm product and research boundaries are visible and enforceable
+    - [ ] If submodule conversion proceeds, validate that parent status shows gitlinks rather than tracked child files
+    - [x] Push the GitHub Packages mirror workflow and README clarification to the remote repository
+    - [x] Trigger one successful GitHub Packages mirror publish so the repository Packages area is populated
+    - [ ] If the REST adapter proceeds, validate local OpenAPI generation and one end-to-end AI-facing smoke test
 - [ ] Task: Create final release roadmap summary
     - [ ] Capture immediate next action for `2.0.0`
     - [ ] Capture `3.0.0-next` incubation plan
     - [ ] Capture follow-on work for collaboration, homepage clarity, and repository separation
     - [ ] Capture the final product-versus-research operating model and guardrails
+    - [ ] Capture the final recommendation on whether the AI-facing REST adapter ships in-repo, as a separate package, or as a separate service
 - [ ] Task: Conductor - User Manual Verification 'Phase 6: Rollout and Migration' (Protocol in workflow.md)
