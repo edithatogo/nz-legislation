@@ -8,9 +8,13 @@ This document defines how `nz-legislation-tool` is versioned, released, and comm
 
 ## Stable Baseline
 
-**Current Stable Line:** `v1.x` (ongoing)
-**Next Major Line:** `v2.0.0` (MCP-enabled product line)
-**Future Incubation:** `v3.0.0-next.x` (provider-platform work)
+**Current Stable Line:** `v1.2.x` (NZ CLI + MCP)
+**Current Prerelease Lane:** `next` (approved prerelease work only)
+**Next Major Line:** reserved for the first true breaking contract shift
+
+The MCP surface shipped as a backward-compatible addition in `1.2.0`. Future
+multi-jurisdiction work should stay on the `v1.x` line unless it breaks a
+supported public contract.
 
 ## Release Channels
 
@@ -26,7 +30,11 @@ This document defines how `nz-legislation-tool` is versioned, released, and comm
 - Branch: `next`
 - Workflow: `Release Next`
 - npm dist-tag: `next`
-- Intended audience: early adopters and maintainers validating the next major line
+- Intended audience: early adopters and maintainers validating approved prerelease work
+
+`next` is a governed prerelease lane, not an automatic promise of a major
+release. It may be used for additive work that is not yet ready for the stable
+line.
 
 ## Versioning Rules
 
@@ -43,8 +51,8 @@ Use a major release when a change breaks a supported public contract, including:
 
 **Examples:**
 
-- `1.1.0` → `2.0.0` (MCP-enabled product line, breaking changes)
-- `2.0.0` → `3.0.0` (provider-platform with breaking interface changes)
+- `1.2.0` → `2.0.0` (breaking provider interface or CLI/MCP contract shift)
+- `2.0.0` → `3.0.0` (new breaking public platform line)
 
 ### Minor (Backward-Compatible Features)
 
@@ -59,8 +67,8 @@ Use a minor release for backward-compatible feature additions, including:
 
 **Examples:**
 
-- `2.0.0` → `2.1.0` (add new `export` command)
-- `2.1.0` → `2.2.0` (add MCP tool for citation generation)
+- `1.1.0` → `1.2.0` (ship MCP as an additive public surface)
+- `1.2.0` → `1.3.0` (ship additive Australian jurisdiction support)
 
 ### Patch (Backward-Compatible Fixes)
 
@@ -82,15 +90,15 @@ Use a patch release for fixes that do not break a supported public contract, inc
 
 Prerelease versions follow SemVer prerelease notation:
 
-- Format: `X.Y.Z-next.N` (e.g., `3.0.0-next.0`, `3.0.0-next.1`)
+- Format: `X.Y.Z-next.N` (e.g., `1.3.0-next.0`, `2.0.0-next.0`)
 - Published to npm with `next` dist-tag
-- Used for v3 incubation on `next` branch
+- Used for prerelease incubation on `next` branch
 - Not guaranteed stable; may contain breaking changes between prereleases
 
 **Examples:**
 
-- `3.0.0-next.0` (first prerelease of v3)
-- `3.0.0-next.1` (second prerelease with fixes)
+- `1.3.0-next.0` (first prerelease of additive Australian support)
+- `2.0.0-next.0` (first prerelease of a breaking future line)
 
 ## Release Artifacts
 
@@ -123,7 +131,7 @@ Legacy release and CI workflows are retained as manual-only paths until they are
 | **Configuration**         | Stable config keys and defaults                     | `~/.nz-legislation-tool/config.json` |
 | **Environment Variables** | Stable required and optional env vars               | `NZ_LEGISLATION_*`                   |
 
-### Provisional Guarantees (v3.x incubation)
+### Provisional Guarantees (prerelease incubation)
 
 | Contract               | Guarantee                                      | Scope                              |
 | ---------------------- | ---------------------------------------------- | ---------------------------------- |
@@ -246,7 +254,7 @@ Before stable release:
 
 Before prerelease:
 
-1. Merge approved next-major work to `next`.
+1. Merge approved prerelease work to `next`.
 2. Confirm prerelease intent and branch scope.
 3. Confirm CI is green.
 4. Let `Release Next` publish to the `next` dist-tag.

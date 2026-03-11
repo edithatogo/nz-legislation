@@ -15,7 +15,7 @@
 ## Prerelease
 
 1. Confirm the target branch is `next`.
-2. Confirm the work is intended for the next major line only.
+2. Confirm the work is intended for the governed prerelease lane only.
 3. Confirm `CI` is green.
 4. Run or allow `Release Next`.
 5. Verify npm `next` dist-tag only.

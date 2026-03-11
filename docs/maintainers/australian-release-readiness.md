@@ -16,7 +16,7 @@ The archived legacy branch contains earlier Australian plugin/provider work, but
 
 ## Release recommendation
 
-- release the MCP-enabled NZ-only tool as `1.2.0` once npm publishing access is fixed
+- keep the MCP-enabled NZ-only tool on the stable `1.2.x` line
 - do not publish Australian support from the current repo state
 - extract and modernize the archived Australian code into the current release topology before assigning it a release version
 
