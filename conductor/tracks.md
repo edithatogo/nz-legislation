@@ -112,17 +112,18 @@ This file tracks all major work streams for the NZ Legislation Tool project.
 
 ---
 
-## 🔄 In Progress Tracks
+## 📦 Archived Tracks
 
 ### [x] Track: Performance & Scalability
-**Link:** [./tracks/performance-scalability/](./tracks/performance-scalability/)
+**Link:** [../archive/performance-scalability/](../archive/performance-scalability/)
 
-**Status:** ✅ **COMPLETE**
+**Status:** 📦 **ARCHIVED**
 
 **Summary:** Performance optimization with caching, batching, streaming, and load testing infrastructure.
 
 **Date Created:** 2026-03-09
 **Date Completed:** 2026-03-11
+**Date Archived:** 2026-03-11
 **Key Deliverables:** LRU cache (500 entries), request batching, streaming exports, k6 load tests, performance dashboard, 9 source files, 8 documentation files
 
 **Performance Targets Achieved:**
@@ -135,9 +136,9 @@ This file tracks all major work streams for the NZ Legislation Tool project.
 - Memory <256MB ✅
 - Load test 100 concurrent ✅
 
----
+**Review Summary:** All code review fixes applied. 44 tests passing. Track archived after successful completion.
 
-## 📦 Archived Tracks
+---
 
 ### [x] Track: Australian Legislation Implementation
 **Link:** [../archive/australian-legislation-implementation/](../archive/australian-legislation-implementation/)
@@ -248,12 +249,12 @@ This file tracks all major work streams for the NZ Legislation Tool project.
 
 | Status | Count | Percentage |
 |--------|-------|------------|
-| ✅ **Complete** | 9 | 56% |
-| 📦 **Archived** | 1 | 6% |
-| ⏳ **Pending** | 6 | 38% |
-| **Total** | **16** | **100%** |
+| ✅ **Complete** | 9 | 53% |
+| 📦 **Archived** | 2 | 12% |
+| ⏳ **Pending** | 6 | 35% |
+| **Total** | **17** | **100%** |
 
-**Overall Project Progress:** ~59% complete (technical infrastructure complete, research programme pending)
+**Overall Project Progress:** ~65% complete (technical infrastructure complete, research programme pending)
 
 ---
 
