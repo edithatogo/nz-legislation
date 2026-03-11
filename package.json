@@ -11,7 +11,7 @@
   "scripts": {
     "dev": "tsx src/cli.ts",
     "dev:mcp": "tsx src/mcp-cli.ts",
-    "build": "tsc",
+    "build": "tsc && tsc-alias",
     "build:analyze": "tsx scripts/bundle-analyze.ts",
     "start": "node dist/cli.js",
     "start:mcp": "node dist/mcp-cli.js",
@@ -91,6 +91,7 @@
     "msw": "^2.12.10",
     "prettier": "^3.8.1",
     "tsx": "^4.16.2",
+    "tsc-alias": "^1.8.16",
     "typedoc": "^0.28.17",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.56.1",
