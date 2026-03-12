@@ -83,10 +83,73 @@ describe('provider routing', () => {
     ).rejects.toThrow("Jurisdiction 'au-qld' is not implemented in this branch yet.");
   });
 
-  it('rejects Commonwealth versions until the endpoint is verified', async () => {
+  it('retrieves Commonwealth version history through the document feed', async () => {
+    setCommonwealthHttpClientFactoryForTesting(() => ({
+      get: () => ({
+        json: async () => ({
+          value: [
+            {
+              titleId: 'C2004A01224',
+              start: '2005-01-01T00:00:00',
+              retrospectiveStart: '2005-01-01T00:00:00',
+              rectificationVersionNumber: 0,
+              type: 'Primary',
+              uniqueTypeNumber: 0,
+              volumeNumber: 0,
+              format: 'Word',
+              compilationNumber: '7',
+              registerId: 'C2005C00006',
+            },
+            {
+              titleId: 'C2004A01224',
+              start: '2005-01-01T00:00:00',
+              retrospectiveStart: '2005-01-01T00:00:00',
+              rectificationVersionNumber: 1,
+              type: 'Primary',
+              uniqueTypeNumber: 0,
+              volumeNumber: 0,
+              format: 'Pdf',
+              compilationNumber: '7',
+              registerId: 'C2005C00006',
+            },
+            {
+              titleId: 'C2004A01224',
+              start: '2003-12-17T00:00:00',
+              retrospectiveStart: '2003-12-17T00:00:00',
+              rectificationVersionNumber: 0,
+              type: 'Primary',
+              uniqueTypeNumber: 0,
+              volumeNumber: 0,
+              format: 'Word',
+              compilationNumber: '0',
+              registerId: 'C2004A01224',
+            },
+          ],
+        }),
+      }),
+    }));
+
     await expect(
       getLegislationVersions({ jurisdiction: 'au-comm', workId: 'C2004A01224' })
-    ).rejects.toThrow("Jurisdiction 'au-comm' does not expose version history in this branch yet.");
+    ).resolves.toMatchObject([
+      {
+        id: 'C2005C00006',
+        version: 7,
+        date: '2005-01-01',
+        isCurrent: true,
+        type: 'Primary',
+        formats: [
+          "https://api.prod.legislation.gov.au/v1/documents(titleid='C2004A01224',start=2005-01-01,retrospectivestart=2005-01-01,rectificationversionnumber=1,type='Primary',uniqueTypeNumber=0,volumeNumber=0,format='Pdf')",
+        ],
+      },
+      {
+        id: 'C2004A01224',
+        version: 0,
+        date: '2003-12-17',
+        isCurrent: false,
+        type: 'Primary',
+      },
+    ]);
   });
 
   it('rejects unimplemented Queensland versions explicitly', async () => {

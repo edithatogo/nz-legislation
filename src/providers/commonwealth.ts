@@ -25,6 +25,25 @@ interface CommonwealthTitleListResponse {
   '@odata.count'?: number;
 }
 
+interface CommonwealthDocument {
+  titleId: string;
+  start: string;
+  retrospectiveStart?: string;
+  rectificationVersionNumber?: number;
+  type: string;
+  uniqueTypeNumber?: number;
+  volumeNumber?: number;
+  format: string;
+  compilationNumber?: string;
+  registerId?: string;
+  rectified?: string;
+  versionType?: string;
+}
+
+interface CommonwealthDocumentListResponse {
+  value: CommonwealthDocument[];
+}
+
 interface HttpResponseLike {
   json(): Promise<unknown>;
 }
@@ -86,6 +105,73 @@ function mapCommonwealthTitle(title: CommonwealthTitle): Work {
     url: `${COMMONWEALTH_WEB_BASE_URL}${title.id}`,
     versionCount: 0,
   };
+}
+
+function buildCommonwealthDocumentUrl(document: CommonwealthDocument): string {
+  const start = document.start.slice(0, 10);
+  const retrospectiveStart = (document.retrospectiveStart || document.start).slice(0, 10);
+  const rectificationVersionNumber = document.rectificationVersionNumber ?? 0;
+  const uniqueTypeNumber = document.uniqueTypeNumber ?? 0;
+  const volumeNumber = document.volumeNumber ?? 0;
+
+  return `${COMMONWEALTH_API_BASE_URL}documents(titleid='${document.titleId}',start=${start},retrospectivestart=${retrospectiveStart},rectificationversionnumber=${rectificationVersionNumber},type='${document.type}',uniqueTypeNumber=${uniqueTypeNumber},volumeNumber=${volumeNumber},format='${document.format}')`;
+}
+
+function compareCommonwealthDocuments(a: CommonwealthDocument, b: CommonwealthDocument): number {
+  const startDiff = new Date(b.start).getTime() - new Date(a.start).getTime();
+  if (startDiff !== 0) {
+    return startDiff;
+  }
+
+  return (b.rectificationVersionNumber ?? 0) - (a.rectificationVersionNumber ?? 0);
+}
+
+function mapCommonwealthDocumentsToVersions(documents: CommonwealthDocument[]): Version[] {
+  const grouped = new Map<string, CommonwealthDocument[]>();
+
+  for (const document of documents) {
+    const key = [
+      document.registerId || '',
+      document.compilationNumber || '',
+      document.start,
+      document.retrospectiveStart || '',
+    ].join('|');
+
+    const existing = grouped.get(key);
+    if (existing) {
+      existing.push(document);
+    } else {
+      grouped.set(key, [document]);
+    }
+  }
+
+  const versions = Array.from(grouped.values())
+    .map(group => {
+      const primary = [...group].sort(compareCommonwealthDocuments)[0];
+      const latestRectification = primary.rectificationVersionNumber ?? 0;
+      const activeDocuments = group.filter(
+        document => (document.rectificationVersionNumber ?? 0) === latestRectification
+      );
+      const versionNumber = Number.parseInt(primary.compilationNumber || '0', 10);
+
+      return {
+        id:
+          primary.registerId ||
+          `${primary.titleId}:${primary.start}:${primary.rectificationVersionNumber ?? 0}`,
+        version: Number.isNaN(versionNumber) ? 0 : versionNumber,
+        date: primary.start.slice(0, 10),
+        isCurrent: false,
+        type: primary.type,
+        formats: activeDocuments.map(buildCommonwealthDocumentUrl),
+      };
+    })
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+  if (versions.length > 0) {
+    versions[0].isCurrent = true;
+  }
+
+  return versions;
 }
 
 function escapeODataString(value: string): string {
@@ -182,10 +268,37 @@ export async function getCommonwealthLegislation(workId: string): Promise<Work> 
   }
 }
 
-export function getCommonwealthLegislationVersions(_workId: string): Promise<Version[]> {
-  return Promise.reject(
-    new Error(
-      "Jurisdiction 'au-comm' does not expose version history in this branch yet. Search and title retrieval are supported."
-    )
-  );
+export async function getCommonwealthLegislationVersions(workId: string): Promise<Version[]> {
+  const client = httpClientFactory();
+  const pageSize = 100;
+  const documents: CommonwealthDocument[] = [];
+
+  try {
+    let skip = 0;
+
+    for (;;) {
+      const data = (await client
+        .get('Documents', {
+          searchParams: {
+            $filter: `titleId eq '${workId}' and type eq 'Primary'`,
+            $top: pageSize.toString(),
+            $skip: skip.toString(),
+          },
+        })
+        .json()) as CommonwealthDocumentListResponse;
+
+      const page = data.value || [];
+      documents.push(...page);
+
+      if (page.length < pageSize) {
+        break;
+      }
+
+      skip += pageSize;
+    }
+
+    return mapCommonwealthDocumentsToVersions(documents);
+  } catch (error) {
+    handleCommonwealthError(error, `Failed to get Commonwealth versions for ${workId}`);
+  }
 }
