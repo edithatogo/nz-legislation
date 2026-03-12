@@ -49,6 +49,11 @@ export const LegislationStatusSchema = z
   .optional();
 
 /**
+ * Jurisdiction validation
+ */
+export const JurisdictionSchema = z.enum(['nz', 'au-comm', 'au-qld']).default('nz');
+
+/**
  * Output format validation
  */
 export const OutputFormatSchema = z.enum(['table', 'json', 'csv']).default('table');
@@ -85,6 +90,7 @@ export const OffsetSchema = z
  * Search parameters schema
  */
 export const SearchParamsSchema = z.object({
+  jurisdiction: JurisdictionSchema,
   query: SearchQuerySchema,
   type: LegislationTypeSchema,
   status: LegislationStatusSchema,
@@ -99,6 +105,7 @@ export const SearchParamsSchema = z.object({
  * Get work parameters schema
  */
 export const GetWorkParamsSchema = z.object({
+  jurisdiction: JurisdictionSchema,
   workId: WorkIdSchema,
   versions: z.boolean().default(false),
   format: OutputFormatSchema,
@@ -113,6 +120,7 @@ export const CitationStyleSchema = z.enum(['nzmj', 'bibtex', 'ris', 'enw', 'apa'
  * Export parameters schema
  */
 export const ExportParamsSchema = z.object({
+  jurisdiction: JurisdictionSchema,
   query: SearchQuerySchema,
   output: z
     .string()
@@ -205,6 +213,7 @@ export function sanitizeInput(input: string): string {
  * Search parameters schema (output types for validated data)
  */
 export interface ValidatedSearchParams {
+  jurisdiction: 'nz' | 'au-comm' | 'au-qld';
   query: string;
   type?: 'act' | 'bill' | 'regulation' | 'instrument';
   status?: 'in-force' | 'not-yet-in-force' | 'repealed' | 'partially-repealed' | 'withdrawn';

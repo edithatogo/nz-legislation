@@ -7,10 +7,11 @@ import { writeFileSync } from 'fs';
 import { Command } from 'commander';
 import ora from 'ora';
 
-import { searchWorks } from '../client.js';
 import { worksToCsv } from '../output/index.js';
+import { searchLegislation } from '../providers/index.js';
 
 interface ExportOptions {
+  jurisdiction: string;
   query: string;
   output: string;
   type?: string;
@@ -25,6 +26,7 @@ interface ExportOptions {
 export const exportCommand = new Command()
   .name('export')
   .description('Export search results to file')
+  .option('-j, --jurisdiction <jurisdiction>', 'Jurisdiction (nz, au-comm, au-qld)', 'nz')
   .requiredOption('-q, --query <text>', 'Search query')
   .requiredOption('-o, --output <file>', 'Output file path')
   .option('-t, --type <type>', 'Filter by type (act, bill, regulation, instrument)')
@@ -40,7 +42,8 @@ export const exportCommand = new Command()
     try {
       const limit = Math.min(parseInt(options.limit, 10), 1000);
 
-      const results = await searchWorks({
+      const results = await searchLegislation({
+        jurisdiction: options.jurisdiction as 'nz' | 'au-comm' | 'au-qld',
         query: options.query,
         type: options.type,
         status: options.status,

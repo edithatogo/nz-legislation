@@ -5,12 +5,13 @@
 import { Command } from 'commander';
 import ora from 'ora';
 
-import { searchWorks } from '../client.js';
 import { printTable, printJson, worksToCsv } from '../output/index.js';
+import { searchLegislation } from '../providers/index.js';
 import { logger } from '../utils/logger.js';
 import { validateSearchParams, sanitizeInput } from '../utils/validation.js';
 
 interface SearchOptions {
+  jurisdiction?: string;
   query: string;
   type?: string;
   status?: string;
@@ -24,6 +25,7 @@ interface SearchOptions {
 export const searchCommand = new Command()
   .name('search')
   .description('Search for legislation')
+  .option('-j, --jurisdiction <jurisdiction>', 'Jurisdiction (nz, au-comm, au-qld)', 'nz')
   .requiredOption('-q, --query <text>', 'Search query')
   .option('-t, --type <type>', 'Filter by type (act, bill, regulation, instrument)')
   .option('-s, --status <status>', 'Filter by status (in-force, repealed, etc.)')
@@ -39,6 +41,7 @@ export const searchCommand = new Command()
       // Sanitize inputs
       const sanitizedOptions = {
         ...options,
+        jurisdiction: options.jurisdiction ? sanitizeInput(options.jurisdiction) : 'nz',
         query: sanitizeInput(options.query),
         type: options.type ? sanitizeInput(options.type) : undefined,
         status: options.status ? sanitizeInput(options.status) : undefined,
@@ -65,7 +68,8 @@ export const searchCommand = new Command()
         limit: validatedParams.limit,
       });
 
-      const results = await searchWorks({
+      const results = await searchLegislation({
+        jurisdiction: validatedParams.jurisdiction,
         query: validatedParams.query,
         type: validatedParams.type,
         status: validatedParams.status,

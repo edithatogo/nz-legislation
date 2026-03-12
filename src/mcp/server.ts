@@ -7,9 +7,9 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
 
-import { searchWorks, getWork, getWorkVersions } from '../client.js';
 import { getConfig, hasApiKey } from '../config.js';
 import { generateCitation, worksToCsv } from '../output/index.js';
+import { getLegislation, getLegislationVersions, searchLegislation } from '../providers/index.js';
 import { logger } from '../utils/logger.js';
 
 /**
@@ -59,8 +59,12 @@ export function createServer(): McpServer {
 function registerSearchTool(server: McpServer): void {
   server.tool(
     'search_legislation',
-    'Search for New Zealand legislation by query',
+    'Search legislation by query and jurisdiction',
     {
+      jurisdiction: z
+        .enum(['nz', 'au-comm', 'au-qld'])
+        .default('nz')
+        .describe('Jurisdiction identifier'),
       query: z.string().describe('Search query text'),
       type: z
         .enum(['act', 'bill', 'regulation', 'instrument'])
@@ -108,7 +112,8 @@ function registerSearchTool(server: McpServer): void {
           };
         }
 
-        const results = await searchWorks({
+        const results = await searchLegislation({
+          jurisdiction: params.jurisdiction,
           query: params.query,
           type: params.type,
           status: params.status,
@@ -155,6 +160,10 @@ function registerGetTool(server: McpServer): void {
     'get_legislation',
     'Get details of a specific legislation work by ID',
     {
+      jurisdiction: z
+        .enum(['nz', 'au-comm', 'au-qld'])
+        .default('nz')
+        .describe('Jurisdiction identifier'),
       workId: z.string().describe('Work ID (e.g., act_public_1989_18)'),
     },
     async params => {
@@ -172,7 +181,10 @@ function registerGetTool(server: McpServer): void {
           };
         }
 
-        const work = await getWork(params.workId);
+        const work = await getLegislation({
+          jurisdiction: params.jurisdiction,
+          workId: params.workId,
+        });
 
         return {
           content: [
@@ -213,6 +225,10 @@ function registerGetVersionsTool(server: McpServer): void {
     'get_legislation_versions',
     'Get all versions of a specific legislation work',
     {
+      jurisdiction: z
+        .enum(['nz', 'au-comm', 'au-qld'])
+        .default('nz')
+        .describe('Jurisdiction identifier'),
       workId: z.string().describe('Work ID (e.g., act_public_1989_18)'),
     },
     async params => {
@@ -230,7 +246,10 @@ function registerGetVersionsTool(server: McpServer): void {
           };
         }
 
-        const versions = await getWorkVersions(params.workId);
+        const versions = await getLegislationVersions({
+          jurisdiction: params.jurisdiction,
+          workId: params.workId,
+        });
 
         return {
           content: [
@@ -273,6 +292,10 @@ function registerCitationTool(server: McpServer): void {
     'generate_citation',
     'Generate citation for legislation in various styles',
     {
+      jurisdiction: z
+        .enum(['nz', 'au-comm', 'au-qld'])
+        .default('nz')
+        .describe('Jurisdiction identifier'),
       workId: z.string().describe('Work ID (e.g., act_public_1989_18)'),
       style: z
         .enum(['nzmj', 'bibtex', 'ris', 'enw', 'apa'])
@@ -294,7 +317,10 @@ function registerCitationTool(server: McpServer): void {
           };
         }
 
-        const work = await getWork(params.workId);
+        const work = await getLegislation({
+          jurisdiction: params.jurisdiction,
+          workId: params.workId,
+        });
         const citation = generateCitation(work, params.style);
 
         return {
@@ -328,6 +354,10 @@ function registerExportTool(server: McpServer): void {
     'export_legislation',
     'Export legislation search results to CSV or JSON format',
     {
+      jurisdiction: z
+        .enum(['nz', 'au-comm', 'au-qld'])
+        .default('nz')
+        .describe('Jurisdiction identifier'),
       query: z.string().describe('Search query'),
       format: z.enum(['csv', 'json']).default('csv').describe('Export format'),
       limit: z.number().min(1).max(100).default(25).describe('Maximum results'),
@@ -347,7 +377,8 @@ function registerExportTool(server: McpServer): void {
           };
         }
 
-        const results = await searchWorks({
+        const results = await searchLegislation({
+          jurisdiction: params.jurisdiction,
           query: params.query,
           limit: params.limit,
         });
@@ -448,7 +479,10 @@ function registerLegislationResource(server: McpServer): void {
     }
 
     try {
-      const work = await getWork(workId);
+      const work = await getLegislation({
+        jurisdiction: 'nz',
+        workId,
+      });
 
       return {
         contents: [

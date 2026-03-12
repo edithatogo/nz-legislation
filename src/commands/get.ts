@@ -5,12 +5,13 @@
 import { Command } from 'commander';
 import ora from 'ora';
 
-import { getWork, getWorkVersions } from '../client.js';
 import { printWorkDetail, printVersionsTable, printJson, versionsToCsv } from '../output/index.js';
+import { getLegislation, getLegislationVersions } from '../providers/index.js';
 import { logger } from '../utils/logger.js';
 import { validateWorkId, sanitizeInput } from '../utils/validation.js';
 
 interface GetOptions {
+  jurisdiction: string;
   versions?: boolean;
   format: string;
 }
@@ -19,6 +20,7 @@ export const getCommand = new Command()
   .name('get')
   .description('Get legislation by ID')
   .argument('<id>', 'Work ID (e.g., act_public_1989_18)')
+  .option('-j, --jurisdiction <jurisdiction>', 'Jurisdiction (nz, au-comm, au-qld)', 'nz')
   .option('--versions', 'Show version history')
   .option('--format <format>', 'Output format (table, json, csv)', 'table')
   .action(async (workId: string, options: GetOptions) => {
@@ -44,7 +46,10 @@ export const getCommand = new Command()
 
       if (options.versions) {
         // Get version history
-        const versions = await getWorkVersions(sanitizedWorkId);
+        const versions = await getLegislationVersions({
+          jurisdiction: options.jurisdiction as 'nz' | 'au-comm' | 'au-qld',
+          workId: sanitizedWorkId,
+        });
         spinner.stop();
 
         switch (options.format.toLowerCase()) {
@@ -61,7 +66,10 @@ export const getCommand = new Command()
         }
       } else {
         // Get work details
-        const work = await getWork(sanitizedWorkId);
+        const work = await getLegislation({
+          jurisdiction: options.jurisdiction as 'nz' | 'au-comm' | 'au-qld',
+          workId: sanitizedWorkId,
+        });
         spinner.stop();
 
         switch (options.format.toLowerCase()) {

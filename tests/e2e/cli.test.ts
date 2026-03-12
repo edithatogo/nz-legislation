@@ -73,6 +73,22 @@ describe('E2E CLI Tests', () => {
   });
 
   describe('nzlegislation search', () => {
+    it('should fail clearly for an unimplemented Australian jurisdiction', async () => {
+      const { stderr, exitCode } = await execa(
+        TSX_BIN,
+        [CLI_PATH, 'search', '--query', 'health', '--jurisdiction', 'au-comm'],
+        {
+          reject: false,
+          env: {
+            NZ_LEGISLATION_API_KEY: '',
+          },
+        }
+      );
+
+      expect(exitCode).toBe(1);
+      expect(stderr).toContain("Jurisdiction 'au-comm' is not implemented in this branch yet.");
+    });
+
     itWithApi('should search for legislation', async () => {
       const { stdout, exitCode } = await execa(
         TSX_BIN,
