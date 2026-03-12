@@ -9,6 +9,12 @@
 import { getWork, getWorkVersions, searchWorks } from '../client.js';
 import type { SearchResults, Version, Work } from '../models/index.js';
 
+import {
+  getCommonwealthLegislation,
+  getCommonwealthLegislationVersions,
+  searchCommonwealthLegislation,
+} from './commonwealth.js';
+
 export const SUPPORTED_JURISDICTIONS = ['nz', 'au-comm', 'au-qld'] as const;
 export type Jurisdiction = (typeof SUPPORTED_JURISDICTIONS)[number];
 
@@ -40,6 +46,15 @@ export async function searchLegislation(
   params: SearchLegislationParams
 ): Promise<SearchResults> {
   const jurisdiction = params.jurisdiction ?? 'nz';
+
+  if (jurisdiction === 'au-comm') {
+    return searchCommonwealthLegislation({
+      query: params.query,
+      limit: params.limit,
+      offset: params.offset,
+    });
+  }
+
   assertJurisdictionImplemented(jurisdiction);
 
   return searchWorks({
@@ -55,6 +70,11 @@ export async function searchLegislation(
 
 export async function getLegislation(params: GetLegislationParams): Promise<Work> {
   const jurisdiction = params.jurisdiction ?? 'nz';
+
+  if (jurisdiction === 'au-comm') {
+    return getCommonwealthLegislation(params.workId);
+  }
+
   assertJurisdictionImplemented(jurisdiction);
 
   return getWork(params.workId);
@@ -62,6 +82,11 @@ export async function getLegislation(params: GetLegislationParams): Promise<Work
 
 export async function getLegislationVersions(params: GetLegislationParams): Promise<Version[]> {
   const jurisdiction = params.jurisdiction ?? 'nz';
+
+  if (jurisdiction === 'au-comm') {
+    return getCommonwealthLegislationVersions(params.workId);
+  }
+
   assertJurisdictionImplemented(jurisdiction);
 
   return getWorkVersions(params.workId);

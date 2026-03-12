@@ -17,15 +17,24 @@ export const DateStringSchema = z
   }, 'Invalid date');
 
 /**
- * Work ID validation for current API work IDs (e.g., act_public_1989_18)
+ * Work ID validation for current API work IDs.
+ * NZ examples: act_public_1989_18, act/2006/60
+ * Commonwealth examples: C2004A01224
  */
-export const WorkIdSchema = z
+export const NzWorkIdSchema = z
   .string()
   .min(1, 'Work ID is required')
   .regex(
     /^(?:[a-z0-9-]+(?:_[a-z0-9-]+){2,}|[a-z0-9-]+\/\d{4}\/\d+)$/,
-    'Invalid work ID format. Expected an API work ID like act_public_1989_18.'
+    'Invalid NZ work ID format. Expected an API work ID like act_public_1989_18.'
   );
+
+export const CommonwealthWorkIdSchema = z
+  .string()
+  .min(1, 'Work ID is required')
+  .regex(/^[A-Z]\d{4}[A-Z]\d{5}$/i, 'Invalid Commonwealth title ID format. Expected an ID like C2004A01224.');
+
+export const WorkIdSchema = z.union([NzWorkIdSchema, CommonwealthWorkIdSchema]);
 
 /**
  * Search query validation
@@ -262,8 +271,18 @@ export function validateSearchParams(params: unknown): ValidationFailure | Searc
 /**
  * Validate and sanitize work ID
  */
-export function validateWorkId(workId: string): ValidationFailure | WorkIdValidationSuccess {
-  const result = WorkIdSchema.safeParse(workId);
+export function validateWorkId(
+  workId: string,
+  jurisdiction: 'nz' | 'au-comm' | 'au-qld' = 'nz'
+): ValidationFailure | WorkIdValidationSuccess {
+  const schema =
+    jurisdiction === 'au-comm'
+      ? CommonwealthWorkIdSchema
+      : jurisdiction === 'nz'
+        ? NzWorkIdSchema
+        : WorkIdSchema;
+
+  const result = schema.safeParse(workId);
   if (!result.success) {
     const errors: ValidationError[] = result.error.errors.map(err => ({
       field: 'workId',

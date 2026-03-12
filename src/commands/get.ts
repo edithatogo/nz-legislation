@@ -29,7 +29,8 @@ export const getCommand = new Command()
     try {
       // Sanitize and validate work ID
       const sanitizedWorkId = sanitizeInput(workId);
-      const validation = validateWorkId(sanitizedWorkId);
+      const jurisdiction = options.jurisdiction as 'nz' | 'au-comm' | 'au-qld';
+      const validation = validateWorkId(sanitizedWorkId, jurisdiction);
 
       if (!validation.valid) {
         spinner.stop();
@@ -38,7 +39,11 @@ export const getCommand = new Command()
         validation.errors?.forEach(err => {
           console.error(`  - ${err.message}`);
         });
-        console.error('\nExpected format: API work ID (e.g., act_public_1989_18)');
+        if (jurisdiction === 'au-comm') {
+          console.error('\nExpected format: Commonwealth title ID (e.g., C2004A01224)');
+        } else {
+          console.error('\nExpected format: API work ID (e.g., act_public_1989_18)');
+        }
         process.exit(3);
       }
 
@@ -47,7 +52,7 @@ export const getCommand = new Command()
       if (options.versions) {
         // Get version history
         const versions = await getLegislationVersions({
-          jurisdiction: options.jurisdiction as 'nz' | 'au-comm' | 'au-qld',
+          jurisdiction,
           workId: sanitizedWorkId,
         });
         spinner.stop();
@@ -67,7 +72,7 @@ export const getCommand = new Command()
       } else {
         // Get work details
         const work = await getLegislation({
-          jurisdiction: options.jurisdiction as 'nz' | 'au-comm' | 'au-qld',
+          jurisdiction,
           workId: sanitizedWorkId,
         });
         spinner.stop();
