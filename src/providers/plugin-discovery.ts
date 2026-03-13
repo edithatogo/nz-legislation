@@ -1,11 +1,14 @@
 /**
  * Plugin Discovery
- * 
+ *
  * Discovers and loads plugins from standard locations.
  */
 
-import { PluginLoader, LoadedPlugin } from './plugin-loader.js';
+import os from 'node:os';
+import path from 'node:path';
+
 import { getGlobalRegistry } from './legislation-provider.js';
+import { PluginLoader, LoadedPlugin } from './plugin-loader.js';
 
 export interface DiscoveryOptions {
   directories?: string[];
@@ -51,7 +54,7 @@ export class PluginDiscovery {
       }
 
       const loaded = await this.loader.loadPlugins(allPlugins);
-      
+
       if (this.verbose) {
         const success = loaded.filter(p => p.loaded).length;
         const failed = loaded.filter(p => !p.loaded).length;
@@ -68,9 +71,6 @@ export class PluginDiscovery {
    * Get default plugin directories
    */
   private getDefaultDirectories(): string[] {
-    const path = require('path');
-    const os = require('os');
-    
     const directories: string[] = [];
 
     // Global plugin directories
@@ -89,10 +89,7 @@ export class PluginDiscovery {
     }
 
     // Local plugin directory (for development)
-    directories.push(
-      path.join(process.cwd(), 'node_modules'),
-      path.join(process.cwd(), 'plugins')
-    );
+    directories.push(path.join(process.cwd(), 'node_modules'), path.join(process.cwd(), 'plugins'));
 
     if (this.verbose) {
       console.log('Plugin search directories:');
@@ -114,7 +111,7 @@ export class PluginDiscovery {
     availableJurisdictions: string[];
   } {
     const registry = getGlobalRegistry();
-    
+
     return {
       directories: this.directories,
       autoLoad: this.autoLoad,

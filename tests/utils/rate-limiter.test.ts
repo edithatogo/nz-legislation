@@ -43,4 +43,20 @@ describe('RateLimiter', () => {
     expect(status.remaining).toBe(10);
     expect(status.resetTime).toBeInstanceOf(Date);
   });
+
+  it('should wake queued requests when tokens refill', async () => {
+    const limiter = new RateLimiter({ requests: 1, per: 1 });
+
+    await limiter.throttle();
+
+    let released = false;
+    const pending = limiter.throttle().then(() => {
+      released = true;
+    });
+
+    await vi.advanceTimersByTimeAsync(1000);
+    await pending;
+
+    expect(released).toBe(true);
+  });
 });

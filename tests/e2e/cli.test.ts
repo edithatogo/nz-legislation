@@ -51,7 +51,7 @@ describe('E2E CLI Tests', () => {
       const { stdout, exitCode } = await execa(TSX_BIN, [CLI_PATH, '--version']);
 
       expect(exitCode).toBe(0);
-      expect(stdout.trim()).toMatch(/^\d+\.\d+\.\d+$/);
+      expect(stdout.trim()).toMatch(/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/);
     });
   });
 

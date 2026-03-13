@@ -5,10 +5,12 @@
 import { Command } from 'commander';
 import ora from 'ora';
 
-import { getGlobalRegistry } from '../providers/index.js';
 import { printTable, printJson, worksToCsv } from '@output';
 import { logger } from '@utils/logger';
 import { validateSearchParams, sanitizeInput } from '@utils/validation';
+
+import { getGlobalRegistry } from '../providers/index.js';
+import { toLegacySearchResults } from '../providers/output-adapters.js';
 
 interface SearchOptions {
   query: string;
@@ -33,16 +35,16 @@ export const searchCommand = new Command()
   .option('-o, --offset <number>', 'Result offset for pagination', '0')
   .option('--format <format>', 'Output format (table, json, csv)', 'table')
   .action(async (options: SearchOptions, command: Command) => {
-    const globalOptions = command.parent?.opts() || {};
+    const globalOptions = command.parent ? command.parent.opts<{ jurisdiction?: string }>() : {};
     const jurisdiction = globalOptions.jurisdiction || 'nz';
-    
+
     const spinner = ora(`Searching ${jurisdiction} legislation...`).start();
 
     try {
       // Get provider
       const registry = getGlobalRegistry();
       const provider = registry.get(jurisdiction);
-      
+
       if (!provider) {
         spinner.stop();
         console.error(`❌ Error: Unknown jurisdiction "${jurisdiction}"`);
@@ -61,23 +63,29 @@ export const searchCommand = new Command()
 
       // Validate parameters
       const validation = validateSearchParams(sanitizedOptions);
-      if (!validation.valid || !validation.data) {
+      if (!validation.valid) {
         spinner.stop();
         logger.error('Validation failed', undefined, { errors: validation.errors });
         console.error('❌ Validation errors:');
-        validation.errors?.forEach((err) => {
+        validation.errors?.forEach(err => {
           console.error(`  - ${err.field}: ${err.message}`);
         });
         process.exit(3);
       }
 
       const validatedParams = validation.data;
-      
+      const normalizedStatus: 'in-force' | 'repealed' | 'not-in-force' | undefined =
+        validatedParams.status === 'not-yet-in-force'
+          ? 'not-in-force'
+          : validatedParams.status === 'in-force' || validatedParams.status === 'repealed'
+            ? validatedParams.status
+            : undefined;
+
       // Map Command-style WorkType to SearchParams WorkType
       const searchParams = {
         query: validatedParams.query,
-        type: validatedParams.type as any,
-        status: validatedParams.status as any,
+        type: validatedParams.type,
+        status: normalizedStatus,
         from: validatedParams.from,
         to: validatedParams.to,
         limit: validatedParams.limit,
@@ -85,6 +93,7 @@ export const searchCommand = new Command()
       };
 
       const results = await provider.search(searchParams);
+      const legacyResults = toLegacySearchResults(results);
 
       spinner.stop();
 
@@ -93,11 +102,11 @@ export const searchCommand = new Command()
           printJson(results);
           break;
         case 'csv':
-          console.log(worksToCsv(results));
+          console.log(worksToCsv(legacyResults));
           break;
         case 'table':
         default:
-          printTable(results);
+          printTable(legacyResults);
           break;
       }
     } catch (error) {

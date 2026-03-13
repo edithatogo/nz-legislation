@@ -2,10 +2,18 @@
  * Unit tests for Scraper Cache
  */
 
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { ScraperCache } from '../../src/utils/scraper-cache.js';
 
 describe('ScraperCache', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('should initialize with default options', () => {
     const cache = new ScraperCache();
     expect(cache.getStats().maxSize).toBe(1000);
@@ -30,7 +38,7 @@ describe('ScraperCache', () => {
   it('should use getOrSet to fetch and cache', async () => {
     const cache = new ScraperCache();
     const fetcher = vi.fn().mockResolvedValue('fetched');
-    
+
     const result = await cache.getOrSet('key', fetcher);
     expect(result).toBe('fetched');
     expect(fetcher).toHaveBeenCalledTimes(1);
@@ -47,5 +55,16 @@ describe('ScraperCache', () => {
     cache.set('k1', 'v1');
     cache.clear();
     expect(cache.get('k1')).toBeUndefined();
+  });
+
+  it('should honor per-entry TTL overrides', async () => {
+    const cache = new ScraperCache({ ttl: 60_000 });
+    cache.set('short-lived', 'value', 100);
+
+    expect(cache.get('short-lived')).toBe('value');
+
+    vi.advanceTimersByTime(101);
+
+    expect(cache.get('short-lived')).toBeUndefined();
   });
 });

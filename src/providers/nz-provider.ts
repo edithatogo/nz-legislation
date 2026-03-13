@@ -1,13 +1,21 @@
 /**
  * New Zealand Legislation Provider
- * 
+ *
  * Provides access to New Zealand legislation via the official PCO API
  * at https://api.legislation.govt.nz/
  */
 
-import { BaseLegislationProvider } from './legislation-provider.js';
-import type { SearchParams, SearchResults, Work, VersionSummary, CitationStyle } from './legislation-provider.js';
 import * as client from '../client.js';
+
+import { BaseLegislationProvider } from './legislation-provider.js';
+import type {
+  SearchParams,
+  SearchResults,
+  Work,
+  VersionSummary,
+  CitationStyle,
+} from './legislation-provider.js';
+import { normalizeWorkType, parseWorkIdMetadata } from './output-adapters.js';
 
 export class NZLegislationProvider extends BaseLegislationProvider {
   constructor() {
@@ -36,11 +44,15 @@ export class NZLegislationProvider extends BaseLegislationProvider {
     return {
       total: results.total,
       results: results.results.map(r => ({
-        work_id: r.work_id,
+        ...parseWorkIdMetadata(r.id),
+        work_id: r.id,
         title: r.title,
+        shortTitle: r.shortTitle,
         type: r.type,
-        year: r.year,
-        number: r.number,
+        status: r.status,
+        date: r.date,
+        url: r.url,
+        versionCount: r.versionCount,
         jurisdiction: 'nz',
       })),
       limit: results.limit,
@@ -52,23 +64,32 @@ export class NZLegislationProvider extends BaseLegislationProvider {
    * Get work by ID
    */
   protected async getWorkImpl(workId: string): Promise<Work> {
-    const work = await client.getWork(workId);
-    
+    const [work, versions] = await Promise.all([
+      client.getWork(workId),
+      client.getWorkVersions(workId),
+    ]);
+
     return {
-      work_id: work.work_id,
+      ...parseWorkIdMetadata(work.id),
+      work_id: work.id,
       title: work.title,
+      shortTitle: work.shortTitle,
       type: work.type,
-      year: work.year,
-      number: work.number,
       jurisdiction: 'nz',
       status: work.status,
-      versions: work.versions.map(v => ({
-        version_id: v.version_id,
-        title: v.title,
+      date: work.date,
+      url: work.url,
+      versionCount: work.versionCount || versions.length,
+      versions: versions.map(v => ({
+        version_id: v.id,
+        title: v.id,
         date: v.date,
-        is_current: v.is_current,
+        is_current: v.isCurrent,
+        version: v.version,
+        type: v.type,
+        formats: v.formats,
       })),
-      citations: work.citations || {},
+      citations: {},
     };
   }
 
@@ -78,10 +99,13 @@ export class NZLegislationProvider extends BaseLegislationProvider {
   protected async getVersionsImpl(workId: string): Promise<VersionSummary[]> {
     const versions = await client.getWorkVersions(workId);
     return versions.map(v => ({
-      version_id: v.version_id,
-      title: v.title,
+      version_id: v.id,
+      title: v.id,
       date: v.date,
-      is_current: v.is_current,
+      is_current: v.isCurrent,
+      version: v.version,
+      type: v.type,
+      formats: v.formats,
     }));
   }
 
@@ -90,15 +114,18 @@ export class NZLegislationProvider extends BaseLegislationProvider {
    */
   protected async getVersionImpl(versionId: string): Promise<Work> {
     const version = await client.getVersion(versionId);
-    
+    const metadata = parseWorkIdMetadata(version.workId);
+
     return {
-      work_id: version.work_id,
+      ...metadata,
+      work_id: version.workId,
       title: version.title,
-      type: version.type,
-      year: version.year,
-      number: version.number,
+      type: normalizeWorkType(metadata.type),
       jurisdiction: 'nz',
       status: 'in-force', // Versions are typically historical/in-force snapshots
+      date: version.date,
+      url: version.formats.find(format => format.format === 'html')?.url,
+      versionCount: 1,
       versions: [],
       citations: {},
     };

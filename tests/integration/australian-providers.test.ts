@@ -18,7 +18,7 @@ const server = setupServer(
   http.head('https://api.prod.legislation.gov.au/v1/constitution', () => {
     return new HttpResponse(null, { status: 200 });
   }),
-  
+
   // Queensland Health Checks
   http.head('https://api.legislation.qld.gov.au/v1/health', () => {
     return new HttpResponse(null, { status: 200 });
@@ -52,18 +52,24 @@ describe('Australian Providers Integration (Hardened)', () => {
     });
 
     it('should throw error when searching (in development)', async () => {
-      await expect(provider.search({ query: 'privacy' })).rejects.toThrow('Commonwealth search is currently in development');
+      await expect(provider.search({ query: 'privacy' })).rejects.toThrow(
+        'Commonwealth search is currently in development'
+      );
     });
 
     it('should generate australian style citations', () => {
       const mockWork = {
         work_id: 'act/2020/1',
         title: 'Test Act 2020',
+        type: 'act',
         year: 2020,
-        jurisdiction: 'au-comm'
+        jurisdiction: 'au-comm',
+        status: 'in-force',
+        versions: [],
+        citations: {},
       };
       const citation = provider.getCitation(mockWork as any, 'australian');
-      expect(citation).toBe('Test Act 2020 (2020) au-comm');
+      expect(citation).toBe('Test Act 2020 (Cth)');
     });
 
     it('should fall back to base citation for other styles', () => {
@@ -72,13 +78,13 @@ describe('Australian Providers Integration (Hardened)', () => {
         title: 'Test Act 2020',
         year: 2020,
         type: 'act',
-        jurisdiction: 'au-comm'
+        jurisdiction: 'au-comm',
       };
       // BaseLegislationProvider generateNzmjCitation returns `${title} ${year} (${jurisdiction})`
       const citation = provider.getCitation(mockWork as any, 'nzmj');
       expect(citation).toBe('Test Act 2020 2020 (au-comm)');
     });
-    
+
     it('should return a work by ID (placeholder logic)', async () => {
       const work = await provider.getWork('act/2020/1');
       expect(work.work_id).toBe('act/2020/1');
@@ -127,32 +133,44 @@ describe('Australian Providers Integration (Hardened)', () => {
 
     it('should throw error when searching without API key', async () => {
       const noKeyProvider = new QueenslandProvider();
-      await expect(noKeyProvider.search({ query: 'health' })).rejects.toThrow('Queensland API key is required');
+      await expect(noKeyProvider.search({ query: 'health' })).rejects.toThrow(
+        'Queensland API key is required'
+      );
     });
 
     it('should throw error when searching (in development)', async () => {
-      await expect(provider.search({ query: 'health' })).rejects.toThrow('Queensland search is currently in development');
+      await expect(provider.search({ query: 'health' })).rejects.toThrow(
+        'Queensland search is currently in development'
+      );
     });
 
     it('should throw error when getting work without API key', async () => {
       const noKeyProvider = new QueenslandProvider();
-      await expect(noKeyProvider.getWork('act-2006-060')).rejects.toThrow('Queensland API key is required');
+      await expect(noKeyProvider.getWork('act-2006-060')).rejects.toThrow(
+        'Queensland API key is required'
+      );
     });
 
     it('should throw error when getting versions without API key', async () => {
       const noKeyProvider = new QueenslandProvider();
-      await expect(noKeyProvider.getVersions('act-2006-060')).rejects.toThrow('Queensland API key is required');
+      await expect(noKeyProvider.getVersions('act-2006-060')).rejects.toThrow(
+        'Queensland API key is required'
+      );
     });
 
     it('should generate australian style citations', () => {
       const mockWork = {
         work_id: 'act/2021/5',
         title: 'QLD Health Act 2021',
+        type: 'act',
         year: 2021,
-        jurisdiction: 'au-qld'
+        jurisdiction: 'au-qld',
+        status: 'in-force',
+        versions: [],
+        citations: {},
       };
       const citation = provider.getCitation(mockWork as any, 'australian');
-      expect(citation).toBe('QLD Health Act 2021 (2021) au-qld');
+      expect(citation).toBe('QLD Health Act 2021 (Qld)');
     });
 
     it('should return a work by ID (placeholder logic)', async () => {

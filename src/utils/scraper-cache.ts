@@ -1,13 +1,13 @@
 /**
  * Scraper Caching Utility
- * 
+ *
  * LRU caching for scraper results to improve performance and
  * reduce load on legislation websites.
  */
 
 import { LRUCache } from 'lru-cache';
 
-export interface CachedResult<T = any> {
+export interface CachedResult<T = unknown> {
   data: T;
   timestamp: Date;
   ttl: number; // ms
@@ -31,7 +31,7 @@ export interface ScraperCacheOptions {
   jurisdiction?: string; // For stats
 }
 
-export class ScraperCache<T = any> {
+export class ScraperCache<T = unknown> {
   private cache: LRUCache<string, CachedResult<T>>;
   private defaultTTL: number;
   private hits: number = 0;
@@ -47,7 +47,7 @@ export class ScraperCache<T = any> {
       ttl: this.defaultTTL,
       updateAgeOnGet: false,
       allowStale: false,
-      dispose: (value, key) => {
+      dispose: (value, key): void => {
         // Called when item is evicted
         console.debug(`Cache eviction: ${key} (age: ${Date.now() - value.timestamp.getTime()}ms)`);
       },
@@ -60,20 +60,24 @@ export class ScraperCache<T = any> {
   async getOrSet(key: string, fetcher: () => Promise<T>, ttl?: number): Promise<T> {
     // Check cache first
     const cached = this.cache.get(key);
-    
-    if (cached) {
+
+    if (cached && !this.isExpired(cached)) {
       this.hits++;
       cached.hits++;
       return cached.data;
+    }
+
+    if (cached) {
+      this.cache.delete(key);
     }
 
     this.misses++;
 
     // Fetch and cache
     const data = await fetcher();
-    
+
     this.set(key, data, ttl);
-    
+
     return data;
   }
 
@@ -81,13 +85,19 @@ export class ScraperCache<T = any> {
    * Set value in cache
    */
   set(key: string, data: T, ttl?: number): void {
-    this.cache.set(key, {
-      data,
-      timestamp: new Date(),
-      ttl: ttl ?? this.defaultTTL,
-      hits: 0,
-      source: this.jurisdiction,
-    });
+    this.cache.set(
+      key,
+      {
+        data,
+        timestamp: new Date(),
+        ttl: ttl ?? this.defaultTTL,
+        hits: 0,
+        source: this.jurisdiction,
+      },
+      {
+        ttl: ttl ?? this.defaultTTL,
+      }
+    );
   }
 
   /**
@@ -95,11 +105,15 @@ export class ScraperCache<T = any> {
    */
   get(key: string): T | undefined {
     const cached = this.cache.get(key);
-    
-    if (cached) {
+
+    if (cached && !this.isExpired(cached)) {
       this.hits++;
       cached.hits++;
       return cached.data;
+    }
+
+    if (cached) {
+      this.cache.delete(key);
     }
 
     this.misses++;
@@ -146,7 +160,7 @@ export class ScraperCache<T = any> {
   getStats(): CacheStats {
     const total = this.hits + this.misses;
     const hitRate = total > 0 ? (this.hits / total) * 100 : 0;
-    
+
     let totalAge = 0;
     let count = 0;
     for (const key of this.cache.keys()) {
@@ -201,7 +215,7 @@ export class ScraperCache<T = any> {
   getOldest(count: number = 10): Array<{ key: string; age: number }> {
     const entries = this.entries();
     entries.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
-    
+
     return entries.slice(0, count).map(entry => ({
       key: entry.key,
       age: Date.now() - entry.timestamp.getTime(),
@@ -214,7 +228,7 @@ export class ScraperCache<T = any> {
   getMostAccessed(count: number = 10): Array<{ key: string; hits: number }> {
     const entries = this.entries();
     entries.sort((a, b) => b.hits - a.hits);
-    
+
     return entries.slice(0, count).map(entry => ({
       key: entry.key,
       hits: entry.hits,
@@ -229,12 +243,16 @@ export class ScraperCache<T = any> {
     this.misses = 0;
   }
 
+  private isExpired(entry: CachedResult<T>): boolean {
+    return Date.now() - entry.timestamp.getTime() > entry.ttl;
+  }
+
   /**
    * Get cache info for CLI
    */
   getInfo(): string {
     const stats = this.getStats();
-    
+
     return [
       `Cache: ${this.jurisdiction}`,
       `  Size: ${stats.size} / ${stats.maxSize} entries`,
@@ -252,11 +270,11 @@ const sharedCaches: Map<string, ScraperCache> = new Map();
 
 export function getSharedCache(jurisdiction: string, options?: ScraperCacheOptions): ScraperCache {
   const key = options?.jurisdiction ?? jurisdiction;
-  
+
   if (!sharedCaches.has(key)) {
     sharedCaches.set(key, new ScraperCache({ ...options, jurisdiction }));
   }
-  
+
   return sharedCaches.get(key)!;
 }
 

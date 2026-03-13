@@ -6,8 +6,8 @@
  */
 
 import type { HealthCheckable, HealthStatus } from '../utils/health-monitor.js';
-import { ScraperCache } from '../utils/scraper-cache.js';
 import { RateLimiter } from '../utils/rate-limiter.js';
+import { ScraperCache } from '../utils/scraper-cache.js';
 
 /**
  * Search parameters
@@ -42,6 +42,11 @@ export interface WorkSummary {
   year: number;
   number: number;
   jurisdiction: string;
+  shortTitle?: string;
+  status?: string;
+  date?: string;
+  url?: string;
+  versionCount?: number;
 }
 
 /**
@@ -61,16 +66,19 @@ export interface VersionSummary {
   title: string;
   date: string;
   is_current: boolean;
+  version?: number;
+  type?: string;
+  formats?: string[];
 }
 
 /**
  * Citation styles
  */
-export type CitationStyle = 'nzmj' | 'apa' | 'oscola' | 'australian';
+export type CitationStyle = 'nzmj' | 'apa' | 'oscola' | 'australian' | 'bibtex' | 'ris' | 'enw';
 
 /**
  * Legislation Provider Interface
- * 
+ *
  * All jurisdiction providers (NZ, Australian states, etc.) must implement this.
  */
 export interface LegislationProvider extends HealthCheckable {
@@ -119,7 +127,7 @@ export interface LegislationProvider extends HealthCheckable {
  * Base provider with common functionality
  */
 export abstract class BaseLegislationProvider implements LegislationProvider {
-  protected cache: ScraperCache;
+  protected cache: ScraperCache<unknown>;
   protected rateLimiter: RateLimiter;
   protected jurisdiction: string;
   protected displayName: string;
@@ -160,10 +168,14 @@ export abstract class BaseLegislationProvider implements LegislationProvider {
     await this.rateLimiter.throttle();
 
     const cacheKey = `search:${JSON.stringify(params)}`;
-    
-    return this.cache.getOrSet(cacheKey, async () => {
-      return this.searchImpl(params);
-    }, 30 * 60 * 1000); // 30 minute cache for search
+
+    const results = await this.cache.getOrSet(
+      cacheKey,
+      async (): Promise<unknown> => this.searchImpl(params),
+      30 * 60 * 1000
+    ); // 30 minute cache for search
+
+    return results as SearchResults;
   }
 
   /**
@@ -173,10 +185,14 @@ export abstract class BaseLegislationProvider implements LegislationProvider {
     await this.rateLimiter.throttle();
 
     const cacheKey = `work:${workId}`;
-    
-    return this.cache.getOrSet(cacheKey, async () => {
-      return this.getWorkImpl(workId);
-    }, 24 * 60 * 60 * 1000); // 24 hour cache for work details
+
+    const work = await this.cache.getOrSet(
+      cacheKey,
+      async (): Promise<unknown> => this.getWorkImpl(workId),
+      24 * 60 * 60 * 1000
+    ); // 24 hour cache for work details
+
+    return work as Work;
   }
 
   /**
@@ -186,10 +202,14 @@ export abstract class BaseLegislationProvider implements LegislationProvider {
     await this.rateLimiter.throttle();
 
     const cacheKey = `versions:${workId}`;
-    
-    return this.cache.getOrSet(cacheKey, async () => {
-      return this.getVersionsImpl(workId);
-    }, 24 * 60 * 60 * 1000);
+
+    const versions = await this.cache.getOrSet(
+      cacheKey,
+      async (): Promise<unknown> => this.getVersionsImpl(workId),
+      24 * 60 * 60 * 1000
+    );
+
+    return versions as VersionSummary[];
   }
 
   /**
@@ -199,10 +219,14 @@ export abstract class BaseLegislationProvider implements LegislationProvider {
     await this.rateLimiter.throttle();
 
     const cacheKey = `version:${versionId}`;
-    
-    return this.cache.getOrSet(cacheKey, async () => {
-      return this.getVersionImpl(versionId);
-    }, 24 * 60 * 60 * 1000);
+
+    const version = await this.cache.getOrSet(
+      cacheKey,
+      async (): Promise<unknown> => this.getVersionImpl(versionId),
+      24 * 60 * 60 * 1000
+    );
+
+    return version as Work;
   }
 
   /**
@@ -218,9 +242,15 @@ export abstract class BaseLegislationProvider implements LegislationProvider {
         return this.generateOscolaCitation(work);
       case 'australian':
         return this.generateAustralianCitation(work);
-      default:
-        throw new Error(`Unknown citation style: ${style}`);
+      case 'bibtex':
+        return this.generateBibtexCitation(work);
+      case 'ris':
+        return this.generateRisCitation(work);
+      case 'enw':
+        return this.generateEnwCitation(work);
     }
+
+    throw new Error(`Unknown citation style: ${String(style)}`);
   }
 
   /**
@@ -234,14 +264,14 @@ export abstract class BaseLegislationProvider implements LegislationProvider {
   /**
    * Get cache stats
    */
-  getCacheStats() {
+  getCacheStats(): ReturnType<ScraperCache<unknown>['getStats']> {
     return this.cache.getStats();
   }
 
   /**
    * Get rate limit status
    */
-  getRateLimitStatus() {
+  getRateLimitStatus(): ReturnType<RateLimiter['getStatus']> {
     return this.rateLimiter.getStatus();
   }
 
@@ -267,13 +297,90 @@ export abstract class BaseLegislationProvider implements LegislationProvider {
   }
 
   protected generateAustralianCitation(work: Work): string {
-    return `${work.title} (${work.year}) ${work.jurisdiction}`;
+    const suffix =
+      work.jurisdiction === 'au-comm'
+        ? '(Cth)'
+        : work.jurisdiction === 'au-qld'
+          ? '(Qld)'
+          : `(${work.jurisdiction})`;
+
+    return `${work.title} ${suffix}`;
+  }
+
+  protected generateBibtexCitation(work: Work): string {
+    const year = this.getCitationYear(work);
+    const url = this.getCitationUrl(work);
+
+    return `@legislation{${work.work_id.replace(/[\\/]/g, '-')},
+  title = {${work.title}},
+  year = {${year}},
+  type = {${work.type}},
+  status = {${work.status}},
+  url = {${url}}
+}`;
+  }
+
+  protected generateRisCitation(work: Work): string {
+    const year = this.getCitationYear(work);
+    const url = this.getCitationUrl(work);
+
+    return `TY - LEG
+ID - ${work.work_id}
+TI - ${work.title}
+PY - ${year}
+M3 - ${work.type === 'act' ? 'Public Act' : work.type}
+CY - ${this.displayName}
+UR - ${url}
+ER - `;
+  }
+
+  protected generateEnwCitation(work: Work): string {
+    const year = this.getCitationYear(work);
+    const url = this.getCitationUrl(work);
+
+    return `%0 Statute
+%A ${this.displayName}
+%D ${year}
+%T ${work.title}
+%9 ${work.type === 'act' ? 'Public Act' : work.type}
+%U ${url}
+%Z ${work.work_id}`;
+  }
+
+  protected getCitationYear(work: Work): string {
+    if (work.year > 0) {
+      return String(work.year);
+    }
+
+    if (work.date) {
+      return work.date.substring(0, 4);
+    }
+
+    const match = work.work_id.match(/(?:^|[_/])((?:19|20)\d{2})(?:[_/]|$)/);
+    return match ? match[1] : '1900';
+  }
+
+  protected getCitationUrl(work: Work): string {
+    if (work.url) {
+      return work.url;
+    }
+
+    switch (work.jurisdiction) {
+      case 'nz':
+        return `https://www.legislation.govt.nz/${work.work_id.replace(/_/g, '/')}/`;
+      case 'au-comm':
+        return `https://www.legislation.gov.au/Details/${work.work_id}`;
+      case 'au-qld':
+        return `https://www.legislation.qld.gov.au/view/html/inforce/current/${work.work_id.replace(/\//g, '-')}`;
+      default:
+        return work.work_id;
+    }
   }
 }
 
 /**
  * Provider registry
- * 
+ *
  * Manages multiple legislation providers and provides
  * health monitoring across all jurisdictions.
  */
@@ -325,13 +432,15 @@ export class ProviderRegistry {
   /**
    * Get health dashboard for all providers
    */
-  async getHealthDashboard(): Promise<{
-    jurisdiction: string;
-    healthy: boolean;
-    status: HealthStatus;
-  }[]> {
+  async getHealthDashboard(): Promise<
+    {
+      jurisdiction: string;
+      healthy: boolean;
+      status: HealthStatus;
+    }[]
+  > {
     const results = [];
-    
+
     for (const provider of this.providers.values()) {
       try {
         const status = await this.getProviderHealth(provider);
