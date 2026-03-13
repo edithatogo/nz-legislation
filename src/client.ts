@@ -680,3 +680,10 @@ export function getRateLimitStatus() {
     burstResetTime: new Date(rateLimitState.burstResetTime),
   };
 }
+
+/**
+ * Get cache metrics
+ */
+export function getCacheMetrics() {
+  return { ...cacheMetrics };
+}

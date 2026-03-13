@@ -48,3 +48,4 @@
 - [x] Task: Decide whether the Australian work qualifies for a prerelease from `next`
 - [x] Task: Prepare prerelease notes and compatibility updates for the `next` lane
 - [x] Task: Confirm `release-next.yml` is ready for a real Australian prerelease publish when the implementation is complete
+- [x] Task: Execute `changeset version` to prepare `v1.2.0-next.0` prerelease packages
