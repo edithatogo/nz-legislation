@@ -1,0 +1,16 @@
+export default {
+  "17896441": [() => import(/* webpackChunkName: "17896441" */ "@theme/DocItem"), "@theme/DocItem", require.resolveWeak("@theme/DocItem")],
+  "201129e5": [() => import(/* webpackChunkName: "201129e5" */ "@site/docs/user-guide/exporting.md"), "@site/docs/user-guide/exporting.md", require.resolveWeak("@site/docs/user-guide/exporting.md")],
+  "3b8c55ea": [() => import(/* webpackChunkName: "3b8c55ea" */ "@site/docs/installation.md"), "@site/docs/installation.md", require.resolveWeak("@site/docs/installation.md")],
+  "5e95c892": [() => import(/* webpackChunkName: "5e95c892" */ "@theme/DocsRoot"), "@theme/DocsRoot", require.resolveWeak("@theme/DocsRoot")],
+  "72e14192": [() => import(/* webpackChunkName: "72e14192" */ "@site/docs/quick-start.md"), "@site/docs/quick-start.md", require.resolveWeak("@site/docs/quick-start.md")],
+  "7fe43e5e": [() => import(/* webpackChunkName: "7fe43e5e" */ "@site/docs/user-guide/research-workflow.md"), "@site/docs/user-guide/research-workflow.md", require.resolveWeak("@site/docs/user-guide/research-workflow.md")],
+  "85805df7": [() => import(/* webpackChunkName: "85805df7" */ "@site/docs/user-guide/index.md"), "@site/docs/user-guide/index.md", require.resolveWeak("@site/docs/user-guide/index.md")],
+  "892b216c": [() => import(/* webpackChunkName: "892b216c" */ "@site/docs/user-guide/citations.md"), "@site/docs/user-guide/citations.md", require.resolveWeak("@site/docs/user-guide/citations.md")],
+  "9cde0d67": [() => import(/* webpackChunkName: "9cde0d67" */ "@site/docs/user-guide/searching.md"), "@site/docs/user-guide/searching.md", require.resolveWeak("@site/docs/user-guide/searching.md")],
+  "9ed00105": [() => import(/* webpackChunkName: "9ed00105" */ "@site/docs/configuration.md"), "@site/docs/configuration.md", require.resolveWeak("@site/docs/configuration.md")],
+  "a7bd4aaa": [() => import(/* webpackChunkName: "a7bd4aaa" */ "@theme/DocVersionRoot"), "@theme/DocVersionRoot", require.resolveWeak("@theme/DocVersionRoot")],
+  "a94703ab": [() => import(/* webpackChunkName: "a94703ab" */ "@theme/DocRoot"), "@theme/DocRoot", require.resolveWeak("@theme/DocRoot")],
+  "aba21aa0": [() => import(/* webpackChunkName: "aba21aa0" */ "@generated/docusaurus-plugin-content-docs/default/__plugin.json"), "@generated/docusaurus-plugin-content-docs/default/__plugin.json", require.resolveWeak("@generated/docusaurus-plugin-content-docs/default/__plugin.json")],
+  "ae7a3101": [() => import(/* webpackChunkName: "ae7a3101" */ "@generated/docusaurus-plugin-content-docs/default/p/nz-legislation-47a.json"), "@generated/docusaurus-plugin-content-docs/default/p/nz-legislation-47a.json", require.resolveWeak("@generated/docusaurus-plugin-content-docs/default/p/nz-legislation-47a.json")],
+  "c377a04b": [() => import(/* webpackChunkName: "c377a04b" */ "@site/docs/index.md"), "@site/docs/index.md", require.resolveWeak("@site/docs/index.md")],};

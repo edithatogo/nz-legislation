@@ -1,0 +1,27 @@
+{
+  "id": "user-guide/exporting",
+  "title": "Exporting Data",
+  "description": "This guide covers exporting search results to various formats for analysis.",
+  "source": "@site/docs/user-guide/exporting.md",
+  "sourceDirName": "user-guide",
+  "slug": "/user-guide/exporting",
+  "permalink": "/nz-legislation/user-guide/exporting",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/edithatogo/nz-legislation/tree/main/nz-legislation-tool/docs/user-guide/exporting.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "sidebar_position": 2
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Searching Legislation",
+    "permalink": "/nz-legislation/user-guide/searching"
+  },
+  "next": {
+    "title": "Generating Citations",
+    "permalink": "/nz-legislation/user-guide/citations"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "user-guide/searching",
+  "title": "Searching Legislation",
+  "description": "This guide covers all search options and techniques for finding legislation.",
+  "source": "@site/docs/user-guide/searching.md",
+  "sourceDirName": "user-guide",
+  "slug": "/user-guide/searching",
+  "permalink": "/nz-legislation/user-guide/searching",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/edithatogo/nz-legislation/tree/main/nz-legislation-tool/docs/user-guide/searching.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "User Guide",
+    "permalink": "/nz-legislation/user-guide/"
+  },
+  "next": {
+    "title": "Exporting Data",
+    "permalink": "/nz-legislation/user-guide/exporting"
+  }
+}

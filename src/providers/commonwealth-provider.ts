@@ -5,22 +5,13 @@
  * Register of Legislation API at https://api.prod.legislation.gov.au/v1/
  */
 
-import { BaseLegislationProvider } from './legislation-provider.js';
-import type { SearchParams, SearchResults, Work, VersionSummary, CitationStyle } from './legislation-provider.js';
+import { BaseLegislationProvider, type SearchParams, type SearchResults, type Work, type VersionSummary, type CitationStyle } from './legislation-provider.js';
 import { logger } from '../utils/logger.js';
 
 export class CommonwealthProvider extends BaseLegislationProvider {
-  private baseUrl = 'https://api.prod.legislation.gov.au/v1';
-  private apiKey?: string;
-
   constructor(apiKey?: string) {
-    super(
-      'au-comm',
-      'Commonwealth (Federal)',
-      { requests: 60, per: 60 }, // 60 requests per minute
-      { max: 500, ttl: 24 * 60 * 60 * 1000 }
-    );
-    this.apiKey = apiKey;
+    // Default rate limit: 5 requests per second
+    super('au-comm', 'Australian Commonwealth', { requests: 5, per: 1 });
   }
 
   /**
@@ -35,67 +26,41 @@ export class CommonwealthProvider extends BaseLegislationProvider {
   }
 
   /**
-   * Get work by ID
+   * Get specific Commonwealth work by ID
    */
   protected async getWorkImpl(workId: string): Promise<Work> {
-    // Implementation for /v1/content('{id}')
-    const [type, year, number] = workId.split('/');
-    
+    // Placeholder for direct ID retrieval
+    // In a real implementation, this would call /v1/Titles('{id}')
     return {
+      id: workId,
       work_id: workId,
-      title: `${type} ${year} (Cth)`,
-      type: type ?? 'act',
-      year: parseInt(year ?? '0'),
-      number: parseInt(number ?? '0'),
-      jurisdiction: 'au-comm',
+      title: `${workId} (Cth)`,
+      type: 'act',
       status: 'in-force',
+      date: new Date().toISOString().split('T')[0],
+      url: `https://www.legislation.gov.au/Details/${workId}`,
+      versionCount: 1,
+      jurisdiction: 'au-comm',
       versions: [],
       citations: {
-        australian: `${type} ${year} (Cth)`,
-      },
+        nzmj: `${workId} (Cth)`,
+        australian: `${workId} (Cth)`
+      }
     };
   }
 
-  /**
-   * Get versions of a work
-   */
   protected async getVersionsImpl(workId: string): Promise<VersionSummary[]> {
-    // Implementation for /v1/content('{id}')/versions
     return [];
   }
 
-  /**
-   * Get specific version
-   */
   protected async getVersionImpl(versionId: string): Promise<Work> {
     throw new Error('Not implemented - scraper pending');
   }
 
   /**
-   * Health check
+   * Override citation generation for Australian style
    */
-  async healthCheck(): Promise<void> {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-    try {
-      const response = await fetch(`${this.baseUrl}/constitution`, {
-        signal: controller.signal,
-        method: 'HEAD',
-      });
-
-      if (!response.ok) {
-        throw new Error(`Health check failed with status ${response.status}`);
-      }
-    } finally {
-      clearTimeout(timeoutId);
-    }
-  }
-
-  /**
-   * Custom citation generation for Commonwealth
-   */
-  override getCitation(work: Work, style: CitationStyle): string {
+  getCitation(work: Work, style: CitationStyle): string {
     if (style === 'australian') {
       return `${work.title} (${work.year}) ${work.jurisdiction}`;
     }

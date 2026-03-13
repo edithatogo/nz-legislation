@@ -1,0 +1,23 @@
+{
+  "id": "user-guide/research-workflow",
+  "title": "Research Workflow",
+  "description": "This guide provides an end-to-end workflow for using the NZ Legislation Tool in academic research.",
+  "source": "@site/docs/user-guide/research-workflow.md",
+  "sourceDirName": "user-guide",
+  "slug": "/user-guide/research-workflow",
+  "permalink": "/nz-legislation/user-guide/research-workflow",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/edithatogo/nz-legislation/tree/main/nz-legislation-tool/docs/user-guide/research-workflow.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 4,
+  "frontMatter": {
+    "sidebar_position": 4
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Generating Citations",
+    "permalink": "/nz-legislation/user-guide/citations"
+  }
+}

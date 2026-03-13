@@ -1,0 +1,27 @@
+{
+  "id": "user-guide/index",
+  "title": "User Guide",
+  "description": "Welcome to the NZ Legislation Tool User Guide. This section covers all features and workflows.",
+  "source": "@site/docs/user-guide/index.md",
+  "sourceDirName": "user-guide",
+  "slug": "/user-guide/",
+  "permalink": "/nz-legislation/user-guide/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/edithatogo/nz-legislation/tree/main/nz-legislation-tool/docs/user-guide/index.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Configuration",
+    "permalink": "/nz-legislation/configuration"
+  },
+  "next": {
+    "title": "Searching Legislation",
+    "permalink": "/nz-legislation/user-guide/searching"
+  }
+}
