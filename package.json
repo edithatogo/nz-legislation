@@ -1,6 +1,6 @@
 {
   "name": "nz-legislation-tool",
-  "version": "1.1.0",
+  "version": "1.2.0-next.0",
   "description": "CLI tool for searching and retrieving New Zealand legislation data",
   "type": "module",
   "main": "dist/cli.js",

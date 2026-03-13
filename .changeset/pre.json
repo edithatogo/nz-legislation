@@ -4,5 +4,7 @@
   "initialVersions": {
     "nz-legislation-tool": "1.1.0"
   },
-  "changesets": []
+  "changesets": [
+    "eleven-parents-worry"
+  ]
 }
