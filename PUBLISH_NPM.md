@@ -4,7 +4,7 @@
 
 ✅ **GitHub Repository:** https://github.com/edithatogo/nz-legislation  
 ✅ **GitHub Release v1.0.0:** https://github.com/edithatogo/nz-legislation/releases/tag/v1.0.0  
-⏳ **npm Package:** Ready to publish  
+⏳ **npm Package:** Ready to publish
 
 ---
 
@@ -56,7 +56,7 @@ Check `package.json`:
 
 ✅ Name: `nz-legislation`  
 ✅ Version: `1.0.0`  
-✅ Bin: `nzlegislation`  
+✅ Bin: `nzlegislation`
 
 ### Step 5: Build the Project
 
@@ -73,6 +73,7 @@ npm publish --access public
 ```
 
 **Expected Output:**
+
 ```
 + nz-legislation@1.0.0
 ```
@@ -157,6 +158,7 @@ nzlegislation search --query "health" --limit 5
 ### 3. Announce Release
 
 Share on:
+
 - Twitter/LinkedIn
 - Research networks
 - NZ Legislation API community
@@ -175,6 +177,7 @@ Share on:
 **Cause:** Package name already taken or not logged in
 
 **Solution:**
+
 ```bash
 npm login
 # Or choose different package name
@@ -191,6 +194,7 @@ npm login
 **Cause:** Not logged in or token expired
 
 **Solution:**
+
 ```bash
 npm login
 ```
@@ -199,15 +203,15 @@ npm login
 
 ## Package Details
 
-| Field | Value |
-|-------|-------|
-| **Package Name** | `nz-legislation` |
-| **Version** | `1.0.0` |
-| **License** | Apache-2.0 |
-| **Repository** | github:edithatogo/nz-legislation |
-| **Bin Command** | `nzlegislation` |
-| **Main Entry** | `dist/cli.js` |
-| **Node Engine** | `>=18.0.0` |
+| Field            | Value                            |
+| ---------------- | -------------------------------- |
+| **Package Name** | `nz-legislation`                 |
+| **Version**      | `1.0.0`                          |
+| **License**      | Apache-2.0                       |
+| **Repository**   | github:edithatogo/nz-legislation |
+| **Bin Command**  | `nzlegislation`                  |
+| **Main Entry**   | `dist/cli.js`                    |
+| **Node Engine**  | `>=18.0.0`                       |
 
 ---
 

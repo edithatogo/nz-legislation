@@ -29,11 +29,12 @@ export async function checkForUpdates(): Promise<void> {
       return;
     }
 
-    const data = await response.json() as { version: string };
+    const data = (await response.json()) as { version: string };
     const latestVersion = data.version;
 
     if (latestVersion !== VERSION) {
-      console.log(chalk.yellow(`
+      console.log(
+        chalk.yellow(`
 ╔═══════════════════════════════════════════════════════════╗
 ║                                                           ║
 ║  ⚠️  New version available!                               ║
@@ -43,11 +44,15 @@ export async function checkForUpdates(): Promise<void> {
 ║  Run: npm install -g nz-legislation-tool                  ║
 ║                                                           ║
 ╚═══════════════════════════════════════════════════════════╝
-      `));
+      `)
+      );
     }
   } catch (error) {
     // Log debug info if verbose mode is enabled
-    logger.debug('Update check failed', error instanceof Error ? { error: error.message } : { error });
+    logger.debug(
+      'Update check failed',
+      error instanceof Error ? { error: error.message } : { error }
+    );
   }
 }
 

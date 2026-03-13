@@ -73,13 +73,9 @@ describe('Hypothesis Tests: Consistency', () => {
   });
 
   it('should handle work ID format consistently', () => {
-    const workIds = [
-      'act_public_1989_18',
-      'bill_government_2025_217',
-      'regulation_2020_100',
-    ];
+    const workIds = ['act_public_1989_18', 'bill_government_2025_217', 'regulation_2020_100'];
 
-    workIds.forEach((workId) => {
+    workIds.forEach(workId => {
       const work: Work = {
         ...mockWork,
         id: workId,

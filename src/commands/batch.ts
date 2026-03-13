@@ -2,12 +2,14 @@
  * Batch Command - Execute bulk operations
  */
 
+import { readFileSync } from 'fs';
+
 import { Command } from 'commander';
 import ora from 'ora';
-import { readFileSync } from 'fs';
 
 import {
   BatchExecutor,
+  type BatchProgress,
   BatchRequest,
   createBatchFromFile,
   createBatchFromIds,
@@ -44,7 +46,7 @@ export const batchCommand = new Command()
     }
 
     const spinner = ora('Preparing batch...').start();
-    
+
     try {
       let requests: BatchRequest[] = [];
 
@@ -52,11 +54,15 @@ export const batchCommand = new Command()
       if (options.file) {
         spinner.text = 'Loading input file...';
         const content = readFileSync(options.file, 'utf-8');
-        
+
         if (options.file.endsWith('.json')) {
-          const data = JSON.parse(content);
+          const data: unknown = JSON.parse(content);
           if (Array.isArray(data)) {
-            requests = createBatchFromFile(data, options.type, options.idColumn || 'id');
+            requests = createBatchFromFile(
+              data as Array<Record<string, string>>,
+              options.type,
+              options.idColumn || 'id'
+            );
           } else {
             throw new Error('JSON file must contain an array of objects');
           }
@@ -64,10 +70,10 @@ export const batchCommand = new Command()
           // Simple CSV parsing (for production, use a proper CSV parser)
           const lines = content.trim().split('\n');
           const headers = lines[0].split(',');
-          const idColumnIndex = options.idColumn 
+          const idColumnIndex = options.idColumn
             ? headers.indexOf(options.idColumn)
             : headers.indexOf('id');
-          
+
           if (idColumnIndex === -1) {
             throw new Error(`ID column "${options.idColumn || 'id'}" not found in CSV`);
           }
@@ -82,7 +88,10 @@ export const batchCommand = new Command()
           throw new Error('Unsupported file format. Use CSV or JSON.');
         }
       } else if (options.ids) {
-        const ids = options.ids.split(',').map(id => id.trim()).filter(id => id);
+        const ids = options.ids
+          .split(',')
+          .map(id => id.trim())
+          .filter(id => id);
         requests = createBatchFromIds(ids, options.type);
       }
 
@@ -102,7 +111,7 @@ export const batchCommand = new Command()
 
       // Track progress
       let lastProgress = 0;
-      executor.on('progress', (progress) => {
+      executor.on('progress', (progress: BatchProgress) => {
         if (progress.percent - lastProgress >= 10) {
           console.log(`  Progress: ${progress.percent}% (${progress.completed}/${progress.total})`);
           lastProgress = progress.percent;
@@ -128,7 +137,7 @@ export const batchCommand = new Command()
 
       // Save results if output specified
       if (options.output) {
-        saveBatchResults(results, options.output, options.format as 'json' | 'csv');
+        saveBatchResults(results, options.output, options.format);
         console.log(`\n✓ Results saved to: ${options.output}`);
       }
 
@@ -142,7 +151,6 @@ export const batchCommand = new Command()
           });
         }
       }
-
     } catch (error) {
       spinner.fail('Batch operation failed');
       console.error('Error:', error instanceof Error ? error.message : error);

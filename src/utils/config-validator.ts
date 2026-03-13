@@ -3,8 +3,6 @@
  * Runtime validation and health checks for configuration
  */
 
-import { z } from 'zod';
-
 import { ErrorCode, ValidationError } from '@errors';
 import { logger } from '@utils/logger';
 import { validateApiKeyFormat } from '@utils/secure-config';
@@ -36,7 +34,8 @@ function validateApiKey(apiKey: string | undefined): ValidationErrorDetail[] {
   if (!apiKey || apiKey.length === 0) {
     errors.push({
       field: 'apiKey',
-      message: 'API key is required. Set via config file or NZ_LEGISLATION_API_KEY environment variable.',
+      message:
+        'API key is required. Set via config file or NZ_LEGISLATION_API_KEY environment variable.',
       code: ErrorCode.CONFIG_API_KEY_MISSING,
     });
   } else if (apiKey === 'your_api_key_here') {
@@ -68,7 +67,7 @@ function validateBaseUrl(baseUrl: string | undefined): ValidationErrorDetail[] {
 
   try {
     new URL(baseUrl);
-    
+
     if (!baseUrl.startsWith('https://')) {
       errors.push({
         field: 'baseUrl',
@@ -167,12 +166,16 @@ function generateWarnings(config: Record<string, unknown>): string[] {
 
   // Warn if using non-default timeout
   if (config.timeout && (config.timeout as number) < 10000) {
-    warnings.push('Timeout is set to less than 10 seconds. This may cause failures on slow connections.');
+    warnings.push(
+      'Timeout is set to less than 10 seconds. This may cause failures on slow connections.'
+    );
   }
 
   // Warn if cache is disabled
   if (config.cacheEnabled === false) {
-    warnings.push('Caching is disabled. This may result in slower performance and higher API usage.');
+    warnings.push(
+      'Caching is disabled. This may result in slower performance and higher API usage.'
+    );
   }
 
   // Warn if verbose mode is enabled in production-like setting
@@ -228,11 +231,7 @@ export function validateConfigurationOrThrow(config: Record<string, unknown>): v
 
   if (!result.valid && result.errors.length > 0) {
     const firstError = result.errors[0];
-    throw new ValidationError(
-      firstError.code,
-      firstError.message,
-      { field: firstError.field }
-    );
+    throw new ValidationError(firstError.code, firstError.message, { field: firstError.field });
   }
 }
 

@@ -11,8 +11,15 @@ import { z } from 'zod';
 const envSchema = z.object({
   NZ_LEGISLATION_API_KEY: z.string().optional(),
   NZ_LEGISLATION_BASE_URL: z.string().url().optional(),
-  NZ_LEGISLATION_TIMEOUT: z.string().regex(/^\d+$/).transform((val) => parseInt(val, 10)).optional(),
-  NZ_LEGISLATION_VERBOSE: z.string().transform((val) => val === 'true').optional(),
+  NZ_LEGISLATION_TIMEOUT: z
+    .string()
+    .regex(/^\d+$/)
+    .transform(val => parseInt(val, 10))
+    .optional(),
+  NZ_LEGISLATION_VERBOSE: z
+    .string()
+    .transform(val => val === 'true')
+    .optional(),
 });
 
 export type EnvConfig = z.infer<typeof envSchema>;
@@ -37,20 +44,18 @@ export function loadEnvConfig(): ParsedEnv {
 
   if (!result.success) {
     // Log validation errors but don't fail - we'll use defaults
-    const errors = result.error.errors.map((err) => ({
+    const errors = result.error.errors.map(err => ({
       variable: err.path.join('.'),
       message: err.message,
     }));
-    
+
     // Only warn if there are actual env vars set but invalid
-    const hasEnvVars = Object.keys(process.env).some((key) =>
-      key.startsWith('NZ_LEGISLATION_')
-    );
-    
+    const hasEnvVars = Object.keys(process.env).some(key => key.startsWith('NZ_LEGISLATION_'));
+
     if (hasEnvVars) {
       console.warn('Warning: Invalid environment variables detected:', errors);
     }
-    
+
     return {};
   }
 
@@ -80,16 +85,24 @@ export function loadEnvConfig(): ParsedEnv {
  * @returns True if API key is configured
  */
 export function hasRequiredEnvVars(): boolean {
-  return !!process.env.NZ_LEGISLATION_API_KEY &&
-    process.env.NZ_LEGISLATION_API_KEY !== 'your_api_key_here';
+  return (
+    !!process.env.NZ_LEGISLATION_API_KEY &&
+    process.env.NZ_LEGISLATION_API_KEY !== 'your_api_key_here'
+  );
 }
 
 /**
  * Get environment variable validation status
  */
-export function getEnvValidationStatus() {
+export function getEnvValidationStatus(): {
+  hasApiKey: boolean;
+  hasBaseUrl: boolean;
+  hasTimeout: boolean;
+  isVerbose: boolean;
+  source: 'environment';
+} {
   const env = loadEnvConfig();
-  
+
   return {
     hasApiKey: !!env.apiKey && env.apiKey !== 'your_api_key_here',
     hasBaseUrl: !!env.baseUrl,

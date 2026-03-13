@@ -60,29 +60,29 @@ const server = setupServer(
   http.get('https://api.legislation.govt.nz/v0/works', ({ request }) => {
     const url = new URL(request.url);
     const apiKey = url.searchParams.get('api_key');
-    
+
     // Validate API key
     if (!apiKey || apiKey !== TEST_API_KEY) {
       return HttpResponse.json({ error: 'API key is required' }, { status: 401 });
     }
-    
+
     // Return mock search results
     return HttpResponse.json(mockSearchResponse);
   }),
-  
+
   http.get('https://api.legislation.govt.nz/v0/works/:workId', ({ params, request }) => {
     const url = new URL(request.url);
     const apiKey = url.searchParams.get('api_key');
-    
+
     if (!apiKey || apiKey !== TEST_API_KEY) {
       return HttpResponse.json({ error: 'API key is required' }, { status: 401 });
     }
-    
+
     const { workId } = params;
     if (workId === 'act_public_1989_18') {
       return HttpResponse.json(mockWork);
     }
-    
+
     return HttpResponse.json({ error: '404', message: 'Not Found' }, { status: 404 });
   }),
 
@@ -100,7 +100,7 @@ const server = setupServer(
     }
 
     return HttpResponse.json({ error: '404', message: 'Not Found' }, { status: 404 });
-  }),
+  })
 );
 
 describe('API Integration Tests', () => {
@@ -108,43 +108,43 @@ describe('API Integration Tests', () => {
     // Start server before all tests
     server.listen({ onUnhandledRequest: 'error' });
   });
-  
+
   afterAll(() => {
     // Close server after all tests
     server.close();
   });
-  
+
   beforeEach(() => {
     // Reset handlers before each test
     server.resetHandlers();
     clearCache();
   });
-  
+
   describe('searchWorks', () => {
     it('should search for legislation successfully', async () => {
-      const results = await searchWorks({ 
-        query: 'health', 
+      const results = await searchWorks({
+        query: 'health',
         limit: 5,
       });
-      
+
       expect(results).toBeDefined();
       expect(results.results).toBeInstanceOf(Array);
       expect(results.results.length).toBeGreaterThan(0);
       expect(results.results[0].id).toBe('act_public_1989_18');
     });
-    
+
     it('should handle search with filters', async () => {
-      const results = await searchWorks({ 
+      const results = await searchWorks({
         query: 'health',
         type: 'act',
         status: 'in-force',
         limit: 10,
       });
-      
+
       expect(results).toBeDefined();
       expect(results.results).toBeInstanceOf(Array);
     });
-    
+
     it('should handle empty results', async () => {
       // Override handler for this test
       server.use(
@@ -155,35 +155,34 @@ describe('API Integration Tests', () => {
             per_page: 20,
             total: 0,
           });
-        }),
+        })
       );
-      
-      const results = await searchWorks({ 
+
+      const results = await searchWorks({
         query: 'nonexistent-query-xyz',
       });
-      
+
       expect(results).toBeDefined();
       expect(results.results).toHaveLength(0);
       expect(results.total).toBe(0);
     });
-    
+
     it('should respect rate limits', async () => {
       // Test that rate limit state is tracked
       const status = getRateLimitStatus();
-      
+
       expect(status).toBeDefined();
       expect(status.remaining).toBeGreaterThan(0);
     });
   });
-  
+
   describe('getWork', () => {
     it('should get work by ID successfully', async () => {
       const work = await getWork('act_public_1989_18');
-      
+
       expect(work).toBeDefined();
       expect(work.id).toBe('act_public_1989_18');
       expect(work.type).toBe('act');
     });
-    
   });
 });

@@ -44,8 +44,7 @@ const config = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to be your repository's URL
-          editUrl:
-            'https://github.com/edithatogo/nz-legislation-tool/tree/main/docs-site/',
+          editUrl: 'https://github.com/edithatogo/nz-legislation-tool/tree/main/docs-site/',
           routeBasePath: '/', // Serve docs at root
         },
         blog: false, // Disable blog for documentation-only site
@@ -186,10 +185,10 @@ const config = {
         apiKey: 'YOUR_API_KEY',
         indexName: 'nz-legislation-tool',
         contextualSearch: true,
-        
+
         // Optional: Algolia search parameters
         searchParameters: {},
-        
+
         // Optional: path for search page
         searchPagePath: 'search',
       },
@@ -205,12 +204,11 @@ const config = {
         maxHeadingLevel: 5,
       },
     }),
-  
+
   // Plugins
   plugins: [
     // Optional: Add local search if Algolia not available
     // 'docusaurus-lunr-search',
-    
     // Optional: Add Google Analytics
     // [
     //   '@docusaurus/plugin-google-analytics',
@@ -220,13 +218,13 @@ const config = {
     //   },
     // ],
   ],
-  
+
   // Themes
   themes: [
     // Optional: Add Mermaid diagram support
     // '@docusaurus/theme-mermaid',
   ],
-  
+
   // Markdown configuration
   markdown: {
     mermaid: true,
@@ -283,7 +281,7 @@ const sidebars = {
       ],
     },
   ],
-  
+
   developerGuideSidebar: [
     {
       type: 'category',
@@ -374,16 +372,8 @@ module.exports = sidebars;
     "@docusaurus/types": "3.0.0"
   },
   "browserslist": {
-    "production": [
-      ">0.5%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "production": [">0.5%", "not dead", "not op_mini all"],
+    "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
   },
   "engines": {
     "node": ">=18.0"
@@ -413,7 +403,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: 'pages'
   cancel-in-progress: false
 
 jobs:
@@ -426,20 +416,20 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'npm'
           cache-dependency-path: docs-site/package-lock.json
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Build website
         run: npm run build
-      
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
@@ -528,19 +518,22 @@ jobs:
   --ifm-color-primary-light: #00288c;
   --ifm-color-primary-lighter: #002b97;
   --ifm-color-primary-lightest: #0033b3;
-  
+
   /* Secondary colors - Fern green */
   --ifm-color-secondary: #008951;
-  
+
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
-  
+
   /* Spacing */
   --ifm-spacing-horizontal: 1rem;
-  
+
   /* Typography */
-  --ifm-font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  --ifm-font-family-monospace: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+  --ifm-font-family-base:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
+    'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  --ifm-font-family-monospace:
+    'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
 }
 
 /* For readability concerns, you should choose a lighter one in dark mode. */
@@ -577,13 +570,13 @@ jobs:
   border-radius: 8px;
   padding: 24px;
   margin: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s;
 }
 
 .feature-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
 /* Code blocks */
@@ -607,7 +600,7 @@ table {
 
 /* Navigation */
 .navbar {
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Sidebar */
@@ -639,11 +632,11 @@ a:focus-visible {
   .hero__title {
     font-size: 2rem;
   }
-  
+
   .hero__subtitle {
     font-size: 1.2rem;
   }
-  
+
   .feature-card {
     margin: 8px;
   }
@@ -657,7 +650,7 @@ a:focus-visible {
   .theme-edit-this-page {
     display: none !important;
   }
-  
+
   main {
     padding: 0 !important;
   }
@@ -711,16 +704,19 @@ npm run build
 ### 6. Deploy
 
 **GitHub Pages:**
+
 ```bash
 npm run deploy
 ```
 
 **Netlify:**
+
 - Connect GitHub repository
 - Configure build settings
 - Auto-deploy on push
 
 **Vercel:**
+
 - Import project
 - Auto-detect Docusaurus
 - Deploy

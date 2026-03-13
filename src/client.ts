@@ -3,18 +3,12 @@
  * Handles HTTP requests, authentication, rate limiting, and caching
  */
 
-import { LRUCache } from 'lru-cache';
 import got from 'got';
+import { LRUCache } from 'lru-cache';
 import { z } from 'zod';
 
 import { getConfig } from '@config';
-import {
-  ConfigError,
-  createApiError,
-  ErrorCode,
-  NetworkError,
-} from '@errors';
-import { logger } from '@utils/logger';
+import { ConfigError, createApiError, ErrorCode, NetworkError } from '@errors';
 import {
   LegislationVersionSchema,
   SearchResultsSchema,
@@ -26,6 +20,7 @@ import {
   type Version,
   type Work,
 } from '@models';
+import { logger } from '@utils/logger';
 
 /**
  * Cache entry with metadata
@@ -71,18 +66,6 @@ const rateLimitState = {
   burstRemaining: 2000,
   burstResetTime: Date.now() + 300000, // 5 minutes from now
 };
-
-/**
- * Request batching queue
- */
-interface BatchRequest {
-  key: string;
-  resolve: (value: unknown) => void;
-  reject: (reason: Error) => void;
-}
-
-const batchQueue = new Map<string, BatchRequest[]>();
-const batchTimeout = 50; // ms to wait before executing batch
 
 /**
  * Cache metrics for observability
@@ -166,7 +149,7 @@ export function clearCache(pattern?: string): void {
     logger.info('Cache cleared');
     return;
   }
-  
+
   const keys = cache.keys();
   for (const key of keys) {
     if (key.includes(pattern)) {
@@ -179,10 +162,16 @@ export function clearCache(pattern?: string): void {
 /**
  * Get cache statistics
  */
-export function getCacheStats() {
+export function getCacheStats(): {
+  size: number;
+  maxSize: number;
+  metrics: typeof cacheMetrics;
+  hitRate: string;
+  keys: string[];
+} {
   const total = cacheMetrics.hits + cacheMetrics.misses;
   const hitRate = total > 0 ? ((cacheMetrics.hits / total) * 100).toFixed(2) : '0.00';
-  
+
   return {
     size: cache.size,
     maxSize: CACHE_CONFIG.max,
@@ -195,43 +184,11 @@ export function getCacheStats() {
 /**
  * Reset cache metrics (for testing)
  */
-export function resetCacheMetrics() {
+export function resetCacheMetrics(): void {
   cacheMetrics.hits = 0;
   cacheMetrics.misses = 0;
   cacheMetrics.evictions = 0;
   cacheMetrics.sets = 0;
-}
-
-/**
- * Execute batched requests
- */
-async function executeBatch(queueKey: string): Promise<void> {
-  const requests = batchQueue.get(queueKey);
-  if (!requests || requests.length === 0) return;
-
-  batchQueue.delete(queueKey);
-
-  logger.debug('Executing batched requests', { 
-    queueKey, 
-    count: requests.length,
-  });
-
-  // Execute all requests in the batch concurrently
-  // Note: This is a placeholder for future batch API implementation
-  // The NZ Legislation API doesn't currently support batch endpoints
-  const promises = requests.map(({ resolve, reject }) => ({ resolve, reject }));
-  
-  // Resolve all promises (actual execution happens in individual functions)
-  await Promise.allSettled(promises.map(() => Promise.resolve()));
-}
-
-/**
- * Schedule batch execution with debouncing
- */
-function scheduleBatchExecution(queueKey: string): void {
-  setTimeout(() => {
-    executeBatch(queueKey);
-  }, batchTimeout);
 }
 
 /**
@@ -261,9 +218,7 @@ function checkRateLimit(): void {
 
   if (rateLimitState.burstRemaining <= 0) {
     const waitTime = Math.ceil((rateLimitState.burstResetTime - now) / 1000);
-    throw new Error(
-      `Burst rate limit exceeded. Please wait ${waitTime} seconds.`
-    );
+    throw new Error(`Burst rate limit exceeded. Please wait ${waitTime} seconds.`);
   }
 }
 
@@ -285,12 +240,12 @@ function getHeaderValue(
   name: string
 ): string | undefined {
   const value = headers[name];
-  
+
   // Type guard: check if it's a string array
   if (isStringArray(value)) {
     return value[0];
   }
-  
+
   // If it's a string or undefined, return as-is
   return value;
 }
@@ -327,7 +282,7 @@ function createClient(): HttpClientLike {
   if (!config.apiKey) {
     throw new ConfigError(
       ErrorCode.CONFIG_API_KEY_MISSING,
-      'API key is required. Set NZ_LEGISLATION_API_KEY or configure it with the CLI.',
+      'API key is required. Set NZ_LEGISLATION_API_KEY or configure it with the CLI.'
     );
   }
 
@@ -335,7 +290,7 @@ function createClient(): HttpClientLike {
     prefixUrl: config.baseUrl,
     timeout: { request: config.timeout },
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
       'User-Agent': 'nz-legislation-tool/1.0.0',
     },
     searchParams: {
@@ -345,7 +300,7 @@ function createClient(): HttpClientLike {
       limit: 3,
       methods: ['get'],
       statusCodes: [408, 413, 429, 500, 502, 503, 504],
-      calculateDelay: ({ attemptCount, error }) => {
+      calculateDelay: ({ attemptCount, error }): number => {
         if (error.response?.statusCode === 429) {
           const retryAfter = getHeaderValue(error.response.headers, 'retry-after');
           if (retryAfter) {
@@ -358,13 +313,13 @@ function createClient(): HttpClientLike {
     },
     hooks: {
       afterResponse: [
-        (response) => {
+        (response): typeof response => {
           updateRateLimitState(response.headers);
           return response;
         },
       ],
       beforeError: [
-        (error) => {
+        (error): typeof error => {
           // Add helpful context to errors
           if (error.response?.statusCode === 401) {
             error.message = 'Authentication failed. Please check your API key.';
@@ -386,22 +341,26 @@ export function setHttpClientFactoryForTesting(factory?: HttpClientFactory): voi
   httpClientFactory = factory ?? createClient;
 }
 
-async function getWorkFromVersions(client: HttpClientLike, workId: string, cacheKey: string): Promise<Work> {
-  const versionsData = await client.get(`v0/works/${workId}/versions`).json() as { results?: unknown[] } | unknown[];
-  const rawResults = Array.isArray(versionsData) ? versionsData : (versionsData.results || []);
+async function getWorkFromVersions(
+  client: HttpClientLike,
+  workId: string,
+  cacheKey: string
+): Promise<Work> {
+  const versionsData = (await client.get(`v0/works/${workId}/versions`).json()) as
+    | { results?: unknown[] }
+    | unknown[];
+  const rawResults = Array.isArray(versionsData) ? versionsData : versionsData.results || [];
   const candidates = z.array(WorkFromVersionSchema).parse(rawResults);
 
   if (candidates.length === 0) {
     throw createApiError(
       404,
       `v0/works/${workId}/versions`,
-      `Failed to get work: Work not found for ID "${workId}"`,
+      `Failed to get work: Work not found for ID "${workId}"`
     );
   }
 
-  const result = candidates
-    .slice()
-    .sort((a, b) => b.date.localeCompare(a.date))[0];
+  const result = candidates.slice().sort((a, b) => b.date.localeCompare(a.date))[0];
 
   result.versionCount = candidates.length;
   setInCache(cacheKey, result, CACHE_CONFIG.workTTL);
@@ -422,7 +381,7 @@ export async function searchWorks(params: {
   offset?: number;
 }): Promise<SearchResults> {
   const cacheKey = generateCacheKey('search', params as Record<string, string>);
-  
+
   // Try cache first
   const cached = getFromCache<SearchResults>(cacheKey);
   if (cached) {
@@ -435,34 +394,36 @@ export async function searchWorks(params: {
   const client = httpClientFactory();
 
   try {
-    const data = await client.get('v0/works', {
-      searchParams: {
-        ...(params.query && { search_term: params.query }),
-        ...(params.type && {
-          legislation_type: params.type === 'regulation' ? 'secondary_legislation' : params.type,
-        }),
-        ...(params.status && { legislation_status: params.status.replace(/-/g, '_') }),
-        ...(params.from && { from: params.from }),
-        ...(params.to && { to: params.to }),
-        ...(params.limit && { per_page: params.limit.toString() }),
-        ...(params.offset && {
-          page: (Math.floor((params.offset || 0) / (params.limit || 20)) + 1).toString(),
-        }),
-      },
-    }).json();
+    const data = await client
+      .get('v0/works', {
+        searchParams: {
+          ...(params.query && { search_term: params.query }),
+          ...(params.type && {
+            legislation_type: params.type === 'regulation' ? 'secondary_legislation' : params.type,
+          }),
+          ...(params.status && { legislation_status: params.status.replace(/-/g, '_') }),
+          ...(params.from && { from: params.from }),
+          ...(params.to && { to: params.to }),
+          ...(params.limit && { per_page: params.limit.toString() }),
+          ...(params.offset && {
+            page: (Math.floor((params.offset || 0) / (params.limit || 20)) + 1).toString(),
+          }),
+        },
+      })
+      .json();
 
     const result = SearchResultsSchema.parse(data);
-    
+
     // Cache the result
     setInCache(cacheKey, result, CACHE_CONFIG.searchTTL);
-    
+
     const duration = logger.endTimer('searchWorks');
-    logger.debug('Search completed', { 
-      results: result.results.length, 
+    logger.debug('Search completed', {
+      results: result.results.length,
       total: result.total,
-      duration: `${duration}ms` 
+      duration: `${duration}ms`,
     });
-    
+
     return result;
   } catch (error) {
     logger.error('Search failed', error instanceof Error ? error : undefined, { params });
@@ -475,7 +436,7 @@ export async function searchWorks(params: {
         throw createApiError(
           apiError.response.statusCode || 500,
           apiError.response.url || 'unknown',
-          `Search failed: ${error.message}`,
+          `Search failed: ${error.message}`
         );
       }
     }
@@ -488,7 +449,7 @@ export async function searchWorks(params: {
  */
 export async function getWork(workId: string): Promise<Work> {
   const cacheKey = generateCacheKey('work', { id: workId });
-  
+
   // Try cache first
   const cached = getFromCache<Work>(cacheKey);
   if (cached) {
@@ -515,18 +476,19 @@ export async function getWork(workId: string): Promise<Work> {
 
     const data = await client.get(`v0/works/${workId}`).json();
     const result = WorkSchema.parse(data);
-    
+
     // Cache the result
     setInCache(cacheKey, result, CACHE_CONFIG.workTTL);
-    
+
     const duration = logger.endTimer('getWork');
     logger.debug('Work retrieved', { workId, duration: `${duration}ms` });
-    
+
     return result;
   } catch (error) {
-    const apiError = error instanceof Error && 'response' in error
-      ? error as { response?: { statusCode?: number; url?: string } }
-      : undefined;
+    const apiError =
+      error instanceof Error && 'response' in error
+        ? (error as { response?: { statusCode?: number; url?: string } })
+        : undefined;
 
     // The live v0 API currently exposes work details reliably via the versions
     // collection, while the single-work endpoint returns 404 for valid work IDs.
@@ -543,19 +505,23 @@ export async function getWork(workId: string): Promise<Work> {
         return result;
       } catch (fallbackError) {
         if (fallbackError instanceof Error && 'response' in fallbackError) {
-          const fallbackApiError = fallbackError as { response?: { statusCode?: number; url?: string } };
+          const fallbackApiError = fallbackError as {
+            response?: { statusCode?: number; url?: string };
+          };
           if (fallbackApiError.response) {
             throw createApiError(
               fallbackApiError.response.statusCode || 500,
               fallbackApiError.response.url || 'unknown',
-              `Failed to get work: ${fallbackError.message}`,
+              `Failed to get work: ${fallbackError.message}`
             );
           }
         }
         if (fallbackError instanceof Error && 'code' in fallbackError) {
           throw fallbackError;
         }
-        throw new Error(`Failed to get work: ${fallbackError instanceof Error ? fallbackError.message : 'Unknown error'}`);
+        throw new Error(
+          `Failed to get work: ${fallbackError instanceof Error ? fallbackError.message : 'Unknown error'}`
+        );
       }
     }
 
@@ -564,13 +530,15 @@ export async function getWork(workId: string): Promise<Work> {
       throw error;
     }
     if (apiError?.response) {
-        throw createApiError(
-          apiError.response.statusCode || 500,
-          apiError.response.url || 'unknown',
-          `Failed to get work: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        );
+      throw createApiError(
+        apiError.response.statusCode || 500,
+        apiError.response.url || 'unknown',
+        `Failed to get work: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
-    throw new Error(`Failed to get work: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    throw new Error(
+      `Failed to get work: ${error instanceof Error ? error.message : 'Unknown error'}`
+    );
   }
 }
 
@@ -579,7 +547,7 @@ export async function getWork(workId: string): Promise<Work> {
  */
 export async function getWorkVersions(workId: string): Promise<Version[]> {
   const cacheKey = generateCacheKey('versions', { workId });
-  
+
   // Try cache first
   const cached = getFromCache<Version[]>(cacheKey);
   if (cached) {
@@ -592,16 +560,18 @@ export async function getWorkVersions(workId: string): Promise<Version[]> {
   const client = httpClientFactory();
 
   try {
-    const data = await client.get(`v0/works/${workId}/versions`).json() as { results?: unknown[] } | unknown[];
-    const rawResults = Array.isArray(data) ? data : (data.results || []);
+    const data = (await client.get(`v0/works/${workId}/versions`).json()) as
+      | { results?: unknown[] }
+      | unknown[];
+    const rawResults = Array.isArray(data) ? data : data.results || [];
     const result = z.array(VersionSchema).parse(rawResults);
-    
+
     // Cache the result
     setInCache(cacheKey, result, CACHE_CONFIG.versionsTTL);
-    
+
     const duration = logger.endTimer('getWorkVersions');
     logger.debug('Versions retrieved', { workId, count: result.length, duration: `${duration}ms` });
-    
+
     return result;
   } catch (error) {
     logger.error('Failed to get versions', error instanceof Error ? error : undefined, { workId });
@@ -614,11 +584,13 @@ export async function getWorkVersions(workId: string): Promise<Version[]> {
         throw createApiError(
           apiError.response.statusCode || 500,
           apiError.response.url || 'unknown',
-          `Failed to get versions: ${error.message}`,
+          `Failed to get versions: ${error.message}`
         );
       }
     }
-    throw new Error(`Failed to get versions: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    throw new Error(
+      `Failed to get versions: ${error instanceof Error ? error.message : 'Unknown error'}`
+    );
   }
 }
 
@@ -627,7 +599,7 @@ export async function getWorkVersions(workId: string): Promise<Version[]> {
  */
 export async function getVersion(versionId: string): Promise<LegislationVersion> {
   const cacheKey = generateCacheKey('version', { versionId });
-  
+
   // Try cache first
   const cached = getFromCache<LegislationVersion>(cacheKey);
   if (cached) {
@@ -642,16 +614,18 @@ export async function getVersion(versionId: string): Promise<LegislationVersion>
   try {
     const data = await client.get(`v0/versions/${versionId}`).json();
     const result = LegislationVersionSchema.parse(data);
-    
+
     // Cache the result
     setInCache(cacheKey, result, CACHE_CONFIG.versionsTTL);
-    
+
     const duration = logger.endTimer('getVersion');
     logger.debug('Version retrieved', { versionId, duration: `${duration}ms` });
-    
+
     return result;
   } catch (error) {
-    logger.error('Failed to get version', error instanceof Error ? error : undefined, { versionId });
+    logger.error('Failed to get version', error instanceof Error ? error : undefined, {
+      versionId,
+    });
     if (error instanceof NetworkError) {
       throw error;
     }
@@ -661,18 +635,25 @@ export async function getVersion(versionId: string): Promise<LegislationVersion>
         throw createApiError(
           apiError.response.statusCode || 500,
           apiError.response.url || 'unknown',
-          `Failed to get version: ${error.message}`,
+          `Failed to get version: ${error.message}`
         );
       }
     }
-    throw new Error(`Failed to get version: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    throw new Error(
+      `Failed to get version: ${error instanceof Error ? error.message : 'Unknown error'}`
+    );
   }
 }
 
 /**
  * Get rate limit status
  */
-export function getRateLimitStatus() {
+export function getRateLimitStatus(): {
+  remaining: number;
+  resetTime: Date;
+  burstRemaining: number;
+  burstResetTime: Date;
+} {
   return {
     remaining: rateLimitState.remaining,
     resetTime: new Date(rateLimitState.resetTime),

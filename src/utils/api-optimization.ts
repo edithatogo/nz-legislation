@@ -1,41 +1,70 @@
 /**
  * API Call Optimization Utilities
- * 
+ *
  * Provides connection pooling, retry strategies, request deduplication,
  * and payload optimization for improved API performance.
  */
 
 import { EventEmitter } from 'events';
-import got, { OptionsOfJSONResponseBody } from 'got';
+import { Agent as HttpAgent } from 'node:http';
+import { Agent as HttpsAgent } from 'node:https';
+
+import got, { type Got } from 'got';
 import { LRUCache } from 'lru-cache';
+
+type SearchParamValue = string | number | boolean | null | undefined;
+type SearchParams = Record<string, SearchParamValue>;
+type JsonObject = Record<string, unknown>;
+
+interface RetryableError {
+  code?: string;
+  message?: string;
+  response?: {
+    statusCode?: number;
+  };
+}
+
+interface RequestOptions {
+  searchParams?: SearchParams;
+}
+
+interface DeduplicationStats {
+  pendingRequests: number;
+  recentRequests: number;
+}
+
+interface AgentSet {
+  http: HttpAgent;
+  https: HttpsAgent;
+}
 
 /**
  * Connection pool configuration
  */
 export interface ConnectionPoolConfig {
-  maxSockets?: number;        // Max concurrent sockets (default: 50)
-  maxFreeSockets?: number;    // Max free sockets to keep (default: 10)
-  timeout?: number;           // Socket timeout in ms (default: 30000)
-  keepAlive?: boolean;        // Enable keep-alive (default: true)
+  maxSockets?: number;
+  maxFreeSockets?: number;
+  timeout?: number;
+  keepAlive?: boolean;
 }
 
 /**
  * Retry configuration
  */
 export interface RetryConfig {
-  maxRetries?: number;        // Max retry attempts (default: 3)
-  baseDelay?: number;         // Base delay in ms (default: 1000)
-  maxDelay?: number;          // Max delay in ms (default: 30000)
-  retryableStatusCodes?: number[];  // Status codes to retry (default: [408, 429, 500, 502, 503, 504])
-  retryableMethods?: string[];      // Methods to retry (default: ['GET'])
+  maxRetries?: number;
+  baseDelay?: number;
+  maxDelay?: number;
+  retryableStatusCodes?: number[];
+  retryableMethods?: string[];
 }
 
 /**
  * Request deduplication configuration
  */
 export interface DeduplicationConfig {
-  enabled?: boolean;          // Enable deduplication (default: true)
-  windowMs?: number;          // Deduplication window in ms (default: 1000)
+  enabled?: boolean;
+  windowMs?: number;
 }
 
 /**
@@ -63,14 +92,11 @@ export interface RequestMetrics {
   p99ResponseTime: number;
 }
 
-/**
- * Connection pool manager
- */
 class ConnectionPool {
-  private maxSockets: number;
-  private maxFreeSockets: number;
-  private timeout: number;
-  private keepAlive: boolean;
+  private readonly maxSockets: number;
+  private readonly maxFreeSockets: number;
+  private readonly timeout: number;
+  private readonly keepAlive: boolean;
 
   constructor(config: ConnectionPoolConfig = {}) {
     this.maxSockets = config.maxSockets ?? 50;
@@ -79,11 +105,7 @@ class ConnectionPool {
     this.keepAlive = config.keepAlive ?? true;
   }
 
-  getAgent() {
-    // Node.js http/https agent with connection pooling
-    const http = require('http');
-    const https = require('https');
-
+  getAgent(): AgentSet {
     const agentOptions = {
       keepAlive: this.keepAlive,
       maxSockets: this.maxSockets,
@@ -92,21 +114,18 @@ class ConnectionPool {
     };
 
     return {
-      http: new http.Agent(agentOptions),
-      https: new https.Agent(agentOptions),
+      http: new HttpAgent(agentOptions),
+      https: new HttpsAgent(agentOptions),
     };
   }
 }
 
-/**
- * Retry manager with exponential backoff and jitter
- */
 class RetryManager {
-  private maxRetries: number;
-  private baseDelay: number;
-  private maxDelay: number;
-  private retryableStatusCodes: number[];
-  private retryableMethods: string[];
+  private readonly maxRetries: number;
+  private readonly baseDelay: number;
+  private readonly maxDelay: number;
+  private readonly retryableStatusCodes: number[];
+  private readonly retryableMethods: string[];
 
   constructor(config: RetryConfig = {}) {
     this.maxRetries = config.maxRetries ?? 3;
@@ -120,72 +139,54 @@ class RetryManager {
     return this.maxRetries;
   }
 
-  shouldRetry(error: any, method: string): boolean {
-    // Check if method is retryable
+  shouldRetry(error: RetryableError, method: string): boolean {
     if (!this.retryableMethods.includes(method.toUpperCase())) {
       return false;
     }
 
-    // Check if error is retryable
     if (error.code === 'ETIMEDOUT' || error.code === 'ECONNRESET') {
       return true;
     }
 
-    // Check if status code is retryable
-    if (error.response?.statusCode) {
-      return this.retryableStatusCodes.includes(error.response.statusCode);
-    }
-
-    return false;
+    const statusCode = error.response?.statusCode;
+    return statusCode !== undefined && this.retryableStatusCodes.includes(statusCode);
   }
 
   getDelay(attempt: number): number {
-    // Exponential backoff with jitter
     const exponentialDelay = this.baseDelay * Math.pow(2, attempt);
-    const jitter = Math.random() * 0.3 * exponentialDelay; // 30% jitter
-    const delay = Math.min(exponentialDelay + jitter, this.maxDelay);
-    
-    return Math.round(delay);
+    const jitter = Math.random() * 0.3 * exponentialDelay;
+    return Math.round(Math.min(exponentialDelay + jitter, this.maxDelay));
   }
 }
 
-/**
- * Request deduplication manager
- */
 class DeduplicationManager {
-  private pendingRequests: Map<string, Promise<any>>;
-  private windowMs: number;
-  private recentRequests: LRUCache<string, number>;
+  private readonly pendingRequests = new Map<string, Promise<unknown>>();
+  private readonly recentRequests: LRUCache<string, number>;
+  private readonly enabled: boolean;
 
   constructor(config: DeduplicationConfig = {}) {
-    this.pendingRequests = new Map();
-    this.windowMs = config.windowMs ?? 1000;
-    this.recentRequests = new LRUCache({
+    this.enabled = config.enabled ?? true;
+    this.recentRequests = new LRUCache<string, number>({
       max: 1000,
-      ttl: this.windowMs,
+      ttl: config.windowMs ?? 1000,
     });
   }
 
-  /**
-   * Generate cache key from request options
-   */
-  generateKey(url: string, options: any): string {
-    const params = options.searchParams || {};
-    const paramString = JSON.stringify(params);
+  generateKey(url: string, options: RequestOptions): string {
+    const paramString = JSON.stringify(options.searchParams ?? {});
     return `${url}:${paramString}`;
   }
 
-  /**
-   * Get or create deduplicated request
-   */
-  getOrAdd(key: string, requestFn: () => Promise<any>): Promise<any> {
-    // Check if identical request is in flight
-    const existing = this.pendingRequests.get(key);
-    if (existing) {
-      return existing;
+  async getOrAdd<T>(key: string, requestFn: () => Promise<T>): Promise<T> {
+    if (!this.enabled) {
+      return requestFn();
     }
 
-    // Execute request and store promise
+    const existing = this.pendingRequests.get(key);
+    if (existing) {
+      return existing as Promise<T>;
+    }
+
     const promise = requestFn()
       .then(result => {
         this.pendingRequests.delete(key);
@@ -201,17 +202,11 @@ class DeduplicationManager {
     return promise;
   }
 
-  /**
-   * Check if request was recently made (deduplication)
-   */
   isDuplicate(key: string): boolean {
-    return this.recentRequests.has(key);
+    return this.enabled && this.recentRequests.has(key);
   }
 
-  /**
-   * Get deduplication statistics
-   */
-  getStats() {
+  getStats(): DeduplicationStats {
     return {
       pendingRequests: this.pendingRequests.size,
       recentRequests: this.recentRequests.size,
@@ -219,21 +214,18 @@ class DeduplicationManager {
   }
 }
 
-/**
- * Optimized API Client
- */
 export class OptimizedApiClient extends EventEmitter {
-  private baseUrl: string;
-  private apiKey: string;
-  private pool: ConnectionPool;
-  private retryManager: RetryManager;
-  private deduplicationManager: DeduplicationManager;
+  private readonly baseUrl: string;
+  private readonly apiKey: string;
+  private readonly pool: ConnectionPool;
+  private readonly retryManager: RetryManager;
+  private readonly deduplicationManager: DeduplicationManager;
   private metrics: RequestMetrics;
   private responseTimes: number[];
 
   constructor(options: OptimizedClientOptions) {
     super();
-    this.baseUrl = options.baseUrl;
+    this.baseUrl = options.baseUrl.replace(/\/+$/, '');
     this.apiKey = options.apiKey;
     this.pool = new ConnectionPool(options.pool);
     this.retryManager = new RetryManager(options.retry);
@@ -251,123 +243,111 @@ export class OptimizedApiClient extends EventEmitter {
     this.responseTimes = [];
   }
 
-  /**
-   * Execute HTTP GET request with optimization
-   */
-  async get<T>(endpoint: string, options?: any): Promise<T> {
-    const url = `${this.baseUrl}/${endpoint}`;
-    const method = 'GET';
+  async get<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
+    const normalizedEndpoint = endpoint.replace(/^\/+/, '');
+    const requestUrl = `${this.baseUrl}/${normalizedEndpoint}`;
     const startTime = Date.now();
 
     this.metrics.totalRequests++;
 
-    // Generate deduplication key
-    const dedupKey = this.deduplicationManager.generateKey(url, options || {});
-
-    // Check for duplicate request
+    const dedupKey = this.deduplicationManager.generateKey(requestUrl, options);
     if (this.deduplicationManager.isDuplicate(dedupKey)) {
       this.metrics.deduplicatedRequests++;
-      this.emit('deduplicated', { url, method });
+      this.emit('deduplicated', { url: requestUrl, method: 'GET' });
     }
 
-    // Execute with deduplication
-    const result = await this.deduplicationManager.getOrAdd(dedupKey, async () => {
-      return this.executeWithRetry<T>(url, method, options);
-    });
+    const result = await this.deduplicationManager.getOrAdd(dedupKey, async () =>
+      this.executeWithRetry<T>(normalizedEndpoint, requestUrl, 'GET', options)
+    );
 
-    // Track response time
-    const responseTime = Date.now() - startTime;
-    this.trackResponseTime(responseTime);
-
+    this.trackResponseTime(Date.now() - startTime);
     return result;
   }
 
-  /**
-   * Execute request with retry logic
-   */
+  private createClient(options: RequestOptions): Got {
+    return got.extend({
+      prefixUrl: this.baseUrl,
+      timeout: { request: 30000 },
+      headers: {
+        Accept: 'application/json',
+        'User-Agent': 'nz-legislation-tool/1.0.0',
+      },
+      searchParams: {
+        api_key: this.apiKey,
+        ...(options.searchParams ?? {}),
+      },
+      agent: this.pool.getAgent(),
+      retry: {
+        limit: 0,
+      },
+    });
+  }
+
   private async executeWithRetry<T>(
-    url: string,
+    endpoint: string,
+    requestUrl: string,
     method: string,
-    options?: any,
-    attempt: number = 0
+    options: RequestOptions,
+    attempt = 0
   ): Promise<T> {
     try {
-      const client = got.extend({
-        prefixUrl: this.baseUrl,
-        timeout: { request: 30000 },
-        headers: {
-          'Accept': 'application/json',
-          'User-Agent': 'nz-legislation-tool/1.0.0',
-        },
-        searchParams: {
-          api_key: this.apiKey,
-          ...options?.searchParams,
-        },
-        agent: this.pool.getAgent(),
-        retry: {
-          limit: 0, // We handle retries manually
-        },
-      });
-
-      const response = await client.get(url, {
-        responseType: 'json',
-      });
+      const client = this.createClient(options);
+      const response = await client.get(endpoint).json<T>();
 
       this.metrics.successfulRequests++;
-      this.emit('success', { url, method, attempt });
+      this.emit('success', { url: requestUrl, method, attempt });
+      return response;
+    } catch (error) {
+      const retryableError = error as RetryableError;
 
-      return response.body as T;
-    } catch (error: any) {
-      // Check if should retry
-      if (this.retryManager.shouldRetry(error, method) && attempt < this.retryManager.getMaxRetries()) {
+      if (
+        this.retryManager.shouldRetry(retryableError, method) &&
+        attempt < this.retryManager.getMaxRetries()
+      ) {
         const delay = this.retryManager.getDelay(attempt);
         this.metrics.retriedRequests++;
-        this.emit('retry', { url, method, attempt, delay, error: error.message });
+        this.emit('retry', {
+          url: requestUrl,
+          method,
+          attempt,
+          delay,
+          error: retryableError.message ?? 'Unknown retryable error',
+        });
 
-        // Wait before retry
         await new Promise(resolve => setTimeout(resolve, delay));
-
-        // Retry
-        return this.executeWithRetry<T>(url, method, options, attempt + 1);
+        return this.executeWithRetry<T>(endpoint, requestUrl, method, options, attempt + 1);
       }
 
       this.metrics.failedRequests++;
-      this.emit('error', { url, method, attempt, error: error.message });
+      this.emit('error', {
+        url: requestUrl,
+        method,
+        attempt,
+        error: retryableError.message ?? 'Unknown request error',
+      });
       throw error;
     }
   }
 
-  /**
-   * Track response time for metrics
-   */
-  private trackResponseTime(time: number) {
+  private trackResponseTime(time: number): void {
     this.responseTimes.push(time);
-
-    // Keep last 1000 response times
     if (this.responseTimes.length > 1000) {
       this.responseTimes.shift();
     }
 
-    // Update metrics
-    this.metrics.averageResponseTime = 
-      this.responseTimes.reduce((a, b) => a + b, 0) / this.responseTimes.length;
-    
+    this.metrics.averageResponseTime =
+      this.responseTimes.reduce((sum, value) => sum + value, 0) / this.responseTimes.length;
+
     const sorted = [...this.responseTimes].sort((a, b) => a - b);
-    this.metrics.p95ResponseTime = sorted[Math.floor(sorted.length * 0.95)] || 0;
-    this.metrics.p99ResponseTime = sorted[Math.floor(sorted.length * 0.99)] || 0;
+    this.metrics.p95ResponseTime = sorted[Math.floor(sorted.length * 0.95)] ?? 0;
+    this.metrics.p99ResponseTime = sorted[Math.floor(sorted.length * 0.99)] ?? 0;
   }
 
-  /**
-   * Get request metrics
-   */
   getMetrics(): RequestMetrics {
     return { ...this.metrics };
   }
 
-  /**
-   * Reset metrics
-   */
-  resetMetrics() {
+  resetMetrics(): void {
     this.metrics = {
       totalRequests: 0,
       successfulRequests: 0,
@@ -381,30 +361,17 @@ export class OptimizedApiClient extends EventEmitter {
     this.responseTimes = [];
   }
 
-  /**
-   * Get deduplication stats
-   */
-  getDeduplicationStats() {
+  getDeduplicationStats(): DeduplicationStats {
     return this.deduplicationManager.getStats();
   }
 
-  /**
-   * Close all connections
-   */
-  close() {
-    // Agents will be garbage collected when no longer referenced
+  close(): void {
     this.emit('close');
   }
 }
 
-/**
- * Payload optimizer
- */
 export class PayloadOptimizer {
-  /**
-   * Compress payload by removing unnecessary fields
-   */
-  static compressPayload(data: any, fields?: string[]): any {
+  static compressPayload(data: unknown, fields?: string[]): unknown {
     if (!fields || fields.length === 0) {
       return data;
     }
@@ -416,37 +383,34 @@ export class PayloadOptimizer {
     return this.pickFields(data, fields);
   }
 
-  /**
-   * Pick only specified fields from object
-   */
-  private static pickFields(obj: any, fields: string[]): any {
-    const result: any = {};
+  private static pickFields(value: unknown, fields: string[]): JsonObject {
+    if (!this.isJsonObject(value)) {
+      return {};
+    }
+
+    const result: JsonObject = {};
     for (const field of fields) {
-      if (obj[field] !== undefined) {
-        result[field] = obj[field];
+      const fieldValue = value[field];
+      if (fieldValue !== undefined) {
+        result[field] = fieldValue;
       }
     }
     return result;
   }
 
-  /**
-   * Minify JSON payload
-   */
-  static minify(data: any): string {
+  static minify(data: unknown): string {
     return JSON.stringify(data);
   }
 
-  /**
-   * Estimate payload size in bytes
-   */
-  static estimateSize(data: any): number {
+  static estimateSize(data: unknown): number {
     return Buffer.byteLength(JSON.stringify(data), 'utf8');
+  }
+
+  private static isJsonObject(value: unknown): value is JsonObject {
+    return typeof value === 'object' && value !== null && !Array.isArray(value);
   }
 }
 
-/**
- * Create optimized API client
- */
 export function createOptimizedClient(options: OptimizedClientOptions): OptimizedApiClient {
   return new OptimizedApiClient(options);
 }

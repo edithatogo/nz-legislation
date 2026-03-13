@@ -4,7 +4,10 @@ on:
   schedule:
     # Run every Monday at 6am NZST (Sunday 6pm UTC)
     - cron: '0 18 * * 0'
-  workflow_dispatch:  # Allow manual trigger
+  workflow_dispatch: # Allow manual trigger
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
 jobs:
   maintenance:
@@ -13,79 +16,79 @@ jobs:
     permissions:
       contents: read
       issues: write
-    
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
-      
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-      
+        uses: actions/checkout@v5
+
+      - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.29.3 --activate
+
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '20'
           cache: 'pnpm'
-      
+
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
-      
+
       - name: 🔒 Security audit
         run: |
           echo "## Security Audit" >> $GITHUB_STEP_SUMMARY
           pnpm audit --audit-level=moderate >> $GITHUB_STEP_SUMMARY 2>&1 || true
-      
+
       - name: ✨ Run linters
         run: |
           echo "## Code Quality" >> $GITHUB_STEP_SUMMARY
           pnpm lint >> $GITHUB_STEP_SUMMARY 2>&1 || true
-      
+
       - name: 🔍 Run type check
         run: |
           echo "## Type Check" >> $GITHUB_STEP_SUMMARY
           pnpm typecheck >> $GITHUB_STEP_SUMMARY 2>&1 || true
-      
+
       - name: 🧪 Run tests
         run: |
           echo "## Tests" >> $GITHUB_STEP_SUMMARY
           pnpm test >> $GITHUB_STEP_SUMMARY 2>&1 || true
-      
+
       - name: 📦 Check for outdated dependencies
         run: |
           echo "## Outdated Dependencies" >> $GITHUB_STEP_SUMMARY
           pnpm outdated >> $GITHUB_STEP_SUMMARY 2>&1 || true
-      
+
       - name: 🗑️ Check for unused dependencies
         run: |
           npx depcheck --ignores="@types/*,eslint,@typescript-eslint/*" || true
-      
+
       - name: ⚡ Run benchmarks
         run: |
           echo "## Performance Benchmarks" >> $GITHUB_STEP_SUMMARY
           pnpm bench >> $GITHUB_STEP_SUMMARY 2>&1 || true
-      
+
       - name: 📊 Generate maintenance report
         run: |
           cat >> $GITHUB_STEP_SUMMARY << EOF
-          
+
           ## Maintenance Summary
-          
+
           - **Date:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
           - **Node Version:** $(node --version)
           - **pnpm Version:** $(pnpm --version)
           - **Repository:** ${{ github.repository }}
-          
+
           ### Next Steps
-          
+
           - Review any security vulnerabilities above
           - Check outdated dependencies for updates
           - Review test failures if any
           - Check benchmark results for regressions
-          
+
           EOF
-      
+
       - name: Create issue if problems found
         if: failure()
         uses: actions/github-script@v7
@@ -94,24 +97,24 @@ jobs:
           script: |
             const issueBody = `
             ## Maintenance Issues Detected
-            
+
             **Date:** ${new Date().toISOString()}
             **Workflow:** ${process.env.GITHUB_WORKFLOW}
             **Run:** ${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}
-            
+
             Please review the maintenance workflow results and address any issues.
-            
+
             ### Common Fixes:
-            
+
             - Run \`pnpm audit\` for security issues
             - Run \`pnpm lint:fix\` for linting issues
             - Update dependencies with Renovate or manually
             - Review and fix any test failures
-            
+
             ---
             *This issue was automatically created by the Maintenance Automation workflow*
             `;
-            
+
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,

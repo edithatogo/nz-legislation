@@ -1,9 +1,9 @@
 /**
  * Bundle Size Optimization Script
- * 
+ *
  * Analyzes bundle composition, identifies optimization opportunities,
  * and generates recommendations for reducing bundle size.
- * 
+ *
  * Run with: npx tsx scripts/bundle-analyze.ts
  */
 
@@ -68,7 +68,7 @@ function analyzeBundle(): BundleAnalysis {
 
   // Get file sizes
   const files = readdirSync(DIST_DIR);
-  
+
   let totalSize = 0;
   let mainBundleSize = 0;
   const dependencySizes: Map<string, number> = new Map();
@@ -76,7 +76,7 @@ function analyzeBundle(): BundleAnalysis {
   for (const file of files) {
     const filePath = join(DIST_DIR, file);
     const stat = statSync(filePath);
-    
+
     if (stat.isFile()) {
       const sizeKB = stat.size / 1024;
       totalSize += sizeKB;
@@ -129,18 +129,16 @@ function analyzeBundle(): BundleAnalysis {
  * Analyze treeshaking effectiveness
  */
 function analyzeTreeshaking(): TreeshakingResult {
-  const packageJson = JSON.parse(
-    readFileSync(join(PROJECT_ROOT, 'package.json'), 'utf-8')
-  );
+  const packageJson = JSON.parse(readFileSync(join(PROJECT_ROOT, 'package.json'), 'utf-8'));
 
   const hasSideEffects = packageJson.sideEffects === true;
-  
+
   // Check for unused exports (simplified - would need AST analysis for accurate results)
   const unusedExports: string[] = [];
-  
+
   // Check for duplicate dependencies
   const duplicateDependencies: string[] = [];
-  
+
   try {
     // Check npm lockfile for duplicates when present.
     const lockfilePath = join(PROJECT_ROOT, 'package-lock.json');
@@ -154,7 +152,7 @@ function analyzeTreeshaking(): TreeshakingResult {
     }
 
     const lockFile = JSON.parse(readFileSync(lockfilePath, 'utf-8'));
-    
+
     // Simple duplicate detection (would need more sophisticated analysis)
     const dependencies = new Set<string>();
     if (lockFile.dependencies) {
@@ -206,7 +204,8 @@ function generateRecommendations(
       title: 'Side effects enabled',
       description: 'Package.json marks all files as having side effects, preventing treeshaking',
       estimatedSavings: totalSize * 0.2, // Assume 20% savings
-      action: 'Set "sideEffects": false or provide specific files with side effects in package.json',
+      action:
+        'Set "sideEffects": false or provide specific files with side effects in package.json',
     });
   }
 
@@ -222,7 +221,8 @@ function generateRecommendations(
   }
 
   // Check total bundle size
-  if (totalSize > 5120) { // > 5MB
+  if (totalSize > 5120) {
+    // > 5MB
     recommendations.push({
       priority: 'high',
       title: 'Bundle size exceeds target',
@@ -230,7 +230,8 @@ function generateRecommendations(
       estimatedSavings: totalSize * 0.3,
       action: 'Implement code splitting and lazy loading for non-critical features',
     });
-  } else if (totalSize > 3072) { // > 3MB
+  } else if (totalSize > 3072) {
+    // > 3MB
     recommendations.push({
       priority: 'medium',
       title: 'Bundle size approaching limit',
@@ -268,8 +269,11 @@ function generateRecommendations(
  * Generate markdown report
  */
 function generateReport(analysis: BundleAnalysis): void {
-  const reportPath = join(REPORTS_DIR, `bundle-analysis-${new Date().toISOString().replace(/[:.]/g, '-')}.md`);
-  
+  const reportPath = join(
+    REPORTS_DIR,
+    `bundle-analysis-${new Date().toISOString().replace(/[:.]/g, '-')}.md`
+  );
+
   const report = `# Bundle Size Analysis Report
 
 **Generated:** ${analysis.timestamp}
@@ -291,9 +295,12 @@ function generateReport(analysis: BundleAnalysis): void {
 
 | Rank | Dependency | Size (KB) | Percentage |
 |------|-----------|-----------|------------|
-${analysis.dependencies.map((dep, i) => 
-`| ${i + 1} | ${dep.name} | ${dep.size.toFixed(1)} | ${dep.percentage.toFixed(1)}% |`
-).join('\n')}
+${analysis.dependencies
+  .map(
+    (dep, i) =>
+      `| ${i + 1} | ${dep.name} | ${dep.size.toFixed(1)} | ${dep.percentage.toFixed(1)}% |`
+  )
+  .join('\n')}
 
 ### Bundle Breakdown
 
@@ -316,7 +323,12 @@ Dependencies:    ${((analysis.totalSize - analysis.mainBundle) / 1024).toFixed(2
 
 ## Optimization Recommendations
 
-${analysis.recommendations.map((rec, i) => `### ${i + 1}. ${rec.title} ${rec.priority === 'high' ? '🔴' : rec.priority === 'medium' ? '🟡' : '🟢'}
+${analysis.recommendations
+  .map(
+    (
+      rec,
+      i
+    ) => `### ${i + 1}. ${rec.title} ${rec.priority === 'high' ? '🔴' : rec.priority === 'medium' ? '🟡' : '🟢'}
 
 **Priority:** ${rec.priority.toUpperCase()}  
 **Estimated Savings:** ${(rec.estimatedSavings / 1024).toFixed(2)} KB
@@ -326,7 +338,9 @@ ${rec.description}
 **Action:** ${rec.action}
 
 ---
-`).join('')}
+`
+  )
+  .join('')}
 
 ## Historical Comparison
 
@@ -356,7 +370,10 @@ npx webpack-bundle-analyzer bundle-reports/stats.json
   console.log(`📄 Report saved to: ${reportPath}\n`);
 
   // Also save JSON for programmatic access
-  const jsonPath = join(REPORTS_DIR, `bundle-analysis-${new Date().toISOString().replace(/[:.]/g, '-')}.json`);
+  const jsonPath = join(
+    REPORTS_DIR,
+    `bundle-analysis-${new Date().toISOString().replace(/[:.]/g, '-')}.json`
+  );
   writeFileSync(jsonPath, JSON.stringify(analysis, null, 2));
   console.log(`📊 Data saved to: ${jsonPath}\n`);
 }
@@ -368,12 +385,14 @@ console.log();
 
 try {
   const analysis = analyzeBundle();
-  
+
   console.log('='.repeat(60));
   console.log('\n✅ Bundle Analysis Complete!\n');
   console.log(`📦 Total Size: ${(analysis.totalSize / 1024).toFixed(2)} MB`);
   console.log(`📊 Recommendations: ${analysis.recommendations.length}`);
-  console.log(`🎯 High Priority: ${analysis.recommendations.filter(r => r.priority === 'high').length}\n`);
+  console.log(
+    `🎯 High Priority: ${analysis.recommendations.filter(r => r.priority === 'high').length}\n`
+  );
 } catch (error) {
   console.error('\n❌ Bundle Analysis Failed:', (error as Error).message);
   console.error(error);

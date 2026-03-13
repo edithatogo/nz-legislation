@@ -6,6 +6,9 @@ on:
   push:
     branches: [main]
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
 jobs:
   bundle-size:
     runs-on: ubuntu-latest
@@ -13,13 +16,14 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
+      - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.29.3 --activate
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: '20'
           cache: 'pnpm'
@@ -37,12 +41,12 @@ jobs:
           CLI_SIZE=$(du -k dist/cli.js | cut -f1)
           MCP_SIZE=$(du -k dist/mcp-cli.js | cut -f1)
           TOTAL_SIZE=$(du -k dist/*.js | awk '{sum += $1} END {print sum}')
-          
+
           # Output sizes
           echo "cli_size=$CLI_SIZE" >> $GITHUB_OUTPUT
           echo "mcp_size=$MCP_SIZE" >> $GITHUB_OUTPUT
           echo "total_size=$TOTAL_SIZE" >> $GITHUB_OUTPUT
-          
+
           # Display sizes
           echo "## Bundle Size Analysis" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -60,18 +64,18 @@ jobs:
             const cliSize = ${{ steps.analyze.outputs.cli_size }};
             const mcpSize = ${{ steps.analyze.outputs.mcp_size }};
             const totalSize = ${{ steps.analyze.outputs.total_size }};
-            
+
             const body = `## 📦 Bundle Size Analysis
-            
+
             | Bundle | Size |
             |--------|------|
             | CLI | ${cliSize}KB |
             | MCP Server | ${mcpSize}KB |
             | **Total** | **${totalSize}KB** |
-            
+
             > Bundle size budget: <5MB (current: ${totalSize}KB ✅)
             `;
-            
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,

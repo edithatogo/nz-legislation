@@ -57,7 +57,7 @@ export function printTable(results: SearchResults): void {
     wrapOnWordBoundary: false,
   });
 
-  results.results.forEach((work) => {
+  results.results.forEach(work => {
     table.push([
       work.id,
       work.title.length > 48 ? work.title.substring(0, 47) + '…' : work.title,
@@ -68,9 +68,7 @@ export function printTable(results: SearchResults): void {
   });
 
   console.log(table.toString());
-  console.log(
-    chalk.gray(`\nTotal: ${results.total} results (showing ${results.results.length})`)
-  );
+  console.log(chalk.gray(`\nTotal: ${results.total} results (showing ${results.results.length})`));
 }
 
 /**
@@ -117,7 +115,7 @@ export function printVersionsTable(versions: Version[]): void {
     wordWrap: true,
   });
 
-  versions.forEach((version) => {
+  versions.forEach(version => {
     table.push([
       version.id,
       version.version.toString(),
@@ -144,7 +142,7 @@ export function printJson(data: unknown): void {
  */
 export function worksToCsv(results: SearchResults): string {
   const headers = ['id', 'title', 'shortTitle', 'type', 'status', 'date', 'url', 'versionCount'];
-  const rows = results.results.map((work) => [
+  const rows = results.results.map(work => [
     work.id,
     `"${work.title.replace(/"/g, '""')}"`,
     work.shortTitle ? `"${work.shortTitle.replace(/"/g, '""')}"` : '',
@@ -155,7 +153,7 @@ export function worksToCsv(results: SearchResults): string {
     work.versionCount.toString(),
   ]);
 
-  return [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
+  return [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
 }
 
 /**
@@ -163,7 +161,7 @@ export function worksToCsv(results: SearchResults): string {
  */
 export function versionsToCsv(versions: Version[]): string {
   const headers = ['id', 'version', 'type', 'date', 'isCurrent', 'formats'];
-  const rows = versions.map((version) => [
+  const rows = versions.map(version => [
     version.id,
     version.version.toString(),
     version.type,
@@ -172,7 +170,7 @@ export function versionsToCsv(versions: Version[]): string {
     `"${version.formats.join(';').replace(/"/g, '""')}"`,
   ]);
 
-  return [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
+  return [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
 }
 
 /**

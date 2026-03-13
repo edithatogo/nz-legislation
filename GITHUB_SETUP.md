@@ -1,9 +1,11 @@
 # GitHub Repository Setup Guide
 
 ## Repository Name
+
 **`nz-legislation`**
 
 ## GitHub URL
+
 **https://github.com/edithatogo/nz-legislation**
 
 ---
@@ -18,7 +20,7 @@
    - **Repository name:** `nz-legislation`
    - **Description:** "CLI tool for searching and retrieving New Zealand legislation data"
    - **Visibility:** Public (recommended for open source)
-   - **Initialize with:** 
+   - **Initialize with:**
      - ✅ Add a README file (optional, we already have one)
      - ❌ Add .gitignore (we already have one)
      - ❌ Choose a license (we already have LICENSE)
@@ -26,21 +28,22 @@
 3. **Click "Create repository"**
 
 4. **Push existing code:**
+
    ```bash
    cd nz-legislation-tool
-   
+
    # Initialize git (if not already done)
    git init
-   
+
    # Add your GitHub repository as remote
    git remote add origin https://github.com/edithatogo/nz-legislation.git
-   
+
    # Add all files
    git add .
-   
+
    # Commit
    git commit -m "feat: Initial release - comprehensive testing complete"
-   
+
    # Push to GitHub
    git branch -M main
    git push -u origin main
@@ -155,6 +158,7 @@ Visit: https://www.npmjs.com/package/nz-legislation
 If you can't access GitHub due to network restrictions:
 
 1. **Use HTTPS instead of SSH:**
+
    ```bash
    git remote add origin https://github.com/edithatogo/nz-legislation.git
    ```
@@ -207,15 +211,15 @@ Before publishing, ensure:
 
 ## Quick Reference
 
-| Item | Value |
-|------|-------|
-| **GitHub Username** | edithatogo |
-| **Repository Name** | nz-legislation |
-| **Full GitHub URL** | https://github.com/edithatogo/nz-legislation |
-| **npm Package Name** | nz-legislation |
-| **CLI Command** | `nzlegislation` |
-| **Install Command** | `npm install -g nz-legislation` |
-| **npx Command** | `npx nz-legislation` |
+| Item                 | Value                                        |
+| -------------------- | -------------------------------------------- |
+| **GitHub Username**  | edithatogo                                   |
+| **Repository Name**  | nz-legislation                               |
+| **Full GitHub URL**  | https://github.com/edithatogo/nz-legislation |
+| **npm Package Name** | nz-legislation                               |
+| **CLI Command**      | `nzlegislation`                              |
+| **Install Command**  | `npm install -g nz-legislation`              |
+| **npx Command**      | `npx nz-legislation`                         |
 
 ---
 

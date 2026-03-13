@@ -50,11 +50,13 @@ Usability testing ensures the documentation is easy to use, understand, and navi
 **Target Participants:** 5-8 users
 
 **User Types:**
+
 - **End Users** (2-3) - Researchers, students
 - **Developers** (2-3) - Contributors, API consumers
 - **Non-Technical** (1-2) - Administrators, general users
 
 **Recruitment Criteria:**
+
 - Varying technical skill levels
 - Different roles (researcher, developer, student)
 - At least 1 user with accessibility needs
@@ -69,18 +71,21 @@ Usability testing ensures the documentation is easy to use, understand, and navi
 **Task:** Set up the tool for the first time
 
 **Steps:**
+
 1. Find installation instructions
 2. Get an API key
 3. Configure the tool
 4. Run your first search
 
 **Success Criteria:**
+
 - ✅ Find installation in <30 seconds
 - ✅ Complete setup in <5 minutes
 - ✅ Successfully run first search
 - ✅ No errors encountered
 
 **Metrics:**
+
 - Time to complete
 - Number of errors
 - Success/failure
@@ -93,18 +98,21 @@ Usability testing ensures the documentation is easy to use, understand, and navi
 **Task:** Find all health-related Acts from 2020-2024
 
 **Steps:**
+
 1. Find search command documentation
 2. Learn how to filter by type and date
 3. Run the search
 4. Export results to CSV
 
 **Success Criteria:**
+
 - ✅ Find search docs in <30 seconds
 - ✅ Understand filter options
 - ✅ Successfully export to CSV
 - ✅ Open CSV in Excel successfully
 
 **Metrics:**
+
 - Time to complete
 - Number of help requests
 - Success/failure
@@ -117,18 +125,21 @@ Usability testing ensures the documentation is easy to use, understand, and navi
 **Task:** Fix an "API key not configured" error
 
 **Steps:**
+
 1. Encounter error message
 2. Find troubleshooting guide
 3. Follow fix instructions
 4. Verify error is resolved
 
 **Success Criteria:**
+
 - ✅ Find troubleshooting in <30 seconds
 - ✅ Understand error cause
 - ✅ Successfully fix error
 - ✅ Tool works after fix
 
 **Metrics:**
+
 - Time to resolution
 - Number of attempts
 - Success/failure
@@ -141,18 +152,21 @@ Usability testing ensures the documentation is easy to use, understand, and navi
 **Task:** Create citations for 3 Acts in APA format
 
 **Steps:**
+
 1. Find cite command documentation
 2. Learn citation styles available
 3. Generate 3 APA citations
 4. Copy citations for use
 
 **Success Criteria:**
+
 - ✅ Find cite docs in <30 seconds
 - ✅ Understand citation styles
 - ✅ Successfully generate citations
 - ✅ Citations formatted correctly
 
 **Metrics:**
+
 - Time to complete
 - Format accuracy
 - Success/failure
@@ -165,18 +179,21 @@ Usability testing ensures the documentation is easy to use, understand, and navi
 **Task:** Use the API in a Node.js script
 
 **Steps:**
+
 1. Find API reference
 2. Understand searchWorks function
 3. Write a simple script
 4. Run script successfully
 
 **Success Criteria:**
+
 - ✅ Find API reference in <30 seconds
 - ✅ Understand function signature
 - ✅ Script runs without errors
 - ✅ Gets expected results
 
 **Metrics:**
+
 - Time to complete
 - Code accuracy
 - Success/failure
@@ -189,6 +206,7 @@ Usability testing ensures the documentation is easy to use, understand, and navi
 **Format:** 1-on-1 sessions (45-60 minutes)
 
 **Structure:**
+
 1. **Introduction** (5 min)
    - Explain purpose
    - Get consent
@@ -220,6 +238,7 @@ Usability testing ensures the documentation is easy to use, understand, and navi
 ### Data Collection
 
 **Quantitative Metrics:**
+
 - Task completion time
 - Success rate (%)
 - Error count
@@ -227,6 +246,7 @@ Usability testing ensures the documentation is easy to use, understand, and navi
 - Satisfaction ratings (1-5)
 
 **Qualitative Data:**
+
 - Think-aloud comments
 - Observer notes
 - Open-ended feedback
@@ -234,6 +254,7 @@ Usability testing ensures the documentation is easy to use, understand, and navi
 - Suggestions for improvement
 
 **Tools:**
+
 - Screen recording software
 - Note-taking template
 - Survey form (Google Forms/Typeform)
@@ -244,6 +265,7 @@ Usability testing ensures the documentation is easy to use, understand, and navi
 ### Analysis
 
 **After Each Session:**
+
 1. Review recording
 2. Transcribe key quotes
 3. Note pain points
@@ -251,6 +273,7 @@ Usability testing ensures the documentation is easy to use, understand, and navi
 5. Identify patterns
 
 **After All Sessions:**
+
 1. Aggregate metrics
 2. Identify common themes
 3. Prioritize issues
@@ -258,6 +281,7 @@ Usability testing ensures the documentation is easy to use, understand, and navi
 5. Calculate SUS score
 
 **Success Thresholds:**
+
 - **Task Success Rate:** >80%
 - **SUS Score:** >68 (above average)
 - **Satisfaction:** >4.0/5.0
@@ -413,6 +437,7 @@ Ensure all technical content is accurate, up-to-date, and functional.
 - [ ] **PDF/Images** - Files exist and load
 
 **Testing Tools:**
+
 - `find . -name '*.md' -exec grep -l 'http' {} \;`
 - Online link checkers
 - Browser dev tools (Network tab)
@@ -446,11 +471,13 @@ Automated and manual link checking to ensure all links work correctly.
 #### Tool: markdown-link-check
 
 **Installation:**
+
 ```bash
 npm install -g markdown-link-check
 ```
 
 **Usage:**
+
 ```bash
 # Check single file
 markdown-link-check README.md
@@ -463,6 +490,7 @@ markdown-link-check -c .link-check-config.json README.md
 ```
 
 **Configuration (.link-check-config.json):**
+
 ```json
 {
   "ignorePatterns": [
@@ -499,6 +527,7 @@ markdown-link-check -c .link-check-config.json README.md
 #### Tool: lychee
 
 **Installation:**
+
 ```bash
 # Using cargo (Rust)
 cargo install lychee
@@ -508,6 +537,7 @@ brew install lychee
 ```
 
 **Usage:**
+
 ```bash
 # Check all markdown files
 lychee . --include '*.md'
@@ -523,6 +553,7 @@ lychee . --format json > link-check-report.json
 ```
 
 **Configuration (.lychee.toml):**
+
 ```toml
 [lychee]
 max_concurrency = 128
@@ -537,6 +568,7 @@ exclude = ['api.legislation.govt.nz']
 #### Tool: GitHub Actions (Automated CI)
 
 **Workflow (.github/workflows/link-check.yml):**
+
 ```yaml
 name: Check Links
 
@@ -546,14 +578,14 @@ on:
       - main
   pull_request:
   schedule:
-    - cron: '0 0 * * 0'  # Weekly
+    - cron: '0 0 * * 0' # Weekly
 
 jobs:
   link-check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Link Checker
         uses: lycheeverse/lychee-action@v1
         with:
@@ -568,7 +600,7 @@ jobs:
             './**/*.md'
           output: lychee/out.md
           fail: true
-      
+
       - name: Upload Report
         uses: actions/upload-artifact@v3
         if: always()
@@ -584,6 +616,7 @@ jobs:
 #### Process
 
 1. **Extract All Links**
+
    ```bash
    # Extract all URLs from markdown files
    grep -roh 'http[s]\?://[^")]*' docs/ | sort -u > all-links.txt
@@ -614,16 +647,19 @@ jobs:
 #### Regular Checks
 
 **Weekly:**
+
 - Run automated link checker
 - Review broken links report
 - Fix critical broken links
 
 **Monthly:**
+
 - Manual review of external links
 - Update deprecated URLs
 - Check for new link alternatives
 
 **Quarterly:**
+
 - Full link audit
 - Update link checking tools
 - Review link checking configuration
@@ -635,6 +671,7 @@ jobs:
 #### Issue: 404 Not Found
 
 **Fix:**
+
 1. Verify URL is correct
 2. Check if page moved
 3. Update to new URL
@@ -643,6 +680,7 @@ jobs:
 #### Issue: 301 Redirect
 
 **Fix:**
+
 1. Update link to final destination
 2. Avoid redirect chains
 3. Update all instances
@@ -650,6 +688,7 @@ jobs:
 #### Issue: Slow Response (>5s)
 
 **Fix:**
+
 1. Check if site is temporarily slow
 2. Consider alternative source
 3. Add timeout to link checker
@@ -658,6 +697,7 @@ jobs:
 #### Issue: SSL Certificate Error
 
 **Fix:**
+
 1. Verify URL uses HTTPS
 2. Check certificate validity
 3. Contact site administrator
@@ -676,12 +716,14 @@ Ensure all documentation follows consistent grammar, style, and formatting stand
 ### Grammar Checklist
 
 **Spelling:**
+
 - [ ] NZ English spelling (organise, colour, analyse)
 - [ ] Technical terms spelled correctly
 - [ ] No typos or misspellings
 - [ ] Consistent spelling throughout
 
 **Grammar:**
+
 - [ ] Subject-verb agreement
 - [ ] Correct tense usage (present tense for instructions)
 - [ ] Proper punctuation
@@ -689,6 +731,7 @@ Ensure all documentation follows consistent grammar, style, and formatting stand
 - [ ] No run-on sentences
 
 **Capitalization:**
+
 - [ ] Sentence case for headings
 - [ ] Proper nouns capitalized
 - [ ] Product names capitalized correctly
@@ -701,6 +744,7 @@ Ensure all documentation follows consistent grammar, style, and formatting stand
 #### Voice & Tone
 
 **Use:**
+
 - ✅ Active voice ("You can search" not "Searching can be done")
 - ✅ Second person ("you", "your")
 - ✅ Contractions (you'll, we're, don't)
@@ -708,6 +752,7 @@ Ensure all documentation follows consistent grammar, style, and formatting stand
 - ✅ Present tense
 
 **Avoid:**
+
 - ❌ Passive voice
 - ❌ Third person ("the user")
 - ❌ Formal language
@@ -719,6 +764,7 @@ Ensure all documentation follows consistent grammar, style, and formatting stand
 #### Sentence Structure
 
 **Guidelines:**
+
 - Average sentence length: 15-20 words
 - Maximum: 30 words
 - One idea per sentence
@@ -727,6 +773,7 @@ Ensure all documentation follows consistent grammar, style, and formatting stand
 **Examples:**
 
 ✅ **Good:**
+
 ```
 You can search for legislation using the search command.
 It takes about 2 minutes to get your API key.
@@ -734,6 +781,7 @@ Run this command to export results.
 ```
 
 ❌ **Bad:**
+
 ```
 Legislation can be searched for by utilizing the search command which has been implemented as part of the CLI tool. (Passive, 21 words)
 
@@ -745,6 +793,7 @@ The user should obtain an API key from the official NZ Legislation API website, 
 #### Paragraph Structure
 
 **Guidelines:**
+
 - 3-5 sentences per paragraph
 - One topic per paragraph
 - Topic sentence first
@@ -754,11 +803,13 @@ The user should obtain an API key from the official NZ Legislation API website, 
 **Examples:**
 
 ✅ **Good:**
+
 ```
 Getting your API key is quick and easy. Visit the NZ Legislation API website and fill out the sign-up form. You'll receive your key via email within 2 minutes. Keep it somewhere safe - you'll need it for setup.
 ```
 
 ❌ **Bad:**
+
 ```
 Getting your API key is quick and easy. Visit the NZ Legislation API website and fill out the sign-up form. You'll receive your key via email within 2 minutes. Keep it somewhere safe - you'll need it for setup. The website is https://api.legislation.govt.nz/docs/ and it's available 24/7. You can contact support if you have issues. The form asks for your name, email, and organization. Make sure to use a valid email address. (Too many topics, 7 sentences)
 ```
@@ -768,10 +819,12 @@ Getting your API key is quick and easy. Visit the NZ Legislation API website and
 #### Code Formatting
 
 **Inline Code:**
+
 - Use backticks for commands, file names, variables
 - No spaces inside backticks
 
 ✅ **Good:**
+
 ```
 Run `nzlegislation search --query "health"` to search.
 Edit the `.env` file in your project directory.
@@ -779,16 +832,18 @@ The `apiKey` variable stores your API key.
 ```
 
 **Code Blocks:**
+
 - Specify language for syntax highlighting
 - Include comments for complex sections
 - Keep examples concise
 
 ✅ **Good:**
+
 ```typescript
 // Search for legislation
 const results = await searchWorks({
   query: 'health',
-  limit: 25
+  limit: 25,
 });
 ```
 
@@ -799,14 +854,19 @@ const results = await searchWorks({
 #### Headings
 
 **Hierarchy:**
+
 ```markdown
 # H1 - Page title (one per page)
+
 ## H2 - Major sections
+
 ### H3 - Subsections
+
 #### H4 - Minor sections (use sparingly)
 ```
 
 **Style:**
+
 - ✅ Sentence case: "How to search for legislation"
 - ❌ Title Case: "How to Search for Legislation"
 - ❌ ALL CAPS: "HOW TO SEARCH FOR LEGISLATION"
@@ -816,12 +876,14 @@ const results = await searchWorks({
 #### Lists
 
 **Bulleted Lists:**
+
 - Use for related items
 - No particular order
 - Start with capital letter
 - End without period (unless full sentences)
 
 **Numbered Lists:**
+
 - Use for sequential steps
 - Specific order matters
 - Start with capital letter
@@ -830,13 +892,16 @@ const results = await searchWorks({
 **Examples:**
 
 ✅ **Good:**
+
 ```markdown
 Features:
+
 - Fast search
 - Export to CSV
 - Citation generation
 
 Steps:
+
 1. Install Node.js 18+
 2. Run `npm install -g nz-legislation-tool`
 3. Set your API key
@@ -848,6 +913,7 @@ Steps:
 #### Tables
 
 **Guidelines:**
+
 - Use for structured data
 - Clear column headers
 - Consistent formatting
@@ -856,10 +922,10 @@ Steps:
 **Example:**
 
 ```markdown
-| Option | Short | Description | Default |
-|--------|-------|-------------|---------|
-| `--query` | `-q` | Search query (required) | - |
-| `--limit` | `-l` | Maximum results | `25` |
+| Option    | Short | Description             | Default |
+| --------- | ----- | ----------------------- | ------- |
+| `--query` | `-q`  | Search query (required) | -       |
+| `--limit` | `-l`  | Maximum results         | `25`    |
 ```
 
 ---
@@ -869,12 +935,14 @@ Steps:
 #### Grammarly
 
 **Usage:**
+
 - Install browser extension
 - Copy-paste content to web editor
 - Review suggestions
 - Accept/reject changes
 
 **Focus Areas:**
+
 - Spelling
 - Grammar
 - Punctuation
@@ -886,12 +954,14 @@ Steps:
 #### Hemingway App
 
 **Usage:**
+
 - Visit hemingwayapp.com
 - Paste content
 - Review highlights
 - Simplify complex sentences
 
 **Focus Areas:**
+
 - Readability score (target: Grade 8-10)
 - Adverb usage (minimize)
 - Passive voice (avoid)
@@ -902,6 +972,7 @@ Steps:
 #### Vale (Command Line)
 
 **Installation:**
+
 ```bash
 # macOS
 brew install vale
@@ -910,6 +981,7 @@ brew install vale
 ```
 
 **Usage:**
+
 ```bash
 # Check single file
 vale README.md
@@ -922,6 +994,7 @@ vale --config=.vale.ini docs/
 ```
 
 **Configuration (.vale.ini):**
+
 ```ini
 StylesPath = .vale/styles
 MinAlertLevel = suggestion
@@ -997,24 +1070,14 @@ echo "Spelling check complete. Report saved to spelling-report.md"
 ```
 
 **Configuration (.cspell.json):**
+
 ```json
 {
   "version": "0.2",
   "language": "en-NZ",
-  "words": [
-    "nzlegislation",
-    "legislation",
-    "Aotearoa",
-    "Māori",
-    "whakature"
-  ],
-  "ignoreWords": [
-    "npmjs",
-    "github"
-  ],
-  "files": [
-    "**/*.md"
-  ]
+  "words": ["nzlegislation", "legislation", "Aotearoa", "Māori", "whakature"],
+  "ignoreWords": ["npmjs", "github"],
+  "files": ["**/*.md"]
 }
 ```
 
@@ -1073,6 +1136,7 @@ echo "Markdown validation complete. Report saved to markdown-report.md"
 ```
 
 **Configuration (.markdownlint.json):**
+
 ```json
 {
   "default": true,
@@ -1186,6 +1250,7 @@ Quality Score = (Usability + Accuracy + Accessibility + Style) / 4
 ### Target Scores
 
 **Before Launch:**
+
 - Overall Quality Score: >85/100
 - Usability: >80/100
 - Accuracy: >95/100
@@ -1193,6 +1258,7 @@ Quality Score = (Usability + Accuracy + Accessibility + Style) / 4
 - Style: >85/100
 
 **Post-Launch (Quarter 1):**
+
 - Overall Quality Score: >90/100
 - User satisfaction: >4.5/5.0
 - Support tickets: -50%
@@ -1250,13 +1316,13 @@ Quality Score = (Usability + Accuracy + Accessibility + Style) / 4
 
 **Sign-off:**
 
-| Role | Name | Date | Signature |
-|------|------|------|-----------|
-| Technical Lead | | | |
-| Content Lead | | | |
-| UX Lead | | | |
-| Accessibility Lead | | | |
-| Project Lead | | | |
+| Role               | Name | Date | Signature |
+| ------------------ | ---- | ---- | --------- |
+| Technical Lead     |      |      |           |
+| Content Lead       |      |      |           |
+| UX Lead            |      |      |           |
+| Accessibility Lead |      |      |           |
+| Project Lead       |      |      |           |
 
 ---
 

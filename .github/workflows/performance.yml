@@ -9,53 +9,57 @@ on:
 permissions:
   contents: read
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
 jobs:
   performance:
     runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
-      
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.29.3 --activate
+
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '20'
           cache: 'pnpm'
-      
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      
+
       - name: Build
         run: pnpm build
-      
+
       - name: Run performance audit
         run: pnpm bench:audit
         continue-on-error: true
-      
+
       - name: Upload performance results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: performance-results
           path: performance-audit-results/
           retention-days: 30
-      
+
       - name: Run bundle analysis
         run: pnpm build:analyze
         continue-on-error: true
-      
+
       - name: Upload bundle analysis
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: bundle-analysis
           path: bundle-reports/
           retention-days: 30
-      
+
       - name: Check performance gates
         run: node scripts/check-performance-gates.js
         env:
@@ -65,23 +69,24 @@ jobs:
   load-test:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    
-    steps:
-      - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
-      
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.29.3 --activate
+
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '20'
           cache: 'pnpm'
-      
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      
+
       - name: Install k6
         run: |
           sudo gpg -k
@@ -89,16 +94,16 @@ jobs:
           echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
           sudo apt-get update
           sudo apt-get install k6
-      
+
       - name: Run load test
         run: k6 run scripts/load-test.ts
         env:
           NZ_LEGISLATION_API_KEY: ${{ secrets.NZ_LEGISLATION_API_KEY }}
           NZ_LEGISLATION_BASE_URL: 'https://api.legislation.govt.nz'
         continue-on-error: true
-      
+
       - name: Upload load test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: load-test-results

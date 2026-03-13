@@ -38,11 +38,13 @@ A fast, friendly command-line tool for researchers, legal professionals, and any
 ### Step 2: Install the Tool (1 minute)
 
 **Option A: Try without installing (recommended for first time)**
+
 ```bash
 npx nz-legislation-tool search --query "health"
 ```
 
 **Option B: Install globally (recommended for regular use)**
+
 ```bash
 npm install -g nz-legislation-tool
 ```
@@ -60,6 +62,7 @@ nzlegislation search --query "health act"
 ```
 
 **You should see:**
+
 ```
 ┌────────────────────┬──────────────────────────────────────────┬────────┬──────────┬────────────┐
 │ ID                 │ Title                                    │ Type   │ Status   │ Date       │
@@ -107,16 +110,16 @@ nzlegislation search --query "health" --format csv --output results.csv
 
 **All options:**
 
-| Option | Short | Description | Default |
-|--------|-------|-------------|---------|
-| `--query` | `-q` | Search query (required) | - |
-| `--type` | `-t` | Filter: act, bill, regulation, instrument | - |
-| `--status` | `-s` | Filter: in-force, repealed, etc. | - |
-| `--from` | - | From date (YYYY-MM-DD) | - |
-| `--to` | - | To date (YYYY-MM-DD) | - |
-| `--limit` | `-l` | Max results (1-100) | `25` |
-| `--offset` | `-o` | For pagination | `0` |
-| `--format` | `-f` | Output: table, json, csv | `table` |
+| Option     | Short | Description                               | Default |
+| ---------- | ----- | ----------------------------------------- | ------- |
+| `--query`  | `-q`  | Search query (required)                   | -       |
+| `--type`   | `-t`  | Filter: act, bill, regulation, instrument | -       |
+| `--status` | `-s`  | Filter: in-force, repealed, etc.          | -       |
+| `--from`   | -     | From date (YYYY-MM-DD)                    | -       |
+| `--to`     | -     | To date (YYYY-MM-DD)                      | -       |
+| `--limit`  | `-l`  | Max results (1-100)                       | `25`    |
+| `--offset` | `-o`  | For pagination                            | `0`     |
+| `--format` | `-f`  | Output: table, json, csv                  | `table` |
 
 👉 **Pro tip:** Use quotes for multi-word searches: `"Mental Health Act"`
 
@@ -140,6 +143,7 @@ nzlegislation get "act/2020/67" --format json
 **Where do I find the ID?**
 
 Run a search first, then copy the ID from the results:
+
 ```bash
 nzlegislation search --query "health act"
 # Copy "act/2020/67" from the results
@@ -167,17 +171,17 @@ nzlegislation export --query "health" --output health.csv --include-metadata
 
 **All options:**
 
-| Option | Short | Description | Default |
-|--------|-------|-------------|---------|
-| `--query` | `-q` | Search query (required) | - |
-| `--output` | `-o` | Output file path (required) | - |
-| `--format` | `-f` | Output: csv, json | `csv` |
-| `--type` | `-t` | Filter by type | - |
-| `--status` | `-s` | Filter by status | - |
-| `--from` | - | From date | - |
-| `--to` | - | To date | - |
-| `--limit` | `-l` | Max results | `100` |
-| `--include-metadata` | - | Add export metadata | `false` |
+| Option               | Short | Description                 | Default |
+| -------------------- | ----- | --------------------------- | ------- |
+| `--query`            | `-q`  | Search query (required)     | -       |
+| `--output`           | `-o`  | Output file path (required) | -       |
+| `--format`           | `-f`  | Output: csv, json           | `csv`   |
+| `--type`             | `-t`  | Filter by type              | -       |
+| `--status`           | `-s`  | Filter by status            | -       |
+| `--from`             | -     | From date                   | -       |
+| `--to`               | -     | To date                     | -       |
+| `--limit`            | `-l`  | Max results                 | `100`   |
+| `--include-metadata` | -     | Add export metadata         | `false` |
 
 ---
 
@@ -200,6 +204,7 @@ nzlegislation cite "act/2020/67" --style apa
 ```
 
 **Build a bibliography:**
+
 ```bash
 # Append multiple citations to a .bib file
 nzlegislation cite "act/1981/118" --style bibtex >> references.bib
@@ -344,10 +349,10 @@ act/2020/67,Health Act 2020,Health Act 2020,act,in-force,2020-11-15,https://api.
 
 The NZ Legislation API has fair use limits:
 
-| Limit | Value | Reset |
-|-------|-------|-------|
-| **Daily** | 10,000 requests | Midnight local time |
-| **Burst** | 2,000 requests per 5 minutes | Rolling window |
+| Limit     | Value                        | Reset               |
+| --------- | ---------------------------- | ------------------- |
+| **Daily** | 10,000 requests              | Midnight local time |
+| **Burst** | 2,000 requests per 5 minutes | Rolling window      |
 
 **Don't worry**—the CLI automatically handles rate limiting. If you hit a limit, you'll see a friendly message telling you when to try again.
 
@@ -358,11 +363,13 @@ The NZ Legislation API has fair use limits:
 ### "API key not configured"
 
 **Quick fix:**
+
 ```bash
 nzlegislation config --key YOUR_API_KEY
 ```
 
 **Still not working?** Check if it's set correctly:
+
 ```bash
 nzlegislation config --show
 ```
@@ -372,11 +379,13 @@ nzlegislation config --show
 ### "Authentication failed"
 
 **Common causes:**
+
 - Typo in the API key
 - API key expired
 - Wrong key copied
 
 **Fix it:**
+
 1. Check your email for the original API key
 2. Re-run: `nzlegislation config --key YOUR_KEY`
 3. Test: `nzlegislation search --query "test"`
@@ -388,10 +397,12 @@ nzlegislation config --show
 **What happened:** You've made too many requests too quickly.
 
 **Fix it:**
+
 - Wait 5 minutes for the burst limit to reset
 - Or wait until midnight for the daily limit to reset
 
 **Prevent it:**
+
 - Add pauses between bulk requests
 - Use `--limit` to reduce batch sizes
 
@@ -400,10 +411,12 @@ nzlegislation config --show
 ### "Resource not found"
 
 **Common causes:**
+
 - Wrong ID format (should be like `act/2020/67`)
 - The legislation doesn't exist
 
 **Fix it:**
+
 1. Search first to find the correct ID:
    ```bash
    nzlegislation search --query "health"
@@ -418,6 +431,7 @@ nzlegislation config --show
 **What happened:** Can't connect to the API.
 
 **Fix it:**
+
 1. Check your internet connection
 2. Try the API website directly: https://api.legislation.govt.nz
 3. If the API is down, wait and try again later
@@ -470,6 +484,7 @@ npm link  # Install globally
 We'd love your help! This project is open source and welcomes contributions from everyone.
 
 **Ways to contribute:**
+
 - 🐛 Report bugs
 - 💡 Suggest features
 - 📝 Improve documentation
@@ -512,14 +527,14 @@ Need more help? Check out these guides:
 
 This repository runs itself with minimal manual intervention:
 
-| Automation | Frequency | What It Does |
-|------------|-----------|--------------|
-| 🔒 **Security Audit** | Weekly | Scans for vulnerabilities |
-| ✨ **Code Quality** | Every commit | Linting, type checking |
-| 📦 **Dependency Updates** | Weekly | Auto-updates safe packages |
-| 🧪 **Tests** | Every commit | 43+ automated tests |
-| ⚡ **Benchmarks** | Weekly | Performance tracking |
-| 🗑️ **Stale Cleanup** | Daily | Closes inactive issues |
+| Automation                | Frequency    | What It Does               |
+| ------------------------- | ------------ | -------------------------- |
+| 🔒 **Security Audit**     | Weekly       | Scans for vulnerabilities  |
+| ✨ **Code Quality**       | Every commit | Linting, type checking     |
+| 📦 **Dependency Updates** | Weekly       | Auto-updates safe packages |
+| 🧪 **Tests**              | Every commit | 43+ automated tests        |
+| ⚡ **Benchmarks**         | Weekly       | Performance tracking       |
+| 🗑️ **Stale Cleanup**      | Daily        | Closes inactive issues     |
 
 **Manual maintenance:** ~0 hours/month ✅
 

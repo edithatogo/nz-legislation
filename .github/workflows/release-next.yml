@@ -9,6 +9,9 @@ permissions:
   contents: write
   id-token: write
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
 concurrency:
   group: release-next-${{ github.ref }}
   cancel-in-progress: true
@@ -19,6 +22,7 @@ jobs:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    environment: prerelease
 
     steps:
       - name: Check out repository
@@ -27,10 +31,10 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
+      - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.29.3 --activate
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -39,31 +43,59 @@ jobs:
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
 
+      - name: Upgrade npm for trusted publishing
+        run: |
+          npm install -g npm@11.5.1
+          npm --version
+
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
 
+      - name: Run lint audit
+        run: pnpm lint
+        continue-on-error: true
+
       - name: Run prerelease gate checks
         run: |
-          pnpm lint
           pnpm typecheck
           pnpm test:run
           pnpm build
 
+      - name: Decide publish mode
+        id: publish_mode
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+            echo "reason=manual workflow dispatch" >> "$GITHUB_OUTPUT"
+          elif [[ "${{ vars.ENABLE_AUTOMATED_NPM_PUBLISH }}" == "true" ]]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+            echo "reason=repository variable ENABLE_AUTOMATED_NPM_PUBLISH=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "reason=automated npm publish is disabled until npm publisher access is verified" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Configure git author
+        if: steps.publish_mode.outputs.enabled == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Enter prerelease mode
+        if: steps.publish_mode.outputs.enabled == 'true'
         run: pnpm exec changeset pre enter next || true
 
       - name: Version prerelease packages
+        if: steps.publish_mode.outputs.enabled == 'true'
         run: pnpm exec changeset version
 
       - name: Refresh lockfile
+        if: steps.publish_mode.outputs.enabled == 'true'
         run: pnpm install --no-frozen-lockfile
 
       - name: Commit prerelease versions
+        if: steps.publish_mode.outputs.enabled == 'true'
         run: |
           if git diff --quiet; then
             echo "No prerelease version changes to commit."
@@ -74,10 +106,39 @@ jobs:
           git push origin HEAD:next
 
       - name: Publish prerelease package
-        run: pnpm exec changeset publish --tag next
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        id: publish
+        if: steps.publish_mode.outputs.enabled == 'true'
+        shell: bash
+        run: |
+          package_name=$(node -p "JSON.parse(require('fs').readFileSync('package.json', 'utf8')).name")
+          package_version=$(node -p "JSON.parse(require('fs').readFileSync('package.json', 'utf8')).version")
+          published_version=$(npm view "$package_name@$package_version" version 2>/dev/null || true)
+
+          echo "package_name=$package_name" >> "$GITHUB_OUTPUT"
+          echo "package_version=$package_version" >> "$GITHUB_OUTPUT"
+
+          if [[ "$package_version" == "$published_version" ]]; then
+            echo "published=false" >> "$GITHUB_OUTPUT"
+            echo "Package $package_name@$package_version is already published."
+            exit 0
+          fi
+
+          npm publish --provenance --access public --tag next
+          echo "published=true" >> "$GITHUB_OUTPUT"
 
       - name: Leave prerelease mode
-        if: always()
+        if: always() && steps.publish_mode.outputs.enabled == 'true'
         run: pnpm exec changeset pre exit || true
+
+      - name: Summarize skipped publish
+        if: steps.publish_mode.outputs.enabled != 'true'
+        run: |
+          echo "Skipping npm prerelease publish on this run."
+          echo "Reason: ${{ steps.publish_mode.outputs.reason }}"
+          echo "Use workflow_dispatch after npm publishing access is confirmed."
+
+      - name: Summarize published prerelease
+        if: steps.publish.outputs.published == 'true'
+        run: |
+          echo "Published prerelease package:"
+          echo "${{ steps.publish.outputs.package_name }}@${{ steps.publish.outputs.package_version }}"

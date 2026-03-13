@@ -22,9 +22,6 @@ export const LegislationStatusSchema = z.enum([
 ]);
 export type LegislationStatus = z.infer<typeof LegislationStatusSchema>;
 
-// Date string in YYYY-MM-DD format
-const DateStringSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format (expected YYYY-MM-DD)');
-
 /**
  * Format entry as returned by the API.
  */
@@ -62,7 +59,9 @@ function mapLegislationType(apiType: string): WorkType {
 }
 
 function mapLegislationStatus(status: string | null | undefined): LegislationStatus {
-  if (!status) return 'not-yet-in-force';
+  if (!status) {
+    return 'not-yet-in-force';
+  }
 
   switch (status) {
     case 'in_force':
@@ -83,30 +82,33 @@ function mapLegislationStatus(status: string | null | undefined): LegislationSta
 /**
  * Raw API search result item — loose schema to accept the actual API shape.
  */
-const ApiWorkSchema = z.object({
-  work_id: z.string(),
-  legislation_type: z.string(),
-  legislation_status: z.string().nullable().optional(),
-  publisher: z.string().nullable().optional(),
-  administering_agencies: z.array(z.string()).optional(),
-  latest_matching_version: LatestMatchingVersionSchema,
-  act_type: z.string().optional(),
-  act_status: z.string().optional(),
-  act_classification: z.string().optional(),
-  bill_type: z.string().optional(),
-  bill_status: z.string().optional(),
-  instrument_type_group: z.string().optional(),
-  instrument_status: z.string().optional(),
-  instrument_classification: z.string().optional(),
-}).passthrough();
+const ApiWorkSchema = z
+  .object({
+    work_id: z.string(),
+    legislation_type: z.string(),
+    legislation_status: z.string().nullable().optional(),
+    publisher: z.string().nullable().optional(),
+    administering_agencies: z.array(z.string()).optional(),
+    latest_matching_version: LatestMatchingVersionSchema,
+    act_type: z.string().optional(),
+    act_status: z.string().optional(),
+    act_classification: z.string().optional(),
+    bill_type: z.string().optional(),
+    bill_status: z.string().optional(),
+    instrument_type_group: z.string().optional(),
+    instrument_status: z.string().optional(),
+    instrument_classification: z.string().optional(),
+  })
+  .passthrough();
 
 /**
  * Legislation Work model — normalized from API response.
  */
-export const WorkSchema = ApiWorkSchema.transform((raw) => {
+export const WorkSchema = ApiWorkSchema.transform(raw => {
   const version = raw.latest_matching_version;
-  const htmlFormat = version.formats?.find((format) => format.type === 'html');
-  const status = raw.legislation_status || raw.act_status || raw.bill_status || raw.instrument_status;
+  const htmlFormat = version.formats?.find(format => format.type === 'html');
+  const status =
+    raw.legislation_status || raw.act_status || raw.bill_status || raw.instrument_status;
 
   return {
     id: raw.work_id,
@@ -124,25 +126,27 @@ export type Work = z.infer<typeof WorkSchema>;
 /**
  * Raw API version item.
  */
-const ApiVersionSchema = z.object({
-  version_id: z.string(),
-  work_id: z.string(),
-  title: z.string(),
-  is_latest_version: z.boolean().optional(),
-  legislation_type: z.string().optional(),
-  legislation_status: z.string().nullable().optional(),
-  act_status: z.string().optional(),
-  act_type: z.string().optional(),
-  formats: z.array(ApiFormatSchema).optional(),
-  administering_agencies: z.array(z.string()).optional(),
-}).passthrough();
+const ApiVersionSchema = z
+  .object({
+    version_id: z.string(),
+    work_id: z.string(),
+    title: z.string(),
+    is_latest_version: z.boolean().optional(),
+    legislation_type: z.string().optional(),
+    legislation_status: z.string().nullable().optional(),
+    act_status: z.string().optional(),
+    act_type: z.string().optional(),
+    formats: z.array(ApiFormatSchema).optional(),
+    administering_agencies: z.array(z.string()).optional(),
+  })
+  .passthrough();
 
 /**
  * Version item promoted to a normalized work, used when the API does not expose
  * a dedicated single-work endpoint.
  */
-export const WorkFromVersionSchema = ApiVersionSchema.transform((raw) => {
-  const htmlFormat = raw.formats?.find((format) => format.type === 'html');
+export const WorkFromVersionSchema = ApiVersionSchema.transform(raw => {
+  const htmlFormat = raw.formats?.find(format => format.type === 'html');
   const status = raw.legislation_status || raw.act_status;
 
   return {
@@ -160,14 +164,14 @@ export const WorkFromVersionSchema = ApiVersionSchema.transform((raw) => {
 /**
  * Version model — normalized from API response.
  */
-export const VersionSchema = ApiVersionSchema.transform((raw) => {
+export const VersionSchema = ApiVersionSchema.transform(raw => {
   return {
     id: raw.version_id,
     version: 1,
     date: extractDateFromVersionId(raw.version_id),
     isCurrent: raw.is_latest_version || false,
     type: raw.legislation_type || raw.act_type || 'unknown',
-    formats: (raw.formats || []).map((format) => format.url),
+    formats: (raw.formats || []).map(format => format.url),
   };
 });
 export type Version = z.infer<typeof VersionSchema>;
@@ -185,7 +189,7 @@ export type FormatInfo = z.infer<typeof FormatInfoSchema>;
 /**
  * Legislation Version with full content — normalized from API response.
  */
-export const LegislationVersionSchema = ApiVersionSchema.transform((raw) => {
+export const LegislationVersionSchema = ApiVersionSchema.transform(raw => {
   return {
     id: raw.version_id,
     workId: raw.work_id,
@@ -194,7 +198,7 @@ export const LegislationVersionSchema = ApiVersionSchema.transform((raw) => {
     date: extractDateFromVersionId(raw.version_id),
     isCurrent: raw.is_latest_version || false,
     content: undefined as string | undefined,
-    formats: (raw.formats || []).map((format) => ({ format: format.type, url: format.url })),
+    formats: (raw.formats || []).map(format => ({ format: format.type, url: format.url })),
   };
 });
 export type LegislationVersion = z.infer<typeof LegislationVersionSchema>;
@@ -211,18 +215,20 @@ export type PaginationLinks = z.infer<typeof PaginationLinksSchema>;
 /**
  * Search results from API — handles the actual PCO API v0 pagination format.
  */
-export const SearchResultsSchema = z.object({
-  total: z.number(),
-  page: z.number().optional(),
-  per_page: z.number().optional(),
-  results: z.array(WorkSchema),
-}).transform((raw) => ({
-  total: raw.total,
-  offset: ((raw.page || 1) - 1) * (raw.per_page || 20),
-  limit: raw.per_page || 20,
-  results: raw.results,
-  links: undefined as PaginationLinks | undefined,
-}));
+export const SearchResultsSchema = z
+  .object({
+    total: z.number(),
+    page: z.number().optional(),
+    per_page: z.number().optional(),
+    results: z.array(WorkSchema),
+  })
+  .transform(raw => ({
+    total: raw.total,
+    offset: ((raw.page || 1) - 1) * (raw.per_page || 20),
+    limit: raw.per_page || 20,
+    results: raw.results,
+    links: undefined as PaginationLinks | undefined,
+  }));
 export type SearchResults = z.infer<typeof SearchResultsSchema>;
 
 /**

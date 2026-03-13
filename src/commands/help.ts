@@ -3,9 +3,10 @@
  * Provides menu-driven help navigation for NZ Legislation CLI
  */
 
+import * as readline from 'readline';
+
 import chalk from 'chalk';
 import { Command } from 'commander';
-import * as readline from 'readline';
 
 interface HelpTopic {
   id: string;
@@ -110,7 +111,7 @@ const helpTopics: HelpTopic[] = [
  */
 export function createInteractiveHelpCommand(): Command {
   const cmd = new Command();
-  
+
   cmd
     .name('help-interactive')
     .alias('help-i')
@@ -126,7 +127,7 @@ export function createInteractiveHelpCommand(): Command {
 
       let selectedIndex = 0;
 
-      const showMenu = () => {
+      const showMenu = (): void => {
         console.clear();
         console.log(chalk.blue.bold('\n📚 NZ Legislation Tool - Interactive Help\n'));
         console.log('Select a topic:\n');
@@ -142,19 +143,19 @@ export function createInteractiveHelpCommand(): Command {
         console.log(chalk.gray('↑/↓ - Navigate | Enter - Select\n'));
       };
 
-      const showTopic = (topic: HelpTopic) => {
+      const showTopic = (topic: HelpTopic): void => {
         console.clear();
         console.log(chalk.blue.bold(`\n📖 ${topic.title}\n`));
         console.log(`${topic.description}\n`);
 
         console.log(chalk.yellow.bold('Examples:'));
-        topic.examples.forEach((example) => {
+        topic.examples.forEach(example => {
           console.log(`  ${chalk.cyan(example)}`);
         });
 
         if (topic.relatedCommands && topic.relatedCommands.length > 0) {
           console.log('\n' + chalk.yellow.bold('Related Commands:'));
-          topic.relatedCommands.forEach((cmdName) => {
+          topic.relatedCommands.forEach(cmdName => {
             console.log(`  ${chalk.green(`nzlegislation ${cmdName} --help`)}`);
           });
         }
@@ -164,8 +165,8 @@ export function createInteractiveHelpCommand(): Command {
 
       // Handle keyboard input
       const handleInput = async (): Promise<void> => {
-        return new Promise((resolve) => {
-          rl.once('data', (key) => {
+        return new Promise(resolve => {
+          rl.once('data', (key: Buffer) => {
             const input = key.toString().toLowerCase();
 
             if (input === 'q') {
@@ -182,19 +183,21 @@ export function createInteractiveHelpCommand(): Command {
               // Wait for Enter to return
               rl.once('data', () => {
                 showMenu();
-                handleInput().then(resolve);
+                void handleInput().then(resolve);
               });
               return;
             }
 
-            if (input === '\x1b[A') { // Up arrow
+            if (input === '\x1b[A') {
+              // Up arrow
               selectedIndex = Math.max(0, selectedIndex - 1);
-            } else if (input === '\x1b[B') { // Down arrow
+            } else if (input === '\x1b[B') {
+              // Down arrow
               selectedIndex = Math.min(helpTopics.length - 1, selectedIndex + 1);
             }
 
             showMenu();
-            handleInput().then(resolve);
+            void handleInput().then(resolve);
           });
         });
       };
@@ -202,7 +205,7 @@ export function createInteractiveHelpCommand(): Command {
       showMenu();
       await handleInput();
     });
-  
+
   return cmd;
 }
 
@@ -211,7 +214,7 @@ export function createInteractiveHelpCommand(): Command {
  */
 export function createContextualHelpCommand(): Command {
   const cmd = new Command();
-  
+
   cmd
     .name('help-context')
     .description('Show contextual help for common scenarios')
@@ -230,7 +233,7 @@ export function createContextualHelpCommand(): Command {
       }
 
       const scenarios: Record<string, string[]> = {
-        'auth': [
+        auth: [
           chalk.yellow.bold('Authentication Issues'),
           '',
           chalk.green('Check API Key Configuration:'),
@@ -261,7 +264,7 @@ export function createContextualHelpCommand(): Command {
           chalk.green('Example:'),
           '  nzlegislation search --query "health" --limit 50',
         ],
-        'network': [
+        network: [
           chalk.yellow.bold('Network Issues'),
           '',
           chalk.green('Check Connection:'),
@@ -276,7 +279,7 @@ export function createContextualHelpCommand(): Command {
           chalk.green('Timeout Issues:'),
           '  • Increase timeout: export NZ_LEGISLATION_TIMEOUT=60000',
         ],
-        'export': [
+        export: [
           chalk.yellow.bold('Export Issues'),
           '',
           chalk.green('Supported Formats:'),
@@ -294,7 +297,7 @@ export function createContextualHelpCommand(): Command {
           '  • Ensure directory exists',
           '  • Use absolute paths if needed',
         ],
-        'cite': [
+        cite: [
           chalk.yellow.bold('Citation Issues'),
           '',
           chalk.green('Supported Styles:'),
@@ -325,6 +328,6 @@ export function createContextualHelpCommand(): Command {
       console.log(help.join('\n'));
       console.log();
     });
-  
+
   return cmd;
 }

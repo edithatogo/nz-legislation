@@ -1,14 +1,15 @@
 /**
  * Streaming Utilities
- * 
+ *
  * Provides streaming support for large data exports to minimize memory usage.
  * Allows exporting GBs of data without running out of memory.
  */
 
 import { createWriteStream, WriteStream } from 'fs';
-import { pipeline } from 'stream/promises';
 import { Readable } from 'stream';
-import { searchWorks, getWork, getWorkVersions } from '@client';
+import { pipeline } from 'stream/promises';
+
+import { searchWorks, getWork } from '@client';
 import type { Work } from '@models';
 
 interface SearchParams {
@@ -29,9 +30,9 @@ export interface StreamExportOptions {
   outputPath: string;
   format: 'csv' | 'json' | 'ndjson';
   includeMetadata?: boolean;
-  batchSize?: number;        // Results per batch (default: 100)
-  maxResults?: number;       // Maximum total results (default: unlimited)
-  concurrency?: number;      // Concurrent API calls (default: 3)
+  batchSize?: number; // Results per batch (default: 100)
+  maxResults?: number; // Maximum total results (default: unlimited)
+  concurrency?: number; // Concurrent API calls (default: 3)
 }
 
 /**
@@ -77,7 +78,7 @@ export class StreamExporter {
     onProgress?: (progress: StreamProgress) => void
   ): Promise<{ processed: number; bytesWritten: number }> {
     const startTime = Date.now();
-    
+
     // Create write stream
     this.writeStream = createWriteStream(this.outputPath, {
       encoding: 'utf-8',
@@ -87,7 +88,7 @@ export class StreamExporter {
     try {
       // Write header based on format
       if (this.format === 'csv') {
-        await this.writeCsvHeader();
+        this.writeCsvHeader();
       } else if (this.format === 'json') {
         this.writeStream.write('[\n');
       }
@@ -112,13 +113,15 @@ export class StreamExporter {
 
         // Process and write each result
         for (const work of results.results) {
-          if (this.aborted) break;
+          if (this.aborted) {
+            break;
+          }
           if (totalFetched >= this.maxResults) {
             hasMore = false;
             break;
           }
 
-          await this.writeWork(work, totalFetched === 0 && this.format === 'json');
+          this.writeWork(work, totalFetched === 0 && this.format === 'json');
           this.processed++;
           totalFetched++;
 
@@ -128,9 +131,7 @@ export class StreamExporter {
               processed: this.processed,
               total: results.total,
               bytesWritten: this.bytesWritten,
-              percent: results.total > 0 
-                ? Math.round((this.processed / results.total) * 100) 
-                : 0,
+              percent: results.total > 0 ? Math.round((this.processed / results.total) * 100) : 0,
               estimatedTimeRemaining: this.calculateETA(startTime, this.processed),
             });
           }
@@ -146,7 +147,7 @@ export class StreamExporter {
 
       // Include metadata if requested
       if (this.includeMetadata && this.format !== 'ndjson') {
-        await this.writeMetadata(params, totalFetched);
+        this.writeMetadata(params, totalFetched);
       }
 
       // Close stream
@@ -187,13 +188,14 @@ export class StreamExporter {
 
       for (let i = 0; i < workIds.length; i++) {
         const workId = workIds[i];
-        
+
         try {
           const work = await getWork(workId);
-          
-          const line = format === 'json'
-            ? (i > 0 ? ',\n' : '') + JSON.stringify(work, null, 2)
-            : JSON.stringify(work) + '\n';
+
+          const line =
+            format === 'json'
+              ? (i > 0 ? ',\n' : '') + JSON.stringify(work, null, 2)
+              : JSON.stringify(work) + '\n';
 
           writeStream.write(line);
           bytesWritten += line.length;
@@ -245,7 +247,7 @@ export class StreamExporter {
   /**
    * Write CSV header
    */
-  private async writeCsvHeader(): Promise<void> {
+  private writeCsvHeader(): void {
     const header = 'id,title,shortTitle,type,status,date,url,versionCount\n';
     this.writeStream.write(header);
     this.bytesWritten += header.length;
@@ -254,7 +256,7 @@ export class StreamExporter {
   /**
    * Write work to stream
    */
-  private async writeWork(work: Work, isFirst: boolean): Promise<void> {
+  private writeWork(work: Work, isFirst: boolean): void {
     let line = '';
 
     switch (this.format) {
@@ -280,29 +282,31 @@ export class StreamExporter {
    */
   private formatCsvRow(work: Work): string {
     // Escape CSV fields
-    const escape = (str: string) => {
+    const escape = (str: string): string => {
       if (str.includes(',') || str.includes('"') || str.includes('\n')) {
         return `"${str.replace(/"/g, '""')}"`;
       }
       return str;
     };
 
-    return [
-      work.id,
-      escape(work.title),
-      work.shortTitle ? escape(work.shortTitle) : '',
-      work.type,
-      work.status,
-      work.date,
-      work.url,
-      work.versionCount.toString(),
-    ].join(',') + '\n';
+    return (
+      [
+        work.id,
+        escape(work.title),
+        work.shortTitle ? escape(work.shortTitle) : '',
+        work.type,
+        work.status,
+        work.date,
+        work.url,
+        work.versionCount.toString(),
+      ].join(',') + '\n'
+    );
   }
 
   /**
    * Write metadata at end of file
    */
-  private async writeMetadata(params: SearchParams, totalResults: number): Promise<void> {
+  private writeMetadata(params: SearchParams, totalResults: number): void {
     const metadata = {
       _metadata: {
         exportedAt: new Date().toISOString(),
@@ -341,12 +345,14 @@ export class StreamExporter {
    * Calculate estimated time remaining
    */
   private calculateETA(startTime: number, processed: number): number | undefined {
-    if (processed === 0) return undefined;
-    
+    if (processed === 0) {
+      return undefined;
+    }
+
     const elapsed = Date.now() - startTime;
     const avgTimePerItem = elapsed / processed;
     const remaining = this.maxResults - processed;
-    
+
     return Math.round(avgTimePerItem * remaining);
   }
 }
@@ -361,19 +367,21 @@ export function createPaginatedStream(
   const batchSize = options.batchSize ?? 100;
   let offset = 0;
   let hasMore = true;
-  let pending: Promise<any> | null = null;
+  let pending: Promise<void> | null = null;
 
   return new Readable({
     objectMode: true,
-    async read() {
-      if (pending) return;
+    read(): void {
+      if (pending) {
+        return;
+      }
 
       if (!hasMore) {
         this.push(null);
         return;
       }
 
-      pending = (async () => {
+      pending = (async (): Promise<void> => {
         try {
           const results = await searchWorks({
             ...params,
@@ -404,7 +412,7 @@ export function createPaginatedStream(
 
 /**
  * Stream processing pipeline
- * 
+ *
  * Example usage:
  * ```typescript
  * const stream = createPaginatedStream({ query: 'health' });
@@ -414,7 +422,7 @@ export function createPaginatedStream(
  *     callback(null, { id: work.work_id, title: work.title });
  *   }
  * }));
- * 
+ *
  * await pipeline(stream, transformed, createWriteStream('output.json'));
  * ```
  */

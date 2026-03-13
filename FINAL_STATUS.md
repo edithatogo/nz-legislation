@@ -3,6 +3,7 @@
 ## ✅ COMPLETED WORK
 
 ### **1. SOTA TypeScript Toolchain Migration** ✅
+
 - ✅ All dependencies upgraded to latest versions in package.json
 - ✅ pnpm configured (3x faster than npm)
 - ✅ tsup configured for bundling (10x faster builds)
@@ -14,6 +15,7 @@
 - ✅ **pnpm-lock.yaml generated and pushed**
 
 ### **2. GitHub Repository** ✅
+
 - ✅ Repository: https://github.com/edithatogo/nz-legislation
 - ✅ All code pushed to main branch
 - ✅ Lockfile committed and pushed
@@ -23,6 +25,7 @@
 - ✅ CI/CD workflows created (ci.yml, ci-simple.yml)
 
 ### **3. Configuration Files** ✅
+
 - ✅ package.json (all dependencies)
 - ✅ pnpm-lock.yaml (lockfile)
 - ✅ tsconfig.json (TypeScript config)
@@ -31,9 +34,10 @@
 - ✅ .eslintrc.json (linting)
 - ✅ .prettierrc (formatting)
 - ✅ .changeset/config.json (versioning)
-- ✅ .github/workflows/*.yml (CI/CD)
+- ✅ .github/workflows/\*.yml (CI/CD)
 
 ### **4. Documentation** ✅
+
 - ✅ README.md (comprehensive user guide)
 - ✅ TESTING.md (testing guide)
 - ✅ AUTO_PUBLISH.md (auto-publish guide)
@@ -56,21 +60,23 @@ The automated build is encountering TypeScript type errors that need to be resol
 Since the TypeScript errors are related to backup files and type mismatches, the quickest path is to:
 
 1. **Install npm globally** (if not already installed):
+
    ```bash
    # Download from: https://nodejs.org/
    # This will install both Node.js and npm
    ```
 
 2. **Build and publish**:
+
    ```bash
    cd "C:\Users\60217257\OneDrive - Flinders\Project - 2026.03 - NZ Legislation\nz-legislation-tool"
-   
+
    # Install tsup
    npm install -D tsup
-   
+
    # Build with tsup (bypasses TypeScript errors)
    npx tsup src/cli.ts --format cjs --minify --clean --outDir dist
-   
+
    # Publish to npm
    npm publish --access public
    ```
@@ -80,6 +86,7 @@ Since the TypeScript errors are related to backup files and type mismatches, the
 If you want to fix the TypeScript errors before publishing:
 
 1. **Remove backup files**:
+
    ```bash
    cd "C:\Users\60217257\OneDrive - Flinders\Project - 2026.03 - NZ Legislation\nz-legislation-tool"
    del *-IASN*.ts
@@ -99,15 +106,15 @@ If you want to fix the TypeScript errors before publishing:
 
 ## 📊 CURRENT STATUS
 
-| Component | Status | Notes |
-|-----------|--------|-------|
+| Component               | Status      | Notes                     |
+| ----------------------- | ----------- | ------------------------- |
 | **Toolchain Migration** | ✅ **100%** | All dependencies upgraded |
-| **Lockfile** | ✅ **100%** | Generated and pushed |
-| **GitHub Repo** | ✅ **100%** | All code on main |
-| **Documentation** | ✅ **100%** | 10+ guides created |
-| **CI/CD Workflows** | ✅ **100%** | Created and configured |
-| **TypeScript Build** | ⚠️ **80%** | Type errors need fixing |
-| **npm Publish** | ⏳ **0%** | Pending build fix |
+| **Lockfile**            | ✅ **100%** | Generated and pushed      |
+| **GitHub Repo**         | ✅ **100%** | All code on main          |
+| **Documentation**       | ✅ **100%** | 10+ guides created        |
+| **CI/CD Workflows**     | ✅ **100%** | Created and configured    |
+| **TypeScript Build**    | ⚠️ **80%**  | Type errors need fixing   |
+| **npm Publish**         | ⏳ **0%**   | Pending build fix         |
 
 ---
 
@@ -158,15 +165,17 @@ If you want clean TypeScript builds:
 ## 📁 KEY FILES CREATED
 
 **Source Files:**
+
 - src/cli.ts
 - src/client.ts
 - src/config.ts
 - src/models/index.ts
 - src/output/index.ts
-- src/commands/*.ts
-- src/utils/*.ts
+- src/commands/\*.ts
+- src/utils/\*.ts
 
 **Configuration:**
+
 - package.json
 - pnpm-lock.yaml
 - tsconfig.json
@@ -176,11 +185,13 @@ If you want clean TypeScript builds:
 - .prettierrc
 
 **CI/CD:**
+
 - .github/workflows/ci.yml
 - .github/workflows/ci-simple.yml
 - .github/workflows/publish.yml
 
 **Documentation:**
+
 - README.md
 - TESTING.md
 - AUTO_PUBLISH.md
@@ -191,18 +202,19 @@ If you want clean TypeScript builds:
 
 ## 🔗 IMPORTANT LINKS
 
-| Resource | URL |
-|----------|-----|
-| **Repository** | https://github.com/edithatogo/nz-legislation |
-| **Actions** | https://github.com/edithatogo/nz-legislation/actions |
-| **npm (pending)** | https://www.npmjs.com/package/nz-legislation |
-| **Issues** | https://github.com/edithatogo/nz-legislation/issues |
+| Resource          | URL                                                  |
+| ----------------- | ---------------------------------------------------- |
+| **Repository**    | https://github.com/edithatogo/nz-legislation         |
+| **Actions**       | https://github.com/edithatogo/nz-legislation/actions |
+| **npm (pending)** | https://www.npmjs.com/package/nz-legislation         |
+| **Issues**        | https://github.com/edithatogo/nz-legislation/issues  |
 
 ---
 
 ## 💡 SUMMARY
 
 **What I Accomplished:**
+
 - ✅ Complete SOTA TypeScript toolchain migration
 - ✅ All dependencies upgraded
 - ✅ pnpm lockfile generated and pushed
@@ -212,6 +224,7 @@ If you want clean TypeScript builds:
 - ✅ All code committed and pushed to main
 
 **What's Left:**
+
 - ⏳ Install npm (if not already available)
 - ⏳ Build with tsup (bypasses TypeScript errors)
 - ⏳ Publish to npm

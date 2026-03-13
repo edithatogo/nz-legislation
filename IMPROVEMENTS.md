@@ -17,6 +17,7 @@ Implemented **critical production-readiness improvements** for the NZ Legislatio
 **File:** `.github/workflows/ci.yml`
 
 ### Features:
+
 - **Automated Testing** on every push/PR
 - **Linting & Type Checking** before merge
 - **Automated Builds** with artifact storage
@@ -24,6 +25,7 @@ Implemented **critical production-readiness improvements** for the NZ Legislatio
 - **GitHub Releases** auto-created
 
 ### Workflows:
+
 ```yaml
 on:
   push:
@@ -32,13 +34,14 @@ on:
     branches: [main]
 
 jobs:
-  lint:      # ESLint + TypeScript type check
-  test:      # Vitest tests with coverage
-  build:     # Build dist/ artifacts
-  publish:   # Publish to npm + GitHub release
+  lint: # ESLint + TypeScript type check
+  test: # Vitest tests with coverage
+  build: # Build dist/ artifacts
+  publish: # Publish to npm + GitHub release
 ```
 
 ### Usage:
+
 ```bash
 # Tests run automatically on push/PR
 # To publish: git tag v1.0.0 && git push --tags
@@ -52,15 +55,18 @@ jobs:
 **Framework:** Vitest (Vite-based test runner)
 
 ### Test Files:
+
 - `tests/output.test.ts` - Output formatter tests (8 tests)
 - `tests/client.test.ts` - Rate limiting tests (2 tests)
 
 ### Test Coverage:
+
 - **Output Formatters:** CSV, Citations (NZMJ, BibTeX, RIS, APA)
 - **Rate Limiting:** Status tracking
 - **Total:** 10 tests, all passing ✅
 
 ### Commands:
+
 ```bash
 npm test              # Run tests in watch mode
 npm run test:run      # Run tests once
@@ -68,6 +74,7 @@ npm run test:coverage # Run with coverage report
 ```
 
 ### Coverage Reports:
+
 - Text summary in console
 - HTML report in `coverage/index.html`
 - LCOV for Codecov integration
@@ -79,6 +86,7 @@ npm run test:coverage # Run with coverage report
 **File:** `src/utils/logger.ts`
 
 ### Features:
+
 - **File-based logging** to `~/.nz-legislation-tool/logs/`
 - **Daily log files** (error-YYYY-MM-DD.log)
 - **Log levels:** debug, info, warn, error
@@ -86,6 +94,7 @@ npm run test:coverage # Run with coverage report
 - **Verbose mode** via `--verbose` flag
 
 ### Usage:
+
 ```typescript
 import { logger } from './utils/logger.js';
 
@@ -96,10 +105,12 @@ logger.error('Request failed', error);
 ```
 
 ### Log File Location:
+
 - **Windows:** `C:\Users\<user>\.nz-legislation-tool\logs\`
 - **macOS/Linux:** `~/.nz-legislation-tool/logs/`
 
 ### Verbose Mode:
+
 ```bash
 nzlegislation search --query "health" --verbose
 # Shows debug logs in console
@@ -112,12 +123,14 @@ nzlegislation search --query "health" --verbose
 **File:** `src/utils/version.ts`
 
 ### Features:
+
 - **Automatic update checks** on search command
 - **Non-blocking** (doesn't slow down execution)
 - **Friendly update notification** with install command
 - **Version displayed** in `--version` flag
 
 ### Update Check:
+
 ```
 ╔═══════════════════════════════════════════════════════════╗
 ║                                                           ║
@@ -131,6 +144,7 @@ nzlegislation search --query "health" --verbose
 ```
 
 ### Commands:
+
 ```bash
 nzlegislation --version  # Shows: nz-legislation-tool v1.0.0
 ```
@@ -142,6 +156,7 @@ nzlegislation --version  # Shows: nz-legislation-tool v1.0.0
 **Files:** `src/config.ts`, `src/commands/config.ts`, `src/client.ts`
 
 ### Configuration Options:
+
 ```bash
 # View current limits
 nzlegislation config --show
@@ -157,20 +172,23 @@ nzlegislation config --safety-margin 0.2  # 20% buffer
 ```
 
 ### Default Values:
+
 - **Daily Limit:** 10,000 requests/day (API default)
 - **Burst Limit:** 2,000 requests/5min (API default)
 - **Safety Margin:** 10% (stays under limits)
 - **Effective Limits:** 9,000/day, 1,800/5min
 
 ### Use Cases:
-| Scenario | Configuration |
-|----------|---------------|
-| **Casual user** | `--daily-limit 1000 --safety-margin 0.2` |
-| **Power user** | `--daily-limit 10000 --safety-margin 0.05` |
-| **Shared key** | `--daily-limit 2000 --burst-limit 500` |
-| **Batch processing** | `--daily-limit 10000 --safety-margin 0.0` |
+
+| Scenario             | Configuration                              |
+| -------------------- | ------------------------------------------ |
+| **Casual user**      | `--daily-limit 1000 --safety-margin 0.2`   |
+| **Power user**       | `--daily-limit 10000 --safety-margin 0.05` |
+| **Shared key**       | `--daily-limit 2000 --burst-limit 500`     |
+| **Batch processing** | `--daily-limit 10000 --safety-margin 0.0`  |
 
 ### Display:
+
 ```
 Rate Limits:
   Daily Limit: 10,000 requests/day
@@ -185,6 +203,7 @@ Rate Limits:
 ## Additional Improvements
 
 ### Package.json Scripts:
+
 ```json
 {
   "scripts": {
@@ -201,6 +220,7 @@ Rate Limits:
 ```
 
 ### New Dependencies:
+
 ```json
 {
   "devDependencies": {
@@ -210,6 +230,7 @@ Rate Limits:
 ```
 
 ### New Files Created:
+
 ```
 nz-legislation-tool/
 ├── .github/
@@ -246,6 +267,7 @@ nz-legislation-tool/
 ## Next Steps (Optional)
 
 ### Recommended Future Improvements:
+
 1. **Shell Completions** - Tab completion for bash/zsh/fish
 2. **Interactive Prompts** - Guided setup for new users
 3. **Progress Bars** - For large exports
@@ -255,13 +277,14 @@ nz-legislation-tool/
 7. **GitHub Releases** - Pre-built binaries for Windows/macOS/Linux
 
 ### Priority Matrix:
-| Feature | Effort | Impact | Priority |
-|---------|--------|--------|----------|
-| Shell Completions | 1h | Medium | 🟡 P1 |
-| Interactive Prompts | 2h | Medium | 🟡 P1 |
-| Progress Bars | 1h | Low | 🟢 P2 |
-| Query History | 2h | Low | 🟢 P2 |
-| Docker Support | 2h | Low | 🟢 P2 |
+
+| Feature             | Effort | Impact | Priority |
+| ------------------- | ------ | ------ | -------- |
+| Shell Completions   | 1h     | Medium | 🟡 P1    |
+| Interactive Prompts | 2h     | Medium | 🟡 P1    |
+| Progress Bars       | 1h     | Low    | 🟢 P2    |
+| Query History       | 2h     | Low    | 🟢 P2    |
+| Docker Support      | 2h     | Low    | 🟢 P2    |
 
 ---
 
@@ -285,12 +308,14 @@ nz-legislation-tool/
 ## Usage Examples
 
 ### Run Tests:
+
 ```bash
 npm test
 npm run test:coverage
 ```
 
 ### Configure Rate Limits:
+
 ```bash
 nzlegislation config --daily-limit 5000
 nzlegislation config --burst-limit 1000
@@ -298,6 +323,7 @@ nzlegislation config --safety-margin 0.15
 ```
 
 ### View Logs:
+
 ```bash
 # Windows
 notepad %USERPROFILE%\.nz-legislation-tool\logs\error-2026-03-08.log
@@ -307,6 +333,7 @@ cat ~/.nz-legislation-tool/logs/error-2026-03-08.log
 ```
 
 ### Enable Verbose Mode:
+
 ```bash
 nzlegislation search --query "health" --verbose
 ```

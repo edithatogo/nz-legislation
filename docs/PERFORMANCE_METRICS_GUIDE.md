@@ -6,13 +6,13 @@ This guide helps you understand and interpret the performance metrics collected 
 
 ## Quick Reference
 
-| Metric | Good | Fair | Poor | Critical |
-|--------|------|------|------|----------|
-| **Startup Time** | <200ms | 200-300ms | 300-500ms | >500ms |
-| **API Response (p95)** | <500ms | 500-750ms | 750-1000ms | >1000ms |
-| **Memory Peak** | <256MB | 256-400MB | 400-512MB | >512MB |
-| **Bundle Size** | <5MB | 5-7MB | 7-10MB | >10MB |
-| **Cache Hit Rate** | >80% | 60-80% | 40-60% | <40% |
+| Metric                 | Good   | Fair      | Poor       | Critical |
+| ---------------------- | ------ | --------- | ---------- | -------- |
+| **Startup Time**       | <200ms | 200-300ms | 300-500ms  | >500ms   |
+| **API Response (p95)** | <500ms | 500-750ms | 750-1000ms | >1000ms  |
+| **Memory Peak**        | <256MB | 256-400MB | 400-512MB  | >512MB   |
+| **Bundle Size**        | <5MB   | 5-7MB     | 7-10MB     | >10MB    |
+| **Cache Hit Rate**     | >80%   | 60-80%    | 40-60%     | <40%     |
 
 ---
 
@@ -32,10 +32,12 @@ Startup time measures how long it takes from running `nzlegislation` command to 
 ### How to Interpret
 
 **Cold Start:** First run after system boot or cache clear
+
 - Includes full module loading
 - Most realistic for occasional users
 
 **Warm Start:** Subsequent runs
+
 - Benefits from OS file caching
 - Represents power user experience
 
@@ -44,16 +46,19 @@ Startup time measures how long it takes from running `nzlegislation` command to 
 #### Slow Startup (>500ms)
 
 **Symptoms:**
+
 - CLI feels sluggish
 - Noticeable delay before help text appears
 
 **Causes:**
+
 - Too many dependencies
 - Large module imports
 - Synchronous initialization
 - Slow config loading
 
 **Solutions:**
+
 1. Profile with Clinic.js: `clinic doctor -- node dist/cli.js`
 2. Implement lazy loading for non-critical modules
 3. Use ES modules for better tree-shaking
@@ -93,10 +98,12 @@ Time from API request initiation to receiving and parsing the response.
 ### How to Interpret
 
 **Average:** Mean response time across all samples
+
 - Good for general performance overview
 - Can be skewed by outliers
 
 **P95 (95th Percentile):** 95% of requests are faster than this
+
 - Better metric for user experience
 - Accounts for outliers
 - **This is our primary target metric**
@@ -106,16 +113,19 @@ Time from API request initiation to receiving and parsing the response.
 #### Slow Search (>750ms p95)
 
 **Symptoms:**
+
 - Search feels slow
 - Users perceive the tool as "laggy"
 
 **Causes:**
+
 - Network congestion
 - API server load
 - Large result sets
 - No caching
 
 **Solutions:**
+
 1. Enable response caching (Phase 2)
 2. Implement request batching (Phase 3)
 3. Add pagination for large results
@@ -124,15 +134,18 @@ Time from API request initiation to receiving and parsing the response.
 #### Slow Get Work (>750ms p95)
 
 **Symptoms:**
+
 - Individual lookups are slow
 - Citation generation delayed
 
 **Causes:**
+
 - Same as search issues
 - Complex response parsing
 - Validation overhead
 
 **Solutions:**
+
 1. Cache work details (already implemented)
 2. Optimize Zod schemas
 3. Use streaming for large responses
@@ -151,7 +164,7 @@ async function getWork(workId: string) {
   const cacheKey = `work:${workId}`;
   const cached = cache.get(cacheKey);
   if (cached) return cached;
-  
+
   const response = await api.get(`/works/${workId}`);
   const work = parseWork(response);
   cache.set(cacheKey, work, { ttl: 3600 });
@@ -176,14 +189,17 @@ Heap memory used by the Node.js process during operation.
 ### How to Interpret
 
 **Baseline (50-150MB typical):**
+
 - Higher = more dependencies or larger modules
 - Should be stable across runs
 
 **Peak (<256MB target):**
+
 - Indicates memory needed for typical operations
 - Higher = potential memory inefficiency
 
 **After GC:**
+
 - Should be close to baseline
 - Large difference = memory pressure or leaks
 
@@ -192,17 +208,20 @@ Heap memory used by the Node.js process during operation.
 #### High Memory Usage (>400MB)
 
 **Symptoms:**
+
 - System slows down
 - Other applications affected
 - Possible crashes on low-memory systems
 
 **Causes:**
+
 - Loading large datasets into memory
 - Memory leaks (unclosed handles, growing caches)
 - Inefficient data structures
 - Buffer accumulation
 
 **Detection:**
+
 ```bash
 # Run with memory profiling
 node --inspect dist/cli.js search --query "health" --limit 1000
@@ -211,6 +230,7 @@ node --inspect dist/cli.js search --query "health" --limit 1000
 ```
 
 **Solutions:**
+
 1. Use streaming for large exports (Phase 4)
 2. Implement pagination
 3. Clear caches periodically
@@ -279,15 +299,18 @@ Size of compiled JavaScript in the `dist/` directory.
 ### How to Interpret
 
 **Total <5MB:**
+
 - Excellent for a CLI tool
 - Fast installation
 - Minimal disk usage
 
 **5-10MB:**
+
 - Acceptable
 - Consider optimization
 
 **>10MB:**
+
 - Needs investigation
 - Likely including unnecessary dependencies
 
@@ -296,6 +319,7 @@ Size of compiled JavaScript in the `dist/` directory.
 #### Large Bundle (>10MB)
 
 **Causes:**
+
 - Including dev dependencies in production
 - Large dependencies (lodash, moment.js)
 - Duplicate dependencies
@@ -303,6 +327,7 @@ Size of compiled JavaScript in the `dist/` directory.
 - Including source maps in production
 
 **Analysis:**
+
 ```bash
 # Run bundle analyzer
 npm run build:analyze
@@ -312,6 +337,7 @@ npx webpack-bundle-analyzer dist/stats.json
 ```
 
 **Solutions:**
+
 1. Replace heavy dependencies (moment.js → date-fns)
 2. Enable tree-shaking (ES modules)
 3. Remove unused dependencies
@@ -352,15 +378,18 @@ Effectiveness of the LRU caching layer for API responses.
 ### How to Interpret
 
 **Hit Rate >80%:**
+
 - Excellent caching
 - Minimal API calls
 - Fast response times
 
 **Hit Rate 60-80%:**
+
 - Good caching
 - Room for improvement
 
 **Hit Rate <60%:**
+
 - Poor caching
 - Too many API calls
 - Consider increasing TTL or cache size
@@ -370,12 +399,14 @@ Effectiveness of the LRU caching layer for API responses.
 #### Low Hit Rate (<50%)
 
 **Causes:**
+
 - Short TTL values
 - Small cache size
 - High query diversity
 - Cache not being used
 
 **Solutions:**
+
 1. Increase cache TTL
 2. Increase max cache size
 3. Implement cache warming
@@ -386,10 +417,10 @@ Effectiveness of the LRU caching layer for API responses.
 ```typescript
 // Cache configuration
 const CACHE_CONFIG = {
-  max: 500,              // Max entries
-  searchTTL: 30 * 60 * 1000,    // 30 minutes for search
-  workTTL: 2 * 60 * 60 * 1000,  // 2 hours for work details
-  versionsTTL: 60 * 60 * 1000,  // 1 hour for versions
+  max: 500, // Max entries
+  searchTTL: 30 * 60 * 1000, // 30 minutes for search
+  workTTL: 2 * 60 * 60 * 1000, // 2 hours for work details
+  versionsTTL: 60 * 60 * 1000, // 1 hour for versions
 };
 
 // Cache warming (preload frequently accessed data)
@@ -417,14 +448,17 @@ Remaining API requests before hitting rate limits.
 ### How to Interpret
 
 **Remaining >50%:**
+
 - Healthy usage
 - No action needed
 
 **Remaining 20-50%:**
+
 - Moderate usage
 - Monitor closely
 
 **Remaining <20%:**
+
 - High usage
 - Consider reducing request rate
 - Enable aggressive caching
@@ -434,15 +468,18 @@ Remaining API requests before hitting rate limits.
 #### Rate Limit Exceeded
 
 **Symptoms:**
+
 - 429 Too Many Requests errors
 - Requests blocked until reset
 
 **Causes:**
+
 - Too many API calls
 - Inefficient caching
 - Bulk operations without batching
 
 **Solutions:**
+
 1. Enable caching
 2. Implement request batching
 3. Add rate limit awareness to CLI
@@ -455,28 +492,31 @@ Remaining API requests before hitting rate limits.
 ### Reading Trends
 
 **Improving Trend:**
+
 - Scores increasing over time
 - Response times decreasing
 - Memory usage stable or decreasing
 
 **Stable Trend:**
+
 - Scores consistent
 - No significant changes
 - Performance is predictable
 
 **Degrading Trend:**
+
 - Scores decreasing
 - Response times increasing
 - Memory usage growing
 
 ### Action Triggers
 
-| Trend | Action |
-|-------|--------|
-| Score drops >10 points | Investigate immediately |
+| Trend                  | Action                       |
+| ---------------------- | ---------------------------- |
+| Score drops >10 points | Investigate immediately      |
 | Score drops >20 points | Block releases, fix required |
-| Consistent degradation | Schedule performance sprint |
-| Improving trend | Document optimizations |
+| Consistent degradation | Schedule performance sprint  |
+| Improving trend        | Document optimizations       |
 
 ---
 

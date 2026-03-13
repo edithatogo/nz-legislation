@@ -1,12 +1,14 @@
 /**
  * Batch Processing Utilities
- * 
+ *
  * Provides request batching for bulk operations to optimize API usage and improve performance.
  */
 
 import { EventEmitter } from 'events';
+import { writeFileSync } from 'fs';
+
 import { searchWorks, getWork, getWorkVersions, getVersion } from '@client';
-import type { SearchResults, Work, Version, LegislationVersion } from '@models';
+import type { SearchResults } from '@models';
 
 /**
  * Batch request types
@@ -39,11 +41,11 @@ export interface BatchResult<T = unknown> {
  * Batch execution options
  */
 export interface BatchOptions {
-  concurrency?: number;        // Max concurrent requests (default: 5)
-  retryFailed?: boolean;       // Auto-retry failed requests (default: false)
-  maxRetries?: number;         // Max retry attempts (default: 3)
-  timeout?: number;           // Request timeout in ms (default: 30000)
-  stopOnError?: boolean;      // Stop batch on first error (default: false)
+  concurrency?: number; // Max concurrent requests (default: 5)
+  retryFailed?: boolean; // Auto-retry failed requests (default: false)
+  maxRetries?: number; // Max retry attempts (default: 3)
+  timeout?: number; // Request timeout in ms (default: 30000)
+  stopOnError?: boolean; // Stop batch on first error (default: false)
 }
 
 /**
@@ -105,8 +107,12 @@ export class BatchExecutor extends EventEmitter {
           const batchResult = result.value;
           results.push(batchResult);
           completed++;
-          if (batchResult.cached) cached++;
-          if (!batchResult.success) failed++;
+          if (batchResult.cached) {
+            cached++;
+          }
+          if (!batchResult.success) {
+            failed++;
+          }
         } else {
           // Promise rejected
           results.push({
@@ -153,16 +159,28 @@ export class BatchExecutor extends EventEmitter {
     let cached = false;
 
     try {
-      const timeoutPromise = new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error(`Request timeout after ${this.timeout}ms`)), this.timeout)
-      );
+      const timeoutPromise = new Promise<never>((_, reject): void => {
+        setTimeout(
+          () => reject(new Error(`Request timeout after ${this.timeout}ms`)),
+          this.timeout
+        );
+      });
 
-      const executePromise = (async () => {
+      const executePromise = (async (): Promise<BatchResult> => {
         let data: unknown;
+        const searchParams = request.params as {
+          query?: string;
+          type?: string;
+          status?: string;
+          from?: string;
+          to?: string;
+          limit?: number;
+          offset?: number;
+        };
 
         switch (request.type) {
           case 'search':
-            data = await searchWorks(request.params as any);
+            data = await searchWorks(searchParams);
             break;
 
           case 'getWork':
@@ -178,7 +196,7 @@ export class BatchExecutor extends EventEmitter {
             break;
 
           default:
-            throw new Error(`Unknown request type: ${request.type}`);
+            throw new Error('Unknown request type');
         }
 
         // Check if result was cached (simplified - real implementation would check cache)
@@ -194,7 +212,7 @@ export class BatchExecutor extends EventEmitter {
       })();
 
       const result = await Promise.race([executePromise, timeoutPromise]);
-      return result as BatchResult;
+      return result;
     } catch (error) {
       // Retry logic
       if (this.retryFailed) {
@@ -236,12 +254,14 @@ export class BatchExecutor extends EventEmitter {
    * Calculate estimated time remaining
    */
   private calculateETA(startTime: number, completed: number, total: number): number | undefined {
-    if (completed === 0) return undefined;
-    
+    if (completed === 0) {
+      return undefined;
+    }
+
     const elapsed = Date.now() - startTime;
     const avgTimePerRequest = elapsed / completed;
     const remaining = total - completed;
-    
+
     return Math.round(avgTimePerRequest * remaining);
   }
 }
@@ -256,9 +276,7 @@ export function createBatchFromSearch(
   return searchResults.results.map((work, index) => ({
     id: work.id,
     type: requestType,
-    params: requestType === 'getWork' 
-      ? { id: work.id }
-      : { workId: work.id },
+    params: requestType === 'getWork' ? { id: work.id } : { workId: work.id },
     priority: index,
   }));
 }
@@ -266,13 +284,9 @@ export function createBatchFromSearch(
 /**
  * Create batch requests from ID list
  */
-export function createBatchFromIds(
-  ids: string[],
-  requestType: BatchRequestType
-): BatchRequest[] {
-  const paramKey = requestType === 'getVersion' ? 'versionId' 
-    : requestType === 'getVersions' ? 'workId' 
-    : 'id';
+export function createBatchFromIds(ids: string[], requestType: BatchRequestType): BatchRequest[] {
+  const paramKey =
+    requestType === 'getVersion' ? 'versionId' : requestType === 'getVersions' ? 'workId' : 'id';
 
   return ids.map((id, index) => ({
     id,
@@ -299,9 +313,10 @@ export function createBatchFromFile(
     return {
       id,
       type: requestType,
-      params: requestType === 'search' 
-        ? { query: id } // Use ID as search query
-        : { [requestType === 'getVersion' ? 'versionId' : 'id']: id },
+      params:
+        requestType === 'search'
+          ? { query: id } // Use ID as search query
+          : { [requestType === 'getVersion' ? 'versionId' : 'id']: id },
       priority: index,
     };
   });
@@ -334,15 +349,9 @@ export function formatBatchResults<T>(results: BatchResult<T>[]): {
     cached,
     summary: {
       total: results.length,
-      successRate: results.length > 0 
-        ? Math.round((successful.length / results.length) * 100) 
-        : 0,
-      cacheHitRate: results.length > 0 
-        ? Math.round((cached.length / results.length) * 100) 
-        : 0,
-      averageDuration: results.length > 0 
-        ? Math.round(totalDuration / results.length) 
-        : 0,
+      successRate: results.length > 0 ? Math.round((successful.length / results.length) * 100) : 0,
+      cacheHitRate: results.length > 0 ? Math.round((cached.length / results.length) * 100) : 0,
+      averageDuration: results.length > 0 ? Math.round(totalDuration / results.length) : 0,
       totalDuration,
     },
   };
@@ -356,8 +365,6 @@ export function saveBatchResults(
   outputPath: string,
   format: 'json' | 'csv' = 'json'
 ): void {
-  const { writeFileSync } = require('fs');
-  
   if (format === 'json') {
     const output = {
       exportedAt: new Date().toISOString(),
@@ -376,7 +383,9 @@ export function saveBatchResults(
     // CSV format - simplified
     const csvLines = ['id,success,cached,duration,error'];
     for (const result of results) {
-      csvLines.push(`${result.id},${result.success},${result.cached},${result.duration},"${result.error?.message || ''}"`);
+      csvLines.push(
+        `${result.id},${result.success},${result.cached},${result.duration},"${result.error?.message || ''}"`
+      );
     }
     writeFileSync(outputPath, csvLines.join('\n'));
   }

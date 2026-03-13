@@ -8,9 +8,10 @@ import { z } from 'zod';
 /**
  * Date string in YYYY-MM-DD format
  */
-export const DateStringSchema = z.string()
+export const DateStringSchema = z
+  .string()
   .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format')
-  .refine((date) => {
+  .refine(date => {
     const parsed = new Date(date);
     return !isNaN(parsed.getTime());
   }, 'Invalid date');
@@ -18,17 +19,19 @@ export const DateStringSchema = z.string()
 /**
  * Work ID validation for current API work IDs (e.g., act_public_1989_18)
  */
-export const WorkIdSchema = z.string()
+export const WorkIdSchema = z
+  .string()
   .min(1, 'Work ID is required')
   .regex(
     /^(?:[a-z0-9-]+(?:_[a-z0-9-]+){2,}|[a-z0-9-]+\/\d{4}\/\d+)$/,
-    'Invalid work ID format. Expected an API work ID like act_public_1989_18.',
+    'Invalid work ID format. Expected an API work ID like act_public_1989_18.'
   );
 
 /**
  * Search query validation
  */
-export const SearchQuerySchema = z.string()
+export const SearchQuerySchema = z
+  .string()
   .min(1, 'Search query is required')
   .max(500, 'Search query must be less than 500 characters')
   .trim();
@@ -36,19 +39,14 @@ export const SearchQuerySchema = z.string()
 /**
  * Legislation type validation
  */
-export const LegislationTypeSchema = z.enum(['act', 'bill', 'regulation', 'instrument'])
-  .optional();
+export const LegislationTypeSchema = z.enum(['act', 'bill', 'regulation', 'instrument']).optional();
 
 /**
  * Legislation status validation
  */
-export const LegislationStatusSchema = z.enum([
-  'in-force',
-  'not-yet-in-force',
-  'repealed',
-  'partially-repealed',
-  'withdrawn',
-]).optional();
+export const LegislationStatusSchema = z
+  .enum(['in-force', 'not-yet-in-force', 'repealed', 'partially-repealed', 'withdrawn'])
+  .optional();
 
 /**
  * Output format validation
@@ -58,22 +56,28 @@ export const OutputFormatSchema = z.enum(['table', 'json', 'csv']).default('tabl
 /**
  * Pagination limit validation
  */
-export const LimitSchema = z.string()
+export const LimitSchema = z
+  .string()
   .default('25')
-  .transform((val) => {
+  .transform(val => {
     const num = parseInt(val, 10);
-    if (isNaN(num)) return 25;
+    if (isNaN(num)) {
+      return 25;
+    }
     return Math.min(Math.max(num, 1), 100); // Clamp between 1 and 100
   });
 
 /**
  * Pagination offset validation
  */
-export const OffsetSchema = z.string()
+export const OffsetSchema = z
+  .string()
   .default('0')
-  .transform((val) => {
+  .transform(val => {
     const num = parseInt(val, 10);
-    if (isNaN(num)) return 0;
+    if (isNaN(num)) {
+      return 0;
+    }
     return Math.max(num, 0); // Ensure non-negative
   });
 
@@ -110,7 +114,8 @@ export const CitationStyleSchema = z.enum(['nzmj', 'bibtex', 'ris', 'enw', 'apa'
  */
 export const ExportParamsSchema = z.object({
   query: SearchQuerySchema,
-  output: z.string()
+  output: z
+    .string()
     .min(1, 'Output filename is required')
     .regex(/\.csv$/i, 'Output file must have .csv extension'),
   type: LegislationTypeSchema,
@@ -137,18 +142,22 @@ export const ConfigKeySchema = z.enum([
 /**
  * API URL validation
  */
-export const ApiUrlSchema = z.string()
+export const ApiUrlSchema = z
+  .string()
   .url('Must be a valid URL')
-  .refine((url) => url.startsWith('https://'), 'API URL must use HTTPS for security');
+  .refine(url => url.startsWith('https://'), 'API URL must use HTTPS for security');
 
 /**
  * Timeout validation (in milliseconds)
  */
-export const TimeoutSchema = z.string()
+export const TimeoutSchema = z
+  .string()
   .default('30000')
-  .transform((val) => {
+  .transform(val => {
     const num = parseInt(val, 10);
-    if (isNaN(num)) return 30000;
+    if (isNaN(num)) {
+      return 30000;
+    }
     return Math.min(Math.max(num, 1000), 300000); // Clamp between 1s and 5min
   });
 
@@ -164,18 +173,21 @@ export interface ValidationError {
 /**
  * Validate input against schema and return formatted errors
  */
-export function validateInput<T>(schema: z.ZodSchema<T>, data: unknown): { valid: boolean; data?: T; errors?: ValidationError[] } {
+export function validateInput<T>(
+  schema: z.ZodSchema<T>,
+  data: unknown
+): { valid: boolean; data?: T; errors?: ValidationError[] } {
   const result = schema.safeParse(data);
-  
+
   if (!result.success) {
-    const errors: ValidationError[] = result.error.errors.map((err) => ({
+    const errors: ValidationError[] = result.error.errors.map(err => ({
       field: err.path.join('.'),
       message: err.message,
       value: 'input' in err ? err.input : undefined,
     }));
     return { valid: false, errors };
   }
-  
+
   return { valid: true, data: result.data };
 }
 
@@ -185,7 +197,7 @@ export function validateInput<T>(schema: z.ZodSchema<T>, data: unknown): { valid
 export function sanitizeInput(input: string): string {
   return input
     .replace(/[<>]/g, '') // Remove potential HTML tags
-    .replace(/["'`]/g, (match) => `\\${match}`) // Escape quotes
+    .replace(/["'`]/g, match => `\\${match}`) // Escape quotes
     .trim();
 }
 
@@ -203,13 +215,33 @@ export interface ValidatedSearchParams {
   format: 'table' | 'json' | 'csv';
 }
 
+interface ValidationFailure {
+  valid: false;
+  errors: ValidationError[];
+}
+
+interface SearchValidationSuccess {
+  valid: true;
+  data: z.infer<typeof SearchParamsSchema>;
+}
+
+interface WorkIdValidationSuccess {
+  valid: true;
+  data: z.infer<typeof WorkIdSchema>;
+}
+
+interface ExportValidationSuccess {
+  valid: true;
+  data: z.infer<typeof ExportParamsSchema>;
+}
+
 /**
  * Validate and sanitize search parameters
  */
-export function validateSearchParams(params: unknown) {
+export function validateSearchParams(params: unknown): ValidationFailure | SearchValidationSuccess {
   const result = SearchParamsSchema.safeParse(params);
   if (!result.success) {
-    const errors: ValidationError[] = result.error.errors.map((err) => ({
+    const errors: ValidationError[] = result.error.errors.map(err => ({
       field: err.path.join('.'),
       message: err.message,
     }));
@@ -221,10 +253,10 @@ export function validateSearchParams(params: unknown) {
 /**
  * Validate and sanitize work ID
  */
-export function validateWorkId(workId: string) {
+export function validateWorkId(workId: string): ValidationFailure | WorkIdValidationSuccess {
   const result = WorkIdSchema.safeParse(workId);
   if (!result.success) {
-    const errors: ValidationError[] = result.error.errors.map((err) => ({
+    const errors: ValidationError[] = result.error.errors.map(err => ({
       field: 'workId',
       message: err.message,
     }));
@@ -236,10 +268,10 @@ export function validateWorkId(workId: string) {
 /**
  * Validate and sanitize export parameters
  */
-export function validateExportParams(params: unknown) {
+export function validateExportParams(params: unknown): ValidationFailure | ExportValidationSuccess {
   const result = ExportParamsSchema.safeParse(params);
   if (!result.success) {
-    const errors: ValidationError[] = result.error.errors.map((err) => ({
+    const errors: ValidationError[] = result.error.errors.map(err => ({
       field: err.path.join('.'),
       message: err.message,
     }));

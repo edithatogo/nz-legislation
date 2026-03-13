@@ -19,7 +19,7 @@ export const cacheCommand = new Command()
   .option('--clear', 'Clear all cached data')
   .option('--pattern <pattern>', 'Clear cache entries matching pattern')
   .option('--stats', 'Show cache statistics')
-  .action(async (options: CacheOptions) => {
+  .action((options: CacheOptions) => {
     try {
       if (options.stats || (!options.clear && !options.pattern)) {
         // Show stats by default

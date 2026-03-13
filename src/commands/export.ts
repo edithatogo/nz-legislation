@@ -85,8 +85,12 @@ export const exportCommand = new Command()
           csvContent += `\n# Timestamp: ${timestamp}`;
           csvContent += `\n# Total Results: ${results.total}`;
           csvContent += `\n# Exported: ${results.results.length}`;
-          if (options.type) {csvContent += `\n# Type: ${options.type}`;}
-          if (options.status) {csvContent += `\n# Status: ${options.status}`;}
+          if (options.type) {
+            csvContent += `\n# Type: ${options.type}`;
+          }
+          if (options.status) {
+            csvContent += `\n# Status: ${options.status}`;
+          }
         }
 
         output = csvContent;

@@ -3,20 +3,20 @@
  * Structured logging with file rotation, request tracing, and performance timing
  */
 
-import { existsSync, mkdirSync } from 'fs';
+import { existsSync, mkdirSync, readdirSync, statSync, unlinkSync } from 'fs';
 import { homedir } from 'os';
 import { join } from 'path';
-import winston from 'winston';
-import 'winston-daily-rotate-file';
 
 import chalk from 'chalk';
+import winston from 'winston';
+import 'winston-daily-rotate-file';
 
 const LOG_DIR = join(homedir(), '.nz-legislation-tool', 'logs');
 
 /**
  * Ensure log directory exists
  */
-function ensureLogDir() {
+function ensureLogDir(): void {
   if (!existsSync(LOG_DIR)) {
     mkdirSync(LOG_DIR, { recursive: true });
   }
@@ -31,7 +31,7 @@ const consoleFormat = winston.format.combine(
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
   winston.format.colorize(),
   winston.format.printf(({ timestamp, level, message, ...metadata }) => {
-    let msg = `${chalk.gray(timestamp)} [${level}]: ${message}`;
+    let msg = `${chalk.gray(String(timestamp))} [${level}]: ${String(message)}`;
     if (Object.keys(metadata).length > 0) {
       msg += ` ${JSON.stringify(metadata)}`;
     }
@@ -56,7 +56,7 @@ const dailyRotateTransport = new winston.transports.DailyRotateFile({
   level: 'error',
   format: fileFormat,
   maxFiles: '14d', // Keep 14 days of logs
-  maxSize: '10m',   // Rotate at 10MB
+  maxSize: '10m', // Rotate at 10MB
   zippedArchive: true,
 });
 
@@ -101,7 +101,7 @@ export class Logger {
   /**
    * Set verbose mode
    */
-  setVerbose(verbose: boolean) {
+  setVerbose(verbose: boolean): void {
     this.verbose = verbose;
     winstonLogger.level = verbose ? 'debug' : 'info';
   }
@@ -109,21 +109,21 @@ export class Logger {
   /**
    * Set quiet mode
    */
-  setQuiet(quiet: boolean) {
+  setQuiet(quiet: boolean): void {
     this.quiet = quiet;
   }
 
   /**
    * Set request context for tracing
    */
-  setRequestContext(context: RequestContext) {
+  setRequestContext(context: RequestContext): void {
     this.requestContext = { ...this.requestContext, ...context };
   }
 
   /**
    * Clear request context
    */
-  clearRequestContext() {
+  clearRequestContext(): void {
     this.requestContext = {};
   }
 
@@ -153,7 +153,7 @@ export class Logger {
   /**
    * Debug log (only shown in verbose mode)
    */
-  debug(message: string, metadata?: Record<string, unknown>) {
+  debug(message: string, metadata?: Record<string, unknown>): void {
     if (this.verbose && !this.quiet) {
       winstonLogger.debug(message, { ...this.requestContext, ...metadata });
     }
@@ -162,7 +162,7 @@ export class Logger {
   /**
    * Info log
    */
-  info(message: string, metadata?: Record<string, unknown>) {
+  info(message: string, metadata?: Record<string, unknown>): void {
     if (!this.quiet) {
       winstonLogger.info(message, { ...this.requestContext, ...metadata });
     }
@@ -171,7 +171,7 @@ export class Logger {
   /**
    * Warning log
    */
-  warn(message: string, metadata?: Record<string, unknown>) {
+  warn(message: string, metadata?: Record<string, unknown>): void {
     if (!this.quiet) {
       winstonLogger.warn(message, { ...this.requestContext, ...metadata });
     }
@@ -180,7 +180,7 @@ export class Logger {
   /**
    * Error log
    */
-  error(message: string, error?: Error, metadata?: Record<string, unknown>) {
+  error(message: string, error?: Error, metadata?: Record<string, unknown>): void {
     if (this.quiet) {
       return;
     }
@@ -214,9 +214,8 @@ export class Logger {
   /**
    * Clear old log files
    */
-  clearOldLogs(daysToKeep: number = 7) {
+  clearOldLogs(daysToKeep: number = 7): void {
     try {
-      const { readdirSync, statSync, unlinkSync } = require('fs');
       const now = Date.now();
       const maxAge = daysToKeep * 24 * 60 * 60 * 1000;
 
@@ -229,7 +228,7 @@ export class Logger {
           this.debug(`Deleted old log file: ${file}`);
         }
       }
-    } catch (error) {
+    } catch {
       this.debug('Failed to clear old logs');
     }
   }
@@ -237,7 +236,12 @@ export class Logger {
   /**
    * Get logger statistics
    */
-  getStats() {
+  getStats(): {
+    level: string;
+    transports: number;
+    requestContext: RequestContext;
+    activeTimers: number;
+  } {
     return {
       level: winstonLogger.level,
       transports: winstonLogger.transports.length,
@@ -253,13 +257,13 @@ export const logger = new Logger();
 /**
  * Set logger verbose mode from CLI
  */
-export function setLoggerVerbose(verbose: boolean) {
+export function setLoggerVerbose(verbose: boolean): void {
   logger.setVerbose(verbose);
 }
 
 /**
  * Set logger quiet mode
  */
-export function setLoggerQuiet(quiet: boolean) {
+export function setLoggerQuiet(quiet: boolean): void {
   logger.setQuiet(quiet);
 }

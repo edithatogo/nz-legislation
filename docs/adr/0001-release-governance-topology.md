@@ -40,6 +40,5 @@ The repository adopts the following governance topology:
 
 ### Negative
 
-- some GitHub-side settings still need to be aligned manually
-- prerelease behavior still needs end-to-end validation on the remote
-- legacy workflows remain present until cleanup is completed
+- future external surfaces still require explicit governance work before stable release
+- admin bypass needs to be handled intentionally at the branch protection layer

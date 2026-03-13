@@ -16,6 +16,9 @@ permissions:
   checks: write
   pull-requests: write
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
 jobs:
   bundle-analysis:
     name: Bundle Size Analysis
@@ -24,15 +27,15 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
+      - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.29.3 --activate
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '20'
           cache: 'pnpm'
@@ -50,13 +53,13 @@ jobs:
         run: |
           echo "## Bundle Size Analysis" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           # Get file sizes
           echo "### Output Files" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| File | Size | Gzipped |" >> $GITHUB_STEP_SUMMARY
           echo "|------|------|---------|" >> $GITHUB_STEP_SUMMARY
-          
+
           for file in dist/*.js; do
             if [ -f "$file" ]; then
               size=$(wc -c < "$file")
@@ -64,15 +67,15 @@ jobs:
               echo "| $(basename $file) | $(numfmt --to=iec-i --suffix=B $size) | $(numfmt --to=iec-i --suffix=B $gzip_size) |" >> $GITHUB_STEP_SUMMARY
             fi
           done
-          
+
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Performance Budget" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           # Check against budget (e.g., 500KB max per file)
           BUDGET=524288  # 500KB in bytes
           OVER_BUDGET=false
-          
+
           for file in dist/*.js; do
             if [ -f "$file" ]; then
               size=$(wc -c < "$file")
@@ -84,7 +87,7 @@ jobs:
               fi
             fi
           done
-          
+
           if [ "$OVER_BUDGET" = true ]; then
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "**⚠️ Warning:** Some bundles exceed the size budget. Consider code splitting or optimization." >> $GITHUB_STEP_SUMMARY
@@ -92,7 +95,7 @@ jobs:
           fi
 
       - name: Upload bundle artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bundle-analysis
           path: dist/
@@ -105,15 +108,15 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
+      - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.29.3 --activate
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '20'
           cache: 'pnpm'
@@ -136,15 +139,15 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
+      - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.29.3 --activate
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '20'
           cache: 'pnpm'
@@ -169,7 +172,7 @@ jobs:
         run: |
           echo "## Test Coverage Report" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           if [ -f coverage/coverage-summary.json ]; then
             echo "### Coverage Summary" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
@@ -184,7 +187,7 @@ jobs:
           else
             echo "Coverage summary not available" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           # Check coverage threshold (e.g., 80%)
           THRESHOLD=80
           if [ -f coverage/coverage-summary.json ]; then
@@ -200,7 +203,7 @@ jobs:
           fi
 
       - name: Upload coverage artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-report
           path: coverage/

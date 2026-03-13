@@ -5,6 +5,7 @@ This project uses [Changesets](https://github.com/changesets/changesets) for aut
 ## 🎯 What is Changesets?
 
 Changesets is a tool that manages versioning and changelogs by tracking changes in a `changeset` file alongside your code. When you're ready to release, Changesets automatically:
+
 - Bumps version numbers based on the type of changes
 - Generates changelog entries
 - Creates GitHub releases
@@ -40,11 +41,11 @@ This creates a file in `.changeset/` that should be committed with your PR.
 
 ## 📋 Changeset Types
 
-| Type | When to Use | Example |
-|------|-------------|---------|
-| **Major** | Breaking changes | `pnpm changeset` → select major |
+| Type      | When to Use                        | Example                         |
+| --------- | ---------------------------------- | ------------------------------- |
+| **Major** | Breaking changes                   | `pnpm changeset` → select major |
 | **Minor** | New features (backward compatible) | `pnpm changeset` → select minor |
-| **Patch** | Bug fixes (backward compatible) | `pnpm changeset` → select patch |
+| **Patch** | Bug fixes (backward compatible)    | `pnpm changeset` → select patch |
 
 ## 🚀 Release Process
 
@@ -130,6 +131,7 @@ This publishes a version like `1.0.1-alpha.0` that won't affect the main release
 ## 🛠️ Troubleshooting
 
 ### Forgot to create a changeset?
+
 ```bash
 # Create it now and amend your commit
 pnpm changeset
@@ -138,12 +140,14 @@ git commit --amend --no-edit
 ```
 
 ### Changeset with wrong version?
+
 ```bash
 # Edit the .changeset file directly
 # Change "minor" to "patch" or vice versa
 ```
 
 ### Need to skip a release?
+
 ```bash
 # Add an empty changeset
 echo '---

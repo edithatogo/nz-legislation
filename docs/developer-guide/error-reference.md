@@ -22,18 +22,18 @@ This document provides a comprehensive reference for all error messages that may
 
 ## Quick Reference
 
-| Error Code | Message | Quick Fix |
-|------------|---------|-----------|
-| [1001](#1001-config_api_key_missing) | API key not configured | Run `config --key` |
-| [1002](#1002-config_not_found) | Configuration not found | Run `config --key` |
-| [2001](#2001-api_authentication_failed) | Authentication failed | Check API key |
-| [2002](#2002-api_not_found) | Resource not found | Check ID format |
-| [2003](#2003-api_rate_limit_exceeded) | Rate limit exceeded | Wait and retry |
-| [2004](#2004-api_timeout) | Request timeout | Check connection |
-| [3001](#3001-validation_invalid_format) | Invalid format | Check format |
-| [3002](#3002-validation_required_field) | Required field missing | Add field |
-| [4001](#4001-file_not_found) | File not found | Check path |
-| [5001](#5001-network_error) | Network error | Check connection |
+| Error Code                              | Message                 | Quick Fix          |
+| --------------------------------------- | ----------------------- | ------------------ |
+| [1001](#1001-config_api_key_missing)    | API key not configured  | Run `config --key` |
+| [1002](#1002-config_not_found)          | Configuration not found | Run `config --key` |
+| [2001](#2001-api_authentication_failed) | Authentication failed   | Check API key      |
+| [2002](#2002-api_not_found)             | Resource not found      | Check ID format    |
+| [2003](#2003-api_rate_limit_exceeded)   | Rate limit exceeded     | Wait and retry     |
+| [2004](#2004-api_timeout)               | Request timeout         | Check connection   |
+| [3001](#3001-validation_invalid_format) | Invalid format          | Check format       |
+| [3002](#3002-validation_required_field) | Required field missing  | Add field          |
+| [4001](#4001-file_not_found)            | File not found          | Check path         |
+| [5001](#5001-network_error)             | Network error           | Check connection   |
 
 ---
 
@@ -46,6 +46,7 @@ This document provides a comprehensive reference for all error messages that may
 **What it means:** The tool cannot find your API key.
 
 **Common Causes:**
+
 - API key never set
 - Configuration file deleted
 - Environment variable not set
@@ -53,15 +54,17 @@ This document provides a comprehensive reference for all error messages that may
 **How to Fix:**
 
 1. **Set API key interactively:**
+
    ```bash
    nzlegislation config --key YOUR_API_KEY
    ```
 
 2. **Or set as environment variable:**
+
    ```bash
    # Linux/macOS
    export NZ_LEGISLATION_API_KEY=YOUR_API_KEY
-   
+
    # Windows PowerShell
    $env:NZ_LEGISLATION_API_KEY="YOUR_API_KEY"
    ```
@@ -72,6 +75,7 @@ This document provides a comprehensive reference for all error messages that may
    ```
 
 **Prevention:**
+
 - Set API key once during initial setup
 - Use environment variables for CI/CD
 - Don't commit .env files to version control
@@ -87,6 +91,7 @@ This document provides a comprehensive reference for all error messages that may
 **What it means:** The configuration file doesn't exist.
 
 **Common Causes:**
+
 - First time using the tool
 - Configuration file manually deleted
 - Wrong user account
@@ -94,6 +99,7 @@ This document provides a comprehensive reference for all error messages that may
 **How to Fix:**
 
 1. **Run initial setup:**
+
    ```bash
    nzlegislation config --key YOUR_API_KEY
    ```
@@ -109,6 +115,7 @@ This document provides a comprehensive reference for all error messages that may
    ```
 
 **Prevention:**
+
 - Don't manually delete config files
 - Use environment variables as backup
 
@@ -125,6 +132,7 @@ This document provides a comprehensive reference for all error messages that may
 **What it means:** Your API key is being rejected by the server.
 
 **Common Causes:**
+
 - Typo in API key
 - API key expired
 - Wrong API key copied
@@ -141,6 +149,7 @@ This document provides a comprehensive reference for all error messages that may
    - Paste into text editor first to verify
 
 3. **Reconfigure:**
+
    ```bash
    nzlegislation config --key YOUR_NEW_KEY
    ```
@@ -151,6 +160,7 @@ This document provides a comprehensive reference for all error messages that may
    ```
 
 **Prevention:**
+
 - Store API key in password manager
 - Copy-paste carefully (no typos)
 - Don't share API key publicly
@@ -166,12 +176,14 @@ This document provides a comprehensive reference for all error messages that may
 **What it means:** The work ID you provided doesn't exist.
 
 **Common Causes:**
+
 - Wrong ID format
 - Typo in ID
 - Legislation doesn't exist
 - ID from different jurisdiction
 
 **ID Format:**
+
 ```
 ✅ Correct: act/2020/67
 ❌ Wrong: 2020-67
@@ -182,11 +194,13 @@ This document provides a comprehensive reference for all error messages that may
 **How to Fix:**
 
 1. **Search to find correct ID:**
+
    ```bash
    nzlegislation search --query "health act"
    ```
 
 2. **Copy exact ID from results:**
+
    ```
    ┌────────────────────┬──────────────────────────────────────────┐
    │ ID                 │ Title                                    │
@@ -202,6 +216,7 @@ This document provides a comprehensive reference for all error messages that may
    ```
 
 **Prevention:**
+
 - Always search first to get correct ID
 - Copy-paste IDs (don't type manually)
 - Verify ID format matches `type/YYYY/NN`
@@ -215,10 +230,12 @@ This document provides a comprehensive reference for all error messages that may
 **What it means:** You've made too many requests too quickly.
 
 **Rate Limits:**
+
 - **Daily:** 10,000 requests per day
 - **Burst:** 2,000 requests per 5 minutes
 
 **Common Causes:**
+
 - Bulk export without delays
 - Script making rapid requests
 - Multiple users sharing one API key
@@ -238,6 +255,7 @@ This document provides a comprehensive reference for all error messages that may
 **Prevention:**
 
 1. **Add delays in scripts:**
+
    ```bash
    #!/bin/bash
    for i in {0..10}; do
@@ -248,6 +266,7 @@ This document provides a comprehensive reference for all error messages that may
    ```
 
 2. **Use smaller batch sizes:**
+
    ```bash
    # Export in chunks
    nzlegislation export --query "health" --limit 1000 --output part1.csv
@@ -267,6 +286,7 @@ This document provides a comprehensive reference for all error messages that may
 **What it means:** The API took too long to respond.
 
 **Common Causes:**
+
 - Slow internet connection
 - API server busy
 - Large result sets
@@ -275,17 +295,20 @@ This document provides a comprehensive reference for all error messages that may
 **How to Fix:**
 
 1. **Check your internet:**
+
    ```bash
    ping api.legislation.govt.nz
    ```
 
 2. **Try a smaller request:**
+
    ```bash
    # Instead of 1000 results, try 25
    nzlegislation search --query "health" --limit 25
    ```
 
 3. **Increase timeout (if needed):**
+
    ```bash
    # Set timeout to 60 seconds
    export NZ_LEGISLATION_TIMEOUT=60000
@@ -297,6 +320,7 @@ This document provides a comprehensive reference for all error messages that may
    ```
 
 **Prevention:**
+
 - Use smaller limits for large queries
 - Export in chunks
 - Check API status: https://api.legislation.govt.nz/
@@ -312,6 +336,7 @@ This document provides a comprehensive reference for all error messages that may
 **What it means:** One of your parameters has the wrong format.
 
 **Common Causes:**
+
 - Wrong date format (should be YYYY-MM-DD)
 - Invalid type value
 - Invalid status value
@@ -319,34 +344,38 @@ This document provides a comprehensive reference for all error messages that may
 **How to Fix:**
 
 1. **Check date format:**
+
    ```bash
    # ✅ Correct
    --from 2020-01-01 --to 2024-12-31
-   
+
    # ❌ Wrong
    --from 01/01/2020 --to 12/31/2024
    ```
 
 2. **Check type values:**
+
    ```bash
    # ✅ Valid types: act, bill, regulation, instrument
    --type act
-   
+
    # ❌ Invalid
    --type law
    ```
 
 3. **Check status values:**
+
    ```bash
    # ✅ Valid statuses
    --status in-force
    --status repealed
-   
+
    # ❌ Invalid
    --status active
    ```
 
 **Prevention:**
+
 - Use ISO date format (YYYY-MM-DD)
 - Check valid values in documentation
 - Use tab completion if available
@@ -360,30 +389,34 @@ This document provides a comprehensive reference for all error messages that may
 **What it means:** A required parameter is missing.
 
 **Common Causes:**
+
 - Forgot to specify query
 - Missing output file for export
 
 **How to Fix:**
 
 1. **For search:**
+
    ```bash
    # ✅ Include query
    nzlegislation search --query "health"
-   
+
    # ❌ Missing query
    nzlegislation search
    ```
 
 2. **For export:**
+
    ```bash
    # ✅ Include output
    nzlegislation export --query "health" --output results.csv
-   
+
    # ❌ Missing output
    nzlegislation export --query "health"
    ```
 
 **Prevention:**
+
 - Check command help: `nzlegislation <command> --help`
 - Required parameters are shown in usage
 
@@ -398,6 +431,7 @@ This document provides a comprehensive reference for all error messages that may
 **What it means:** The specified file doesn't exist.
 
 **Common Causes:**
+
 - Wrong file path
 - File was deleted
 - Typo in filename
@@ -405,15 +439,17 @@ This document provides a comprehensive reference for all error messages that may
 **How to Fix:**
 
 1. **Check file exists:**
+
    ```bash
    # Linux/macOS
    ls -la results.csv
-   
+
    # Windows
    dir results.csv
    ```
 
 2. **Use absolute path:**
+
    ```bash
    # Instead of relative path
    nzlegislation export --query "health" --output /full/path/to/results.csv
@@ -426,6 +462,7 @@ This document provides a comprehensive reference for all error messages that may
    ```
 
 **Prevention:**
+
 - Use tab completion for file paths
 - Check file exists before using
 - Use absolute paths in scripts
@@ -439,6 +476,7 @@ This document provides a comprehensive reference for all error messages that may
 **What it means:** Cannot save to the specified file.
 
 **Common Causes:**
+
 - No write permissions
 - Directory doesn't exist
 - Disk full
@@ -447,23 +485,26 @@ This document provides a comprehensive reference for all error messages that may
 **How to Fix:**
 
 1. **Check permissions:**
+
    ```bash
    # Linux/macOS
    ls -la /path/to/
-   
+
    # Windows - check file properties
    ```
 
 2. **Create directory:**
+
    ```bash
    mkdir -p /path/to/directory
    ```
 
 3. **Check disk space:**
+
    ```bash
    # Linux/macOS
    df -h
-   
+
    # Windows
    wmic logicaldisk get size,freespace,caption
    ```
@@ -484,6 +525,7 @@ This document provides a comprehensive reference for all error messages that may
 **What it means:** Cannot establish connection to the API server.
 
 **Common Causes:**
+
 - No internet connection
 - Firewall blocking connection
 - Proxy configuration issues
@@ -492,6 +534,7 @@ This document provides a comprehensive reference for all error messages that may
 **How to Fix:**
 
 1. **Check internet connection:**
+
    ```bash
    ping google.com
    ```
@@ -513,6 +556,7 @@ This document provides a comprehensive reference for all error messages that may
    ```
 
 **Prevention:**
+
 - Use stable internet connection
 - Configure proxy if needed
 - Check API status before bulk operations
@@ -526,6 +570,7 @@ This document provides a comprehensive reference for all error messages that may
 **What it means:** Connection attempt timed out.
 
 **Common Causes:**
+
 - Very slow connection
 - Server not responding
 - Network congestion
@@ -533,11 +578,13 @@ This document provides a comprehensive reference for all error messages that may
 **How to Fix:**
 
 1. **Increase timeout:**
+
    ```bash
    export NZ_LEGISLATION_TIMEOUT=60000
    ```
 
 2. **Check connection speed:**
+
    ```bash
    # Install speedtest-cli
    npm install -g speedtest-cli
@@ -623,6 +670,7 @@ Include:
 5. **Tool version** (`nzlegislation --version`)
 
 **Example:**
+
 ```
 Error: "Authentication failed. Invalid API key."
 
