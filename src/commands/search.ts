@@ -5,10 +5,12 @@
 import { Command } from 'commander';
 import ora from 'ora';
 
-import { searchWorks } from '@client';
 import { printTable, printJson, worksToCsv } from '@output';
 import { logger } from '@utils/logger';
 import { validateSearchParams, sanitizeInput } from '@utils/validation';
+
+import { getGlobalRegistry } from '../providers/index.js';
+import { toLegacySearchResults } from '../providers/output-adapters.js';
 
 interface SearchOptions {
   query: string;
@@ -32,10 +34,23 @@ export const searchCommand = new Command()
   .option('-l, --limit <number>', 'Maximum results (default: 25, max: 100)', '25')
   .option('-o, --offset <number>', 'Result offset for pagination', '0')
   .option('--format <format>', 'Output format (table, json, csv)', 'table')
-  .action(async (options: SearchOptions) => {
-    const spinner = ora('Searching legislation...').start();
+  .action(async (options: SearchOptions, command: Command) => {
+    const globalOptions = command.parent ? command.parent.opts<{ jurisdiction?: string }>() : {};
+    const jurisdiction = globalOptions.jurisdiction || 'nz';
+
+    const spinner = ora(`Searching ${jurisdiction} legislation...`).start();
 
     try {
+      // Get provider
+      const registry = getGlobalRegistry();
+      const provider = registry.get(jurisdiction);
+
+      if (!provider) {
+        spinner.stop();
+        console.error(`❌ Error: Unknown jurisdiction "${jurisdiction}"`);
+        process.exit(1);
+      }
+
       // Sanitize inputs
       const sanitizedOptions = {
         ...options,
@@ -52,28 +67,33 @@ export const searchCommand = new Command()
         spinner.stop();
         logger.error('Validation failed', undefined, { errors: validation.errors });
         console.error('❌ Validation errors:');
-        validation.errors.forEach(err => {
+        validation.errors?.forEach(err => {
           console.error(`  - ${err.field}: ${err.message}`);
         });
         process.exit(3);
       }
 
       const validatedParams = validation.data;
-      logger.debug('Search parameters validated', {
-        query: validatedParams.query,
-        type: validatedParams.type,
-        limit: validatedParams.limit,
-      });
+      const normalizedStatus: 'in-force' | 'repealed' | 'not-in-force' | undefined =
+        validatedParams.status === 'not-yet-in-force'
+          ? 'not-in-force'
+          : validatedParams.status === 'in-force' || validatedParams.status === 'repealed'
+            ? validatedParams.status
+            : undefined;
 
-      const results = await searchWorks({
+      // Map Command-style WorkType to SearchParams WorkType
+      const searchParams = {
         query: validatedParams.query,
         type: validatedParams.type,
-        status: validatedParams.status,
+        status: normalizedStatus,
         from: validatedParams.from,
         to: validatedParams.to,
         limit: validatedParams.limit,
         offset: validatedParams.offset,
-      });
+      };
+
+      const results = await provider.search(searchParams);
+      const legacyResults = toLegacySearchResults(results);
 
       spinner.stop();
 
@@ -82,11 +102,11 @@ export const searchCommand = new Command()
           printJson(results);
           break;
         case 'csv':
-          console.log(worksToCsv(results));
+          console.log(worksToCsv(legacyResults));
           break;
         case 'table':
         default:
-          printTable(results);
+          printTable(legacyResults);
           break;
       }
     } catch (error) {

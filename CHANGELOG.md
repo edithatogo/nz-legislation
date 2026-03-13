@@ -1,5 +1,17 @@
 # nz-legislation-tool
 
+## 1.2.0-next.0
+
+### Minor Changes
+
+- # Australian Expansion (BETA)
+
+  Initial support for Australian jurisdictions (Commonwealth and Queensland).
+  - New providers in `src/providers/`
+  - Routing flag `--jurisdiction`
+  - Australian citation style
+  - Hardened test suite
+
 ## 1.1.0
 
 ### Minor Changes

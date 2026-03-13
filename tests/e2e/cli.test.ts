@@ -36,7 +36,7 @@ describe('E2E CLI Tests', () => {
       const { stdout, exitCode } = await execa(TSX_BIN, [CLI_PATH, '--help']);
 
       expect(exitCode).toBe(0);
-      expect(stdout).toContain('Search and retrieve New Zealand legislation data');
+      expect(stdout).toContain('Search and retrieve legislation data across jurisdictions');
       expect(stdout).toContain('Commands:');
       expect(stdout).toContain('search');
       expect(stdout).toContain('get');
@@ -51,7 +51,7 @@ describe('E2E CLI Tests', () => {
       const { stdout, exitCode } = await execa(TSX_BIN, [CLI_PATH, '--version']);
 
       expect(exitCode).toBe(0);
-      expect(stdout.trim()).toMatch(/^\d+\.\d+\.\d+$/);
+      expect(stdout.trim()).toMatch(/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/);
     });
   });
 
