@@ -5,7 +5,7 @@
 import { Command } from 'commander';
 import ora from 'ora';
 
-import { getWork, getWorkVersions } from '@client';
+import { getGlobalRegistry } from '../providers/index.js';
 import { printWorkDetail, printVersionsTable, printJson, versionsToCsv } from '@output';
 import { logger } from '@utils/logger';
 import { validateWorkId, sanitizeInput } from '@utils/validation';
@@ -21,30 +21,45 @@ export const getCommand = new Command()
   .argument('<id>', 'Work ID (e.g., act_public_1989_18)')
   .option('--versions', 'Show version history')
   .option('--format <format>', 'Output format (table, json, csv)', 'table')
-  .action(async (workId: string, options: GetOptions) => {
-    const spinner = ora('Retrieving legislation...').start();
+  .action(async (workId: string, options: GetOptions, command: Command) => {
+    const globalOptions = command.parent?.opts() || {};
+    const jurisdiction = globalOptions.jurisdiction || 'nz';
+    
+    const spinner = ora(`Retrieving ${jurisdiction} legislation...`).start();
 
     try {
-      // Sanitize and validate work ID
-      const sanitizedWorkId = sanitizeInput(workId);
-      const validation = validateWorkId(sanitizedWorkId);
+      // Get provider
+      const registry = getGlobalRegistry();
+      const provider = registry.get(jurisdiction);
       
-      if (!validation.valid) {
+      if (!provider) {
         spinner.stop();
-        logger.error('Work ID validation failed', undefined, { workId, errors: validation.errors });
-        console.error('❌ Invalid work ID format:');
-        validation.errors?.forEach((err) => {
-          console.error(`  - ${err.message}`);
-        });
-        console.error('\nExpected format: API work ID (e.g., act_public_1989_18)');
-        process.exit(3);
+        console.error(`❌ Error: Unknown jurisdiction "${jurisdiction}"`);
+        process.exit(1);
       }
 
-      logger.debug('Work ID validated', { workId: sanitizedWorkId });
+      // Sanitize and validate work ID
+      const sanitizedWorkId = sanitizeInput(workId);
+      
+      // NZ-specific ID validation only if jurisdiction is nz
+      if (jurisdiction === 'nz') {
+        const validation = validateWorkId(sanitizedWorkId);
+        
+        if (!validation.valid) {
+          spinner.stop();
+          logger.error('Work ID validation failed', undefined, { workId, errors: validation.errors });
+          console.error('❌ Invalid work ID format:');
+          validation.errors?.forEach((err) => {
+            console.error(`  - ${err.message}`);
+          });
+          console.error('\nExpected format: API work ID (e.g., act_public_1989_18)');
+          process.exit(3);
+        }
+      }
 
       if (options.versions) {
         // Get version history
-        const versions = await getWorkVersions(sanitizedWorkId);
+        const versions = await provider.getVersions(sanitizedWorkId);
         spinner.stop();
 
         switch (options.format.toLowerCase()) {
@@ -52,16 +67,16 @@ export const getCommand = new Command()
             printJson(versions);
             break;
           case 'csv':
-            console.log(versionsToCsv(versions));
+            console.log(versionsToCsv(versions as any));
             break;
           case 'table':
           default:
-            printVersionsTable(versions);
+            printVersionsTable(versions as any);
             break;
         }
       } else {
         // Get work details
-        const work = await getWork(sanitizedWorkId);
+        const work = await provider.getWork(sanitizedWorkId);
         spinner.stop();
 
         switch (options.format.toLowerCase()) {
@@ -70,11 +85,11 @@ export const getCommand = new Command()
             break;
           case 'csv':
             console.log('Note: CSV format not ideal for single work. Use table or json.');
-            printWorkDetail(work);
+            printWorkDetail(work as any);
             break;
           case 'table':
           default:
-            printWorkDetail(work);
+            printWorkDetail(work as any);
             break;
         }
       }

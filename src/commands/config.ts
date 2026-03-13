@@ -4,8 +4,8 @@
 
 import { Command } from 'commander';
 
-import { clearConfig, getConfig, getConfigPath, hasApiKey, setApiKey } from '@config';
-import { maskApiKey } from '@utils/secure-config';
+import { clearConfig, getConfig, getConfigPath, hasApiKey, setApiKey } from '../config.js';
+import { maskApiKey } from '../utils/secure-config.js';
 
 interface ConfigOptions {
   show?: boolean;

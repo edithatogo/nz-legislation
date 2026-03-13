@@ -5,8 +5,9 @@
 import { Command } from 'commander';
 import ora from 'ora';
 
-import { getWork } from '@client';
-import { generateCitation } from '@output';
+import { getGlobalRegistry } from '../providers/index.js';
+import { generateCitation } from '../output/index.js';
+import { logger } from '../utils/logger.js';
 
 interface CiteOptions {
   style: string;
@@ -17,16 +18,28 @@ export const citeCommand = new Command()
   .name('cite')
   .description('Generate citation for legislation')
   .argument('<id>', 'Work ID (e.g., act_public_1989_18)')
-  .option('-s, --style <style>', 'Citation style (nzmj, bibtex, ris, enw, apa)', 'nzmj')
+  .option('-s, --style <style>', 'Citation style (nzmj, bibtex, ris, enw, apa, australian)', 'nzmj')
   .option('--copy', 'Copy to clipboard (not implemented)', false)
-  .action(async (workId: string, options: CiteOptions) => {
-    const spinner = ora('Generating citation...').start();
+  .action(async (workId: string, options: CiteOptions, command: Command) => {
+    const globalOptions = command.parent?.opts() || {};
+    const jurisdiction = globalOptions.jurisdiction || 'nz';
+    const spinner = ora(`Generating citation for ${jurisdiction} legislation...`).start();
 
     try {
-      const work = await getWork(workId);
+      // Get provider
+      const registry = getGlobalRegistry();
+      const provider = registry.get(jurisdiction);
+      
+      if (!provider) {
+        spinner.stop();
+        console.error(`❌ Error: Unknown jurisdiction "${jurisdiction}"`);
+        process.exit(1);
+      }
+
+      const work = await provider.getWork(workId);
       spinner.stop();
 
-      const citation = generateCitation(work, options.style);
+      const citation = provider.getCitation(work as any, options.style as any);
 
       console.log(`\n${options.style.toUpperCase()} Citation:`);
       console.log('─'.repeat(60));
@@ -39,8 +52,9 @@ export const citeCommand = new Command()
       }
     } catch (error) {
       spinner.stop();
+      logger.error('Failed to generate citation', error instanceof Error ? error : undefined, { workId });
       if (error instanceof Error) {
-        console.error(`Error: ${error.message}`);
+        console.error(`❌ Error: ${error.message}`);
         process.exit(1);
       }
       throw error;

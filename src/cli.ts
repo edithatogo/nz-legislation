@@ -18,6 +18,7 @@ import { streamCommand } from './commands/stream.js';
 import { createInteractiveHelpCommand, createContextualHelpCommand } from './commands/help.js';
 import { createGenerateCommand } from './commands/generate.js';
 import { getConfig } from './config.js';
+import { initializeProviders } from './providers/index.js';
 import {
   ApplicationError,
   ErrorCode,
@@ -28,12 +29,19 @@ import { logger } from './utils/logger.js';
 // Get package version from package.json
 const pkg = await import('../package.json', { with: { type: 'json' } });
 
+// Initialize providers with config
+const config = getConfig();
+initializeProviders({
+  commonwealthApiKey: process.env.COMMONWEALTH_API_KEY,
+  queenslandApiKey: process.env.QUEENSLAND_API_KEY,
+});
+
 // Create main CLI program
 const program = new Command();
 
 program
   .name('nzlegislation')
-  .description('Search and retrieve New Zealand legislation data')
+  .description('Search and retrieve legislation data across jurisdictions')
   .version(pkg.default.version)
   .configureHelp({
     sortOptions: true,
@@ -42,9 +50,16 @@ program
   .addHelpText(
     'after',
     `
+Jurisdictions:
+  - nz (New Zealand, default)
+  - au-comm (Australian Commonwealth)
+  - au-qld (Queensland)
+
 Examples:
   $ nzlegislation search --query "health" --type act
+  $ nzlegislation search --query "privacy" --jurisdiction au-comm
   $ nzlegislation get "act/1986/132"
+  $ nzlegislation get "act/1988/123" --jurisdiction au-comm
   $ nzlegislation get "act/1986/132" --versions
   $ nzlegislation export --query "health" --output health.csv
   $ nzlegislation stream --query "health" --output health.csv  # Stream large exports
@@ -61,7 +76,8 @@ API Documentation: https://api.legislation.govt.nz/docs/`
 // Add global options
 program
   .option('--verbose', 'Enable verbose output')
-  .option('--quiet', 'Suppress non-essential output');
+  .option('--quiet', 'Suppress non-essential output')
+  .option('-j, --jurisdiction <id>', 'Jurisdiction identifier (nz, au-comm, au-qld)', 'nz');
 
 // Add commands
 program
