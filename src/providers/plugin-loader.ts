@@ -1,6 +1,6 @@
 /**
  * Plugin Loader
- * 
+ *
  * Dynamically loads and registers jurisdiction plugins.
  * Supports both official and community plugins.
  */
@@ -45,17 +45,19 @@ export class PluginLoader {
     try {
       // Import plugin module
       const module = await import(pluginPath);
-      
+
       // Get manifest
       const manifest: PluginManifest = module.default?.manifest ?? module.manifest;
-      
+
       if (!manifest) {
         throw new Error('Plugin manifest not found');
       }
 
       // Verify plugin integrity (trust official plugins, warn on community)
       if (manifest.pluginType === 'community') {
-        console.warn(`⚠️  Loading community plugin: ${manifest.name}. Ensure you trust the source.`);
+        console.warn(
+          `⚠️  Loading community plugin: ${manifest.name}. Ensure you trust the source.`
+        );
       }
 
       // Check compatibility
@@ -81,7 +83,7 @@ export class PluginLoader {
       }
 
       const provider = new ProviderClass();
-      
+
       // Verify provider implements interface
       if (!this.isValidProvider(provider)) {
         throw new Error('Plugin does not implement LegislationProvider interface');
@@ -104,7 +106,15 @@ export class PluginLoader {
       return loadedPlugin;
     } catch (error) {
       const loadedPlugin: LoadedPlugin = {
-        manifest: { name: pluginPath, version: 'unknown', main: '', provider: '', peerDependencies: {}, pluginType: 'community', pluginStatus: 'alpha' },
+        manifest: {
+          name: pluginPath,
+          version: 'unknown',
+          main: '',
+          provider: '',
+          peerDependencies: {},
+          pluginType: 'community',
+          pluginStatus: 'alpha',
+        },
         provider: null as any,
         loaded: false,
         error: error instanceof Error ? error : new Error(String(error)),
@@ -123,9 +133,7 @@ export class PluginLoader {
    * Load multiple plugins in parallel
    */
   async loadPlugins(pluginPaths: string[]): Promise<LoadedPlugin[]> {
-    const results = await Promise.allSettled(
-      pluginPaths.map(path => this.loadPlugin(path))
-    );
+    const results = await Promise.allSettled(pluginPaths.map(path => this.loadPlugin(path)));
 
     return results
       .filter((r): r is PromiseFulfilledResult<LoadedPlugin> => r.status === 'fulfilled')
@@ -137,18 +145,18 @@ export class PluginLoader {
    */
   async discoverPlugins(directory: string): Promise<string[]> {
     const plugins: string[] = [];
-    
+
     try {
       const fs = await import('fs');
       const path = await import('path');
-      
+
       if (!fs.existsSync(directory)) {
         console.debug(`Plugin directory not found: ${directory}`);
         return plugins;
       }
 
       const files = fs.readdirSync(directory);
-      
+
       for (const file of files) {
         if (file.startsWith('@')) {
           // Scoped package directory
@@ -202,7 +210,7 @@ export class PluginLoader {
    */
   unloadPlugin(name: string): void {
     const plugin = this.loadedPlugins.get(name);
-    
+
     if (plugin) {
       // Note: In Node.js, we can't truly unload modules, but we can remove from registry
       this.loadedPlugins.delete(name);

@@ -40,8 +40,8 @@ describe('API Client', () => {
       const mockData = { total: 1, results: [] };
       setHttpClientFactoryForTesting(() => ({
         get: () => ({
-          json: async () => mockData
-        })
+          json: async () => mockData,
+        }),
       }));
 
       // Miss and set
@@ -73,17 +73,19 @@ describe('API Client', () => {
           json: async () => {
             if (url.includes('/versions')) {
               return {
-                results: [{
-                  work_id: 'test-id',
-                  title: 'Reconstructed',
-                  version_id: 'v1',
-                  formats: []
-                }]
+                results: [
+                  {
+                    work_id: 'test-id',
+                    title: 'Reconstructed',
+                    version_id: 'v1',
+                    formats: [],
+                  },
+                ],
               };
             }
             throw makeHttpError(404, 'Not found', url);
-          }
-        })
+          },
+        }),
       }));
 
       const work = await getWork('test-id');

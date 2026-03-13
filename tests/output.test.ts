@@ -16,17 +16,19 @@ describe('Output Formatters', () => {
   it('should print search results table', () => {
     const results = {
       total: 1,
-      results: [{
-        id: 'test-id',
-        title: 'Test Title',
-        type: 'act',
-        status: 'in-force',
-        date: '2020-01-01',
-        url: 'http://test',
-        versionCount: 1
-      }],
+      results: [
+        {
+          id: 'test-id',
+          title: 'Test Title',
+          type: 'act',
+          status: 'in-force',
+          date: '2020-01-01',
+          url: 'http://test',
+          versionCount: 1,
+        },
+      ],
       limit: 25,
-      offset: 0
+      offset: 0,
     };
     printTable(results);
     expect(mockLog).toHaveBeenCalled();
@@ -45,7 +47,7 @@ describe('Output Formatters', () => {
       url: 'http://test',
       versionCount: 5,
       versions: [],
-      citations: {}
+      citations: {},
     };
     printWorkDetail(work as any);
     expect(mockLog).toHaveBeenCalled();
@@ -56,7 +58,14 @@ describe('Output Formatters', () => {
   it('should print versions table', () => {
     const versions = [
       { id: 'v1', version: 1, date: '2020-01-01', type: 'act', isCurrent: false, formats: ['xml'] },
-      { id: 'v2', version: 2, date: '2021-01-01', type: 'act', isCurrent: true, formats: ['xml', 'pdf'] }
+      {
+        id: 'v2',
+        version: 2,
+        date: '2021-01-01',
+        type: 'act',
+        isCurrent: true,
+        formats: ['xml', 'pdf'],
+      },
     ];
     printVersionsTable(versions as any);
     expect(mockLog).toHaveBeenCalled();

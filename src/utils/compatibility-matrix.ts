@@ -1,6 +1,6 @@
 /**
  * Compatibility Matrix
- * 
+ *
  * Tracks which plugin versions are compatible with which core versions.
  * Prevents version conflicts and helps users upgrade safely.
  */
@@ -61,14 +61,14 @@ export class CompatibilityMatrix {
    */
   check(plugin: string, version: string): boolean {
     const infos = this.compatibilityData.get(plugin);
-    
+
     if (!infos || infos.length === 0) {
       console.warn(`No compatibility info for ${plugin}@${version}`);
       return true; // Assume compatible if no info
     }
 
     const info = infos.find(i => i.version === version);
-    
+
     if (!info) {
       console.warn(`No compatibility info for ${plugin}@${version}`);
       return true;
@@ -115,11 +115,11 @@ export class CompatibilityMatrix {
   warnOnIncompatibility(plugin: string, version: string): void {
     if (!this.check(plugin, version)) {
       const info = this.compatibilityData.get(plugin)?.find(i => i.version === version);
-      
+
       console.warn(
         `⚠️ Plugin ${plugin}@${version} is not compatible with core v${this.currentCoreVersion}.` +
-        `Required: ${info?.coreVersion.exact ?? 'unknown'}. ` +
-        `Please update the plugin or downgrade core.`
+          `Required: ${info?.coreVersion.exact ?? 'unknown'}. ` +
+          `Please update the plugin or downgrade core.`
       );
     }
   }
@@ -181,7 +181,7 @@ export class CompatibilityMatrix {
     }
 
     const versionParts = version.split('.').map(Number);
-    
+
     if (parsed.min) {
       const minParts = parsed.min.split('.').map(Number);
       if (this.compareVersions(versionParts, minParts) < 0) {
@@ -206,12 +206,12 @@ export class CompatibilityMatrix {
     for (let i = 0; i < Math.max(a.length, b.length); i++) {
       const aPart = a[i] ?? 0;
       const bPart = b[i] ?? 0;
-      
+
       if (aPart !== bPart) {
         return aPart - bPart;
       }
     }
-    
+
     return 0;
   }
 
@@ -222,11 +222,11 @@ export class CompatibilityMatrix {
     if (range.startsWith('^')) {
       return `Requires core version ${range}`;
     }
-    
+
     if (range.startsWith('>=')) {
       return `Requires core version ${range}`;
     }
-    
+
     return `Requires core version ${range} exactly`;
   }
 
@@ -235,7 +235,7 @@ export class CompatibilityMatrix {
    */
   formatReport(): string {
     const report = this.getReport();
-    
+
     const lines = [
       `Compatibility Report`,
       `Core Version: v${report.coreVersion}`,
@@ -272,9 +272,9 @@ export async function checkPluginCompatibility(
 ): Promise<{ compatible: boolean; message: string }> {
   // In real implementation, this would fetch compatibility info from registry
   // For now, simple version check
-  
+
   const matrix = new CompatibilityMatrix(coreVersion);
-  
+
   // Simulate registration
   matrix.register({
     name: plugin,
@@ -285,10 +285,10 @@ export async function checkPluginCompatibility(
   });
 
   const isCompatible = matrix.check(plugin, version);
-  
+
   return {
     compatible: isCompatible,
-    message: isCompatible 
+    message: isCompatible
       ? `${plugin}@${version} is compatible with core v${coreVersion}`
       : `${plugin}@${version} is NOT compatible with core v${coreVersion}`,
   };

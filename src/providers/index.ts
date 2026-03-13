@@ -1,6 +1,6 @@
 /**
  * Providers Index
- * 
+ *
  * Central export point for all provider modules.
  */
 
@@ -37,10 +37,10 @@ export function initializeProviders(config?: {
   queenslandApiKey?: string;
 }): void {
   const registry = getGlobalRegistry();
-  
+
   // Register NZ provider (default)
   registry.register(new NZLegislationProvider());
-  
+
   // Register Australian providers
   registry.register(new CommonwealthProvider(config?.commonwealthApiKey));
   registry.register(new QueenslandProvider(config?.queenslandApiKey));

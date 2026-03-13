@@ -11,7 +11,7 @@ const TSX_BIN = join(
   process.cwd(),
   'node_modules',
   '.bin',
-  process.platform === 'win32' ? 'tsx.cmd' : 'tsx',
+  process.platform === 'win32' ? 'tsx.cmd' : 'tsx'
 );
 
 describe('CLI Jurisdiction Routing', () => {
@@ -23,9 +23,9 @@ describe('CLI Jurisdiction Routing', () => {
       '--jurisdiction',
       'au-comm',
       '--format',
-      'json'
+      'json',
     ]);
-    
+
     expect(exitCode).toBe(0);
     const parsed = JSON.parse(stdout);
     expect(parsed.jurisdiction).toBe('au-comm');
@@ -34,21 +34,17 @@ describe('CLI Jurisdiction Routing', () => {
 
   it('should route to Queensland jurisdiction', async () => {
     // Queensland requires API key
-    const { stdout, exitCode } = await execa(TSX_BIN, [
-      CLI_PATH,
-      'get',
-      'act/2021/5',
-      '-j',
-      'au-qld',
-      '--format',
-      'json'
-    ], {
-      env: {
-        ...process.env,
-        QUEENSLAND_API_KEY: 'test-key'
+    const { stdout, exitCode } = await execa(
+      TSX_BIN,
+      [CLI_PATH, 'get', 'act/2021/5', '-j', 'au-qld', '--format', 'json'],
+      {
+        env: {
+          ...process.env,
+          QUEENSLAND_API_KEY: 'test-key',
+        },
       }
-    });
-    
+    );
+
     expect(exitCode).toBe(0);
     const parsed = JSON.parse(stdout);
     expect(parsed.jurisdiction).toBe('au-qld');
@@ -56,14 +52,12 @@ describe('CLI Jurisdiction Routing', () => {
   });
 
   it('should fail for unknown jurisdiction', async () => {
-    const { stderr, exitCode } = await execa(TSX_BIN, [
-      CLI_PATH,
-      'get',
-      'some-id',
-      '--jurisdiction',
-      'unknown'
-    ], { reject: false });
-    
+    const { stderr, exitCode } = await execa(
+      TSX_BIN,
+      [CLI_PATH, 'get', 'some-id', '--jurisdiction', 'unknown'],
+      { reject: false }
+    );
+
     expect(exitCode).toBe(1);
     expect(stderr).toContain('Unknown jurisdiction "unknown"');
   });

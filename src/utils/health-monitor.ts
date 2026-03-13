@@ -1,6 +1,6 @@
 /**
  * Health Monitoring System
- * 
+ *
  * Monitors the health of legislation providers and scrapers,
  * detecting issues before users complain.
  */
@@ -45,7 +45,7 @@ export class HealthMonitor {
    */
   register(provider: HealthCheckable): void {
     const jurisdiction = provider.getJurisdiction();
-    
+
     // Initialize health data
     this.healthData.set(jurisdiction, {
       successTimes: [],
@@ -66,14 +66,14 @@ export class HealthMonitor {
   async check(provider: HealthCheckable): Promise<HealthStatus> {
     const jurisdiction = provider.getJurisdiction();
     const startTime = Date.now();
-    
+
     try {
       // Perform health check (simple scrape test)
       await provider.healthCheck();
-      
+
       const responseTime = Date.now() - startTime;
       this.recordSuccess(jurisdiction, responseTime);
-      
+
       return this.getHealthStatus(jurisdiction);
     } catch (error) {
       this.recordFailure(jurisdiction, error instanceof Error ? error.message : 'Unknown error');
@@ -86,7 +86,7 @@ export class HealthMonitor {
    */
   private startMonitoring(provider: HealthCheckable): void {
     const jurisdiction = provider.getJurisdiction();
-    
+
     // Clear existing interval if any
     const existing = this.monitoringIntervals.get(jurisdiction);
     if (existing) {
@@ -112,7 +112,7 @@ export class HealthMonitor {
     data.responseTimes.push(responseTime);
     data.consecutiveFailures = 0;
     data.lastSuccess = new Date();
-    
+
     // Keep only last 100 data points
     if (data.successTimes.length > 100) data.successTimes.shift();
     if (data.responseTimes.length > 100) data.responseTimes.shift();
@@ -127,7 +127,7 @@ export class HealthMonitor {
 
     data.failureTimes.push(Date.now());
     data.consecutiveFailures++;
-    
+
     // Keep only last 100 data points
     if (data.failureTimes.length > 100) data.failureTimes.shift();
 
@@ -142,7 +142,7 @@ export class HealthMonitor {
    */
   getHealthStatus(jurisdiction: string): HealthStatus {
     const data = this.healthData.get(jurisdiction);
-    
+
     if (!data) {
       return {
         healthy: true,
@@ -158,9 +158,10 @@ export class HealthMonitor {
 
     const total = data.successTimes.length + data.failureTimes.length;
     const successRate = total > 0 ? (data.successTimes.length / total) * 100 : 100;
-    const averageResponseTime = data.responseTimes.length > 0
-      ? data.responseTimes.reduce((a, b) => a + b, 0) / data.responseTimes.length
-      : 0;
+    const averageResponseTime =
+      data.responseTimes.length > 0
+        ? data.responseTimes.reduce((a, b) => a + b, 0) / data.responseTimes.length
+        : 0;
 
     return {
       healthy: data.consecutiveFailures < this.unhealthyThreshold,
@@ -179,7 +180,7 @@ export class HealthMonitor {
    */
   getDashboard(): HealthDashboard {
     const providers: HealthStatus[] = [];
-    
+
     for (const jurisdiction of this.healthData.keys()) {
       providers.push(this.getHealthStatus(jurisdiction));
     }
@@ -205,12 +206,14 @@ export class HealthMonitor {
    */
   private triggerAlert(jurisdiction: string): void {
     const status = this.getHealthStatus(jurisdiction);
-    
+
     for (const callback of this.alertCallbacks) {
       callback(jurisdiction, status);
     }
 
-    console.warn(`⚠️ Health Alert: ${jurisdiction} is unhealthy (${status.consecutiveFailures} consecutive failures)`);
+    console.warn(
+      `⚠️ Health Alert: ${jurisdiction} is unhealthy (${status.consecutiveFailures} consecutive failures)`
+    );
   }
 
   /**
@@ -263,7 +266,7 @@ interface HealthData {
 export function formatHealthStatus(status: HealthStatus): string {
   const icon = status.healthy ? '✅' : '❌';
   const fallback = status.fallbackActive ? ' (fallback)' : '';
-  
+
   return `${icon} ${status.jurisdiction}${fallback}: ${status.successRate.toFixed(1)}% success, ${status.averageResponseTime.toFixed(0)}ms avg`;
 }
 

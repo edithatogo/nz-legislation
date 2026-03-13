@@ -1,6 +1,6 @@
 /**
  * Plugin Marketplace
- * 
+ *
  * Framework for discovering, installing, and managing plugins.
  * Supports both official and community plugins.
  */
@@ -45,14 +45,62 @@ export class PluginMarketplace {
     // For now, return mock data
     const plugins: PluginInfo[] = [
       // Official
-      { name: '@nz-legislation/queensland', version: '1.0.0', description: 'Queensland legislation', author: 'NZ Legislation Team', type: 'official', status: 'stable', downloads: 1000 },
-      { name: '@nz-legislation/commonwealth', version: '1.0.0', description: 'Commonwealth legislation', author: 'NZ Legislation Team', type: 'official', status: 'stable', downloads: 800 },
-      { name: '@nz-legislation/nsw', version: '1.0.0', description: 'NSW legislation', author: 'NZ Legislation Team', type: 'official', status: 'stable', downloads: 600 },
-      { name: '@nz-legislation/victoria', version: '1.0.0', description: 'Victoria legislation', author: 'NZ Legislation Team', type: 'official', status: 'stable', downloads: 500 },
-      
+      {
+        name: '@nz-legislation/queensland',
+        version: '1.0.0',
+        description: 'Queensland legislation',
+        author: 'NZ Legislation Team',
+        type: 'official',
+        status: 'stable',
+        downloads: 1000,
+      },
+      {
+        name: '@nz-legislation/commonwealth',
+        version: '1.0.0',
+        description: 'Commonwealth legislation',
+        author: 'NZ Legislation Team',
+        type: 'official',
+        status: 'stable',
+        downloads: 800,
+      },
+      {
+        name: '@nz-legislation/nsw',
+        version: '1.0.0',
+        description: 'NSW legislation',
+        author: 'NZ Legislation Team',
+        type: 'official',
+        status: 'stable',
+        downloads: 600,
+      },
+      {
+        name: '@nz-legislation/victoria',
+        version: '1.0.0',
+        description: 'Victoria legislation',
+        author: 'NZ Legislation Team',
+        type: 'official',
+        status: 'stable',
+        downloads: 500,
+      },
+
       // Community
-      { name: '@community/fiji', version: '0.1.0', description: 'Fiji legislation (beta)', author: 'Community', type: 'community', status: 'beta', downloads: 50 },
-      { name: '@community/samoa', version: '0.1.0', description: 'Samoa legislation (alpha)', author: 'Community', type: 'community', status: 'alpha', downloads: 20 },
+      {
+        name: '@community/fiji',
+        version: '0.1.0',
+        description: 'Fiji legislation (beta)',
+        author: 'Community',
+        type: 'community',
+        status: 'beta',
+        downloads: 50,
+      },
+      {
+        name: '@community/samoa',
+        version: '0.1.0',
+        description: 'Samoa legislation (alpha)',
+        author: 'Community',
+        type: 'community',
+        status: 'alpha',
+        downloads: 20,
+      },
     ];
 
     if (filter?.type) {
@@ -71,13 +119,13 @@ export class PluginMarketplace {
    */
   async install(name: string, version?: string): Promise<void> {
     console.log(`Installing ${name}${version ? `@${version}` : ''}...`);
-    
+
     // In real implementation:
     // 1. Check compatibility
     // 2. Download from registry
     // 3. Install to plugins directory
     // 4. Register with plugin loader
-    
+
     console.log(`✅ ${name} installed successfully`);
   }
 
@@ -86,11 +134,11 @@ export class PluginMarketplace {
    */
   async uninstall(name: string): Promise<void> {
     console.log(`Uninstalling ${name}...`);
-    
+
     // In real implementation:
     // 1. Remove from plugins directory
     // 2. Unregister from plugin loader
-    
+
     console.log(`✅ ${name} uninstalled successfully`);
   }
 
@@ -99,11 +147,11 @@ export class PluginMarketplace {
    */
   async update(name: string): Promise<void> {
     console.log(`Updating ${name}...`);
-    
+
     // In real implementation:
     // 1. Check for newer version
     // 2. Download and install
-    
+
     console.log(`✅ ${name} updated successfully`);
   }
 
@@ -127,10 +175,11 @@ export class PluginMarketplace {
   async search(query: string): Promise<PluginInfo[]> {
     const all = await this.list();
     const queryLower = query.toLowerCase();
-    
-    return all.filter(p => 
-      p.name.toLowerCase().includes(queryLower) ||
-      p.description.toLowerCase().includes(queryLower)
+
+    return all.filter(
+      p =>
+        p.name.toLowerCase().includes(queryLower) ||
+        p.description.toLowerCase().includes(queryLower)
     );
   }
 
@@ -147,12 +196,12 @@ export class PluginMarketplace {
    */
   async submit(manifest: PluginManifest): Promise<void> {
     console.log(`Submitting community plugin: ${manifest.name}...`);
-    
+
     // In real implementation:
     // 1. Validate manifest
     // 2. Run tests
     // 3. Publish to community registry
-    
+
     console.log(`✅ ${manifest.name} submitted successfully`);
   }
 }
@@ -179,7 +228,9 @@ export function formatPluginList(plugins: PluginInfo[]): string {
     lines.push('Community Plugins:');
     for (const plugin of community) {
       const icon = plugin.status === 'stable' ? '✅' : plugin.status === 'beta' ? '🧪' : '🔬';
-      lines.push(`  ${icon} ${plugin.name}@${plugin.version} - ${plugin.description} (by ${plugin.author})`);
+      lines.push(
+        `  ${icon} ${plugin.name}@${plugin.version} - ${plugin.description} (by ${plugin.author})`
+      );
     }
     lines.push('');
   }

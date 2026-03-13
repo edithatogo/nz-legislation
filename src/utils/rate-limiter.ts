@@ -306,14 +306,14 @@ export function rateLimited(
       return descriptor;
     }
 
-    descriptor.value = (async function (
+    descriptor.value = async function (
       this: ThisParameterType<T>,
       ...args: Parameters<T>
     ): Promise<Awaited<ReturnType<T>>> {
       const limiter = registry.get(jurisdiction);
       await limiter.throttle();
       return (await originalMethod.apply(this, args)) as Awaited<ReturnType<T>>;
-    }) as T;
+    } as T;
 
     return descriptor;
   };
