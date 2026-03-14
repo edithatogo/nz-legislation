@@ -53,10 +53,10 @@ Do not rewrite repository links to `edithatogo/anz-legislation` until the
 repository has actually been renamed. Before that point:
 
 - product copy may be `ANZ Legislation`
-- repo links stay on `edithatogo/nz-legislation`
+- repository links stay on `edithatogo/nz-legislation`
 - docs should explain the naming transition when needed
 
-### Rule 5: Historical Documents Must Be Triaged, Not Normalized Blindly
+### Rule 5: Historical Documents Must Be Reviewed, Not Normalized Blindly
 
 Older release, publishing, and setup documents may reflect past operational
 states. They should be classified before editing:
@@ -75,7 +75,8 @@ The following edits are approved to happen before package and CLI migration:
   `ANZ Legislation`
 - add transition notes explaining that package and CLI names remain legacy for
   compatibility
-- clean up stale support links that point to obviously wrong historical repos
+- clean up stale support links that point to obviously wrong historical
+  repositories
   where the correct current repo is still `edithatogo/nz-legislation`
 - update Conductor, governance, and roadmap documents to use the approved ANZ
   transition language
@@ -84,7 +85,7 @@ The following edits are approved to happen before package and CLI migration:
 
 - renaming `package.json.name`
 - renaming CLI binary entries in `package.json`
-- changing env vars such as `NZ_LEGISLATION_API_KEY`
+- changing environment variables such as `NZ_LEGISLATION_API_KEY`
 - renaming MCP server identifier in code
 - changing `Conf` project name or default config path handling
 - changing GitHub Pages base URLs before the repository rename is coordinated

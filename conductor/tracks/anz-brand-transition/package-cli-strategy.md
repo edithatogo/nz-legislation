@@ -100,7 +100,7 @@ Required message shape:
 - "supported legacy path" rather than "obsolete"
 - exact migration commands
 - end-of-window criteria
-- confirmation that local config and existing env vars still work
+- confirmation that local config and existing environment variables still work
 
 ## Phase 4 Handover
 

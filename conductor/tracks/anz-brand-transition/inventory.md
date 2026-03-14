@@ -38,7 +38,7 @@ handling rather than a blind string replacement.
   - MCP server name is `nz-legislation`
   - startup banner still prints `NZ Legislation MCP Server`
 - `src/client.ts`
-  - error messaging still references the current env var
+  - error messaging still references the current environment variable
   - HTTP user agent still sends `nz-legislation-tool/1.0.0`
 - `src/utils/api-optimization.ts`
   - user agent still sends `nz-legislation-tool/1.0.0`
@@ -93,15 +93,17 @@ and CLI migration strategy is implemented.
 ## Initial Phase 2 Implementation Rules
 
 - Product-copy surfaces can become `ANZ Legislation` first.
-- Package name, binary names, MCP name, env vars, and config paths stay legacy
+- Package name, binary names, MCP name, environment variables, and config
+  paths stay legacy
   until alias or migration support exists.
 - Repo-link cleanup should prefer `edithatogo/nz-legislation` until the actual
   GitHub rename happens, even if product copy becomes ANZ-first.
-- Historical release and operational documents should be triaged rather than
+- Historical release and operational documents should be reviewed rather than
   blindly rewritten, because some reflect past states rather than current
   canonical guidance.
 
 ## Immediate Next Step
 
 Use this inventory to decide which internal references can become ANZ-neutral in
-Phase 2 without breaking installs, configs, MCP integrations, or automation.
+Phase 2 without breaking installs, configurations, MCP integrations, or
+automation.

@@ -62,7 +62,7 @@ detail under `research-conductor` instead of this product-side Conductor tree.
 
 1. Start ANZ transition implementation with reviewed operational PRs, beginning
    with safe ANZ-first product-copy edits that do not rename package, CLI, MCP,
-   env vars, or config paths.
+   environment variables, or config paths.
 2. Track future status changes by updating `metadata.json` alongside each
    active track’s `index.md` and `plan.md`.
 3. Promote backlog entries back into `conductor/tracks` only when they gain a

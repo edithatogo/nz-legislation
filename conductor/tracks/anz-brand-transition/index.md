@@ -15,7 +15,7 @@
 ## Status
 
 🟡 IN PROGRESS - Planning phases are complete; the track is now ready to move
-from planning into implementation and rollout work
+from planning into implementation and roll-out work
 
 ## Summary
 
