@@ -1,6 +1,6 @@
 # Developer Guide
 
-Welcome to the NZ Legislation Tool development team! This guide will help you get set up and contributing in under 30 minutes.
+Welcome to the ANZ Legislation development team. This guide will help you get set up and contributing in under 30 minutes. The repo is transitioning in public branding, but the package and CLI names remain on the current `nz-legislation-tool` path for compatibility.
 
 ## 🚀 Quick Start (5 minutes)
 
@@ -15,7 +15,7 @@ Welcome to the NZ Legislation Tool development team! This guide will help you ge
 ```bash
 # Clone the repository
 git clone https://github.com/edithatogo/nz-legislation.git
-cd nz-legislation-tool
+cd nz-legislation
 
 # Install dependencies
 npm install
@@ -288,7 +288,7 @@ describe('ComponentName', () => {
 
 - **Unit Tests**: Test individual functions/modules
 - **Integration Tests**: Test API interactions (MSW mocked)
-- **E2E Tests**: Test full CLI commands (execa)
+- **E2E Tests**: Test full CLI commands (`execa`)
 - **Property Tests**: Test invariants with fast-check
 - **Hypothesis Tests**: Test consistency/reproducibility
 

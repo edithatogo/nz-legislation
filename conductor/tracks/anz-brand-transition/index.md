@@ -4,12 +4,18 @@
 
 - [Specification](./spec.md)
 - [Implementation Plan](./plan.md)
+- [Phase 1 Decision Record](./decision.md)
+- [Phase 2 Surface Inventory](./inventory.md)
+- [Phase 2 Implementation Rules](./rules.md)
+- [Phase 3 Package and CLI Strategy](./package-cli-strategy.md)
+- [Phase 4 Repo and Docs Migration Checklist](./repo-docs-migration.md)
+- [Phase 5 Deprecation Plan](./deprecation-plan.md)
 - [Metadata](./metadata.json)
 
 ## Status
 
-🟡 PENDING - Track created to govern the rename from NZ-only branding to an
-ANZ-wide product identity
+🟡 IN PROGRESS - Planning phases are complete; the track is now ready to move
+from planning into implementation and roll-out work
 
 ## Summary
 
@@ -23,6 +29,15 @@ This track treats `anz-legislation` as the target repository name and `ANZ
 Legislation` as the target product identity. It deliberately separates the
 decision, compatibility policy, public-surface migration, and eventual cleanup
 so the transition can happen without breaking current users.
+
+All planning phases are complete. The naming policy is recorded in `decision.md`, the
+rename-sensitive inventory is in `inventory.md`, the dual-branding rules are in
+`rules.md`, and the package/CLI migration strategy is in
+`package-cli-strategy.md`. The repository, documentation, site, MCP, and
+support-link migration checklist is in `repo-docs-migration.md`, and the
+deprecation completion criteria are in `deprecation-plan.md`. The next step is
+no longer planning. It is implementation: execute the rename in reversible
+phases against these approved track artifacts.
 
 ## Intended Outcome
 

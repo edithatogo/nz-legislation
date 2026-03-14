@@ -21,7 +21,7 @@ See also:
 | `release-governance-modernization` | COMPLETE | Fully documented and marked complete      |
 | `documentation-site-enhancements`  | PENDING  | Optional post-launch work not yet started |
 | `documentation-site-completion`    | COMPLETE | Parent completion record restored         |
-| `anz-brand-transition`             | PENDING  | Staged rename plan for product and repo   |
+| `anz-brand-transition`             | ACTIVE   | Planning complete; implementation is next |
 
 ## Archived Tracks
 
@@ -49,6 +49,10 @@ detail under `research-conductor` instead of this product-side Conductor tree.
   restored.
 - The ANZ brand transition is now tracked as a separate staged migration rather
   than an implicit future rename.
+- ANZ transition planning is complete across naming policy, inventory, package
+  strategy, repo/docs migration, and deprecation criteria.
+- The product still ships as `nz-legislation-tool`, and package or binary
+  renaming has not started yet.
 - The former template track has been moved out of active inventory to
   `conductor/templates`.
 - Former stub tracks have been moved out of active inventory to
@@ -56,9 +60,10 @@ detail under `research-conductor` instead of this product-side Conductor tree.
 
 ## Recommended Next Cleanup
 
-1. Track future status changes by updating `metadata.json` alongside each active
-   track’s `index.md` and `plan.md`.
-2. Promote backlog entries back into `conductor/tracks` only when they gain a
+1. Start ANZ transition implementation with reviewed operational PRs, beginning
+   with safe ANZ-first product-copy edits that do not rename package, CLI, MCP,
+   environment variables, or config paths.
+2. Track future status changes by updating `metadata.json` alongside each
+   active track’s `index.md` and `plan.md`.
+3. Promote backlog entries back into `conductor/tracks` only when they gain a
    real owner, scope, and plan.
-3. Decide whether any archived tracks should be consolidated or indexed more
-   explicitly for discovery.

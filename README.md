@@ -1,4 +1,4 @@
-# NZ Legislation Tool
+# ANZ Legislation
 
 [![npm](https://img.shields.io/npm/v/nz-legislation-tool)](https://www.npmjs.com/package/nz-legislation-tool)
 [![npm](https://img.shields.io/npm/dm/nz-legislation-tool)](https://www.npmjs.com/package/nz-legislation-tool)
@@ -7,9 +7,11 @@
 [![CI/CD](https://github.com/edithatogo/nz-legislation/actions/workflows/ci.yml/badge.svg)](https://github.com/edithatogo/nz-legislation/actions/workflows/ci.yml)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/edithatogo/nz-legislation/graphs/commit-activity)
 
-**Search, retrieve, and cite New Zealand legislation in seconds.**
+**Search, retrieve, and cite New Zealand legislation, with Australian support now in prerelease.**
 
-A fast, friendly command-line tool for researchers, legal professionals, and anyone working with NZ legislation. Get your research done faster—with less copying and pasting.
+A fast, friendly command-line tool for researchers, legal professionals, and anyone working with legislation across New Zealand and Australia. New Zealand support remains the most complete path today, while Australian providers are being rolled out in staged prerelease form. Get your research done faster with less copying and pasting.
+
+The product is now presented publicly as **ANZ Legislation**. The published npm package and CLI commands remain `nz-legislation-tool`, `nzlegislation`, and `nzlegislation-mcp` for compatibility during the transition.
 
 **Package links:** [npm package](https://www.npmjs.com/package/nz-legislation-tool) · [GitHub repository](https://github.com/edithatogo/nz-legislation)
 
@@ -511,8 +513,8 @@ npx nz-legislation-tool search --query "health"
 ### Option 3: From Source (For contributors)
 
 ```bash
-git clone https://github.com/edithatogo/nz-legislation-tool
-cd nz-legislation-tool
+git clone https://github.com/edithatogo/nz-legislation
+cd nz-legislation
 npm install
 npm run build
 npm link  # Install globally
@@ -540,8 +542,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for how to get started.
 
 ```bash
 # Clone the repo
-git clone https://github.com/edithatogo/nz-legislation-tool
-cd nz-legislation-tool
+git clone https://github.com/edithatogo/nz-legislation
+cd nz-legislation
 
 # Install dependencies
 npm install
@@ -598,8 +600,8 @@ See [MAINTENANCE_GUIDE.md](MAINTENANCE_GUIDE.md) for details.
 
 Need help? We're here for you.
 
-- 🐛 **Found a bug?** [Open an issue](https://github.com/edithatogo/nz-legislation-tool/issues)
-- 💬 **Have a question?** [Start a discussion](https://github.com/edithatogo/nz-legislation-tool/discussions)
+- 🐛 **Found a bug?** [Open an issue](https://github.com/edithatogo/nz-legislation/issues)
+- 💬 **Have a question?** [Start a discussion](https://github.com/edithatogo/nz-legislation/discussions)
 - 📧 **Email:** dylan.mordaunt@vuw.ac.nz
 - 📖 **API docs:** https://api.legislation.govt.nz/docs/
 
@@ -617,7 +619,7 @@ Apache License 2.0 - See [LICENSE](LICENSE) for details.
 
 <div align="center">
 
-**Built with ❤️ for New Zealand researchers, by researchers.**
+**Built for legislation research across New Zealand and Australia.**
 
 [npm](https://www.npmjs.com/package/nz-legislation-tool) ·
 [GitHub](https://github.com/edithatogo/nz-legislation) ·
