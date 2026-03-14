@@ -62,8 +62,7 @@ Example MCP command configuration:
 ```
 
 The current package exposes both the legacy binaries and the new ANZ aliases:
-`nzlegislation`, `anzlegislation`, `nzlegislation-mcp`, and
-`anzlegislation-mcp`.
+`nzlegislation`, `anzlegislation`, `nzlegislation-mcp`, and `anzlegislation-mcp`.
 
 ---
 
