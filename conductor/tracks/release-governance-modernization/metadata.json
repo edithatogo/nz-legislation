@@ -1,0 +1,8 @@
+{
+  "track_id": "release-governance-modernization",
+  "type": "feature",
+  "status": "complete",
+  "created_at": "2026-03-11T00:00:00+11:00",
+  "updated_at": "2026-03-12T16:12:01+11:00",
+  "description": "Modernize package governance, release automation, and stable/prerelease operating rules for nz-legislation-tool"
+}
