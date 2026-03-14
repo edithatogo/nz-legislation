@@ -13,19 +13,29 @@ See also:
 
 ## Active Track Inventory
 
-| Track                  | Status  | Notes                                   |
-| ---------------------- | ------- | --------------------------------------- |
-| `anz-brand-transition` | PENDING | Staged rename plan for product and repo |
+| Track                  | Status | Notes                                                       |
+| ---------------------- | ------ | ----------------------------------------------------------- |
+| `anz-brand-transition` | ACTIVE | Planning complete; implementation and rollout work now next |
 
 ## Current Read on Project State
 
 - The repository now has an explicit Conductor track for ANZ rename planning.
-- The product still ships as `nz-legislation-tool` and has not begun the rename
-  implementation yet.
-- The active tracked work here is planning and migration governance, not the
-  rename itself.
+- Phase 1 is complete: target names, compatibility window, and canonical versus
+  legacy public surfaces are now documented.
+- Phase 2 is complete: rename-sensitive surfaces, dual-branding rules, and safe
+  early-edit boundaries are now documented.
+- Phase 3 is complete: package migration, CLI aliasing, and deprecation
+  messaging now have a chosen strategy.
+- Phase 4 is complete: repository, docs, site, MCP, and support-link migration
+  points now have an explicit checklist.
+- Phase 5 is complete: deprecation criteria, legacy retirement order, and track
+  closure conditions are now defined.
+- The product still ships as `nz-legislation-tool`, and package or binary
+  renaming has not started yet.
+- Planning is complete. The active tracked work here is now implementation and
+  rollout against the approved ANZ transition artifacts.
 
 ## Recommended Next Step
 
-1. Complete Phase 1 naming-policy decisions for `anz-brand-transition`.
-2. Use the phase review gate before moving into implementation work.
+1. Start implementation with the first operational PR: safe ANZ-first product-copy edits that do not rename package, CLI, MCP, env vars, or config paths.
+2. After that, execute the package/CLI migration and repo/docs migration in reviewed rollout phases rather than further planning-only edits.

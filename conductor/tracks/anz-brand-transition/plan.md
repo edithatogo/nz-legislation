@@ -1,7 +1,7 @@
 # Plan: ANZ Brand Transition
 
 **Track ID:** anz-brand-transition  
-**Status:** 🟡 PENDING  
+**Status:** 🟡 IN PROGRESS  
 **Priority:** 🔴 HIGH  
 **Last Updated:** 2026-03-14
 
@@ -31,11 +31,20 @@ package, CLI, documentation, or MCP install base.
 - deprecation policy for old package and binary names
 - canonical list of renamed versus preserved public surfaces
 
+### Phase 1 Decision Outcome
+
+- `ANZ Legislation` is approved as the target public product name
+- `anz-legislation` is approved as the target repository name
+- the compatibility window is defined as at least `90 days` and `2 minor releases`
+- the current npm package, CLI binaries, MCP name, and local config path remain
+  canonical until explicit migration support exists
+- the approved decision record lives in `decision.md`
+
 ### Automated Review Gate
 
-- [ ] Run `node scripts/conductor-phase-review.mjs --track anz-brand-transition --phase 1`
-- [ ] Update `index.md`, `plan.md`, and `metadata.json` with the approved naming policy
-- [ ] Record any explicit exceptions before Phase 2 starts
+- [x] Run `node scripts/conductor-phase-review.mjs --track anz-brand-transition --phase 1`
+- [x] Update `index.md`, `plan.md`, and `metadata.json` with the approved naming policy
+- [x] Record any explicit exceptions before Phase 2 starts
 
 ---
 
@@ -53,11 +62,23 @@ package, CLI, documentation, or MCP install base.
 - implementation rules for dual-branding and alias support
 - updated internal references that should stop assuming NZ-only branding
 
+### Phase 2 Progress Note
+
+- initial inventory captured in `inventory.md`
+- package metadata, runtime identifiers, docs, and support links all contain
+  NZ-only naming
+- compatibility-critical legacy surfaces are now explicitly separated from
+  copy-first rename candidates
+- concrete dual-branding rules and safe early-edit boundaries are recorded in
+  `rules.md`
+- Phase 2 concludes that product copy can lead, but install/runtime identifiers
+  must lag until explicit alias or migration support exists
+
 ### Automated Review Gate
 
-- [ ] Run `node scripts/conductor-phase-review.mjs --track anz-brand-transition --phase 2`
-- [ ] Update track artifacts with the internal migration inventory
-- [ ] Confirm the remaining public rename work is sequenced and reversible
+- [x] Run `node scripts/conductor-phase-review.mjs --track anz-brand-transition --phase 2`
+- [x] Update track artifacts with the internal migration inventory
+- [x] Confirm the remaining public rename work is sequenced and reversible
 
 ---
 
@@ -75,6 +96,16 @@ package, CLI, documentation, or MCP install base.
 - CLI alias strategy
 - release-note and deprecation messaging for current users
 
+### Phase 3 Decision Outcome
+
+- `anz-legislation` is available on npm and can be reserved as the future
+  sibling package
+- dual-publish is approved over a pure shim-first approach
+- legacy CLI binaries remain supported while `anzlegislation*` binaries are
+  introduced
+- release-note and deprecation messaging are defined in
+  `package-cli-strategy.md`
+
 ### Constraints
 
 - no breaking CLI rename without a published compatibility window
@@ -82,9 +113,9 @@ package, CLI, documentation, or MCP install base.
 
 ### Automated Review Gate
 
-- [ ] Run `node scripts/conductor-phase-review.mjs --track anz-brand-transition --phase 3`
-- [ ] Update track artifacts with the chosen package and CLI migration strategy
-- [ ] Verify the plan still preserves a working path for existing users
+- [x] Run `node scripts/conductor-phase-review.mjs --track anz-brand-transition --phase 3`
+- [x] Update track artifacts with the chosen package and CLI migration strategy
+- [x] Verify the plan still preserves a working path for existing users
 
 ---
 
@@ -102,6 +133,14 @@ package, CLI, documentation, or MCP install base.
 - docs/site migration checklist
 - MCP metadata and support-link migration checklist
 
+### Phase 4 Decision Outcome
+
+- the repository rename prerequisites and branch-protection checks are captured
+  in `repo-docs-migration.md`
+- docs, site, MCP, and support-link migration points are explicitly named
+- the repo rename is sequenced with docs/site cleanup rather than treated as an
+  isolated operation
+
 ### Constraints
 
 - GitHub Pages path changes must be coordinated with documentation deployment
@@ -109,9 +148,9 @@ package, CLI, documentation, or MCP install base.
 
 ### Automated Review Gate
 
-- [ ] Run `node scripts/conductor-phase-review.mjs --track anz-brand-transition --phase 4`
-- [ ] Update track artifacts with the repository and docs migration outcome
-- [ ] Confirm no critical public links remain on the old repo path without redirects
+- [x] Run `node scripts/conductor-phase-review.mjs --track anz-brand-transition --phase 4`
+- [x] Update track artifacts with the repository and docs migration outcome
+- [x] Confirm no critical public links remain on the old repo path without redirects
 
 ---
 
@@ -129,19 +168,28 @@ package, CLI, documentation, or MCP install base.
 - final cleanup list for old names in code, docs, workflows, and support materials
 - closure criteria for the transition track
 
+### Phase 5 Decision Outcome
+
+- the compatibility-window end criteria are defined in `deprecation-plan.md`
+- the retirement order for legacy names is now sequenced
+- the transition track closure standard is explicit
+- planning is complete and the next work should be implementation, not more
+  naming-policy design
+
 ### Automated Review Gate
 
-- [ ] Run `node scripts/conductor-phase-review.mjs --track anz-brand-transition --phase 5`
-- [ ] Update track artifacts with final deprecation decisions
-- [ ] Confirm whether the track can be marked complete or needs a follow-on cleanup track
+- [x] Run `node scripts/conductor-phase-review.mjs --track anz-brand-transition --phase 5`
+- [x] Update track artifacts with final deprecation decisions
+- [x] Confirm whether the track can be marked complete or needs a follow-on cleanup track
 
 ---
 
 ## Immediate Recommendation
 
-Proceed with `ANZ Legislation` and `anz-legislation` as the target public names,
-but do not rename the npm package or CLI binaries in the same step as the repo
-rename. The least risky order is:
+Phases 1 and 2 are complete. The next step is still to proceed with
+`ANZ Legislation` and `anz-legislation` as the target public names, but not to
+rename the npm package or CLI binaries in the same step as the repo rename. The
+least risky order remains:
 
 1. agree naming policy
 2. prepare dual-branding internally

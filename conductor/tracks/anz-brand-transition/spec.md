@@ -67,6 +67,34 @@ Legacy names remain valid during the compatibility window:
 - `nzlegislation-mcp`
 - repo references to `edithatogo/nz-legislation`
 
+## Compatibility Window Policy
+
+The compatibility window begins when a replacement public surface is first
+available to users.
+
+- minimum duration: `90 days`
+- minimum release count: `2 minor releases`
+- legacy package and CLI names must remain functional during the full window
+- documentation must label the old names as legacy aliases while replacements
+  are introduced
+- removal of old names requires published migration notes and a passed Phase 5
+  Conductor review gate
+
+## Canonical Surface Policy
+
+During the migration, the canonical state for each public surface is:
+
+- product copy can move first to `ANZ Legislation`
+- repository rename to `anz-legislation` is approved, but deferred until Phase 4
+- npm package remains canonically `nz-legislation-tool` until a dual-publish or
+  migration path exists
+- CLI binaries remain canonically `nzlegislation` and `nzlegislation-mcp` until
+  alias support is implemented
+- MCP metadata remains canonically `nz-legislation` until package, docs, and
+  repo transitions can move together
+- local config and log paths must continue reading the existing
+  `.nz-legislation-tool` state throughout the compatibility window
+
 ## Required Outcomes
 
 1. A canonical rename policy exists before public renaming starts.

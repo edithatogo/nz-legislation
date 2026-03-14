@@ -1,6 +1,6 @@
-# Contributing to NZ Legislation Tool
+# Contributing to ANZ Legislation
 
-Thank you for your interest in contributing to the NZ Legislation Tool! This document provides guidelines and instructions for contributing to the project.
+Thank you for your interest in contributing to ANZ Legislation. This document provides guidelines and instructions for contributing to the project. The published package and CLI names remain on the legacy `nz-legislation-tool` path during the transition.
 
 ## 🎯 Table of Contents
 
@@ -28,7 +28,7 @@ Please be respectful and constructive in your interactions. We're committed to p
 ### Prerequisites
 
 - **Node.js** 18+ (LTS versions: 18, 20, 22)
-- **pnpm** 9+ (package manager)
+- **`pnpm`** 9+ (package manager)
 - **Git** for version control
 - **GitHub account** for contributing
 
@@ -39,7 +39,7 @@ Please be respectful and constructive in your interactions. We're committed to p
    ```bash
    # Click "Fork" on GitHub, then clone your fork
    git clone https://github.com/YOUR_USERNAME/nz-legislation.git
-   cd nz-legislation-tool
+   cd nz-legislation
    ```
 
 2. **Install dependencies**
@@ -111,7 +111,7 @@ Follow the prompts to:
 
 - Patch: "Fix rate limiting configuration error"
 - Minor: "Add CSV export format for search results"
-- Major: "Change authentication method from query param to header"
+- Major: "Change authentication method from query parameter to header"
 
 ### 3. Commit Your Changes
 
@@ -331,7 +331,7 @@ Update the README.md if you:
 
 ### Code Comments
 
-- Add JSDoc comments for exported functions
+- Add JS doc comments for exported functions
 - Explain complex logic
 - Document parameters and return values
 

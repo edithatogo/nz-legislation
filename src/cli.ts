@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * NZ Legislation CLI
- * Command-line interface for searching and retrieving NZ legislation data
+ * ANZ Legislation CLI
+ * Command-line interface for searching and retrieving legislation data
  */
 
 import chalk from 'chalk';
@@ -63,7 +63,7 @@ Examples:
   $ nzlegislation config --show
   $ nzlegislation cache --stats
 
-Documentation: https://github.com/dylanmordaunt/nz-legislation-tool
+Documentation: https://github.com/edithatogo/nz-legislation
 API Documentation: https://api.legislation.govt.nz/docs/`
   );
 
