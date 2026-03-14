@@ -8,6 +8,8 @@
 
 import { z } from 'zod';
 
+export * from './canonical.js';
+
 // Work type enumeration — maps API values to CLI display values
 export const WorkTypeSchema = z.enum(['act', 'bill', 'regulation', 'instrument']);
 export type WorkType = z.infer<typeof WorkTypeSchema>;
