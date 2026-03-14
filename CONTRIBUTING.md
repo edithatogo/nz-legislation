@@ -331,7 +331,7 @@ Update the README.md if you:
 
 ### Code Comments
 
-- Add JS doc comments for exported functions
+- Add `JSDoc` comments for exported functions
 - Explain complex logic
 - Document parameters and return values
 

@@ -7,9 +7,9 @@
 [![CI/CD](https://github.com/edithatogo/nz-legislation/actions/workflows/ci.yml/badge.svg)](https://github.com/edithatogo/nz-legislation/actions/workflows/ci.yml)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/edithatogo/nz-legislation/graphs/commit-activity)
 
-**Search, retrieve, and cite legislation across New Zealand and Australia.**
+**Search, retrieve, and cite New Zealand legislation, with Australian support now in prerelease.**
 
-A fast, friendly command-line tool for researchers, legal professionals, and anyone working with legislation across New Zealand and Australia. Get your research done faster with less copying and pasting.
+A fast, friendly command-line tool for researchers, legal professionals, and anyone working with legislation across New Zealand and Australia. New Zealand support remains the most complete path today, while Australian providers are being rolled out in staged prerelease form. Get your research done faster with less copying and pasting.
 
 The product is now presented publicly as **ANZ Legislation**. The published npm package and CLI commands remain `nz-legislation-tool`, `nzlegislation`, and `nzlegislation-mcp` for compatibility during the transition.
 

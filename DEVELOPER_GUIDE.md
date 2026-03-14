@@ -288,7 +288,7 @@ describe('ComponentName', () => {
 
 - **Unit Tests**: Test individual functions/modules
 - **Integration Tests**: Test API interactions (MSW mocked)
-- **E2E Tests**: Test full CLI commands (command-runner integration)
+- **E2E Tests**: Test full CLI commands (`execa`)
 - **Property Tests**: Test invariants with fast-check
 - **Hypothesis Tests**: Test consistency/reproducibility
 

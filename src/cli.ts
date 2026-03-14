@@ -64,7 +64,7 @@ Examples:
   $ nzlegislation cache --stats
 
 Documentation: https://github.com/edithatogo/nz-legislation
-API Documentation: https://api.legislation.govt.nz/docs/`
+NZ API Documentation: https://api.legislation.govt.nz/docs/`
   );
 
 // Add global options
