@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 describe('package manifest', () => {
   it('exposes both legacy and ANZ CLI binaries', () => {
-    const packageJsonPath = join(process.cwd(), 'package.json');
+    const packageJsonPath = fileURLToPath(new URL('../package.json', import.meta.url));
     const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8')) as {
       bin: Record<string, string>;
     };
