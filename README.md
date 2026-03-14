@@ -35,6 +35,8 @@ Use the CLI if you want direct terminal access for search, retrieval, export, an
 ```bash
 npm install -g nz-legislation-tool
 nzlegislation search --query "health act"
+# Or use the new ANZ alias after install
+anzlegislation search --query "health act"
 ```
 
 ### MCP Server
@@ -44,6 +46,8 @@ Use the MCP server if you want to connect the tool to an AI assistant or tool-ca
 ```bash
 npm install -g nz-legislation-tool
 nzlegislation-mcp
+# Or use the new ANZ MCP alias after install
+anzlegislation-mcp
 ```
 
 Example MCP command configuration:
@@ -56,6 +60,10 @@ Example MCP command configuration:
   }
 }
 ```
+
+The current package exposes both the legacy binaries and the new ANZ aliases:
+`nzlegislation`, `anzlegislation`, `nzlegislation-mcp`, and
+`anzlegislation-mcp`.
 
 ---
 
