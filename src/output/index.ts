@@ -8,6 +8,8 @@ import Table from 'cli-table3';
 
 import type { SearchResults, Version, Work } from '@models';
 
+export * from './legal-metadata-publication.js';
+
 /**
  * Format work type for display
  */

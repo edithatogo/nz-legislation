@@ -16,6 +16,23 @@ The NZ Legislation Tool is a TypeScript-based command-line interface (CLI) that 
 - **Testability** - Designed for unit, integration, and E2E testing
 - **Maintainability** - Clear code organization and documentation
 
+## Standards Direction
+
+The current provider interface is the application-facing cross-jurisdiction
+model. It should remain stable for CLI and runtime behavior.
+
+The repository also now has an accepted standards direction for a canonical
+legal metadata layer beneath that interface. That canonical layer should align
+to:
+
+- `Akoma Ntoso` for legal document structure and lifecycle concepts
+- `FRBR` concepts for work, expression, and manifestation separation
+- `ELI`-style identifiers for stable legal resource identity
+- `schema.org/Legislation` for web publication metadata
+
+See [Legal Metadata Standards](./legal-metadata-standards.md) and
+[ADR 0004](../adr/0004-standards-aligned-canonical-legal-metadata.md).
+
 ---
 
 ## High-Level Architecture

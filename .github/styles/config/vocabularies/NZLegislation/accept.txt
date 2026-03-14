@@ -14,6 +14,8 @@ nzlegislation-mcp
 Alexa
 Algolia
 APIs
+Akoma
+auditable
 backoff
 changeset
 changesets
@@ -23,6 +25,7 @@ Contentful
 CSV
 deduplication
 dev
+discoverability
 Docusaurus
 Enum
 ESLint
@@ -38,6 +41,7 @@ hotspot
 includeMetadata
 JSON
 laggy
+LegalDocML
 lodash
 lookups
 mailto
@@ -45,15 +49,19 @@ Mendeley
 Minecraft
 monospace
 Netlify
+Ntoso
 nzmj
+onboarding
 Profiler
 reo
 Repo
 Resizable
+schema.org
 searchWorks
 Siri
 sudo
 te
+URIs
 Vercel
 workId
 Zod

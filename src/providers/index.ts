@@ -8,6 +8,7 @@ export * from './legislation-provider.js';
 export * from './nz-provider.js';
 export * from './commonwealth-provider.js';
 export * from './queensland-provider.js';
+export * from './canonical-metadata.js';
 export * from './plugin-loader.js';
 export * from './plugin-discovery.js';
 
@@ -24,9 +25,9 @@ export type {
   ProviderRegistry,
 } from './legislation-provider.js';
 
+import { CommonwealthProvider } from './commonwealth-provider.js';
 import { getGlobalRegistry } from './legislation-provider.js';
 import { NZLegislationProvider } from './nz-provider.js';
-import { CommonwealthProvider } from './commonwealth-provider.js';
 import { QueenslandProvider } from './queensland-provider.js';
 
 /**

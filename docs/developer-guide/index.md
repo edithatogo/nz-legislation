@@ -43,6 +43,7 @@ This guide is for developers who want to:
 - [Module Documentation](./modules/) - Detailed module docs
 - [MCP Server](./mcp-server.md) - Model Context Protocol integration
 - [Performance](./performance.md) - Optimization tips
+- [Legal Metadata Standards](./legal-metadata-standards.md) - Canonical legal metadata model and standards alignment
 
 ---
 

@@ -16,12 +16,13 @@ See also:
 
 ## Active Track Inventory
 
-| Track                              | Status   | Notes                                     |
-| ---------------------------------- | -------- | ----------------------------------------- |
-| `release-governance-modernization` | COMPLETE | Fully documented and marked complete      |
-| `documentation-site-enhancements`  | PENDING  | Optional post-launch work not yet started |
-| `documentation-site-completion`    | COMPLETE | Parent completion record restored         |
-| `anz-brand-transition`             | ACTIVE   | Planning complete; implementation is next |
+| Track                                | Status   | Notes                                                           |
+| ------------------------------------ | -------- | --------------------------------------------------------------- |
+| `release-governance-modernization`   | COMPLETE | Fully documented and marked complete                            |
+| `documentation-site-enhancements`    | PENDING  | Optional post-launch work not yet started                       |
+| `documentation-site-completion`      | COMPLETE | Parent completion record restored                               |
+| `anz-brand-transition`               | ACTIVE   | Planning complete; implementation is next                       |
+| `legal-metadata-standards-alignment` | COMPLETE | Canonical standards layer documented and implemented additively |
 
 ## Archived Tracks
 
@@ -51,8 +52,15 @@ detail under `research-conductor` instead of this product-side Conductor tree.
   than an implicit future rename.
 - ANZ transition planning is complete across naming policy, inventory, package
   strategy, repo/docs migration, and deprecation criteria.
+- Legal metadata standards alignment is now tracked as an explicit architecture
+  effort rather than an implicit future refactor.
+- Legal metadata standards alignment now has an accepted ADR, canonical
+  schemas, provider mapping, canonical-backed legacy adapters, additive export
+  metadata, and a schema.org publication helper.
 - The product still ships as `nz-legislation-tool`, and package or binary
   renaming has not started yet.
+- The provider model is coherent internally, and a standards-aligned canonical
+  legal metadata layer now exists additively without breaking the CLI surface.
 - The former template track has been moved out of active inventory to
   `conductor/templates`.
 - Former stub tracks have been moved out of active inventory to
@@ -67,3 +75,5 @@ detail under `research-conductor` instead of this product-side Conductor tree.
    active track’s `index.md` and `plan.md`.
 3. Promote backlog entries back into `conductor/tracks` only when they gain a
    real owner, scope, and plan.
+4. Open a follow-on track only when source-derived legal relationship extraction
+   or dataset-level publication metadata becomes a concrete delivery need.

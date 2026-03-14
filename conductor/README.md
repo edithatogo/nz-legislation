@@ -35,6 +35,7 @@ when they materially improve traceability.
 - `documentation-site-completion`
 - `documentation-site-enhancements`
 - `anz-brand-transition`
+- `legal-metadata-standards-alignment`
 
 ## Operating Rule
 

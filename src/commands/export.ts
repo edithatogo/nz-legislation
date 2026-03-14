@@ -8,6 +8,7 @@ import { Command } from 'commander';
 import ora from 'ora';
 
 import { searchWorks } from '@client';
+import type { CanonicalLegislationRecord } from '@models';
 import { worksToCsv } from '@output';
 
 interface ExportOptions {
@@ -20,6 +21,78 @@ interface ExportOptions {
   limit: string;
   format: string;
   includeMetadata: boolean;
+}
+
+export function toCanonicalExportRecords(
+  results: Awaited<ReturnType<typeof searchWorks>>
+): Array<
+  Pick<CanonicalLegislationRecord, 'work' | 'expressions' | 'manifestations' | 'relationships'>
+> {
+  return results.results.map(work => {
+    const canonicalId = `legacy:${work.id}`;
+    const workUri = `urn:nz-legislation:work:${work.id.replace(/[^a-zA-Z0-9-]+/g, '-')}`;
+    const expressionUri = `${workUri}:expression:current`;
+    const manifestationUri = `${expressionUri}:manifestation:html`;
+
+    return {
+      work: {
+        canonicalId,
+        workUri,
+        source: {
+          sourceSystem: 'legacy-cli-export',
+          sourceId: work.id,
+          sourceUrl: work.url,
+        },
+        jurisdictionCode: 'unknown',
+        documentType: work.type,
+        title: work.title,
+        shortTitle: work.shortTitle,
+        language: 'en',
+      },
+      expressions: [
+        {
+          expressionUri,
+          workUri,
+          expressionDate: work.date,
+          publicationDate: work.date,
+          lifecycleState:
+            work.status === 'in-force'
+              ? 'in-force'
+              : work.status === 'repealed'
+                ? 'repealed'
+                : work.status === 'withdrawn'
+                  ? 'withdrawn'
+                  : work.status === 'not-yet-in-force'
+                    ? 'not-yet-in-force'
+                    : 'unknown',
+          isCurrent: true,
+          versionLabel: 'current',
+          language: 'en',
+        },
+      ],
+      manifestations: [
+        {
+          manifestationUri,
+          expressionUri,
+          format: 'html',
+          mediaType: 'text/html',
+          sourceUrl: work.url,
+        },
+      ],
+      relationships: [
+        {
+          subjectUri: workUri,
+          relationshipType: 'has_expression',
+          objectUri: expressionUri,
+        },
+        {
+          subjectUri: expressionUri,
+          relationshipType: 'has_manifestation',
+          objectUri: manifestationUri,
+        },
+      ],
+    };
+  });
 }
 
 export const exportCommand = new Command()
@@ -69,8 +142,18 @@ export const exportCommand = new Command()
                 timestamp,
                 totalResults: results.total,
                 exportedCount: results.results.length,
+                canonical: {
+                  standardProfile: [
+                    'Akoma Ntoso concepts',
+                    'FRBR work-expression-manifestation',
+                    'ELI-style identifiers',
+                    'schema.org/Legislation',
+                  ],
+                  included: true,
+                },
               },
               results: results.results,
+              canonicalRecords: toCanonicalExportRecords(results),
             }
           : results;
         output = JSON.stringify(exportData, null, 2);
@@ -85,6 +168,8 @@ export const exportCommand = new Command()
           csvContent += `\n# Timestamp: ${timestamp}`;
           csvContent += `\n# Total Results: ${results.total}`;
           csvContent += `\n# Exported: ${results.results.length}`;
+          csvContent += `\n# Canonical Metadata: included`;
+          csvContent += `\n# Canonical Standards: Akoma Ntoso concepts; FRBR work-expression-manifestation; ELI-style identifiers; schema.org/Legislation`;
           if (options.type) {
             csvContent += `\n# Type: ${options.type}`;
           }

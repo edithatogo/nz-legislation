@@ -6,6 +6,7 @@ import type {
   WorkType,
 } from '../models/index.js';
 
+import { toCanonicalLegislationRecord } from './canonical-metadata.js';
 import type {
   SearchResults as ProviderSearchResults,
   VersionSummary,
@@ -106,38 +107,22 @@ export function toLegacySearchResults(results: ProviderSearchResults): LegacySea
     offset: results.offset,
     limit: results.limit,
     links: undefined,
-    results: results.results.map(work => {
-      const metadata = parseWorkIdMetadata(work.work_id);
-      const year = work.year || metadata.year;
-
-      return {
-        id: work.work_id,
-        title: work.title,
-        shortTitle: work.shortTitle,
-        type: normalizeWorkType(work.type || metadata.type),
-        status: normalizeStatus(work.status),
-        date: deriveDate(work.date, year),
-        url: deriveUrl(work.jurisdiction, work.work_id, work.url),
-        versionCount: work.versionCount ?? 0,
-      };
-    }),
+    results: results.results.map(work =>
+      toLegacyWorkFromCanonical(
+        toCanonicalLegislationRecord({
+          ...work,
+          status: work.status ?? 'in-force',
+          versions: [],
+          citations: {},
+        }),
+        work
+      )
+    ),
   };
 }
 
 export function toLegacyWork(work: ProviderWork): LegacyWork {
-  const metadata = parseWorkIdMetadata(work.work_id);
-  const year = work.year || metadata.year;
-
-  return {
-    id: work.work_id,
-    title: work.title,
-    shortTitle: work.shortTitle,
-    type: normalizeWorkType(work.type || metadata.type),
-    status: normalizeStatus(work.status),
-    date: deriveDate(work.date, year),
-    url: deriveUrl(work.jurisdiction, work.work_id, work.url),
-    versionCount: work.versionCount ?? work.versions.length,
-  };
+  return toLegacyWorkFromCanonical(toCanonicalLegislationRecord(work), work);
 }
 
 export function toLegacyVersions(
@@ -152,4 +137,47 @@ export function toLegacyVersions(
     type: version.type ?? fallbackType,
     formats: version.formats ?? [],
   }));
+}
+
+function toLegacyWorkFromCanonical(
+  canonical: ReturnType<typeof toCanonicalLegislationRecord>,
+  fallback: {
+    work_id: string;
+    title: string;
+    shortTitle?: string;
+    type: string;
+    status?: string;
+    date?: string;
+    url?: string;
+    year?: number;
+    versionCount?: number;
+    versions?: VersionSummary[];
+    jurisdiction: string;
+  }
+): LegacyWork {
+  const metadata = parseWorkIdMetadata(fallback.work_id);
+  const year = fallback.year || metadata.year;
+  const currentExpression =
+    canonical.expressions.find(expression => expression.isCurrent) ?? canonical.expressions[0];
+  const primaryManifestation =
+    canonical.manifestations.find(
+      manifestation => manifestation.expressionUri === currentExpression?.expressionUri
+    ) ?? canonical.manifestations[0];
+
+  return {
+    id: fallback.work_id,
+    title: canonical.work.title || fallback.title,
+    shortTitle: canonical.work.shortTitle || fallback.shortTitle,
+    type: normalizeWorkType(canonical.work.documentType || fallback.type || metadata.type),
+    status: normalizeStatus(fallback.status),
+    date: deriveDate(
+      currentExpression?.expressionDate || currentExpression?.publicationDate || fallback.date,
+      year
+    ),
+    url:
+      primaryManifestation?.sourceUrl ||
+      deriveUrl(fallback.jurisdiction, fallback.work_id, fallback.url),
+    versionCount:
+      fallback.versionCount ?? fallback.versions?.length ?? canonical.expressions.length,
+  };
 }
