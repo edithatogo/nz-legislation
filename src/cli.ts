@@ -9,6 +9,7 @@ import { Command } from 'commander';
 
 import { batchCommand } from './commands/batch.js';
 import { cacheCommand } from './commands/cache.js';
+import { capabilitiesCommand } from './commands/capabilities.js';
 import { citeCommand } from './commands/cite.js';
 import { configCommand } from './commands/config.js';
 import { exportCommand } from './commands/export.js';
@@ -47,6 +48,7 @@ Examples:
   $ nzlegislation batch --ids "act/1986/132,act/1989/18" --type getWork --output results.json
   $ nzlegislation batch --file works.csv --type getWork --output results.json
   $ nzlegislation cite "act/1986/132" --style bibtex
+  $ nzlegislation capabilities --format json
   $ nzlegislation config --show
   $ nzlegislation cache --stats
 
@@ -65,6 +67,7 @@ program
   .addCommand(getCommand)
   .addCommand(exportCommand)
   .addCommand(citeCommand)
+  .addCommand(capabilitiesCommand)
   .addCommand(configCommand)
   .addCommand(cacheCommand)
   .addCommand(batchCommand)
@@ -75,8 +78,8 @@ program
 
 // Pre-command hook to check configuration
 program.hook('preAction', (thisCommand, actionCommand) => {
-  // Skip config check for config command itself
-  if (actionCommand.name() === 'config') {
+  // Skip API key checks for commands that do not call the legislation API.
+  if (['capabilities', 'config'].includes(actionCommand.name())) {
     return;
   }
 

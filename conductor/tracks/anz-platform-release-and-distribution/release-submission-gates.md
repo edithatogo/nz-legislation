@@ -5,7 +5,7 @@ submission, registry submission, and public listing created from this track.
 
 | Gate                                          | Status   | Required evidence                                                                                                                    |
 | --------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| No-placeholder legal data                     | BLOCKING | Tests and review evidence show no placeholder Australian legal data is exposed as real support.                                      |
+| No-placeholder legal data                     | BLOCKING | `pnpm gate:no-placeholder-legal-data` and review evidence show no placeholder Australian legal data is exposed as real support.      |
 | Provider capability manifest                  | BLOCKING | A runtime manifest exists and records jurisdiction, provider, feature, and support status.                                           |
 | Provider-aware MCP/export                     | BLOCKING | MCP tools and export paths check provider capability and return structured unsupported errors.                                       |
 | Accurate package metadata                     | BLOCKING | `package.json`, README, registry metadata, binaries, aliases, and deprecation/prerelease language match runtime capability.          |

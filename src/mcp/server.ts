@@ -10,6 +10,7 @@ import { z } from 'zod';
 import { searchWorks, getWork, getWorkVersions } from '../client.js';
 import { getConfig, hasApiKey } from '../config.js';
 import { generateCitation, worksToCsv } from '../output/index.js';
+import { getProviderCapabilities } from '../providers/capability-manifest.js';
 import { logger } from '../utils/logger.js';
 
 /**
@@ -45,6 +46,7 @@ export function createServer(): McpServer {
   registerGetVersionsTool(server);
   registerCitationTool(server);
   registerExportTool(server);
+  registerCapabilitiesTool(server);
   registerConfigTool(server);
 
   // Register resources
@@ -388,6 +390,26 @@ function registerExportTool(server: McpServer): void {
 }
 
 /**
+ * Get provider capability manifest tool
+ */
+function registerCapabilitiesTool(server: McpServer): void {
+  server.tool(
+    'get_capabilities',
+    'Get jurisdiction and provider capability status for supported and planned legislation sources',
+    {},
+    // eslint-disable-next-line @typescript-eslint/require-await
+    async () => ({
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify({ providers: getProviderCapabilities() }, null, 2),
+        },
+      ],
+    })
+  );
+}
+
+/**
  * Get configuration tool
  */
 function registerConfigTool(server: McpServer): void {
@@ -486,7 +508,7 @@ export async function startServer(): Promise<void> {
   console.error('NZ Legislation MCP Server running on stdio');
   // eslint-disable-next-line no-console
   console.error(
-    'Tools available: search_legislation, get_legislation, get_legislation_versions, generate_citation, export_legislation, get_config'
+    'Tools available: search_legislation, get_legislation, get_legislation_versions, generate_citation, export_legislation, get_capabilities, get_config'
   );
   // eslint-disable-next-line no-console
   console.error('Resources available: legislation://{workId}');

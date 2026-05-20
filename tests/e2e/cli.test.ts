@@ -72,6 +72,29 @@ describe('E2E CLI Tests', () => {
     });
   });
 
+  describe('nzlegislation capabilities', () => {
+    it('should display provider capabilities without an API key', async () => {
+      const { stdout, stderr, exitCode } = await execa(
+        TSX_BIN,
+        [CLI_PATH, 'capabilities', '--format', 'json'],
+        {
+          env: {
+            NZ_LEGISLATION_API_KEY: '',
+          },
+        }
+      );
+
+      expect(exitCode).toBe(0);
+      expect(stderr).not.toContain('API key');
+
+      const parsed = JSON.parse(stdout);
+      expect(parsed.providers[0]).toMatchObject({
+        jurisdiction: 'nz',
+        releaseChannel: 'stable',
+      });
+    });
+  });
+
   describe('nzlegislation search', () => {
     itWithApi('should search for legislation', async () => {
       const { stdout, exitCode } = await execa(

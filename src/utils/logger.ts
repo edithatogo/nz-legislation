@@ -3,7 +3,7 @@
  * Structured logging with file rotation, request tracing, and performance timing
  */
 
-import { existsSync, mkdirSync, readdirSync, statSync, unlinkSync } from 'fs';
+import { existsSync, mkdirSync, readdirSync, statSync, unlinkSync, writeFileSync } from 'fs';
 import { homedir } from 'os';
 import { join } from 'path';
 
@@ -22,7 +22,17 @@ function ensureLogDir(): void {
   }
 }
 
-ensureLogDir();
+function canWriteLogDir(): boolean {
+  try {
+    ensureLogDir();
+    const probePath = join(LOG_DIR, '.write-test');
+    writeFileSync(probePath, '');
+    unlinkSync(probePath);
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 /**
  * Custom format for console output with colors
@@ -50,15 +60,19 @@ const fileFormat = winston.format.combine(
 /**
  * Create daily rotating file transport
  */
-const dailyRotateTransport = new winston.transports.DailyRotateFile({
-  filename: join(LOG_DIR, 'error-%DATE%.log'),
-  datePattern: 'YYYY-MM-DD',
-  level: 'error',
-  format: fileFormat,
-  maxFiles: '14d', // Keep 14 days of logs
-  maxSize: '10m', // Rotate at 10MB
-  zippedArchive: true,
-});
+const fileTransports = canWriteLogDir()
+  ? [
+      new winston.transports.DailyRotateFile({
+        filename: join(LOG_DIR, 'error-%DATE%.log'),
+        datePattern: 'YYYY-MM-DD',
+        level: 'error',
+        format: fileFormat,
+        maxFiles: '14d', // Keep 14 days of logs
+        maxSize: '10m', // Rotate at 10MB
+        zippedArchive: true,
+      }),
+    ]
+  : [];
 
 /**
  * Create Winston logger instance
@@ -66,7 +80,7 @@ const dailyRotateTransport = new winston.transports.DailyRotateFile({
 const winstonLogger = winston.createLogger({
   level: 'debug',
   transports: [
-    dailyRotateTransport,
+    ...fileTransports,
     new winston.transports.Console({
       format: consoleFormat,
       stderrLevels: ['error', 'warn'],
