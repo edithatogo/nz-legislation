@@ -17,9 +17,9 @@ The other Australian jurisdiction entries now have a source inventory, not
 runtime support. Queensland has a validated official API candidate requiring
 registration, Swagger capture, fixtures, and provider mapping. NSW has a
 validated XML/export candidate requiring an export/download adapter design. The
-remaining state and territory entries have located official websites, but still
-need machine-readable source-shape validation before any runtime or release
-claim.
+remaining state and territory entries have official-source validation records,
+but still need machine-readable source-shape validation before any runtime or
+release claim.
 
 The archived legacy branch contains earlier Australian plugin/provider work, but that work is not release-ready:
 
@@ -56,3 +56,6 @@ Australian support can be considered releaseable only after all of the following
   `docs/maintainers/queensland-source-validation.md`
 - New South Wales:
   `docs/maintainers/nsw-source-validation.md`
+- Victoria, South Australia, Western Australia, Tasmania, ACT, and Northern
+  Territory:
+  `docs/maintainers/state-territory-source-validation.md`
