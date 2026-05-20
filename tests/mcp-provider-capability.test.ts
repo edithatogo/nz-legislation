@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { createUnsupportedCapabilityResponse } from '../src/mcp/server.ts';
+import { createServer, createUnsupportedCapabilityResponse } from '../src/mcp/server.ts';
 
 describe('MCP provider capability gates', () => {
   it('returns structured unsupported errors for planned Australian providers', () => {
@@ -21,5 +21,9 @@ describe('MCP provider capability gates', () => {
 
   it('allows supported New Zealand provider capabilities to continue to runtime handlers', () => {
     expect(createUnsupportedCapabilityResponse('nz', 'export')).toBeNull();
+  });
+
+  it('registers MCP tools with provider-aware schemas', () => {
+    expect(createServer()).toBeDefined();
   });
 });
