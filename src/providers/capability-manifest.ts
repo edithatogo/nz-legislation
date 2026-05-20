@@ -69,6 +69,13 @@ const unsupportedAuFeature: FeatureCapability = {
     'Source validation and provider implementation are required before this feature can be enabled.',
 };
 
+const validatedCommonwealthFeature: FeatureCapability = {
+  status: 'unsupported',
+  sourceBacked: false,
+  notes:
+    'Source validation is complete against the Federal Register of Legislation API; provider implementation is required before this feature can be enabled.',
+};
+
 const cloneFeature = (capability: FeatureCapability): FeatureCapability => ({ ...capability });
 
 const features = (capability: FeatureCapability): Record<ProviderFeature, FeatureCapability> => ({
@@ -94,9 +101,9 @@ export const providerCapabilityManifest: readonly ProviderCapability[] = [
     jurisdiction: 'au-commonwealth',
     label: 'Australian Commonwealth',
     providerId: 'federal-register-of-legislation',
-    sourceAuthority: 'Federal Register of Legislation',
+    sourceAuthority: 'Federal Register of Legislation public API',
     releaseChannel: 'planned',
-    features: features(unsupportedAuFeature),
+    features: features(validatedCommonwealthFeature),
   },
   {
     jurisdiction: 'au-qld',

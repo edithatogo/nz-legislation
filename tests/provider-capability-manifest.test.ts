@@ -101,6 +101,23 @@ describe('provider capability manifest', () => {
     });
   });
 
+  it('records Commonwealth source validation without enabling runtime support', () => {
+    const capability = getProviderCapability('au-commonwealth');
+    const unsupported = getUnsupportedProviderCapability('au-commonwealth', 'search');
+
+    expect(capability.sourceAuthority).toBe('Federal Register of Legislation public API');
+    expect(capability.releaseChannel).toBe('planned');
+    expect(unsupported).toMatchObject({
+      error: 'unsupported_provider_capability',
+      jurisdiction: 'au-commonwealth',
+      providerId: 'federal-register-of-legislation',
+      feature: 'search',
+      status: 'unsupported',
+      sourceBacked: false,
+    });
+    expect(unsupported?.message).toMatch(/Source validation is complete/);
+  });
+
   it('parses jurisdiction aliases used by CLI and integration hosts', () => {
     expect(parseJurisdictionCode('NZ')).toBe('nz');
     expect(parseJurisdictionCode('au')).toBe('au-commonwealth');

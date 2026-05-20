@@ -108,3 +108,12 @@ Wikidata
 workId
 Zod
 Zotero
+AsMade
+Ceased
+Commonwealth
+FRL
+InForce
+Legislation
+NeverEffective
+OpenAPI
+Repealed
