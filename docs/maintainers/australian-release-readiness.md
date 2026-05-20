@@ -14,8 +14,9 @@ validation confirms a viable official source, but it does not make Commonwealth
 runtime support releaseable until an adapter is implemented and tested.
 
 The other Australian jurisdiction entries now have a source inventory, not
-runtime support. Queensland has a located official API service requiring
-registration and source-shape work. NSW has a located XML/export surface. The
+runtime support. Queensland has a validated official API candidate requiring
+registration, Swagger capture, fixtures, and provider mapping. NSW has a
+validated XML/export candidate requiring an export/download adapter design. The
 remaining state and territory entries have located official websites, but still
 need machine-readable source-shape validation before any runtime or release
 claim.
@@ -51,3 +52,7 @@ Australian support can be considered releaseable only after all of the following
   `docs/maintainers/commonwealth-source-validation.md`
 - Other Australian jurisdictions:
   `docs/maintainers/australian-source-inventory.md`
+- Queensland:
+  `docs/maintainers/queensland-source-validation.md`
+- New South Wales:
+  `docs/maintainers/nsw-source-validation.md`
