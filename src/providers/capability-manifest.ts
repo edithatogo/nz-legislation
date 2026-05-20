@@ -49,14 +49,16 @@ const unsupportedAuFeature: FeatureCapability = {
     'Source validation and provider implementation are required before this feature can be enabled.',
 };
 
+const cloneFeature = (capability: FeatureCapability): FeatureCapability => ({ ...capability });
+
 const features = (capability: FeatureCapability): Record<ProviderFeature, FeatureCapability> => ({
-  search: capability,
-  getWork: capability,
-  getVersions: capability,
-  getVersion: capability,
-  citation: capability,
-  export: capability,
-  mcp: capability,
+  search: cloneFeature(capability),
+  getWork: cloneFeature(capability),
+  getVersions: cloneFeature(capability),
+  getVersion: cloneFeature(capability),
+  citation: cloneFeature(capability),
+  export: cloneFeature(capability),
+  mcp: cloneFeature(capability),
 });
 
 export const providerCapabilityManifest: readonly ProviderCapability[] = [
@@ -142,8 +144,17 @@ export const providerCapabilityManifest: readonly ProviderCapability[] = [
   },
 ] as const;
 
+function cloneProviderCapability(capability: ProviderCapability): ProviderCapability {
+  return {
+    ...capability,
+    features: Object.fromEntries(
+      Object.entries(capability.features).map(([feature, value]) => [feature, cloneFeature(value)])
+    ) as Record<ProviderFeature, FeatureCapability>,
+  };
+}
+
 export function getProviderCapabilities(): readonly ProviderCapability[] {
-  return providerCapabilityManifest;
+  return providerCapabilityManifest.map(cloneProviderCapability);
 }
 
 export function getProviderCapability(jurisdiction: JurisdictionCode): ProviderCapability {
@@ -153,7 +164,7 @@ export function getProviderCapability(jurisdiction: JurisdictionCode): ProviderC
     throw new Error(`Unknown jurisdiction capability: ${jurisdiction}`);
   }
 
-  return capability;
+  return cloneProviderCapability(capability);
 }
 
 export function isFeatureSupported(

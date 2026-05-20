@@ -88,7 +88,11 @@ describe('E2E CLI Tests', () => {
       expect(stderr).not.toContain('API key');
 
       const parsed = JSON.parse(stdout);
-      expect(parsed.providers[0]).toMatchObject({
+      const nzProvider = parsed.providers.find(
+        (provider: { jurisdiction?: string }) => provider.jurisdiction === 'nz'
+      );
+
+      expect(nzProvider).toMatchObject({
         jurisdiction: 'nz',
         releaseChannel: 'stable',
       });

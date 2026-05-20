@@ -78,6 +78,16 @@ program
 
 // Pre-command hook to check configuration
 program.hook('preAction', (thisCommand, actionCommand) => {
+  const options = thisCommand.opts();
+
+  if (options.verbose) {
+    logger.setVerbose(true);
+  }
+
+  if (options.quiet) {
+    logger.setQuiet(true);
+  }
+
   // Skip API key checks for commands that do not call the legislation API.
   if (['capabilities', 'config'].includes(actionCommand.name())) {
     return;
@@ -91,8 +101,7 @@ program.hook('preAction', (thisCommand, actionCommand) => {
   }
 
   // Apply global options
-  if (thisCommand.opts().verbose) {
-    logger.setVerbose(true);
+  if (options.verbose) {
     config.verbose = true;
   }
 });

@@ -59,6 +59,17 @@ describe('provider capability manifest', () => {
     }
   });
 
+  it('does not expose mutable manifest internals', () => {
+    const capabilities = getProviderCapabilities();
+    const nzCapability = capabilities.find(capability => capability.jurisdiction === 'nz');
+
+    expect(nzCapability).toBeDefined();
+
+    nzCapability!.features.search.status = 'unsupported';
+
+    expect(getProviderCapability('nz').features.search.status).toBe('supported');
+  });
+
   it('keeps Australian providers blocked until source-backed provider work lands', () => {
     for (const jurisdiction of australianJurisdictions) {
       const capability = getProviderCapability(jurisdiction);
