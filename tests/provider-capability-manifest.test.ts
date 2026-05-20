@@ -4,10 +4,12 @@ import {
   assertFeatureSupported,
   getProviderCapabilities,
   getProviderCapability,
+  getUnsupportedProviderCapability,
   isFeatureSupported,
   type JurisdictionCode,
   type ProviderFeature,
 } from '../src/providers/capability-manifest.ts';
+import { parseJurisdictionCode } from '../src/providers/jurisdictions.ts';
 
 const runtimeFeatures: ProviderFeature[] = [
   'search',
@@ -84,5 +86,26 @@ describe('provider capability manifest', () => {
         expect(() => assertFeatureSupported(jurisdiction, feature)).toThrow(/source validation/i);
       }
     }
+  });
+
+  it('returns structured unsupported capability details for planned providers', () => {
+    const unsupported = getUnsupportedProviderCapability('au-nsw', 'export');
+
+    expect(unsupported).toMatchObject({
+      error: 'unsupported_provider_capability',
+      jurisdiction: 'au-nsw',
+      providerId: 'nsw-legislation',
+      feature: 'export',
+      status: 'unsupported',
+      sourceBacked: false,
+    });
+  });
+
+  it('parses jurisdiction aliases used by CLI and integration hosts', () => {
+    expect(parseJurisdictionCode('NZ')).toBe('nz');
+    expect(parseJurisdictionCode('au')).toBe('au-commonwealth');
+    expect(parseJurisdictionCode('au-comm')).toBe('au-commonwealth');
+    expect(parseJurisdictionCode('au-qld')).toBe('au-qld');
+    expect(() => parseJurisdictionCode('mars')).toThrow(/Unknown jurisdiction/);
   });
 });

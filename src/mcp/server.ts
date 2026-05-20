@@ -10,7 +10,13 @@ import { z } from 'zod';
 import { searchWorks, getWork, getWorkVersions } from '../client.js';
 import { getConfig, hasApiKey } from '../config.js';
 import { generateCitation, worksToCsv } from '../output/index.js';
-import { getProviderCapabilities } from '../providers/capability-manifest.js';
+import {
+  getProviderCapabilities,
+  getUnsupportedProviderCapability,
+  type JurisdictionCode,
+  type ProviderFeature,
+} from '../providers/capability-manifest.js';
+import { jurisdictionCodes } from '../providers/jurisdictions.js';
 import { logger } from '../utils/logger.js';
 
 /**
@@ -18,6 +24,11 @@ import { logger } from '../utils/logger.js';
  */
 let mcpRequestCount = 0;
 const MCP_DAILY_LIMIT = 9000; // Respect API limits with 10% safety margin
+
+const jurisdictionSchema = z
+  .enum(jurisdictionCodes)
+  .default('nz')
+  .describe('Jurisdiction provider capability to use');
 
 /**
  * Helper to check and increment MCP request count
@@ -29,6 +40,27 @@ function checkMcpRateLimit(): boolean {
   }
   mcpRequestCount++;
   return true;
+}
+
+export function createUnsupportedCapabilityResponse(
+  jurisdiction: JurisdictionCode,
+  feature: ProviderFeature
+): { content: Array<{ type: 'text'; text: string; isError: true }> } | null {
+  const unsupported = getUnsupportedProviderCapability(jurisdiction, feature);
+
+  if (!unsupported) {
+    return null;
+  }
+
+  return {
+    content: [
+      {
+        type: 'text',
+        text: JSON.stringify(unsupported, null, 2),
+        isError: true,
+      },
+    ],
+  };
 }
 
 /**
@@ -94,9 +126,15 @@ function registerSearchTool(server: McpServer): void {
         .optional()
         .describe('Filter to date (YYYY-MM-DD)'),
       limit: z.number().min(1).max(100).default(25).describe('Maximum results (1-100)'),
+      jurisdiction: jurisdictionSchema,
     },
     async params => {
       try {
+        const unsupported = createUnsupportedCapabilityResponse(params.jurisdiction, 'search');
+        if (unsupported) {
+          return unsupported;
+        }
+
         // Check MCP rate limit
         if (!checkMcpRateLimit()) {
           return {
@@ -158,9 +196,15 @@ function registerGetTool(server: McpServer): void {
     'Get details of a specific legislation work by ID',
     {
       workId: z.string().describe('Work ID (e.g., act_public_1989_18)'),
+      jurisdiction: jurisdictionSchema,
     },
     async params => {
       try {
+        const unsupported = createUnsupportedCapabilityResponse(params.jurisdiction, 'getWork');
+        if (unsupported) {
+          return unsupported;
+        }
+
         // Check MCP rate limit
         if (!checkMcpRateLimit()) {
           return {
@@ -216,9 +260,15 @@ function registerGetVersionsTool(server: McpServer): void {
     'Get all versions of a specific legislation work',
     {
       workId: z.string().describe('Work ID (e.g., act_public_1989_18)'),
+      jurisdiction: jurisdictionSchema,
     },
     async params => {
       try {
+        const unsupported = createUnsupportedCapabilityResponse(params.jurisdiction, 'getVersions');
+        if (unsupported) {
+          return unsupported;
+        }
+
         // Check MCP rate limit
         if (!checkMcpRateLimit()) {
           return {
@@ -280,9 +330,15 @@ function registerCitationTool(server: McpServer): void {
         .enum(['nzmj', 'bibtex', 'ris', 'enw', 'apa'])
         .default('nzmj')
         .describe('Citation style'),
+      jurisdiction: jurisdictionSchema,
     },
     async params => {
       try {
+        const unsupported = createUnsupportedCapabilityResponse(params.jurisdiction, 'citation');
+        if (unsupported) {
+          return unsupported;
+        }
+
         // Check MCP rate limit
         if (!checkMcpRateLimit()) {
           return {
@@ -333,9 +389,15 @@ function registerExportTool(server: McpServer): void {
       query: z.string().describe('Search query'),
       format: z.enum(['csv', 'json']).default('csv').describe('Export format'),
       limit: z.number().min(1).max(100).default(25).describe('Maximum results'),
+      jurisdiction: jurisdictionSchema,
     },
     async params => {
       try {
+        const unsupported = createUnsupportedCapabilityResponse(params.jurisdiction, 'export');
+        if (unsupported) {
+          return unsupported;
+        }
+
         // Check MCP rate limit
         if (!checkMcpRateLimit()) {
           return {

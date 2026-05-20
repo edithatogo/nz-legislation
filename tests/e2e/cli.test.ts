@@ -153,6 +153,37 @@ describe('E2E CLI Tests', () => {
   });
 
   describe('nzlegislation export', () => {
+    it('should block unsupported Australian jurisdiction exports before writing files', async () => {
+      const outputPath = join(FIXTURES_DIR, 'test-export.csv');
+
+      const { stderr, exitCode } = await execa(
+        TSX_BIN,
+        [
+          CLI_PATH,
+          'export',
+          '--query',
+          'health',
+          '--jurisdiction',
+          'au-nsw',
+          '--output',
+          outputPath,
+          '--format',
+          'json',
+        ],
+        {
+          reject: false,
+          env: {
+            NZ_LEGISLATION_API_KEY: '',
+          },
+        }
+      );
+
+      expect(exitCode).toBe(1);
+      expect(stderr).toContain('unsupported_provider_capability');
+      expect(stderr).toContain('au-nsw');
+      expect(existsSync(outputPath)).toBe(false);
+    });
+
     itWithApi('should export to CSV file', async () => {
       const outputPath = join(process.cwd(), 'tests', 'fixtures', 'test-export.csv');
 

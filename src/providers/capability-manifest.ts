@@ -36,6 +36,26 @@ export interface ProviderCapability {
   features: Record<ProviderFeature, FeatureCapability>;
 }
 
+export interface UnsupportedProviderCapability {
+  error: 'unsupported_provider_capability';
+  jurisdiction: JurisdictionCode;
+  providerId: string;
+  feature: ProviderFeature;
+  status: CapabilityStatus;
+  sourceBacked: boolean;
+  message: string;
+}
+
+export class ProviderCapabilityError extends Error {
+  readonly details: UnsupportedProviderCapability;
+
+  constructor(details: UnsupportedProviderCapability) {
+    super(details.message);
+    this.name = 'ProviderCapabilityError';
+    this.details = details;
+  }
+}
+
 const supportedNzFeature: FeatureCapability = {
   status: 'supported',
   sourceBacked: true,
@@ -174,16 +194,35 @@ export function isFeatureSupported(
   return getProviderCapability(jurisdiction).features[feature].status === 'supported';
 }
 
+export function getUnsupportedProviderCapability(
+  jurisdiction: JurisdictionCode,
+  feature: ProviderFeature
+): UnsupportedProviderCapability | null {
+  const capability = getProviderCapability(jurisdiction);
+  const featureCapability = capability.features[feature];
+
+  if (featureCapability.status === 'supported') {
+    return null;
+  }
+
+  return {
+    error: 'unsupported_provider_capability',
+    jurisdiction,
+    providerId: capability.providerId,
+    feature,
+    status: featureCapability.status,
+    sourceBacked: featureCapability.sourceBacked,
+    message: `${capability.label} ${feature} is ${featureCapability.status}. ${featureCapability.notes}`,
+  };
+}
+
 export function assertFeatureSupported(
   jurisdiction: JurisdictionCode,
   feature: ProviderFeature
 ): void {
-  const capability = getProviderCapability(jurisdiction);
-  const featureCapability = capability.features[feature];
+  const unsupported = getUnsupportedProviderCapability(jurisdiction, feature);
 
-  if (featureCapability.status !== 'supported') {
-    throw new Error(
-      `${capability.label} ${feature} is ${featureCapability.status}. ${featureCapability.notes}`
-    );
+  if (unsupported) {
+    throw new ProviderCapabilityError(unsupported);
   }
 }
