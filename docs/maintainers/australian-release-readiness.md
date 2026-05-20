@@ -13,6 +13,13 @@ Register of Legislation public API documentation and OpenAPI document. That
 validation confirms a viable official source, but it does not make Commonwealth
 runtime support releaseable until an adapter is implemented and tested.
 
+The other Australian jurisdiction entries now have a source inventory, not
+runtime support. Queensland has a located official API service requiring
+registration and source-shape work. NSW has a located XML/export surface. The
+remaining state and territory entries have located official websites, but still
+need machine-readable source-shape validation before any runtime or release
+claim.
+
 The archived legacy branch contains earlier Australian plugin/provider work, but that work is not release-ready:
 
 - `nz-legislation-tool/plugins/commonwealth/CommonwealthProvider.ts` is mostly placeholder behavior
@@ -42,3 +49,5 @@ Australian support can be considered releaseable only after all of the following
 
 - Australian Commonwealth:
   `docs/maintainers/commonwealth-source-validation.md`
+- Other Australian jurisdictions:
+  `docs/maintainers/australian-source-inventory.md`

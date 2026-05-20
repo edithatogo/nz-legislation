@@ -118,6 +118,26 @@ describe('provider capability manifest', () => {
     expect(unsupported?.message).toMatch(/Source validation is complete/);
   });
 
+  it('records concrete source authorities for planned Australian providers', () => {
+    expect(
+      Object.fromEntries(
+        getProviderCapabilities()
+          .filter(capability => capability.jurisdiction.startsWith('au-'))
+          .map(capability => [capability.jurisdiction, capability.sourceAuthority])
+      )
+    ).toEqual({
+      'au-commonwealth': 'Federal Register of Legislation public API',
+      'au-qld': 'Queensland Legislation API service',
+      'au-nsw': 'NSW legislation XML export surface',
+      'au-vic': 'Victorian legislation website',
+      'au-sa': 'South Australian Legislation website',
+      'au-wa': 'Western Australian Legislation website',
+      'au-tas': 'Tasmanian Legislation Online',
+      'au-act': 'ACT Legislation Register',
+      'au-nt': 'Northern Territory legislation website',
+    });
+  });
+
   it('parses jurisdiction aliases used by CLI and integration hosts', () => {
     expect(parseJurisdictionCode('NZ')).toBe('nz');
     expect(parseJurisdictionCode('au')).toBe('au-commonwealth');
