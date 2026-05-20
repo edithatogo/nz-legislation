@@ -16,7 +16,10 @@ Algolia
 APIs
 ADRs
 Axios
+apa
 backoff
+Backport
+bibtex
 changeset
 changesets
 CodeQL
@@ -65,6 +68,7 @@ monospace
 msw
 Netlify
 nzmj
+overbroad
 param
 Profiler
 pnpm
@@ -72,6 +76,8 @@ prereleases
 Qwen
 Reframe
 reframing
+releaseable
+revalidated
 reo
 Repo
 repos
@@ -90,8 +96,12 @@ te
 Toolchain
 toolchain
 Treeshaking
+tsc
 tsup
+Typecheck
+typecheck
 Vercel
+version_id
 vite
 VUs
 Wikidata
