@@ -38,6 +38,31 @@ export interface CommonwealthVersion {
   compilationNumber?: string | null;
 }
 
+export interface CommonwealthHttpResponseLike {
+  json(): Promise<unknown>;
+}
+
+export interface CommonwealthHttpClientLike {
+  get(
+    path: string,
+    options?: { searchParams?: Record<string, string> }
+  ): CommonwealthHttpResponseLike;
+}
+
+export interface CommonwealthSearchParams {
+  query?: string;
+  type?: WorkType;
+  status?: LegislationStatus;
+  limit?: number;
+  offset?: number;
+}
+
+export interface CommonwealthProviderClient {
+  searchTitles(params: CommonwealthSearchParams): Promise<SearchResults>;
+  getTitle(titleId: string): Promise<Work>;
+  getVersions(titleId: string): Promise<Version[]>;
+}
+
 function toDateOnly(value?: string | null): string {
   if (!value) {
     return '1900-01-01';
@@ -86,6 +111,88 @@ function titleUrl(titleId: string): string {
 function versionUrl(version: CommonwealthVersion): string {
   const registerId = version.registerId || version.titleId;
   return `${COMMONWEALTH_REGISTER_BASE_URL}/${registerId}/latest/text`;
+}
+
+function assertODataResponse<T>(data: unknown, endpoint: string): CommonwealthODataResponse<T> {
+  if (!data || typeof data !== 'object' || !Array.isArray((data as { value?: unknown }).value)) {
+    throw new Error(`Invalid Commonwealth ${endpoint} response: expected an OData value array`);
+  }
+
+  return data as CommonwealthODataResponse<T>;
+}
+
+function escapeODataString(value: string): string {
+  return value.replace(/'/g, "''");
+}
+
+function odataString(value: string): string {
+  return `'${escapeODataString(value)}'`;
+}
+
+function mapWorkTypeToCollection(type?: WorkType): string | undefined {
+  switch (type) {
+    case 'act':
+      return 'Act';
+    case 'regulation':
+      return 'LegislativeInstrument';
+    case 'instrument':
+      return 'NotifiableInstrument';
+    case 'bill':
+    default:
+      return undefined;
+  }
+}
+
+function mapLegislationStatusToCommonwealthStatus(status?: LegislationStatus): string | undefined {
+  switch (status) {
+    case 'in-force':
+      return 'InForce';
+    case 'repealed':
+    case 'partially-repealed':
+      return 'Repealed';
+    case 'withdrawn':
+      return 'NeverEffective';
+    case 'not-yet-in-force':
+    default:
+      return undefined;
+  }
+}
+
+function buildTitleFilter(params: CommonwealthSearchParams): string | undefined {
+  const filters: string[] = [];
+
+  if (params.query?.trim()) {
+    filters.push(`contains(tolower(name), ${odataString(params.query.trim().toLowerCase())})`);
+  }
+
+  const collection = mapWorkTypeToCollection(params.type);
+  if (collection) {
+    filters.push(`collection eq ${odataString(collection)}`);
+  }
+
+  const status = mapLegislationStatusToCommonwealthStatus(params.status);
+  if (status) {
+    filters.push(`status eq ${odataString(status)}`);
+  }
+
+  return filters.length > 0 ? filters.join(' and ') : undefined;
+}
+
+export function buildCommonwealthTitleSearchParams(
+  params: CommonwealthSearchParams
+): Record<string, string> {
+  const searchParams: Record<string, string> = {
+    $count: 'true',
+    $top: String(params.limit ?? 20),
+    $skip: String(params.offset ?? 0),
+  };
+  const filter = buildTitleFilter(params);
+
+  if (filter) {
+    searchParams.$filter = filter;
+  }
+
+  return searchParams;
 }
 
 export function mapCommonwealthTitleToWork(title: CommonwealthTitle): Work {
@@ -137,4 +244,53 @@ export function mapCommonwealthVersionsToVersions(
   response: CommonwealthODataResponse<CommonwealthVersion>
 ): Version[] {
   return response.value.map((version, index) => mapCommonwealthVersionToVersion(version, index));
+}
+
+export function createCommonwealthProviderClient(
+  httpClient: CommonwealthHttpClientLike
+): CommonwealthProviderClient {
+  return {
+    async searchTitles(params: CommonwealthSearchParams): Promise<SearchResults> {
+      const searchParams = buildCommonwealthTitleSearchParams(params);
+      const data = await httpClient.get('titles', { searchParams }).json();
+      const response = assertODataResponse<CommonwealthTitle>(data, 'titles');
+
+      return mapCommonwealthTitlesToSearchResults(response, {
+        offset: params.offset,
+        limit: params.limit,
+      });
+    },
+
+    async getTitle(titleId: string): Promise<Work> {
+      const data = await httpClient
+        .get('titles', {
+          searchParams: {
+            $filter: `id eq ${odataString(titleId)}`,
+            $top: '1',
+          },
+        })
+        .json();
+      const response = assertODataResponse<CommonwealthTitle>(data, 'titles');
+      const title = response.value[0];
+
+      if (!title) {
+        throw new Error(`Commonwealth title not found: ${titleId}`);
+      }
+
+      return mapCommonwealthTitleToWork(title);
+    },
+
+    async getVersions(titleId: string): Promise<Version[]> {
+      const data = await httpClient
+        .get('versions', {
+          searchParams: {
+            $filter: `titleId eq ${odataString(titleId)}`,
+          },
+        })
+        .json();
+      const response = assertODataResponse<CommonwealthVersion>(data, 'versions');
+
+      return mapCommonwealthVersionsToVersions(response);
+    },
+  };
 }
