@@ -63,6 +63,36 @@ export interface CommonwealthProviderClient {
   getVersions(titleId: string): Promise<Version[]>;
 }
 
+export interface CommonwealthProviderSource {
+  jurisdiction: 'au-commonwealth';
+  providerId: 'federal-register-of-legislation';
+  sourceAuthority: 'Federal Register of Legislation public API';
+  apiBaseUrl: typeof COMMONWEALTH_API_BASE_URL;
+  registerBaseUrl: typeof COMMONWEALTH_REGISTER_BASE_URL;
+  runtimeEnabled: false;
+}
+
+export interface CommonwealthProviderAdapter {
+  readonly source: CommonwealthProviderSource;
+  searchWorks(params: CommonwealthSearchParams): Promise<SearchResults>;
+  getWork(workId: string): Promise<Work>;
+  getWorkVersions(workId: string): Promise<Version[]>;
+}
+
+export interface CommonwealthProviderAdapterDependencies {
+  providerClient?: CommonwealthProviderClient;
+  httpClient?: CommonwealthHttpClientLike;
+}
+
+export const commonwealthProviderSource: CommonwealthProviderSource = {
+  jurisdiction: 'au-commonwealth',
+  providerId: 'federal-register-of-legislation',
+  sourceAuthority: 'Federal Register of Legislation public API',
+  apiBaseUrl: COMMONWEALTH_API_BASE_URL,
+  registerBaseUrl: COMMONWEALTH_REGISTER_BASE_URL,
+  runtimeEnabled: false,
+};
+
 function toDateOnly(value?: string | null): string {
   if (!value) {
     return '1900-01-01';
@@ -291,6 +321,38 @@ export function createCommonwealthProviderClient(
       const response = assertODataResponse<CommonwealthVersion>(data, 'versions');
 
       return mapCommonwealthVersionsToVersions(response);
+    },
+  };
+}
+
+export function createCommonwealthProviderAdapter(
+  dependencies: CommonwealthProviderAdapterDependencies = {}
+): CommonwealthProviderAdapter {
+  const providerClient =
+    dependencies.providerClient ??
+    (dependencies.httpClient
+      ? createCommonwealthProviderClient(dependencies.httpClient)
+      : undefined);
+
+  if (!providerClient) {
+    throw new Error(
+      'Commonwealth provider adapter requires either a providerClient or an httpClient'
+    );
+  }
+
+  return {
+    source: commonwealthProviderSource,
+
+    searchWorks(params: CommonwealthSearchParams): Promise<SearchResults> {
+      return providerClient.searchTitles(params);
+    },
+
+    getWork(workId: string): Promise<Work> {
+      return providerClient.getTitle(workId);
+    },
+
+    getWorkVersions(workId: string): Promise<Version[]> {
+      return providerClient.getVersions(workId);
     },
   };
 }
