@@ -47,6 +47,20 @@ coverage, rate limits, and data quality are verified.
 6. Update docs, website, install snippets, and release notes.
 7. Pass the release/submission gates before any public claim or listing.
 
+## Provider implementation tracks
+
+| Jurisdiction/scope           | Track                                               |
+| ---------------------------- | --------------------------------------------------- |
+| Australian Commonwealth      | `conductor/tracks/anz-provider-commonwealth/`       |
+| Queensland                   | `conductor/tracks/anz-provider-queensland/`         |
+| New South Wales              | `conductor/tracks/anz-provider-nsw/`                |
+| Victoria                     | `conductor/tracks/anz-provider-victoria/`           |
+| South Australia              | `conductor/tracks/anz-provider-south-australia/`    |
+| Western Australia            | `conductor/tracks/anz-provider-western-australia/`  |
+| Tasmania                     | `conductor/tracks/anz-provider-tasmania/`           |
+| Australian Capital Territory | `conductor/tracks/anz-provider-act/`                |
+| Northern Territory           | `conductor/tracks/anz-provider-northern-territory/` |
+
 ## Current import verdict
 
 The v9 import does not implement these APIs. The Commonwealth, Queensland, NSW,

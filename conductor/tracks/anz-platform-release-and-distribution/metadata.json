@@ -56,5 +56,16 @@
     "northern-territory",
     "cross-jurisdiction-aggregator-evaluation",
     "future-http-openapi-adapter"
+  ],
+  "providerImplementationTracks": [
+    "anz-provider-commonwealth",
+    "anz-provider-queensland",
+    "anz-provider-nsw",
+    "anz-provider-victoria",
+    "anz-provider-south-australia",
+    "anz-provider-western-australia",
+    "anz-provider-tasmania",
+    "anz-provider-act",
+    "anz-provider-northern-territory"
   ]
 }

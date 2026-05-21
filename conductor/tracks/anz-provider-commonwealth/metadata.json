@@ -1,0 +1,29 @@
+{
+  "trackId": "anz-provider-commonwealth",
+  "status": "active",
+  "priority": "P0",
+  "created": "2026-05-22",
+  "sourceTrack": "anz-platform-release-and-distribution",
+  "singleRepo": true,
+  "phase": "adapter-foundation-to-runtime-gated-provider",
+  "jurisdiction": "Australian Commonwealth",
+  "jurisdictionCode": "au-commonwealth",
+  "providerId": "federal-register-of-legislation",
+  "sourceSurface": "Federal Register of Legislation public API",
+  "sourceValidation": "docs/maintainers/commonwealth-source-validation.md",
+  "externalSubmissionAllowed": false,
+  "publishingAllowed": false,
+  "deploymentAllowed": false,
+  "repositoryRenameAllowed": false,
+  "packageRenameAllowed": false,
+  "stableCompatibility": ["nz-legislation-tool", "nzlegislation", "nzlegislation-mcp"],
+  "transitionAliases": ["anzlegislation", "anzlegislation-mcp"],
+  "requiredGates": [
+    "no-placeholder-legal-data",
+    "provider-capability-manifest",
+    "provider-aware-mcp-export",
+    "federal-register-fixtures",
+    "provenance-source-cards",
+    "docs-and-release-notes"
+  ]
+}

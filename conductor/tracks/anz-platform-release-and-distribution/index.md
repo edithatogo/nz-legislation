@@ -113,6 +113,27 @@ future HTTP/OpenAPI adapter readiness.
 Those entries are source-validation-required backlog items only. They do not
 mean the APIs are implemented, release-ready, or safe to describe as supported.
 
+## Provider implementation tracks
+
+Provider implementation work is split into dedicated Conductor tracks so source
+validation, adapter mapping, fixtures, provider gates, provenance, and release
+readiness can progress without creating separate repositories:
+
+- `anz-provider-commonwealth`
+- `anz-provider-queensland`
+- `anz-provider-nsw`
+- `anz-provider-victoria`
+- `anz-provider-south-australia`
+- `anz-provider-western-australia`
+- `anz-provider-tasmania`
+- `anz-provider-act`
+- `anz-provider-northern-territory`
+
+Each provider track is subordinate to this umbrella release/distribution track.
+No provider track authorizes external publishing, deployment, registry
+submission, marketplace submission, repository rename, package rename, or
+unsupported runtime support claims.
+
 ## Current state
 
 - The v9 handoff ZIP is archived in-repo.
