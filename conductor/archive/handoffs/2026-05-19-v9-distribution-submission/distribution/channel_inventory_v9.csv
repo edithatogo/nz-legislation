@@ -1,0 +1,18 @@
+channel,priority,artifact,submission_target,status,gate,repo_path
+npm stable,P0,nz-legislation-tool,npm latest,existing,release gate,package.json
+npm prerelease,P0,nz-legislation-tool@next,npm next tag,planned/existing,prerelease gate,package.json
+npm ANZ alias,P1,anz-legislation,npm,future,AU truthfulness gate,scripts/ or package metadata
+GitHub Packages,P0,@edithatogo/nz-legislation-tool,GitHub Packages,planned/existing,release workflow gate,.github/workflows
+Website/docs,P0,docs site,GitHub Pages/site,required,docs gate,docs/
+MCP Smithery,P0,MCP listing,Smithery,validate,security gate,integrations/mcp/
+MCP registries,P0,MCP listing,mcp.so/MCP Market/MCP Store/PulseMCP/Glama,validate,security gate,integrations/mcp/
+Claude,P0,MCP config/skill,Claude Desktop/Code,local/config first,MCP gate,integrations/claude/
+Codex,P0,AGENTS/prompt pack,Codex local workflow,local/config first,docs gate,"AGENTS.md, integrations/codex/"
+GitHub Copilot,P1,Copilot Extension,GitHub App/Marketplace,validate,official docs gate,integrations/github-copilot/
+VS Code,P1,VSIX extension,Visual Studio Marketplace,future,extension gate,integrations/vscode/
+Open VSX,P1,VSIX extension,Open VSX,future,extension gate,integrations/vscode/
+Gemini,P1,OpenAPI/tool schema,Gemini/Vertex/AI Studio,validate,official docs gate,integrations/gemini/
+Qwen,P1,tool schema,Qwen/ModelScope/Alibaba,validate,official docs gate,integrations/qwen/
+JetBrains,P2,plugin,JetBrains Marketplace,future,plugin gate,integrations/jetbrains/
+Docker/GHCR,P2,container image,GHCR,future,supply-chain gate,.github/workflows
+Homebrew,P2,formula,Homebrew tap,future,release gate,distribution/homebrew/

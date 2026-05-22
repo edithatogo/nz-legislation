@@ -10,6 +10,13 @@ import { z } from 'zod';
 import { searchWorks, getWork, getWorkVersions } from '../client.js';
 import { getConfig, hasApiKey } from '../config.js';
 import { generateCitation, worksToCsv } from '../output/index.js';
+import {
+  getProviderCapabilities,
+  type JurisdictionCode,
+  type ProviderFeature,
+} from '../providers/capability-manifest.js';
+import { jurisdictionCodes } from '../providers/jurisdictions.js';
+import { getUnsupportedRuntimeProviderCapability } from '../providers/runtime.js';
 import { logger } from '../utils/logger.js';
 
 /**
@@ -17,6 +24,16 @@ import { logger } from '../utils/logger.js';
  */
 let mcpRequestCount = 0;
 const MCP_DAILY_LIMIT = 9000; // Respect API limits with 10% safety margin
+
+const jurisdictionSchema = z
+  .enum(jurisdictionCodes)
+  .default('nz')
+  .describe('Jurisdiction provider capability to use');
+
+type McpTextToolResponse = {
+  content: Array<{ type: 'text'; text: string }>;
+  isError?: true;
+};
 
 /**
  * Helper to check and increment MCP request count
@@ -28,6 +45,39 @@ function checkMcpRateLimit(): boolean {
   }
   mcpRequestCount++;
   return true;
+}
+
+export function createUnsupportedCapabilityResponse(
+  jurisdiction: JurisdictionCode,
+  feature: ProviderFeature
+): McpTextToolResponse | null {
+  const unsupported = getUnsupportedRuntimeProviderCapability(jurisdiction, feature);
+
+  if (!unsupported) {
+    return null;
+  }
+
+  return {
+    isError: true,
+    content: [
+      {
+        type: 'text',
+        text: JSON.stringify(unsupported, null, 2),
+      },
+    ],
+  };
+}
+
+function createMcpErrorResponse(text: string): McpTextToolResponse {
+  return {
+    isError: true,
+    content: [
+      {
+        type: 'text',
+        text,
+      },
+    ],
+  };
 }
 
 /**
@@ -45,6 +95,7 @@ export function createServer(): McpServer {
   registerGetVersionsTool(server);
   registerCitationTool(server);
   registerExportTool(server);
+  registerCapabilitiesTool(server);
   registerConfigTool(server);
 
   // Register resources
@@ -92,20 +143,18 @@ function registerSearchTool(server: McpServer): void {
         .optional()
         .describe('Filter to date (YYYY-MM-DD)'),
       limit: z.number().min(1).max(100).default(25).describe('Maximum results (1-100)'),
+      jurisdiction: jurisdictionSchema,
     },
     async params => {
       try {
+        const unsupported = createUnsupportedCapabilityResponse(params.jurisdiction, 'search');
+        if (unsupported) {
+          return unsupported;
+        }
+
         // Check MCP rate limit
         if (!checkMcpRateLimit()) {
-          return {
-            content: [
-              {
-                type: 'text',
-                text: 'MCP rate limit exceeded. Please try again later.',
-                isError: true,
-              },
-            ],
-          };
+          return createMcpErrorResponse('MCP rate limit exceeded. Please try again later.');
         }
 
         const results = await searchWorks({
@@ -133,15 +182,9 @@ function registerSearchTool(server: McpServer): void {
           ],
         };
       } catch (error) {
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Search failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-              isError: true,
-            },
-          ],
-        };
+        return createMcpErrorResponse(
+          `Search failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+        );
       }
     }
   );
@@ -156,20 +199,18 @@ function registerGetTool(server: McpServer): void {
     'Get details of a specific legislation work by ID',
     {
       workId: z.string().describe('Work ID (e.g., act_public_1989_18)'),
+      jurisdiction: jurisdictionSchema,
     },
     async params => {
       try {
+        const unsupported = createUnsupportedCapabilityResponse(params.jurisdiction, 'getWork');
+        if (unsupported) {
+          return unsupported;
+        }
+
         // Check MCP rate limit
         if (!checkMcpRateLimit()) {
-          return {
-            content: [
-              {
-                type: 'text',
-                text: 'MCP rate limit exceeded. Please try again later.',
-                isError: true,
-              },
-            ],
-          };
+          return createMcpErrorResponse('MCP rate limit exceeded. Please try again later.');
         }
 
         const work = await getWork(params.workId);
@@ -191,15 +232,9 @@ function registerGetTool(server: McpServer): void {
           ],
         };
       } catch (error) {
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Failed to get legislation: ${error instanceof Error ? error.message : 'Unknown error'}`,
-              isError: true,
-            },
-          ],
-        };
+        return createMcpErrorResponse(
+          `Failed to get legislation: ${error instanceof Error ? error.message : 'Unknown error'}`
+        );
       }
     }
   );
@@ -214,20 +249,18 @@ function registerGetVersionsTool(server: McpServer): void {
     'Get all versions of a specific legislation work',
     {
       workId: z.string().describe('Work ID (e.g., act_public_1989_18)'),
+      jurisdiction: jurisdictionSchema,
     },
     async params => {
       try {
+        const unsupported = createUnsupportedCapabilityResponse(params.jurisdiction, 'getVersions');
+        if (unsupported) {
+          return unsupported;
+        }
+
         // Check MCP rate limit
         if (!checkMcpRateLimit()) {
-          return {
-            content: [
-              {
-                type: 'text',
-                text: 'MCP rate limit exceeded. Please try again later.',
-                isError: true,
-              },
-            ],
-          };
+          return createMcpErrorResponse('MCP rate limit exceeded. Please try again later.');
         }
 
         const versions = await getWorkVersions(params.workId);
@@ -251,15 +284,9 @@ function registerGetVersionsTool(server: McpServer): void {
           ],
         };
       } catch (error) {
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Failed to get versions: ${error instanceof Error ? error.message : 'Unknown error'}`,
-              isError: true,
-            },
-          ],
-        };
+        return createMcpErrorResponse(
+          `Failed to get versions: ${error instanceof Error ? error.message : 'Unknown error'}`
+        );
       }
     }
   );
@@ -278,20 +305,18 @@ function registerCitationTool(server: McpServer): void {
         .enum(['nzmj', 'bibtex', 'ris', 'enw', 'apa'])
         .default('nzmj')
         .describe('Citation style'),
+      jurisdiction: jurisdictionSchema,
     },
     async params => {
       try {
+        const unsupported = createUnsupportedCapabilityResponse(params.jurisdiction, 'citation');
+        if (unsupported) {
+          return unsupported;
+        }
+
         // Check MCP rate limit
         if (!checkMcpRateLimit()) {
-          return {
-            content: [
-              {
-                type: 'text',
-                text: 'MCP rate limit exceeded. Please try again later.',
-                isError: true,
-              },
-            ],
-          };
+          return createMcpErrorResponse('MCP rate limit exceeded. Please try again later.');
         }
 
         const work = await getWork(params.workId);
@@ -306,15 +331,9 @@ function registerCitationTool(server: McpServer): void {
           ],
         };
       } catch (error) {
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Failed to generate citation: ${error instanceof Error ? error.message : 'Unknown error'}`,
-              isError: true,
-            },
-          ],
-        };
+        return createMcpErrorResponse(
+          `Failed to generate citation: ${error instanceof Error ? error.message : 'Unknown error'}`
+        );
       }
     }
   );
@@ -331,20 +350,18 @@ function registerExportTool(server: McpServer): void {
       query: z.string().describe('Search query'),
       format: z.enum(['csv', 'json']).default('csv').describe('Export format'),
       limit: z.number().min(1).max(100).default(25).describe('Maximum results'),
+      jurisdiction: jurisdictionSchema,
     },
     async params => {
       try {
+        const unsupported = createUnsupportedCapabilityResponse(params.jurisdiction, 'export');
+        if (unsupported) {
+          return unsupported;
+        }
+
         // Check MCP rate limit
         if (!checkMcpRateLimit()) {
-          return {
-            content: [
-              {
-                type: 'text',
-                text: 'MCP rate limit exceeded. Please try again later.',
-                isError: true,
-              },
-            ],
-          };
+          return createMcpErrorResponse('MCP rate limit exceeded. Please try again later.');
         }
 
         const results = await searchWorks({
@@ -373,17 +390,31 @@ function registerExportTool(server: McpServer): void {
           };
         }
       } catch (error) {
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Export failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-              isError: true,
-            },
-          ],
-        };
+        return createMcpErrorResponse(
+          `Export failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+        );
       }
     }
+  );
+}
+
+/**
+ * Get provider capability manifest tool
+ */
+function registerCapabilitiesTool(server: McpServer): void {
+  server.tool(
+    'get_capabilities',
+    'Get jurisdiction and provider capability status for supported and planned legislation sources',
+    {},
+    // eslint-disable-next-line @typescript-eslint/require-await
+    async () => ({
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify({ providers: getProviderCapabilities() }, null, 2),
+        },
+      ],
+    })
   );
 }
 
@@ -416,15 +447,9 @@ function registerConfigTool(server: McpServer): void {
           ],
         };
       } catch (error) {
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Failed to get config: ${error instanceof Error ? error.message : 'Unknown error'}`,
-              isError: true,
-            },
-          ],
-        };
+        return createMcpErrorResponse(
+          `Failed to get config: ${error instanceof Error ? error.message : 'Unknown error'}`
+        );
       }
     }
   );
@@ -486,7 +511,7 @@ export async function startServer(): Promise<void> {
   console.error('NZ Legislation MCP Server running on stdio');
   // eslint-disable-next-line no-console
   console.error(
-    'Tools available: search_legislation, get_legislation, get_legislation_versions, generate_citation, export_legislation, get_config'
+    'Tools available: search_legislation, get_legislation, get_legislation_versions, generate_citation, export_legislation, get_capabilities, get_config'
   );
   // eslint-disable-next-line no-console
   console.error('Resources available: legislation://{workId}');

@@ -8,6 +8,19 @@ Australian support is **not ready for release** from the current governed releas
 
 The current active release branches (`main` and `next`) do not ship Australian jurisdiction support in the runtime code path.
 
+The Australian Commonwealth source has now been validated against the Federal
+Register of Legislation public API documentation and OpenAPI document. That
+validation confirms a viable official source, but it does not make Commonwealth
+runtime support releaseable until an adapter is implemented and tested.
+
+The other Australian jurisdiction entries now have a source inventory, not
+runtime support. Queensland has a validated official API candidate requiring
+registration, Swagger capture, fixtures, and provider mapping. NSW has a
+validated XML/export candidate requiring an export/download adapter design. The
+remaining state and territory entries have official-source validation records,
+but still need machine-readable source-shape validation before any runtime or
+release claim.
+
 The archived legacy branch contains earlier Australian plugin/provider work, but that work is not release-ready:
 
 - `nz-legislation-tool/plugins/commonwealth/CommonwealthProvider.ts` is mostly placeholder behavior
@@ -18,7 +31,10 @@ The archived legacy branch contains earlier Australian plugin/provider work, but
 
 - keep the MCP-enabled NZ-only tool on the stable `1.2.x` line
 - do not publish Australian support from the current repo state
-- extract and modernize the archived Australian code into the current release topology before assigning it a release version
+- implement Commonwealth support from the validated Federal Register of
+  Legislation API rather than reviving placeholder legacy behavior
+- extract and modernize any useful archived Australian code only after it is
+  reconciled with the current release topology and provider capability gates
 
 ## Next review gate
 
@@ -29,3 +45,17 @@ Australian support can be considered releaseable only after all of the following
 3. CLI, MCP, and any future HTTP adapter contracts are tested
 4. jurisdiction-specific documentation is added
 5. versioning is aligned with the current governed package line
+
+## Source validation records
+
+- Australian Commonwealth:
+  `docs/maintainers/commonwealth-source-validation.md`
+- Other Australian jurisdictions:
+  `docs/maintainers/australian-source-inventory.md`
+- Queensland:
+  `docs/maintainers/queensland-source-validation.md`
+- New South Wales:
+  `docs/maintainers/nsw-source-validation.md`
+- Victoria, South Australia, Western Australia, Tasmania, ACT, and Northern
+  Territory:
+  `docs/maintainers/state-territory-source-validation.md`

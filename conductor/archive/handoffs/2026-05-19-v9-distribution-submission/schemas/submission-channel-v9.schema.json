@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://edithatogo.github.io/anz-legislation/schemas/submission-channel-v9.schema.json",
+  "title": "Submission channel v9",
+  "type": "object",
+  "required": [
+    "channel",
+    "artifact",
+    "status",
+    "gate"
+  ],
+  "properties": {
+    "channel": {
+      "type": "string"
+    },
+    "priority": {
+      "enum": [
+        "P0",
+        "P1",
+        "P2",
+        "P3"
+      ]
+    },
+    "artifact": {
+      "type": "string"
+    },
+    "submissionTarget": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "existing",
+        "planned",
+        "future",
+        "validate",
+        "source-validation-required",
+        "submitted",
+        "listed",
+        "blocked"
+      ]
+    },
+    "gate": {
+      "type": "string"
+    },
+    "repoPath": {
+      "type": "string"
+    },
+    "verifiedDocsAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

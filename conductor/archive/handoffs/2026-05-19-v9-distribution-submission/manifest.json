@@ -1,0 +1,16 @@
+{
+  "name": "anz_legislation_handoff_v9_covering_prompt",
+  "created": "2026-05-19",
+  "purpose": "single-repo distribution/submission roadmap with corrected covering prompt and local import instructions",
+  "repo": "edithatogo/nz-legislation",
+  "download_filename": "anz_legislation_handoff_v9_covering_prompt.zip",
+  "archive_target": "conductor/archive/handoffs/2026-05-19-v9-distribution-submission",
+  "entrypoints": [
+    "COVERING_PROMPT.md",
+    "HANDOFF.md",
+    "codex/LOCAL_IMPORT_AND_INCORPORATION_PROMPT_V9.md",
+    "codex/MASTER_PROMPT_V9.md",
+    "docs/distribution-submission-map-v9.md"
+  ],
+  "contains_repo_overlay": true
+}

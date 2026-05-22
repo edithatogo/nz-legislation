@@ -7,7 +7,6 @@
 import { startServer } from './mcp/server.js';
 import { logger } from './utils/logger.js';
 
-
 let serverInstance: unknown = null;
 
 async function shutdown(signal: 'SIGTERM' | 'SIGINT'): Promise<void> {
