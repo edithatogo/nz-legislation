@@ -1,0 +1,29 @@
+{
+  "trackId": "anz-provider-queensland",
+  "status": "active",
+  "priority": "P0",
+  "created": "2026-05-21",
+  "sourceTrack": "anz-platform-release-and-distribution",
+  "singleRepo": true,
+  "phase": "api-access-and-source-backed-adapter",
+  "jurisdiction": "Queensland",
+  "jurisdictionCode": "au-qld",
+  "providerId": "queensland-legislation",
+  "sourceSurface": "Queensland Legislation API service",
+  "sourceValidation": "docs/maintainers/queensland-source-validation.md",
+  "externalSubmissionAllowed": false,
+  "publishingAllowed": false,
+  "deploymentAllowed": false,
+  "repositoryRenameAllowed": false,
+  "packageRenameAllowed": false,
+  "stableCompatibility": ["nz-legislation-tool", "nzlegislation", "nzlegislation-mcp"],
+  "transitionAliases": ["anzlegislation", "anzlegislation-mcp"],
+  "requiredGates": [
+    "no-placeholder-legal-data",
+    "provider-capability-manifest",
+    "provider-aware-mcp-export",
+    "api-registration-and-swagger-capture",
+    "provenance-source-cards",
+    "docs-and-release-notes"
+  ]
+}

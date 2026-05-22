@@ -18,6 +18,7 @@
     "test": "node ./node_modules/vitest/vitest.mjs --config vitest.config.ts",
     "test:run": "node ./node_modules/vitest/vitest.mjs run --config vitest.config.ts",
     "test:coverage": "node ./node_modules/vitest/vitest.mjs run --config vitest.config.ts --coverage",
+    "gate:no-placeholder-legal-data": "tsx scripts/check-no-placeholder-legal-data.ts",
     "bench": "tsx benchmarks/performance.ts",
     "bench:audit": "tsx benchmarks/performance-audit.ts",
     "lint": "eslint src/",

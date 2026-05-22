@@ -1,0 +1,47 @@
+version: v9
+reviewed: 2026-05-19
+items:
+  - id: V9-001
+    title: Import v9 handoff and merge tracks
+    priority: P0
+    acceptance:
+      - ZIP moved from Downloads to conductor archive
+      - umbrella Conductor track added
+      - status addendum imported
+  - id: V9-002
+    title: Add distribution submission matrix
+    priority: P0
+    acceptance:
+      - channel inventory committed
+      - docs include all target channels
+  - id: V9-003
+    title: Publish npm and website readiness plan
+    priority: P0
+    acceptance:
+      - npm release gates documented
+      - website/docs checklist documented
+  - id: V9-004
+    title: Prepare MCP registry submission package
+    priority: P0
+    acceptance:
+      - registry metadata plan
+      - install snippets tested
+      - security gate documented
+  - id: V9-005
+    title: Add assistant integration artifacts
+    priority: P1
+    acceptance:
+      - Claude/Codex/Copilot docs imported
+      - source-validation-required paths labelled
+  - id: V9-006
+    title: Add IDE extension roadmap
+    priority: P1
+    acceptance:
+      - VS Code/Open VSX plan
+      - JetBrains as P2
+  - id: V9-007
+    title: Add Gemini/Qwen tool route validation tasks
+    priority: P1
+    acceptance:
+      - docs say validation required
+      - no marketplace claims before verification

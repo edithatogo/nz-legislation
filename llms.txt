@@ -1,0 +1,14 @@
+# ANZ Legislation
+
+ANZ Legislation is a CLI and MCP server for official-source-first legislation research across New Zealand and, in prerelease form, Australia.
+
+## Important
+
+Australian support is prerelease. Use the runtime capability manifest and source cards to confirm whether a jurisdiction/method is supported.
+
+## Key docs
+
+- README.md
+- docs/maintainers/distribution-submission-map.md
+- docs/maintainers/security-and-submission-gates-v9.md
+- integrations/README.md

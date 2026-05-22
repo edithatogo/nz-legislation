@@ -72,6 +72,67 @@ describe('E2E CLI Tests', () => {
     });
   });
 
+  describe('nzlegislation capabilities', () => {
+    it('should display provider capabilities without an API key', async () => {
+      const { stdout, stderr, exitCode } = await execa(
+        TSX_BIN,
+        [CLI_PATH, 'capabilities', '--format', 'json'],
+        {
+          env: {
+            NZ_LEGISLATION_API_KEY: '',
+          },
+        }
+      );
+
+      expect(exitCode).toBe(0);
+      expect(stderr).not.toContain('API key');
+
+      const parsed = JSON.parse(stdout);
+      const nzProvider = parsed.providers.find(
+        (provider: { jurisdiction?: string }) => provider.jurisdiction === 'nz'
+      );
+
+      expect(nzProvider).toMatchObject({
+        jurisdiction: 'nz',
+        releaseChannel: 'stable',
+      });
+    });
+
+    it('should include runtime provider registry details when requested', async () => {
+      const { stdout, exitCode } = await execa(
+        TSX_BIN,
+        [CLI_PATH, 'capabilities', '--format', 'json', '--include-runtime'],
+        {
+          env: {
+            NZ_LEGISLATION_API_KEY: '',
+          },
+        }
+      );
+
+      expect(exitCode).toBe(0);
+
+      const parsed = JSON.parse(stdout);
+      expect(parsed).toHaveProperty('providers');
+      expect(parsed).toHaveProperty('runtimeProviders');
+
+      const nzRuntimeProvider = parsed.runtimeProviders.find(
+        (provider: { jurisdiction?: string }) => provider.jurisdiction === 'nz'
+      );
+      const auCommonwealthRuntimeProvider = parsed.runtimeProviders.find(
+        (provider: { jurisdiction?: string }) => provider.jurisdiction === 'au-commonwealth'
+      );
+
+      expect(nzRuntimeProvider).toMatchObject({
+        jurisdiction: 'nz',
+        runtimeSupported: true,
+      });
+      expect(auCommonwealthRuntimeProvider).toMatchObject({
+        jurisdiction: 'au-commonwealth',
+        runtimeSupported: false,
+      });
+    });
+  });
+
   describe('nzlegislation search', () => {
     itWithApi('should search for legislation', async () => {
       const { stdout, exitCode } = await execa(
@@ -126,6 +187,37 @@ describe('E2E CLI Tests', () => {
   });
 
   describe('nzlegislation export', () => {
+    it('should block unsupported Australian jurisdiction exports before writing files', async () => {
+      const outputPath = join(FIXTURES_DIR, 'test-export.csv');
+
+      const { stderr, exitCode } = await execa(
+        TSX_BIN,
+        [
+          CLI_PATH,
+          'export',
+          '--query',
+          'health',
+          '--jurisdiction',
+          'au-nsw',
+          '--output',
+          outputPath,
+          '--format',
+          'json',
+        ],
+        {
+          reject: false,
+          env: {
+            NZ_LEGISLATION_API_KEY: '',
+          },
+        }
+      );
+
+      expect(exitCode).toBe(1);
+      expect(stderr).toContain('unsupported_provider_capability');
+      expect(stderr).toContain('au-nsw');
+      expect(existsSync(outputPath)).toBe(false);
+    });
+
     itWithApi('should export to CSV file', async () => {
       const outputPath = join(process.cwd(), 'tests', 'fixtures', 'test-export.csv');
 

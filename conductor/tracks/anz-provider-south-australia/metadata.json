@@ -1,0 +1,28 @@
+{
+  "trackId": "anz-provider-south-australia",
+  "status": "active",
+  "priority": "P1",
+  "created": "2026-05-21",
+  "imported": "2026-05-21",
+  "sourceHandoff": "conductor/tracks/anz-platform-release-and-distribution/provider-api-roadmap.md",
+  "singleRepo": true,
+  "phase": "source-shape-discovery-and-adapter-mapping",
+  "jurisdiction": "South Australia",
+  "sourceSurface": "South Australian Legislation website",
+  "externalSubmissionAllowed": false,
+  "publishingAllowed": false,
+  "deploymentAllowed": false,
+  "repositoryRenameAllowed": false,
+  "packageRenameAllowed": false,
+  "stableCompatibility": ["nz-legislation-tool", "nzlegislation", "nzlegislation-mcp"],
+  "transitionAliases": ["anzlegislation", "anzlegislation-mcp"],
+  "requiredGates": [
+    "no-placeholder-legal-data",
+    "provider-capability-manifest",
+    "provider-aware-mcp-export",
+    "authoritative-source-formats",
+    "fixtures-and-adapter-mapping",
+    "provenance-source-cards",
+    "docs-and-release-notes"
+  ]
+}
