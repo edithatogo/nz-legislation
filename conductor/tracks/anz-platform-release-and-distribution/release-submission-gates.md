@@ -23,6 +23,10 @@ submission, registry submission, and public listing created from this track.
 - Public listing copy may only claim Australian runtime support after the
   no-placeholder legal-data and provider capability gates pass for that
   jurisdiction; external submission still requires every BLOCKING gate to pass.
+- Release notes for any future external release must preserve the distinction
+  between stable New Zealand support and Australian prerelease or planned
+  support, and must not imply Australian stable runtime support before all
+  release-submission gates pass.
 - Compatibility aliases must be described as aliases while the ANZ transition is
   incomplete.
 - Gate evidence must be committed in this repository before a release PR is

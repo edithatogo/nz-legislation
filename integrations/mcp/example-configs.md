@@ -16,4 +16,7 @@
 }
 ```
 
-Update this once the actual packaged MCP command is verified.
+Update this once the actual packaged MCP command is verified. Before publishing
+or submitting any MCP snippet, record the check in
+`docs/maintainers/install-snippet-verification.md` and keep NZ stable support
+separate from any AU planned or unsupported claims.
