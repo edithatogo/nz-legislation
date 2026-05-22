@@ -69,11 +69,17 @@ const unsupportedAuFeature: FeatureCapability = {
     'Source validation and provider implementation are required before this feature can be enabled.',
 };
 
-const validatedCommonwealthFeature: FeatureCapability = {
+const supportedCommonwealthPrereleaseFeature: FeatureCapability = {
+  status: 'supported',
+  sourceBacked: true,
+  notes: 'Prerelease support backed by the Federal Register of Legislation public API.',
+};
+
+const unsupportedCommonwealthFeature: FeatureCapability = {
   status: 'unsupported',
   sourceBacked: false,
   notes:
-    'Source validation is complete against the Federal Register of Legislation API; provider implementation is required before this feature can be enabled.',
+    'Federal Register mapping for this feature is not complete; use structured unsupported capability errors.',
 };
 
 const cloneFeature = (capability: FeatureCapability): FeatureCapability => ({ ...capability });
@@ -102,8 +108,16 @@ export const providerCapabilityManifest: readonly ProviderCapability[] = [
     label: 'Australian Commonwealth',
     providerId: 'federal-register-of-legislation',
     sourceAuthority: 'Federal Register of Legislation public API',
-    releaseChannel: 'planned',
-    features: features(validatedCommonwealthFeature),
+    releaseChannel: 'prerelease',
+    features: {
+      search: cloneFeature(supportedCommonwealthPrereleaseFeature),
+      getWork: cloneFeature(supportedCommonwealthPrereleaseFeature),
+      getVersions: cloneFeature(supportedCommonwealthPrereleaseFeature),
+      getVersion: cloneFeature(unsupportedCommonwealthFeature),
+      citation: cloneFeature(unsupportedCommonwealthFeature),
+      export: cloneFeature(supportedCommonwealthPrereleaseFeature),
+      mcp: cloneFeature(supportedCommonwealthPrereleaseFeature),
+    },
   },
   {
     jurisdiction: 'au-qld',

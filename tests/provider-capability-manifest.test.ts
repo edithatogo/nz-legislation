@@ -72,8 +72,10 @@ describe('provider capability manifest', () => {
     expect(getProviderCapability('nz').features.search.status).toBe('supported');
   });
 
-  it('keeps Australian providers blocked until source-backed provider work lands', () => {
-    for (const jurisdiction of australianJurisdictions) {
+  it('keeps planned Australian providers blocked until source-backed provider work lands', () => {
+    for (const jurisdiction of australianJurisdictions.filter(
+      jurisdiction => jurisdiction !== 'au-commonwealth'
+    )) {
       const capability = getProviderCapability(jurisdiction);
 
       expect(capability.releaseChannel).toBe('planned');
@@ -106,16 +108,24 @@ describe('provider capability manifest', () => {
     const unsupported = getUnsupportedProviderCapability('au-commonwealth', 'search');
 
     expect(capability.sourceAuthority).toBe('Federal Register of Legislation public API');
-    expect(capability.releaseChannel).toBe('planned');
-    expect(unsupported).toMatchObject({
+    expect(capability.releaseChannel).toBe('prerelease');
+    expect(capability.features.search).toMatchObject({
+      status: 'supported',
+      sourceBacked: true,
+    });
+    expect(capability.features.export).toMatchObject({
+      status: 'supported',
+      sourceBacked: true,
+    });
+    expect(unsupported).toBeNull();
+    expect(getUnsupportedProviderCapability('au-commonwealth', 'citation')).toMatchObject({
       error: 'unsupported_provider_capability',
       jurisdiction: 'au-commonwealth',
       providerId: 'federal-register-of-legislation',
-      feature: 'search',
+      feature: 'citation',
       status: 'unsupported',
       sourceBacked: false,
     });
-    expect(unsupported?.message).toMatch(/Source validation is complete/);
   });
 
   it('records concrete source authorities for planned Australian providers', () => {

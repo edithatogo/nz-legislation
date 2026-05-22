@@ -42,16 +42,16 @@ describe('provider source cards', () => {
     }
   });
 
-  it('keeps the Commonwealth source metadata for preparation but gated from runtime release', () => {
+  it('keeps Commonwealth source metadata for prerelease runtime while blocking release', () => {
     const card = getProviderSourceCard('au-commonwealth');
 
     expect(card).toMatchObject({
       jurisdiction: 'au-commonwealth',
       providerId: 'federal-register-of-legislation',
       sourceAuthority: 'Federal Register of Legislation public API',
-      releaseChannel: 'planned',
-      runtimeSupported: false,
-      runtimeKind: 'gated-au-adapter',
+      releaseChannel: 'prerelease',
+      runtimeSupported: true,
+      runtimeKind: 'prerelease-au-adapter',
       releaseGate: {
         status: 'blocked',
       },
@@ -61,24 +61,34 @@ describe('provider source cards', () => {
       sourceMetadata: {
         apiBaseUrl: 'https://api.prod.legislation.gov.au/v1',
         registerBaseUrl: 'https://www.legislation.gov.au',
-        runtimeEnabled: false,
+        runtimeEnabled: true,
       },
     });
-    expect(card.sourceBackedFeatureSummary.sourceBacked).toEqual([]);
-    expect(card.sourceBackedFeatureSummary.notSourceBacked).toEqual([...runtimeFeatures]);
+    expect(card.sourceBackedFeatureSummary.sourceBacked).toEqual([
+      'search',
+      'getWork',
+      'getVersions',
+      'export',
+      'mcp',
+    ]);
+    expect(card.sourceBackedFeatureSummary.notSourceBacked).toEqual(['getVersion', 'citation']);
 
-    for (const feature of runtimeFeatures) {
+    for (const feature of ['search', 'getWork', 'getVersions', 'export', 'mcp'] as const) {
+      expect(card.sourceBackedFeatureSummary.features[feature]).toMatchObject({
+        status: 'supported',
+        sourceBacked: true,
+      });
+    }
+
+    for (const feature of ['getVersion', 'citation'] as const) {
       expect(card.sourceBackedFeatureSummary.features[feature]).toMatchObject({
         status: 'unsupported',
         sourceBacked: false,
       });
-      expect(card.sourceBackedFeatureSummary.features[feature].notes).toMatch(
-        /Source validation is complete/
-      );
     }
   });
 
-  it('blocks all Australian source cards until they are stable runtime-supported providers', () => {
+  it('blocks all Australian source cards from release until they are stable providers', () => {
     const australianCards = getProviderSourceCards().filter(card =>
       card.jurisdiction.startsWith('au-')
     );
@@ -86,12 +96,8 @@ describe('provider source cards', () => {
     expect(australianCards).toHaveLength(9);
 
     for (const card of australianCards) {
-      expect(card.runtimeSupported).toBe(false);
-      expect(card.releaseChannel).toBe('planned');
       expect(card.releaseGate.status).toBe('blocked');
       expect(card.submissionGate.status).toBe('blocked');
-      expect(card.sourceBackedFeatureSummary.sourceBacked).toEqual([]);
-      expect(card.sourceBackedFeatureSummary.notSourceBacked).toEqual([...runtimeFeatures]);
     }
   });
 

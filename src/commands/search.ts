@@ -7,6 +7,7 @@ import ora from 'ora';
 
 import { searchWorks } from '../client.js';
 import { printTable, printJson, worksToCsv } from '../output/index.js';
+import { parseJurisdictionCode } from '../providers/jurisdictions.js';
 import { logger } from '../utils/logger.js';
 import { validateSearchParams, sanitizeInput } from '../utils/validation.js';
 
@@ -19,6 +20,7 @@ interface SearchOptions {
   limit: string;
   offset: string;
   format: string;
+  jurisdiction: string;
 }
 
 export const searchCommand = new Command()
@@ -32,6 +34,7 @@ export const searchCommand = new Command()
   .option('-l, --limit <number>', 'Maximum results (default: 25, max: 100)', '25')
   .option('-o, --offset <number>', 'Result offset for pagination', '0')
   .option('--format <format>', 'Output format (table, json, csv)', 'table')
+  .option('-j, --jurisdiction <code>', 'Jurisdiction provider (default: nz)', 'nz')
   .action(async (options: SearchOptions) => {
     const spinner = ora('Searching legislation...').start();
 
@@ -59,10 +62,12 @@ export const searchCommand = new Command()
       }
 
       const validatedParams = validation.data;
+      const jurisdiction = parseJurisdictionCode(options.jurisdiction);
       logger.debug('Search parameters validated', {
         query: validatedParams.query,
         type: validatedParams.type,
         limit: validatedParams.limit,
+        jurisdiction,
       });
 
       const results = await searchWorks({
@@ -73,6 +78,7 @@ export const searchCommand = new Command()
         to: validatedParams.to,
         limit: validatedParams.limit,
         offset: validatedParams.offset,
+        jurisdiction,
       });
 
       spinner.stop();

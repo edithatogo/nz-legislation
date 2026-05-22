@@ -5,7 +5,10 @@ import {
 } from './capability-manifest.js';
 import { commonwealthProviderSource, type CommonwealthProviderSource } from './commonwealth.js';
 
-export type ProviderRuntimeKind = 'legacy-nz-client' | 'gated-au-adapter' | 'planned-au-provider';
+export type ProviderRuntimeKind =
+  | 'legacy-nz-client'
+  | 'prerelease-au-adapter'
+  | 'planned-au-provider';
 
 export interface ProviderRegistryEntry {
   readonly jurisdiction: JurisdictionCode;
@@ -22,7 +25,7 @@ function runtimeKindForCapability(capability: ProviderCapability): ProviderRunti
   }
 
   if (capability.jurisdiction === commonwealthProviderSource.jurisdiction) {
-    return 'gated-au-adapter';
+    return 'prerelease-au-adapter';
   }
 
   return 'planned-au-provider';
@@ -45,7 +48,10 @@ function registryEntryForCapability(capability: ProviderCapability): ProviderReg
     jurisdiction: capability.jurisdiction,
     providerId: capability.providerId,
     runtimeKind,
-    runtimeSupported: capability.releaseChannel === 'stable' && capability.jurisdiction === 'nz',
+    runtimeSupported:
+      capability.jurisdiction === 'nz' ||
+      (capability.jurisdiction === commonwealthProviderSource.jurisdiction &&
+        capability.releaseChannel === 'prerelease'),
     capability,
     source: sourceForCapability(capability),
   };

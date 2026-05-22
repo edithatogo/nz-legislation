@@ -17,6 +17,7 @@ import {
 } from '../providers/capability-manifest.js';
 import { jurisdictionCodes } from '../providers/jurisdictions.js';
 import { getUnsupportedRuntimeProviderCapability } from '../providers/runtime.js';
+import { getProviderSourceCard } from '../providers/source-cards.js';
 import { logger } from '../utils/logger.js';
 
 /**
@@ -78,6 +79,12 @@ function createMcpErrorResponse(text: string): McpTextToolResponse {
       },
     ],
   };
+}
+
+function sourceCardText(jurisdiction: JurisdictionCode): string {
+  const card = getProviderSourceCard(jurisdiction);
+
+  return `\n\nSource: ${card.sourceAuthority} (${card.providerId}, ${card.releaseChannel})`;
 }
 
 /**
@@ -164,6 +171,7 @@ function registerSearchTool(server: McpServer): void {
           from: params.from,
           to: params.to,
           limit: params.limit,
+          jurisdiction: params.jurisdiction,
         });
 
         return {
@@ -177,7 +185,8 @@ function registerSearchTool(server: McpServer): void {
                     work =>
                       `• **${work.title}** (${work.type}, ${work.status})\n  ID: ${work.id}\n  Date: ${work.date}`
                   )
-                  .join('\n\n'),
+                  .join('\n\n') +
+                sourceCardText(params.jurisdiction),
             },
           ],
         };
@@ -213,7 +222,7 @@ function registerGetTool(server: McpServer): void {
           return createMcpErrorResponse('MCP rate limit exceeded. Please try again later.');
         }
 
-        const work = await getWork(params.workId);
+        const work = await getWork(params.workId, { jurisdiction: params.jurisdiction });
 
         return {
           content: [
@@ -227,7 +236,8 @@ function registerGetTool(server: McpServer): void {
                 `• **Date:** ${work.date}\n` +
                 `• **Versions:** ${work.versionCount}\n` +
                 `• **URL:** ${work.url}` +
-                (work.shortTitle ? `\n• **Short Title:** ${work.shortTitle}` : ''),
+                (work.shortTitle ? `\n• **Short Title:** ${work.shortTitle}` : '') +
+                sourceCardText(params.jurisdiction),
             },
           ],
         };
@@ -263,7 +273,9 @@ function registerGetVersionsTool(server: McpServer): void {
           return createMcpErrorResponse('MCP rate limit exceeded. Please try again later.');
         }
 
-        const versions = await getWorkVersions(params.workId);
+        const versions = await getWorkVersions(params.workId, {
+          jurisdiction: params.jurisdiction,
+        });
 
         return {
           content: [
@@ -279,7 +291,8 @@ function registerGetVersionsTool(server: McpServer): void {
                       `Current: ${v.isCurrent ? 'Yes' : 'No'}\n  ` +
                       `Formats: ${v.formats.join(', ')}`
                   )
-                  .join('\n\n'),
+                  .join('\n\n') +
+                sourceCardText(params.jurisdiction),
             },
           ],
         };
@@ -319,7 +332,7 @@ function registerCitationTool(server: McpServer): void {
           return createMcpErrorResponse('MCP rate limit exceeded. Please try again later.');
         }
 
-        const work = await getWork(params.workId);
+        const work = await getWork(params.workId, { jurisdiction: params.jurisdiction });
         const citation = generateCitation(work, params.style);
 
         return {
@@ -367,6 +380,7 @@ function registerExportTool(server: McpServer): void {
         const results = await searchWorks({
           query: params.query,
           limit: params.limit,
+          jurisdiction: params.jurisdiction,
         });
 
         if (params.format === 'json') {
@@ -374,7 +388,14 @@ function registerExportTool(server: McpServer): void {
             content: [
               {
                 type: 'text',
-                text: JSON.stringify(results, null, 2),
+                text: JSON.stringify(
+                  {
+                    sourceCard: getProviderSourceCard(params.jurisdiction),
+                    results,
+                  },
+                  null,
+                  2
+                ),
               },
             ],
           };
@@ -384,7 +405,7 @@ function registerExportTool(server: McpServer): void {
             content: [
               {
                 type: 'text',
-                text: `**CSV Export** (${results.results.length} results)\nHeaders: id, title, shortTitle, type, status, date, url, versionCount\n\n\`\`\`csv\n${csv}\n\`\`\``,
+                text: `**CSV Export** (${results.results.length} results)${sourceCardText(params.jurisdiction)}\nHeaders: id, title, shortTitle, type, status, date, url, versionCount\n\n\`\`\`csv\n${csv}\n\`\`\``,
               },
             ],
           };

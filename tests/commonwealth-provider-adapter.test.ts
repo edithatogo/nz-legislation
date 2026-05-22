@@ -82,7 +82,7 @@ function createMockHttpClient(responses: Record<string, unknown>): {
 }
 
 describe('Commonwealth provider adapter', () => {
-  it('declares source metadata without enabling Australian runtime support', () => {
+  it('declares source metadata for prerelease Australian runtime support', () => {
     const unsupportedSearch = getUnsupportedProviderCapability('au-commonwealth', 'search');
 
     expect(commonwealthProviderSource).toEqual({
@@ -91,13 +91,9 @@ describe('Commonwealth provider adapter', () => {
       sourceAuthority: 'Federal Register of Legislation public API',
       apiBaseUrl: 'https://api.prod.legislation.gov.au/v1',
       registerBaseUrl: 'https://www.legislation.gov.au',
-      runtimeEnabled: false,
+      runtimeEnabled: true,
     });
-    expect(unsupportedSearch).toMatchObject({
-      status: 'unsupported',
-      sourceBacked: false,
-      providerId: 'federal-register-of-legislation',
-    });
+    expect(unsupportedSearch).toBeNull();
   });
 
   it('uses the existing Commonwealth client for search, title, and versions lookups', async () => {
@@ -195,7 +191,7 @@ describe('Commonwealth provider adapter', () => {
 
     const adapter = createCommonwealthProviderAdapter({ providerClient });
 
-    expect(adapter.source.runtimeEnabled).toBe(false);
+    expect(adapter.source.runtimeEnabled).toBe(true);
 
     await expect(adapter.searchWorks({ query: 'Legislation Act' })).resolves.toMatchObject({
       results: [],
@@ -213,9 +209,7 @@ describe('Commonwealth provider adapter', () => {
     ]);
   });
 
-  it('fails closed when no client dependency is provided', () => {
-    expect(() => createCommonwealthProviderAdapter()).toThrow(
-      'Commonwealth provider adapter requires either a providerClient or an httpClient'
-    );
+  it('creates a default HTTP-backed adapter when no client dependency is provided', () => {
+    expect(createCommonwealthProviderAdapter().source).toBe(commonwealthProviderSource);
   });
 });

@@ -2,9 +2,10 @@
 
 ## Purpose
 
-Implement Australian Commonwealth legislation support from the official Federal
-Register of Legislation API inside this repository, without changing the stable
-New Zealand support contract or enabling unsupported Australian runtime claims.
+Implement prerelease Australian Commonwealth legislation support from the
+official Federal Register of Legislation API inside this repository, without
+changing the stable New Zealand support contract or enabling unsupported
+Australian stable-release claims.
 
 ## Requirements
 
@@ -22,15 +23,16 @@ transition aliases while Australian support is incomplete.
 
 ### R3: Capability gate
 
-`au-commonwealth` must remain unsupported in the provider capability manifest
-until search, get-work, versions, citation, export, MCP, source cards,
-documentation, and no-placeholder tests all pass.
+`au-commonwealth` may be marked prerelease/source-backed for search, get-work,
+versions, export, and MCP only after provider-aware runtime routing, source
+cards, and no-placeholder tests pass. Citation and single-version support remain
+unsupported until they have source-backed mappings.
 
 ### R4: Provider-aware runtime
 
-When enabled later, CLI, MCP, and export paths must route through explicit
-jurisdiction/provider selection and must never fall back to New Zealand data for
-Commonwealth requests.
+CLI, MCP, and export paths must route through explicit jurisdiction/provider
+selection and must never fall back to New Zealand data for Commonwealth
+requests.
 
 ### R5: Provenance
 
@@ -44,4 +46,5 @@ versions, document URLs, and retrieval metadata.
 - submitting registry listings
 - renaming the repository or package
 - starting a Rust rewrite
-- enabling live Commonwealth runtime support before the release gates pass
+- promoting Commonwealth runtime support beyond prerelease before the release
+  gates pass

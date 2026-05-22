@@ -19,7 +19,14 @@ import {
   type SearchResults,
   type Version,
   type Work,
+  type LegislationStatus,
+  type WorkType,
 } from './models/index.js';
+import type { JurisdictionCode } from './providers/capability-manifest.js';
+import {
+  createCommonwealthProviderAdapter,
+  type CommonwealthProviderAdapter,
+} from './providers/commonwealth.js';
 import { logger } from './utils/logger.js';
 
 /**
@@ -93,6 +100,18 @@ interface HttpClientLike {
 }
 
 type HttpClientFactory = () => HttpClientLike;
+type CommonwealthProviderAdapterFactory = () => CommonwealthProviderAdapter;
+
+export interface ProviderAwareSearchParams {
+  query?: string;
+  type?: string;
+  status?: string;
+  from?: string;
+  to?: string;
+  limit?: number;
+  offset?: number;
+  jurisdiction?: JurisdictionCode;
+}
 
 /**
  * Generate cache key from request parameters
@@ -336,9 +355,21 @@ function createClient(): HttpClientLike {
 }
 
 let httpClientFactory: HttpClientFactory = createClient;
+let commonwealthProviderAdapterFactory: CommonwealthProviderAdapterFactory =
+  createCommonwealthProviderAdapter;
 
 export function setHttpClientFactoryForTesting(factory?: HttpClientFactory): void {
   httpClientFactory = factory ?? createClient;
+}
+
+export function setCommonwealthProviderAdapterFactoryForTesting(
+  factory?: CommonwealthProviderAdapterFactory
+): void {
+  commonwealthProviderAdapterFactory = factory ?? createCommonwealthProviderAdapter;
+}
+
+function getJurisdiction(params?: { jurisdiction?: JurisdictionCode }): JurisdictionCode {
+  return params?.jurisdiction ?? 'nz';
 }
 
 async function getWorkFromVersions(
@@ -379,7 +410,18 @@ export async function searchWorks(params: {
   to?: string;
   limit?: number;
   offset?: number;
+  jurisdiction?: JurisdictionCode;
 }): Promise<SearchResults> {
+  if (getJurisdiction(params) === 'au-commonwealth') {
+    return commonwealthProviderAdapterFactory().searchWorks({
+      query: params.query,
+      type: params.type as WorkType | undefined,
+      status: params.status as LegislationStatus | undefined,
+      limit: params.limit,
+      offset: params.offset,
+    });
+  }
+
   const cacheKey = generateCacheKey('search', params as Record<string, string>);
 
   // Try cache first
@@ -447,8 +489,15 @@ export async function searchWorks(params: {
 /**
  * Get a specific work by ID
  */
-export async function getWork(workId: string): Promise<Work> {
-  const cacheKey = generateCacheKey('work', { id: workId });
+export async function getWork(
+  workId: string,
+  options: { jurisdiction?: JurisdictionCode } = {}
+): Promise<Work> {
+  if (getJurisdiction(options) === 'au-commonwealth') {
+    return commonwealthProviderAdapterFactory().getWork(workId);
+  }
+
+  const cacheKey = generateCacheKey('work', { id: workId, jurisdiction: getJurisdiction(options) });
 
   // Try cache first
   const cached = getFromCache<Work>(cacheKey);
@@ -545,8 +594,15 @@ export async function getWork(workId: string): Promise<Work> {
 /**
  * Get all versions of a work
  */
-export async function getWorkVersions(workId: string): Promise<Version[]> {
-  const cacheKey = generateCacheKey('versions', { workId });
+export async function getWorkVersions(
+  workId: string,
+  options: { jurisdiction?: JurisdictionCode } = {}
+): Promise<Version[]> {
+  if (getJurisdiction(options) === 'au-commonwealth') {
+    return commonwealthProviderAdapterFactory().getWorkVersions(workId);
+  }
+
+  const cacheKey = generateCacheKey('versions', { workId, jurisdiction: getJurisdiction(options) });
 
   // Try cache first
   const cached = getFromCache<Version[]>(cacheKey);

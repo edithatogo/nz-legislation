@@ -7,7 +7,7 @@ import {
 } from '../src/providers/registry.ts';
 
 describe('provider registry', () => {
-  it('keeps New Zealand as the only runtime-supported provider', () => {
+  it('keeps New Zealand stable and Commonwealth prerelease as runtime-supported providers', () => {
     expect(getRuntimeProviderRegistry()).toEqual([
       expect.objectContaining({
         jurisdiction: 'nz',
@@ -15,27 +15,33 @@ describe('provider registry', () => {
         runtimeKind: 'legacy-nz-client',
         runtimeSupported: true,
       }),
+      expect.objectContaining({
+        jurisdiction: 'au-commonwealth',
+        providerId: 'federal-register-of-legislation',
+        runtimeKind: 'prerelease-au-adapter',
+        runtimeSupported: true,
+      }),
     ]);
   });
 
-  it('records the gated Commonwealth adapter without enabling runtime support', () => {
+  it('records the prerelease Commonwealth adapter with source-backed runtime support', () => {
     expect(getProviderRegistryEntry('au-commonwealth')).toMatchObject({
       jurisdiction: 'au-commonwealth',
       providerId: 'federal-register-of-legislation',
-      runtimeKind: 'gated-au-adapter',
-      runtimeSupported: false,
+      runtimeKind: 'prerelease-au-adapter',
+      runtimeSupported: true,
       source: {
         jurisdiction: 'au-commonwealth',
         providerId: 'federal-register-of-legislation',
         sourceAuthority: 'Federal Register of Legislation public API',
-        runtimeEnabled: false,
+        runtimeEnabled: true,
       },
       capability: {
-        releaseChannel: 'planned',
+        releaseChannel: 'prerelease',
         features: {
           search: {
-            status: 'unsupported',
-            sourceBacked: false,
+            status: 'supported',
+            sourceBacked: true,
           },
         },
       },

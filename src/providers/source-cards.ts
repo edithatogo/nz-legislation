@@ -33,7 +33,7 @@ export interface ProviderSourceBackedFeatureSummary {
 export interface ProviderSourceMetadata {
   readonly apiBaseUrl?: string;
   readonly registerBaseUrl?: string;
-  readonly runtimeEnabled?: false;
+  readonly runtimeEnabled?: boolean;
 }
 
 export interface ProviderSourceCard {

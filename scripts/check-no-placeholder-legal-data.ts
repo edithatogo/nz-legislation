@@ -6,6 +6,13 @@ import {
 const placeholderTerms = /\b(dummy|fake|lorem|placeholder|sample)\b/i;
 
 const failures: string[] = [];
+const allowedAustralianSourceBackedFeatures = new Set([
+  'au-commonwealth.search',
+  'au-commonwealth.getWork',
+  'au-commonwealth.getVersions',
+  'au-commonwealth.export',
+  'au-commonwealth.mcp',
+]);
 
 function assertNoPlaceholderText(capability: ProviderCapability): void {
   const fields = [
@@ -43,9 +50,14 @@ for (const capability of getProviderCapabilities()) {
       );
     }
 
-    if (capability.jurisdiction.startsWith('au-') && feature.sourceBacked) {
+    const featureKey = `${capability.jurisdiction}.${featureName}`;
+    if (
+      capability.jurisdiction.startsWith('au-') &&
+      feature.sourceBacked &&
+      !allowedAustralianSourceBackedFeatures.has(featureKey)
+    ) {
       failures.push(
-        `${capability.jurisdiction}.${featureName}: Australian providers must remain unbacked until source validation lands`
+        `${featureKey}: Australian providers must remain unbacked until source validation lands`
       );
     }
   }
