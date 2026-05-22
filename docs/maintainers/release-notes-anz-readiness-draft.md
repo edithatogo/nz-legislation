@@ -6,7 +6,8 @@ This PR prepares the repository for a future ANZ-capable release path while
 preserving the current stable New Zealand legislation support.
 
 New Zealand support remains the stable, supported runtime surface for the
-existing packages, CLIs, MCP server, exports, and compatibility aliases.
+existing packages, command-line tools, MCP server, exports, and compatibility
+aliases.
 Australian support is prerelease/planned only. Australian capability work in
 this PR is readiness and gating work; it must not be described as stable
 runtime support until source validation, provider capability, no-placeholder

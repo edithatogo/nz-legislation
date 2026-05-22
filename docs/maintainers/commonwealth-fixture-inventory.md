@@ -19,7 +19,7 @@ legal data.
 | Title by id                      | Single-title lookups for current, repealed, and invalid identifiers where the API exposes those shapes.     | Needed |
 | Versions                         | Version/history responses that cover current, historical, and as-made metadata returned by the API.         | Needed |
 | Documents, content, and download | Document metadata plus any supported content or download response shapes for HTML, PDF, XML, or other URLs. | Needed |
-| Not-found and invalid responses  | Official 404, empty OData, validation, malformed query, and unsupported-parameter response shapes.          | Needed |
+| Not-found and invalid responses  | Official 404, empty API value, validation, malformed query, and unsupported-parameter response shapes.      | Needed |
 | Rate-limit and error responses   | Throttling, retry, service error, and transient failure shapes, including headers where available.          | Needed |
 
 ## Fixture rules
@@ -28,7 +28,7 @@ legal data.
   documents, or metadata.
 - Do not fabricate Acts, titles, versions, identifiers, dates, URLs, or document
   content.
-- Sanitization is allowed only for operational metadata that is not legal data
+- Redaction is allowed only for operational metadata that is not legal data
   and only when the original API shape remains clear.
 - Keep Commonwealth runtime support gated until these fixtures are reviewed,
   wired into tests, and checked against the provider capability manifest.
@@ -48,7 +48,7 @@ service. For each smoke-test run, record:
 - rate-limit headers, retry-after headers, or observed throttling behavior
 - fixture path, byte size, and SHA-256 digest
 - OpenAPI document version or retrieval date used to interpret the response
-- notes on any redaction or sanitization applied
+- notes on any redaction applied
 
 Use conservative request counts and stop when the service returns rate-limit or
 retry-after signals. Do not use fixture capture to crawl the service broadly.
