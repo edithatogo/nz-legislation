@@ -5,6 +5,7 @@ This repository has a single stable runtime provider today:
 - New Zealand is the only runtime-supported stable provider.
 - Australian providers remain planned or unsupported at runtime.
 - The Commonwealth has a validated Federal Register of Legislation source card and adapter boundary, but its runtime posture is still gated and `runtimeEnabled` remains false.
+- Maintainer guidance for source-card provenance is in `docs/maintainers/provider-source-cards.md`.
 
 ## Runtime posture
 

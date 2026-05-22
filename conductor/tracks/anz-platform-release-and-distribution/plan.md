@@ -71,6 +71,9 @@ the provider registry; provenance and install-snippet verification remain.
 - [x] Route MCP tools through provider-aware capability checks.
 - [x] Route export paths through provider-aware capability checks.
 - [ ] Add provider/source cards and provenance metadata.
+- [ ] Use `docs/maintainers/provenance-wiring-test-plan.md` as the future
+      provenance test checklist before emitting source cards in export or MCP
+      outputs.
 - [x] Add runtime provider gates under `src/providers/runtime.ts` and companion
       tests while keeping Commonwealth runtime support blocked.
 - [ ] Verify stdio install/config snippets against the packaged command.
