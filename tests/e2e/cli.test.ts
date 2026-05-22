@@ -97,6 +97,40 @@ describe('E2E CLI Tests', () => {
         releaseChannel: 'stable',
       });
     });
+
+    it('should include runtime provider registry details when requested', async () => {
+      const { stdout, exitCode } = await execa(
+        TSX_BIN,
+        [CLI_PATH, 'capabilities', '--format', 'json', '--include-runtime'],
+        {
+          env: {
+            NZ_LEGISLATION_API_KEY: '',
+          },
+        }
+      );
+
+      expect(exitCode).toBe(0);
+
+      const parsed = JSON.parse(stdout);
+      expect(parsed).toHaveProperty('providers');
+      expect(parsed).toHaveProperty('runtimeProviders');
+
+      const nzRuntimeProvider = parsed.runtimeProviders.find(
+        (provider: { jurisdiction?: string }) => provider.jurisdiction === 'nz'
+      );
+      const auCommonwealthRuntimeProvider = parsed.runtimeProviders.find(
+        (provider: { jurisdiction?: string }) => provider.jurisdiction === 'au-commonwealth'
+      );
+
+      expect(nzRuntimeProvider).toMatchObject({
+        jurisdiction: 'nz',
+        runtimeSupported: true,
+      });
+      expect(auCommonwealthRuntimeProvider).toMatchObject({
+        jurisdiction: 'au-commonwealth',
+        runtimeSupported: false,
+      });
+    });
   });
 
   describe('nzlegislation search', () => {

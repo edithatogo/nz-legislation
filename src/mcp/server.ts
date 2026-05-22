@@ -12,11 +12,11 @@ import { getConfig, hasApiKey } from '../config.js';
 import { generateCitation, worksToCsv } from '../output/index.js';
 import {
   getProviderCapabilities,
-  getUnsupportedProviderCapability,
   type JurisdictionCode,
   type ProviderFeature,
 } from '../providers/capability-manifest.js';
 import { jurisdictionCodes } from '../providers/jurisdictions.js';
+import { getUnsupportedRuntimeProviderCapability } from '../providers/runtime.js';
 import { logger } from '../utils/logger.js';
 
 /**
@@ -46,7 +46,7 @@ export function createUnsupportedCapabilityResponse(
   jurisdiction: JurisdictionCode,
   feature: ProviderFeature
 ): { content: Array<{ type: 'text'; text: string; isError: true }> } | null {
-  const unsupported = getUnsupportedProviderCapability(jurisdiction, feature);
+  const unsupported = getUnsupportedRuntimeProviderCapability(jurisdiction, feature);
 
   if (!unsupported) {
     return null;

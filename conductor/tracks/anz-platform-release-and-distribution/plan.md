@@ -22,6 +22,8 @@
       and channel coverage into the umbrella plan.
 - [x] Record compatibility naming for `nz-legislation-tool`, `nzlegislation`,
       `nzlegislation-mcp`, `anzlegislation`, and `anzlegislation-mcp`.
+- [x] Capture the provider registry foundation and Commonwealth adapter slices
+      in the umbrella progress docs.
 - [x] Add a channel matrix and release/submission gate checklist.
 - [ ] Reconcile any stale Conductor status claims against the current repository
       remote and package registry state before future public release work.
@@ -63,12 +65,15 @@
 
 ## Phase 5: MCP and export hardening
 
-**Status:** Not started.
+**Status:** In progress. Runtime gates now block unsupported providers through
+the provider registry; provenance and install-snippet verification remain.
 
-- Route MCP tools through provider-aware capability checks.
-- Route export paths through provider-aware capability checks.
-- Add provider/source cards and provenance metadata.
-- Verify stdio install/config snippets against the packaged command.
+- [x] Route MCP tools through provider-aware capability checks.
+- [x] Route export paths through provider-aware capability checks.
+- [ ] Add provider/source cards and provenance metadata.
+- [x] Add runtime provider gates under `src/providers/runtime.ts` and companion
+      tests while keeping Commonwealth runtime support blocked.
+- [ ] Verify stdio install/config snippets against the packaged command.
 
 ## Phase 6: npm, GitHub Packages, website, and docs
 

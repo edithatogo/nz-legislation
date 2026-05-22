@@ -30,5 +30,10 @@ submission, registry submission, and public listing created from this track.
 
 ## Current import verdict
 
-The v9 import is preparation-only. It adds the roadmap, integration folders, and
-gate definitions, but it does not satisfy the release/submission gates.
+The v9 import is still blocked from any external release or submission. It adds
+the roadmap, integration folders, and gate definitions, and the current branch
+also reflects Commonwealth source validation, client/mapping, adapter, and
+provider registry progress, but it does not satisfy the release/submission
+gates. Runtime provider gates now block unsupported providers through the
+registry, and the blocked gates remain blocked until provider selection,
+fixtures, docs, testing, provenance, and release-note work all pass.

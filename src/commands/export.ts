@@ -9,11 +9,9 @@ import ora from 'ora';
 
 import { searchWorks } from '../client.js';
 import { worksToCsv } from '../output/index.js';
-import {
-  assertFeatureSupported,
-  ProviderCapabilityError,
-} from '../providers/capability-manifest.js';
+import { ProviderCapabilityError } from '../providers/capability-manifest.js';
 import { parseJurisdictionCode } from '../providers/jurisdictions.js';
+import { assertRuntimeProviderSupported } from '../providers/runtime.js';
 
 interface ExportOptions {
   query: string;
@@ -48,7 +46,7 @@ export const exportCommand = new Command()
       const limit = Math.min(parseInt(options.limit, 10), 1000);
       const jurisdiction = parseJurisdictionCode(options.jurisdiction);
 
-      assertFeatureSupported(jurisdiction, 'export');
+      assertRuntimeProviderSupported(jurisdiction, 'export');
 
       const results = await searchWorks({
         query: options.query,
