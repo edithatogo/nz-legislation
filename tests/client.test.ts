@@ -3,7 +3,9 @@ import {
   clearCache,
   getRateLimitStatus,
   getWork,
+  getWorkVersions,
   searchWorks,
+  setCommonwealthProviderAdapterFactoryForTesting,
   setHttpClientFactoryForTesting,
 } from '../src/client.ts';
 import { ErrorCode } from '../src/errors.ts';
@@ -21,6 +23,7 @@ function makeHttpError(statusCode: number, message: string, url: string) {
 afterEach(() => {
   clearCache();
   setHttpClientFactoryForTesting();
+  setCommonwealthProviderAdapterFactoryForTesting();
 });
 
 describe('Rate Limiting', () => {
@@ -43,6 +46,87 @@ describe('Rate Limiting', () => {
 });
 
 describe('Client error handling', () => {
+  it('routes Commonwealth requests through the prerelease provider adapter', async () => {
+    const calls: string[] = [];
+
+    setCommonwealthProviderAdapterFactoryForTesting(() => ({
+      source: {
+        jurisdiction: 'au-commonwealth',
+        providerId: 'federal-register-of-legislation',
+        sourceAuthority: 'Federal Register of Legislation public API',
+        apiBaseUrl: 'https://api.prod.legislation.gov.au/v1',
+        registerBaseUrl: 'https://www.legislation.gov.au',
+        runtimeEnabled: true,
+      },
+      async searchWorks(params) {
+        calls.push(`search:${params.query ?? ''}`);
+
+        return {
+          total: 1,
+          offset: 0,
+          limit: 20,
+          results: [
+            {
+              id: 'C2004A01224',
+              title: 'Legislation Act 2003',
+              shortTitle: undefined,
+              type: 'act',
+              status: 'in-force',
+              date: '2003-12-17',
+              url: 'https://www.legislation.gov.au/C2004A01224/latest/text',
+              versionCount: 1,
+            },
+          ],
+          links: undefined,
+        };
+      },
+      async getWork(workId) {
+        calls.push(`get:${workId}`);
+
+        return {
+          id: workId,
+          title: 'Legislation Act 2003',
+          shortTitle: undefined,
+          type: 'act',
+          status: 'in-force',
+          date: '2003-12-17',
+          url: 'https://www.legislation.gov.au/C2004A01224/latest/text',
+          versionCount: 1,
+        };
+      },
+      async getWorkVersions(workId) {
+        calls.push(`versions:${workId}`);
+
+        return [
+          {
+            id: 'C2004A01224',
+            version: 1,
+            date: '2005-01-01',
+            isCurrent: true,
+            type: 'InForce',
+            formats: ['https://www.legislation.gov.au/C2004A01224/latest/text'],
+          },
+        ];
+      },
+    }));
+
+    await expect(
+      searchWorks({ query: 'Legislation Act', jurisdiction: 'au-commonwealth' })
+    ).resolves.toMatchObject({
+      results: [{ id: 'C2004A01224' }],
+    });
+    await expect(
+      getWork('C2004A01224', { jurisdiction: 'au-commonwealth' })
+    ).resolves.toMatchObject({
+      id: 'C2004A01224',
+    });
+    await expect(
+      getWorkVersions('C2004A01224', { jurisdiction: 'au-commonwealth' })
+    ).resolves.toHaveLength(1);
+
+    expect(calls).toEqual(['search:Legislation Act', 'get:C2004A01224', 'versions:C2004A01224']);
+  });
+
   it('should reconstruct a work from the versions endpoint when the direct work endpoint returns 404', async () => {
     setHttpClientFactoryForTesting(() => ({
       get: (url: string) => ({

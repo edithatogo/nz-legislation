@@ -1,3 +1,5 @@
+import got from 'got';
+
 import type { LegislationStatus, SearchResults, Version, Work, WorkType } from '../models/index.js';
 
 export const COMMONWEALTH_API_BASE_URL = 'https://api.prod.legislation.gov.au/v1';
@@ -69,7 +71,7 @@ export interface CommonwealthProviderSource {
   sourceAuthority: 'Federal Register of Legislation public API';
   apiBaseUrl: typeof COMMONWEALTH_API_BASE_URL;
   registerBaseUrl: typeof COMMONWEALTH_REGISTER_BASE_URL;
-  runtimeEnabled: false;
+  runtimeEnabled: boolean;
 }
 
 export interface CommonwealthProviderAdapter {
@@ -90,8 +92,24 @@ export const commonwealthProviderSource: CommonwealthProviderSource = {
   sourceAuthority: 'Federal Register of Legislation public API',
   apiBaseUrl: COMMONWEALTH_API_BASE_URL,
   registerBaseUrl: COMMONWEALTH_REGISTER_BASE_URL,
-  runtimeEnabled: false,
+  runtimeEnabled: true,
 };
+
+export function createCommonwealthHttpClient(): CommonwealthHttpClientLike {
+  return got.extend({
+    prefixUrl: COMMONWEALTH_API_BASE_URL,
+    timeout: { request: 30000 },
+    headers: {
+      Accept: 'application/json',
+      'User-Agent': 'nz-legislation-tool/1.0.0 prerelease-commonwealth-provider',
+    },
+    retry: {
+      limit: 2,
+      methods: ['get'],
+      statusCodes: [408, 429, 500, 502, 503, 504],
+    },
+  });
+}
 
 function toDateOnly(value?: string | null): string {
   const trimmed = value?.trim();
@@ -371,15 +389,7 @@ export function createCommonwealthProviderAdapter(
 ): CommonwealthProviderAdapter {
   const providerClient =
     dependencies.providerClient ??
-    (dependencies.httpClient
-      ? createCommonwealthProviderClient(dependencies.httpClient)
-      : undefined);
-
-  if (!providerClient) {
-    throw new Error(
-      'Commonwealth provider adapter requires either a providerClient or an httpClient'
-    );
-  }
+    createCommonwealthProviderClient(dependencies.httpClient ?? createCommonwealthHttpClient());
 
   return {
     source: commonwealthProviderSource,

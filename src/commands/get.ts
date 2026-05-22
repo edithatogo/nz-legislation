@@ -7,12 +7,14 @@ import ora from 'ora';
 
 import { getWork, getWorkVersions } from '../client.js';
 import { printWorkDetail, printVersionsTable, printJson, versionsToCsv } from '../output/index.js';
+import { parseJurisdictionCode } from '../providers/jurisdictions.js';
 import { logger } from '../utils/logger.js';
 import { validateWorkId, sanitizeInput } from '../utils/validation.js';
 
 interface GetOptions {
   versions?: boolean;
   format: string;
+  jurisdiction: string;
 }
 
 export const getCommand = new Command()
@@ -21,6 +23,7 @@ export const getCommand = new Command()
   .argument('<id>', 'Work ID (e.g., act_public_1989_18)')
   .option('--versions', 'Show version history')
   .option('--format <format>', 'Output format (table, json, csv)', 'table')
+  .option('-j, --jurisdiction <code>', 'Jurisdiction provider (default: nz)', 'nz')
   .action(async (workId: string, options: GetOptions) => {
     const spinner = ora('Retrieving legislation...').start();
 
@@ -41,10 +44,11 @@ export const getCommand = new Command()
       }
 
       logger.debug('Work ID validated', { workId: sanitizedWorkId });
+      const jurisdiction = parseJurisdictionCode(options.jurisdiction);
 
       if (options.versions) {
         // Get version history
-        const versions = await getWorkVersions(sanitizedWorkId);
+        const versions = await getWorkVersions(sanitizedWorkId, { jurisdiction });
         spinner.stop();
 
         switch (options.format.toLowerCase()) {
@@ -61,7 +65,7 @@ export const getCommand = new Command()
         }
       } else {
         // Get work details
-        const work = await getWork(sanitizedWorkId);
+        const work = await getWork(sanitizedWorkId, { jurisdiction });
         spinner.stop();
 
         switch (options.format.toLowerCase()) {

@@ -12,6 +12,7 @@ import { worksToCsv } from '../output/index.js';
 import { ProviderCapabilityError } from '../providers/capability-manifest.js';
 import { parseJurisdictionCode } from '../providers/jurisdictions.js';
 import { assertRuntimeProviderSupported } from '../providers/runtime.js';
+import { getProviderSourceCard } from '../providers/source-cards.js';
 
 interface ExportOptions {
   query: string;
@@ -45,6 +46,7 @@ export const exportCommand = new Command()
     try {
       const limit = Math.min(parseInt(options.limit, 10), 1000);
       const jurisdiction = parseJurisdictionCode(options.jurisdiction);
+      const sourceCard = getProviderSourceCard(jurisdiction);
 
       assertRuntimeProviderSupported(jurisdiction, 'export');
 
@@ -55,6 +57,7 @@ export const exportCommand = new Command()
         from: options.from,
         to: options.to,
         limit,
+        jurisdiction,
       });
 
       spinner.stop();
@@ -76,6 +79,7 @@ export const exportCommand = new Command()
                 },
                 timestamp,
                 jurisdiction,
+                sourceCard,
                 totalResults: results.total,
                 exportedCount: results.results.length,
               },
@@ -93,6 +97,9 @@ export const exportCommand = new Command()
           csvContent += `\n# Query: ${options.query}`;
           csvContent += `\n# Timestamp: ${timestamp}`;
           csvContent += `\n# Jurisdiction: ${jurisdiction}`;
+          csvContent += `\n# Provider: ${sourceCard.providerId}`;
+          csvContent += `\n# Source Authority: ${sourceCard.sourceAuthority}`;
+          csvContent += `\n# Release Channel: ${sourceCard.releaseChannel}`;
           csvContent += `\n# Total Results: ${results.total}`;
           csvContent += `\n# Exported: ${results.results.length}`;
           if (options.type) {

@@ -23,8 +23,8 @@ export const WorkIdSchema = z
   .string()
   .min(1, 'Work ID is required')
   .regex(
-    /^(?:[a-z0-9-]+(?:_[a-z0-9-]+){2,}|[a-z0-9-]+\/\d{4}\/\d+)$/,
-    'Invalid work ID format. Expected an API work ID like act_public_1989_18.'
+    /^(?:[a-z0-9-]+(?:_[a-z0-9-]+){2,}|[a-z0-9-]+\/\d{4}\/\d+|[A-Z]\d{4}[A-Z]\d{5})$/,
+    'Invalid work ID format. Expected an API work ID like act_public_1989_18 or C2004A01224.'
   );
 
 /**

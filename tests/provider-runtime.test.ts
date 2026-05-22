@@ -12,18 +12,23 @@ describe('provider runtime gates', () => {
     expect(() => assertRuntimeProviderSupported('nz', 'export')).not.toThrow();
   });
 
-  it('blocks Commonwealth runtime use even with a gated adapter source card', () => {
-    const unsupported = getUnsupportedRuntimeProviderCapability('au-commonwealth', 'search');
+  it('allows Commonwealth prerelease runtime use for source-backed features', () => {
+    expect(getUnsupportedRuntimeProviderCapability('au-commonwealth', 'search')).toBeNull();
+    expect(getUnsupportedRuntimeProviderCapability('au-commonwealth', 'export')).toBeNull();
+    expect(() => assertRuntimeProviderSupported('au-commonwealth', 'getWork')).not.toThrow();
+  });
+
+  it('blocks incomplete Commonwealth runtime features', () => {
+    const unsupported = getUnsupportedRuntimeProviderCapability('au-commonwealth', 'citation');
 
     expect(unsupported).toMatchObject({
       error: 'unsupported_provider_capability',
       jurisdiction: 'au-commonwealth',
       providerId: 'federal-register-of-legislation',
-      feature: 'search',
+      feature: 'citation',
       status: 'unsupported',
       sourceBacked: false,
     });
-    expect(unsupported?.message).toMatch(/provider implementation is required/i);
   });
 
   it('blocks planned Australian providers before runtime clients are invoked', () => {

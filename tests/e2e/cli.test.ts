@@ -128,7 +128,8 @@ describe('E2E CLI Tests', () => {
       });
       expect(auCommonwealthRuntimeProvider).toMatchObject({
         jurisdiction: 'au-commonwealth',
-        runtimeSupported: false,
+        runtimeSupported: true,
+        runtimeKind: 'prerelease-au-adapter',
       });
     });
   });

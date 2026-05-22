@@ -24,23 +24,24 @@
 
 ## Phase 2: Provider-aware CLI, MCP, and export
 
-**Status:** In progress. Shared runtime gates now block unsupported providers;
-Commonwealth provider selection and provenance output are still not enabled.
+**Status:** In progress. Commonwealth search, get-work, versions, export, and
+MCP are being enabled as source-backed prerelease runtime paths. Citation and
+single-version support remain blocked.
 
-- [ ] Route Commonwealth CLI paths through jurisdiction-aware provider
-      selection.
-- [x] Route Commonwealth MCP/export unsupported paths through shared runtime
-      provider gates.
-- [ ] Add source cards and provenance metadata to export output.
-- [ ] Preserve structured unsupported errors for incomplete features.
+- [~] Route Commonwealth CLI paths through jurisdiction-aware provider
+  selection.
+- [~] Route Commonwealth MCP/export paths through shared runtime provider
+  gates.
+- [~] Add source cards and provenance metadata to export and MCP output.
+- [x] Preserve structured unsupported errors for incomplete features.
 
 ## Phase 3: Tests and gates
 
 **Status:** In progress.
 
 - [x] Add unit tests for mapper, adapter, and unsupported runtime cases.
-- [ ] Add unit tests for provenance output.
-- [ ] Add no-placeholder legal-data tests for Commonwealth fixtures.
+- [~] Add unit tests for provenance output.
+- [~] Add no-placeholder legal-data tests for Commonwealth fixtures.
 - [ ] Add opt-in live smoke tests that are rate-limit respectful.
 - [ ] Keep `pnpm typecheck`, `pnpm test:run`, `pnpm build`, and
       `pnpm gate:no-placeholder-legal-data` passing.

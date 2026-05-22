@@ -41,13 +41,14 @@
 
 ## Phase 3: Provider truthfulness
 
-**Status:** Blocked until provider capability work is implemented.
+**Status:** In progress for Commonwealth prerelease runtime; blocked for stable
+Australian release claims and remaining jurisdictions.
 
 - Use `provider-api-roadmap.md` as the concrete source-validation backlog for
   legal-data providers and APIs.
 - Remove or quarantine placeholder Australian legal-data behavior.
-- Add structured unsupported capability errors.
-- Add no-placeholder legal-data tests.
+- Add structured unsupported capability errors for incomplete provider features.
+- Add no-placeholder legal-data tests for Commonwealth runtime fixtures.
 - Confirm Australian support is described only as prerelease until the gate
   passes.
 - Prioritize Australian Commonwealth and Queensland provider replacement before
@@ -56,21 +57,22 @@
 
 ## Phase 4: Capability manifest
 
-**Status:** Not started.
+**Status:** In progress.
 
-- Implement a provider capability manifest.
-- Use the manifest in CLI, MCP, export metadata, docs, and website surfaces.
-- Add tests that fail on manifest/provider mismatch.
+- [x] Implement a provider capability manifest.
+- [~] Use the manifest in CLI, MCP, export metadata, docs, and website surfaces.
+- [~] Add tests that fail on manifest/provider mismatch.
 - Require every listing or install page to match manifest-backed claims.
 
 ## Phase 5: MCP and export hardening
 
 **Status:** In progress. Runtime gates now block unsupported providers through
-the provider registry; provenance and install-snippet verification remain.
+the provider registry; Commonwealth prerelease runtime and provenance are being
+wired while install-snippet verification remains.
 
 - [x] Route MCP tools through provider-aware capability checks.
 - [x] Route export paths through provider-aware capability checks.
-- [ ] Add provider/source cards and provenance metadata.
+- [~] Add provider/source cards and provenance metadata.
 - [ ] Use `docs/maintainers/provenance-wiring-test-plan.md` as the future
       provenance test checklist before emitting source cards in export or MCP
       outputs.
