@@ -1,6 +1,6 @@
 # Australian Commonwealth source validation
 
-Validated on 2026-05-21 against the Federal Register of Legislation public
+Validated on 2026-05-20 against the Federal Register of Legislation public
 documentation and OpenAPI description.
 
 ## Official source
