@@ -98,6 +98,38 @@ describe('Commonwealth provider client', () => {
     });
   });
 
+  it('clamps Federal Register pagination params before sending OData requests', () => {
+    expect(
+      buildCommonwealthTitleSearchParams({
+        limit: Number.NaN,
+        offset: -10,
+      })
+    ).toMatchObject({
+      $top: '20',
+      $skip: '0',
+    });
+
+    expect(
+      buildCommonwealthTitleSearchParams({
+        limit: 10000,
+        offset: 10000000,
+      })
+    ).toMatchObject({
+      $top: '1000',
+      $skip: '1000000',
+    });
+
+    expect(
+      buildCommonwealthTitleSearchParams({
+        limit: 10.9,
+        offset: 20.9,
+      })
+    ).toMatchObject({
+      $top: '10',
+      $skip: '20',
+    });
+  });
+
   it('searches titles through the injected HTTP client and maps official responses', async () => {
     const response: CommonwealthODataResponse<CommonwealthTitle> = {
       '@odata.count': 1,

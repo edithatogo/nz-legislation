@@ -122,11 +122,39 @@ describe('Commonwealth provider mapping', () => {
         name: 'Customs instrument',
         collection: 'LegislativeInstrument',
         status: 'Repealed',
+        asMadeRegisteredAt: '2025-06-01T00:00:00',
       })
     ).toMatchObject({
       type: 'regulation',
       status: 'repealed',
-      date: '1900-01-01',
+      date: '2025-06-01',
     });
+  });
+
+  it('fails closed when Commonwealth title dates are missing', () => {
+    expect(() =>
+      mapCommonwealthTitleToWork({
+        id: 'F2025L00744',
+        name: 'Customs instrument',
+        collection: 'LegislativeInstrument',
+        status: 'Repealed',
+      })
+    ).toThrow('F2025L00744 is missing an authoritative date');
+  });
+
+  it('fails closed when Commonwealth version dates are missing', () => {
+    const response: CommonwealthODataResponse<CommonwealthVersion> = {
+      value: [
+        {
+          titleId: 'C2004A01224',
+          start: '',
+          registerId: 'C2004A01224',
+        },
+      ],
+    };
+
+    expect(() => mapCommonwealthVersionsToVersions(response)).toThrow(
+      'C2004A01224 is missing an authoritative date'
+    );
   });
 });

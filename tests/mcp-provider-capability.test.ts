@@ -4,7 +4,8 @@ import { createServer, createUnsupportedCapabilityResponse } from '../src/mcp/se
 
 type RegisteredTool = {
   handler: (params: Record<string, unknown>) => Promise<{
-    content: Array<{ type: string; text: string; isError?: boolean }>;
+    content: Array<{ type: string; text: string }>;
+    isError?: boolean;
   }>;
 };
 
@@ -20,10 +21,8 @@ describe('MCP provider capability gates', () => {
   it('returns structured unsupported errors for planned Australian providers', () => {
     const response = createUnsupportedCapabilityResponse('au-nsw', 'export');
 
-    expect(response?.content[0]).toMatchObject({
-      type: 'text',
-      isError: true,
-    });
+    expect(response?.isError).toBe(true);
+    expect(response?.content[0]).toMatchObject({ type: 'text' });
     expect(JSON.parse(response!.content[0].text)).toMatchObject({
       error: 'unsupported_provider_capability',
       jurisdiction: 'au-nsw',
@@ -62,7 +61,7 @@ describe('MCP provider capability gates', () => {
     for (const [toolName, params, feature] of cases) {
       const response = await tools[toolName].handler(params);
 
-      expect(response.content[0].isError).toBe(true);
+      expect(response.isError).toBe(true);
       expect(JSON.parse(response.content[0].text)).toMatchObject({
         error: 'unsupported_provider_capability',
         jurisdiction: 'au-nsw',

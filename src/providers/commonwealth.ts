@@ -94,11 +94,46 @@ export const commonwealthProviderSource: CommonwealthProviderSource = {
 };
 
 function toDateOnly(value?: string | null): string {
-  if (!value) {
-    return '1900-01-01';
+  const trimmed = value?.trim();
+
+  if (!trimmed) {
+    throw new Error('Commonwealth provider record is missing an authoritative date');
   }
 
-  return value.slice(0, 10);
+  return trimmed.slice(0, 10);
+}
+
+function requireDateOnly(value: string | null | undefined, recordId: string): string {
+  try {
+    return toDateOnly(value);
+  } catch (error) {
+    throw new Error(`Commonwealth provider record ${recordId} is missing an authoritative date`, {
+      cause: error,
+    });
+  }
+}
+
+function clampInteger(
+  value: number | undefined,
+  fallback: number,
+  min: number,
+  max: number
+): number {
+  if (typeof value !== 'number' || !Number.isFinite(value)) {
+    return fallback;
+  }
+
+  return Math.min(max, Math.max(min, Math.trunc(value)));
+}
+
+function getCommonwealthPagination(params: CommonwealthSearchParams): {
+  limit: number;
+  offset: number;
+} {
+  return {
+    limit: clampInteger(params.limit, 20, 1, 1000),
+    offset: clampInteger(params.offset, 0, 0, 1000000),
+  };
 }
 
 function mapCollectionToWorkType(collection: string): WorkType {
@@ -211,10 +246,11 @@ function buildTitleFilter(params: CommonwealthSearchParams): string | undefined 
 export function buildCommonwealthTitleSearchParams(
   params: CommonwealthSearchParams
 ): Record<string, string> {
+  const { limit, offset } = getCommonwealthPagination(params);
   const searchParams: Record<string, string> = {
     $count: 'true',
-    $top: String(params.limit ?? 20),
-    $skip: String(params.offset ?? 0),
+    $top: String(limit),
+    $skip: String(offset),
   };
   const filter = buildTitleFilter(params);
 
@@ -232,7 +268,7 @@ export function mapCommonwealthTitleToWork(title: CommonwealthTitle): Work {
     shortTitle: undefined,
     type: mapCollectionToWorkType(title.collection),
     status: mapStatus(title.status, title.isInForce),
-    date: toDateOnly(title.makingDate || title.asMadeRegisteredAt),
+    date: requireDateOnly(title.makingDate || title.asMadeRegisteredAt, title.id),
     url: titleUrl(title.id),
     versionCount: title.versions?.length ?? 0,
   };
@@ -258,12 +294,16 @@ export function mapCommonwealthVersionToVersion(
   index: number = 0
 ): Version {
   const compilationNumber = Number.parseInt(version.compilationNumber || '', 10);
+  const date = requireDateOnly(
+    version.registeredAt || version.start,
+    version.registerId || version.titleId
+  );
 
   return {
-    id: version.registerId || `${version.titleId}:${toDateOnly(version.start)}`,
+    id: version.registerId || `${version.titleId}:${date}`,
     version:
       Number.isFinite(compilationNumber) && compilationNumber > 0 ? compilationNumber : index + 1,
-    date: toDateOnly(version.registeredAt || version.start),
+    date,
     isCurrent: Boolean(version.isCurrent || version.isLatest),
     type: version.status || 'unknown',
     formats: [versionUrl(version)],
@@ -281,13 +321,14 @@ export function createCommonwealthProviderClient(
 ): CommonwealthProviderClient {
   return {
     async searchTitles(params: CommonwealthSearchParams): Promise<SearchResults> {
+      const pagination = getCommonwealthPagination(params);
       const searchParams = buildCommonwealthTitleSearchParams(params);
       const data = await httpClient.get('titles', { searchParams }).json();
       const response = assertODataResponse<CommonwealthTitle>(data, 'titles');
 
       return mapCommonwealthTitlesToSearchResults(response, {
-        offset: params.offset,
-        limit: params.limit,
+        offset: pagination.offset,
+        limit: pagination.limit,
       });
     },
 

@@ -30,6 +30,11 @@ const jurisdictionSchema = z
   .default('nz')
   .describe('Jurisdiction provider capability to use');
 
+type McpTextToolResponse = {
+  content: Array<{ type: 'text'; text: string }>;
+  isError?: true;
+};
+
 /**
  * Helper to check and increment MCP request count
  */
@@ -45,7 +50,7 @@ function checkMcpRateLimit(): boolean {
 export function createUnsupportedCapabilityResponse(
   jurisdiction: JurisdictionCode,
   feature: ProviderFeature
-): { content: Array<{ type: 'text'; text: string; isError: true }> } | null {
+): McpTextToolResponse | null {
   const unsupported = getUnsupportedRuntimeProviderCapability(jurisdiction, feature);
 
   if (!unsupported) {
@@ -53,11 +58,23 @@ export function createUnsupportedCapabilityResponse(
   }
 
   return {
+    isError: true,
     content: [
       {
         type: 'text',
         text: JSON.stringify(unsupported, null, 2),
-        isError: true,
+      },
+    ],
+  };
+}
+
+function createMcpErrorResponse(text: string): McpTextToolResponse {
+  return {
+    isError: true,
+    content: [
+      {
+        type: 'text',
+        text,
       },
     ],
   };
@@ -137,15 +154,7 @@ function registerSearchTool(server: McpServer): void {
 
         // Check MCP rate limit
         if (!checkMcpRateLimit()) {
-          return {
-            content: [
-              {
-                type: 'text',
-                text: 'MCP rate limit exceeded. Please try again later.',
-                isError: true,
-              },
-            ],
-          };
+          return createMcpErrorResponse('MCP rate limit exceeded. Please try again later.');
         }
 
         const results = await searchWorks({
@@ -173,15 +182,9 @@ function registerSearchTool(server: McpServer): void {
           ],
         };
       } catch (error) {
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Search failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-              isError: true,
-            },
-          ],
-        };
+        return createMcpErrorResponse(
+          `Search failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+        );
       }
     }
   );
@@ -207,15 +210,7 @@ function registerGetTool(server: McpServer): void {
 
         // Check MCP rate limit
         if (!checkMcpRateLimit()) {
-          return {
-            content: [
-              {
-                type: 'text',
-                text: 'MCP rate limit exceeded. Please try again later.',
-                isError: true,
-              },
-            ],
-          };
+          return createMcpErrorResponse('MCP rate limit exceeded. Please try again later.');
         }
 
         const work = await getWork(params.workId);
@@ -237,15 +232,9 @@ function registerGetTool(server: McpServer): void {
           ],
         };
       } catch (error) {
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Failed to get legislation: ${error instanceof Error ? error.message : 'Unknown error'}`,
-              isError: true,
-            },
-          ],
-        };
+        return createMcpErrorResponse(
+          `Failed to get legislation: ${error instanceof Error ? error.message : 'Unknown error'}`
+        );
       }
     }
   );
@@ -271,15 +260,7 @@ function registerGetVersionsTool(server: McpServer): void {
 
         // Check MCP rate limit
         if (!checkMcpRateLimit()) {
-          return {
-            content: [
-              {
-                type: 'text',
-                text: 'MCP rate limit exceeded. Please try again later.',
-                isError: true,
-              },
-            ],
-          };
+          return createMcpErrorResponse('MCP rate limit exceeded. Please try again later.');
         }
 
         const versions = await getWorkVersions(params.workId);
@@ -303,15 +284,9 @@ function registerGetVersionsTool(server: McpServer): void {
           ],
         };
       } catch (error) {
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Failed to get versions: ${error instanceof Error ? error.message : 'Unknown error'}`,
-              isError: true,
-            },
-          ],
-        };
+        return createMcpErrorResponse(
+          `Failed to get versions: ${error instanceof Error ? error.message : 'Unknown error'}`
+        );
       }
     }
   );
@@ -341,15 +316,7 @@ function registerCitationTool(server: McpServer): void {
 
         // Check MCP rate limit
         if (!checkMcpRateLimit()) {
-          return {
-            content: [
-              {
-                type: 'text',
-                text: 'MCP rate limit exceeded. Please try again later.',
-                isError: true,
-              },
-            ],
-          };
+          return createMcpErrorResponse('MCP rate limit exceeded. Please try again later.');
         }
 
         const work = await getWork(params.workId);
@@ -364,15 +331,9 @@ function registerCitationTool(server: McpServer): void {
           ],
         };
       } catch (error) {
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Failed to generate citation: ${error instanceof Error ? error.message : 'Unknown error'}`,
-              isError: true,
-            },
-          ],
-        };
+        return createMcpErrorResponse(
+          `Failed to generate citation: ${error instanceof Error ? error.message : 'Unknown error'}`
+        );
       }
     }
   );
@@ -400,15 +361,7 @@ function registerExportTool(server: McpServer): void {
 
         // Check MCP rate limit
         if (!checkMcpRateLimit()) {
-          return {
-            content: [
-              {
-                type: 'text',
-                text: 'MCP rate limit exceeded. Please try again later.',
-                isError: true,
-              },
-            ],
-          };
+          return createMcpErrorResponse('MCP rate limit exceeded. Please try again later.');
         }
 
         const results = await searchWorks({
@@ -437,15 +390,9 @@ function registerExportTool(server: McpServer): void {
           };
         }
       } catch (error) {
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Export failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-              isError: true,
-            },
-          ],
-        };
+        return createMcpErrorResponse(
+          `Export failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+        );
       }
     }
   );
@@ -500,15 +447,9 @@ function registerConfigTool(server: McpServer): void {
           ],
         };
       } catch (error) {
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Failed to get config: ${error instanceof Error ? error.message : 'Unknown error'}`,
-              isError: true,
-            },
-          ],
-        };
+        return createMcpErrorResponse(
+          `Failed to get config: ${error instanceof Error ? error.message : 'Unknown error'}`
+        );
       }
     }
   );
