@@ -1,0 +1,25 @@
+{
+  "status": "not_started",
+  "submission": {
+    "allowed": false,
+    "reason": "Extension implementation and marketplace submission are blocked until runtime scope, snippet evidence, secret storage, and security review pass."
+  },
+  "packageNames": {
+    "vsCodeMarketplace": "nz-legislation-tool",
+    "openVsx": "nz-legislation-tool"
+  },
+  "commands": [
+    {
+      "id": "nzLegislation.search",
+      "title": "Search New Zealand Legislation",
+      "runtime": "nzlegislation"
+    }
+  ],
+  "activationEvents": ["onCommand:nzLegislation.search"],
+  "permissions": ["network", "secretStorage"],
+  "apiKeyHandling": "Store API keys only in VS Code SecretStorage; never write them to settings or logs.",
+  "claims": {
+    "nz": "stable supported runtime",
+    "australia": "Commonwealth prerelease; other Australian jurisdictions planned or unsupported"
+  }
+}

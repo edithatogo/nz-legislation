@@ -2,16 +2,23 @@
 
 ## Current conclusion
 
-Australian support is **not ready for release** from the current governed release branches.
+Australian support is **not ready for stable release** from the current governed
+release branches. Australian Commonwealth is a source-backed prerelease runtime
+surface for search, get-work, versions, export, and MCP. Citation and
+single-version retrieval remain unsupported.
 
 ## Basis for that conclusion
 
-The current active release branches (`main` and `next`) do not ship Australian jurisdiction support in the runtime code path.
+The current active release branches (`main` and `next`) distinguish stable New
+Zealand support from prerelease or planned Australian support in the runtime
+capability manifest.
 
 The Australian Commonwealth source has now been validated against the Federal
 Register of Legislation public API documentation and OpenAPI document. That
-validation confirms a viable official source, but it does not make Commonwealth
-runtime support releaseable until an adapter is implemented and tested.
+validation confirms a viable official source. The repository now keeps
+Commonwealth runtime support prerelease and source-backed for search, get-work,
+versions, export, and MCP while keeping citation and single-version retrieval
+unsupported.
 
 The other Australian jurisdiction entries now have a source inventory, not
 runtime support. Queensland has a validated official API candidate requiring
@@ -30,7 +37,7 @@ The archived legacy branch contains earlier Australian plugin/provider work, but
 ## Release recommendation
 
 - keep the MCP-enabled NZ-only tool on the stable `1.2.x` line
-- do not publish Australian support from the current repo state
+- do not publish stable Australian support from the current repo state
 - implement Commonwealth support from the validated Federal Register of
   Legislation API rather than reviving placeholder legacy behavior
 - extract and modernize any useful archived Australian code only after it is
@@ -41,10 +48,13 @@ The archived legacy branch contains earlier Australian plugin/provider work, but
 Australian support can be considered releaseable only after all of the following are true:
 
 1. provider behavior is implemented rather than stubbed
-2. runtime integration exists on an active release branch
+2. runtime integration exists on an active release branch for the claimed
+   capability
 3. CLI, MCP, and any future HTTP adapter contracts are tested
 4. jurisdiction-specific documentation is added
 5. versioning is aligned with the current governed package line
+6. stable Australian support is promoted only after every release/submission
+   gate passes
 
 ## Source validation records
 

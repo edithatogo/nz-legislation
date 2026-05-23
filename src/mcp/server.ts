@@ -494,13 +494,22 @@ function registerLegislationResource(server: McpServer): void {
     }
 
     try {
-      const work = await getWork(workId);
+      const jurisdiction: JurisdictionCode = 'nz';
+      const work = await getWork(workId, { jurisdiction });
 
       return {
         contents: [
           {
             uri: uri.href,
-            text: JSON.stringify(work, null, 2),
+            text: JSON.stringify(
+              {
+                jurisdiction,
+                sourceCard: getProviderSourceCard(jurisdiction),
+                work,
+              },
+              null,
+              2
+            ),
             mimeType: 'application/json',
           },
         ],

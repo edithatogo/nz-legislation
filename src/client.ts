@@ -27,6 +27,7 @@ import {
   createCommonwealthProviderAdapter,
   type CommonwealthProviderAdapter,
 } from './providers/commonwealth.js';
+import { assertRuntimeProviderSupported } from './providers/runtime.js';
 import { logger } from './utils/logger.js';
 
 /**
@@ -412,7 +413,10 @@ export async function searchWorks(params: {
   offset?: number;
   jurisdiction?: JurisdictionCode;
 }): Promise<SearchResults> {
-  if (getJurisdiction(params) === 'au-commonwealth') {
+  const jurisdiction = getJurisdiction(params);
+  assertRuntimeProviderSupported(jurisdiction, 'search');
+
+  if (jurisdiction === 'au-commonwealth') {
     return commonwealthProviderAdapterFactory().searchWorks({
       query: params.query,
       type: params.type as WorkType | undefined,
@@ -422,7 +426,16 @@ export async function searchWorks(params: {
     });
   }
 
-  const cacheKey = generateCacheKey('search', params as Record<string, string>);
+  const cacheKey = generateCacheKey('search', {
+    ...(params.query && { query: params.query }),
+    ...(params.type && { type: params.type }),
+    ...(params.status && { status: params.status }),
+    ...(params.from && { from: params.from }),
+    ...(params.to && { to: params.to }),
+    ...(params.limit && { limit: params.limit.toString() }),
+    ...(params.offset && { offset: params.offset.toString() }),
+    jurisdiction,
+  });
 
   // Try cache first
   const cached = getFromCache<SearchResults>(cacheKey);
@@ -493,11 +506,14 @@ export async function getWork(
   workId: string,
   options: { jurisdiction?: JurisdictionCode } = {}
 ): Promise<Work> {
-  if (getJurisdiction(options) === 'au-commonwealth') {
+  const jurisdiction = getJurisdiction(options);
+  assertRuntimeProviderSupported(jurisdiction, 'getWork');
+
+  if (jurisdiction === 'au-commonwealth') {
     return commonwealthProviderAdapterFactory().getWork(workId);
   }
 
-  const cacheKey = generateCacheKey('work', { id: workId, jurisdiction: getJurisdiction(options) });
+  const cacheKey = generateCacheKey('work', { id: workId, jurisdiction });
 
   // Try cache first
   const cached = getFromCache<Work>(cacheKey);
@@ -598,11 +614,14 @@ export async function getWorkVersions(
   workId: string,
   options: { jurisdiction?: JurisdictionCode } = {}
 ): Promise<Version[]> {
-  if (getJurisdiction(options) === 'au-commonwealth') {
+  const jurisdiction = getJurisdiction(options);
+  assertRuntimeProviderSupported(jurisdiction, 'getVersions');
+
+  if (jurisdiction === 'au-commonwealth') {
     return commonwealthProviderAdapterFactory().getWorkVersions(workId);
   }
 
-  const cacheKey = generateCacheKey('versions', { workId, jurisdiction: getJurisdiction(options) });
+  const cacheKey = generateCacheKey('versions', { workId, jurisdiction });
 
   // Try cache first
   const cached = getFromCache<Version[]>(cacheKey);

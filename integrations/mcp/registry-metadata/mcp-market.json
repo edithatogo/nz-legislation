@@ -1,0 +1,20 @@
+{
+  "registry": "MCP Market",
+  "status": "not_submitted",
+  "packageName": "nz-legislation-tool",
+  "command": "npx",
+  "args": ["-y", "--package", "nz-legislation-tool", "nzlegislation-mcp"],
+  "env": ["NZ_LEGISLATION_API_KEY"],
+  "capabilityMatrix": "docs/capabilities.md",
+  "sourceCards": "docs/maintainers/provider-source-cards.md",
+  "license": "Apache-2.0",
+  "maintainer": "edithatogo/nz-legislation maintainers",
+  "claims": {
+    "nz": "stable supported runtime",
+    "australia": "Commonwealth prerelease; other Australian jurisdictions planned or unsupported"
+  },
+  "submission": {
+    "allowed": false,
+    "reason": "Blocked until all release/submission gates pass and current registry requirements are revalidated."
+  }
+}

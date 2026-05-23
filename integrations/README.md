@@ -17,3 +17,6 @@ Keep all integrations in this repository.
 - `generic-hosts/` — Cline/Cursor/Windsurf/Zed/etc. install notes
 
 Do not publish or submit integration artifacts until the submission gates pass.
+
+GitHub Copilot integration work remains local-only until the release/submission
+gates pass.

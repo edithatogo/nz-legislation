@@ -138,6 +138,106 @@ jobs:
 
       - name: Run Conductor requirements gate
         run: pnpm gate:conductor-requirements
+  no-placeholder-legal-data:
+    name: No Placeholder Legal Data Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.29.3 --activate
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Run no placeholder legal data gate
+        run: pnpm gate:no-placeholder-legal-data
+  provider-capability-manifest:
+    name: Provider Capability Manifest Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.29.3 --activate
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Run provider capability manifest gate
+        run: pnpm gate:provider-capability-manifest
+  provider-aware-mcp-export:
+    name: Provider Aware MCP Export Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.29.3 --activate
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Run provider aware mcp export gate
+        run: pnpm gate:provider-aware-mcp-export
+  website-docs:
+    name: Website Docs Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.29.3 --activate
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Run website docs gate
+        run: pnpm gate:website-docs
   manifest-docs:
     name: Manifest Docs Drift Gate
     runs-on: ubuntu-latest
@@ -263,6 +363,31 @@ jobs:
 
       - name: Run package metadata gate
         run: pnpm gate:package-metadata
+  channel-readiness:
+    name: Channel Readiness Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.29.3 --activate
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Run channel readiness gate
+        run: pnpm gate:channel-readiness
   test:
     name: Test (Node ${{ matrix.node-version }})
     runs-on: ubuntu-latest
@@ -305,6 +430,11 @@ jobs:
         lint,
         typecheck,
         conductor-requirements,
+        website-docs,
+        channel-readiness,
+        provider-aware-mcp-export,
+        provider-capability-manifest,
+        no-placeholder-legal-data,
         manifest-docs,
         install-snippets,
         security-provenance,

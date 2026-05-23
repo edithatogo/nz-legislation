@@ -4,11 +4,21 @@ ANZ Legislation is a CLI and MCP server for official-source-first legislation re
 
 ## Important
 
-Australian support is prerelease. Use the runtime capability manifest and source cards to confirm whether a jurisdiction/method is supported.
+Australian support is prerelease. Australian support is prerelease or planned.
+Some Australian jurisdictions are planned until they are explicitly promoted by
+the runtime capability manifest and release gates. New Zealand is the stable
+supported runtime surface.
 
 ## Key docs
 
 - README.md
+- docs/capabilities.md
+- docs/provider-runtime.md
+- docs/maintainers/provider-source-cards.md
 - docs/maintainers/distribution-submission-map.md
 - docs/maintainers/security-and-submission-gates-v9.md
 - integrations/README.md
+
+## Capability checks
+
+Use `docs/capabilities.md`, `docs/provider-runtime.md`, and `docs/maintainers/provider-source-cards.md` before describing provider support. Do not describe Australia as stable from prerelease or planned entries.

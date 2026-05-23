@@ -1,0 +1,16 @@
+{
+  "status": "not_started",
+  "submission": {
+    "allowed": false,
+    "reason": "No tap or formula may be published until release/submission gates and install snippet evidence pass."
+  },
+  "formulaName": "nz-legislation-tool",
+  "tap": "edithatogo/homebrew-tap",
+  "installCommand": "brew install edithatogo/tap/nz-legislation-tool",
+  "binaries": ["nzlegislation", "nzlegislation-mcp", "anzlegislation", "anzlegislation-mcp"],
+  "checksumSource": "GitHub release tarball generated after provenance review",
+  "claims": {
+    "nz": "stable supported runtime",
+    "australia": "Commonwealth prerelease; other Australian jurisdictions planned or unsupported"
+  }
+}
