@@ -30,8 +30,9 @@ fresh host profile:
 
 - [ ] `npm install -g nz-legislation-tool`
 - [ ] `npx -y --package nz-legislation-tool nzlegislation --help`
-- [ ] local package install from the built tarball or workspace package
-- [ ] `npx -y --package nz-legislation-tool nzlegislation-mcp`\n- [ ] MCP stdio command and JSON config
+- [x] local package install from the built tarball or workspace package
+- [ ] `npx -y --package nz-legislation-tool nzlegislation-mcp`
+- [x] MCP stdio command and JSON config
 - [ ] Claude Desktop MCP config
 - [ ] Claude Code / project instruction snippet
 - [ ] Codex `AGENTS.md` / MCP config snippet
@@ -71,3 +72,17 @@ starts the intended command, and the user-facing copy matches the actual
 provider support. Any failure, blocked host setup, missing provider gate, or
 unclear jurisdiction claim keeps that surface out of the external publishing or
 submission packet.
+
+## Automated local evidence
+
+`pnpm gate:install-snippets` now runs both text checks and a local package smoke
+test. The smoke test builds the workspace, packs `nz-legislation-tool` into
+`.tmp/install-snippet-smoke/pack/`, installs that tarball into a clean temporary
+project, verifies the installed `nzlegislation --help` binary, and starts the
+installed `nzlegislation-mcp` binary long enough to confirm MCP stdio startup
+and answer an MCP `initialize` request.
+
+This evidence is local-only. It does not install from npm, publish a package,
+submit to an MCP registry, or prove host-specific marketplace setup. Future
+external release or submission packets still need surface-specific evidence for
+the exact published command or host configuration.

@@ -15,7 +15,8 @@
 
 **Status:** Pending.
 
-- [ ] Test MCP stdio install/config snippets.
+- [x] Test MCP stdio install/config snippets through the local package smoke
+      gate.
 - [x] Prepare guarded local listing metadata after provider-aware MCP/export
       gates were added.
 - [x] Add `pnpm gate:channel-readiness` to enforce local-only registry metadata.

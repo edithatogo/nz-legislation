@@ -92,7 +92,7 @@ verification remains.
 - [x] Add runtime provider gates under `src/providers/runtime.ts` and companion
       tests while keeping Commonwealth runtime support prerelease and other
       incomplete features blocked.
-- [ ] Verify stdio install/config snippets against the packaged command.
+- [x] Verify stdio install/config snippets against the packaged command.
 
 ## Phase 6: npm, GitHub Packages, website, and docs
 
@@ -104,7 +104,8 @@ verification remains.
       security/provenance gate.
 - [x] Update website/docs install pages, capability matrix, and `llms.txt`.
 - [x] Add a website/docs gate to keep public docs aligned with runtime claims.
-- [ ] Test install snippets locally before publishing or deploying.
+- [x] Test install snippets locally from a built package tarball before
+      publishing or deploying.
 - Do not publish or deploy until all gates pass.
 
 ## Phase 7: MCP registries
