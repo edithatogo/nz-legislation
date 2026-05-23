@@ -44,7 +44,8 @@
 - Confirm package metadata for stable NZ support and Australian prerelease
   language.
 - Keep legacy package and binary compatibility.
-- Confirm release notes distinguish NZ stable from Australian prerelease support.
+- [x] Add an executable release notes gate that distinguishes NZ stable from
+      Australian prerelease support.
 
 ## Phase 3: Provider truthfulness
 
@@ -138,8 +139,8 @@ wired while install-snippet verification remains.
 - Define Homebrew formula expectations before any tap or formula is published.
 - Maintain a registry/listing tracker with review dates and renewal dates.
 - Monitor upstream source drift and legal-data provider status.
-- Keep all release automation guarded by provenance, docs, install, and release
-  note checks.
+- [x] Keep all release automation guarded by provenance, docs, install, and
+      release note checks.
 
 ## Phase 11: Long-term Rust migration readiness
 

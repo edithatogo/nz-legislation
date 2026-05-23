@@ -6,7 +6,8 @@
 
 - [x] Add package registry contracts to `conductor/requirements.md`.
 - [x] Add this Conductor track.
-- [ ] Add metadata/release-note drift checks against the capability manifest.
+- [x] Add release-note checks that reject premature Australian stable-support
+      claims and require prerelease/planned language for AU-scoped changesets.
 
 ## Phase 2: Publication readiness
 
@@ -14,5 +15,5 @@
 
 - [ ] Verify npm stable and prerelease metadata.
 - [ ] Verify GitHub Packages provenance expectations.
-- [ ] Verify GitHub Release note template distinguishes NZ stable from AU
+- [x] Verify GitHub Release note template distinguishes NZ stable from AU
       prerelease support.

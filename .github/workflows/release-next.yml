@@ -62,6 +62,7 @@ jobs:
           pnpm gate:manifest-docs
           pnpm gate:install-snippets
           pnpm gate:security-provenance
+          pnpm gate:release-notes
           pnpm typecheck
           pnpm test:run
           pnpm build
