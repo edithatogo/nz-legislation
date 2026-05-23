@@ -58,6 +58,11 @@ jobs:
 
       - name: Run release gate checks
         run: |
+          pnpm gate:no-placeholder-legal-data
+          pnpm gate:conductor-requirements
+          pnpm gate:manifest-docs
+          pnpm gate:install-snippets
+          pnpm gate:security-provenance
           pnpm typecheck
           pnpm test:run
           pnpm build

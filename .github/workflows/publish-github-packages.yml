@@ -40,6 +40,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Run mirror gate checks
+        run: |
+          pnpm gate:no-placeholder-legal-data
+          pnpm gate:conductor-requirements
+          pnpm gate:manifest-docs
+          pnpm gate:install-snippets
+          pnpm gate:security-provenance
       - name: Build package
         run: pnpm run build
 
