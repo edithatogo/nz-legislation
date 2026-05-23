@@ -36,7 +36,8 @@
     "docs": "typedoc",
     "docs:serve": "npx http-server docs/api -p 8080 -o",
     "gate:conductor-requirements": "tsx scripts/check-conductor-requirements.ts",
-    "gate:manifest-docs": "tsx scripts/check-manifest-docs-drift.ts"
+    "gate:manifest-docs": "tsx scripts/check-manifest-docs-drift.ts",
+    "gate:install-snippets": "tsx scripts/check-install-snippets.ts"
   },
   "keywords": [
     "nz",

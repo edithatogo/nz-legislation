@@ -29,9 +29,9 @@ For each applicable surface, verify the published snippet from a clean shell or
 fresh host profile:
 
 - [ ] `npm install -g nz-legislation-tool`
-- [ ] `npx -y nz-legislation-tool --help`
+- [ ] `npx -y --package nz-legislation-tool nzlegislation --help`
 - [ ] local package install from the built tarball or workspace package
-- [ ] MCP stdio command and JSON config
+- [ ] `npx -y --package nz-legislation-tool nzlegislation-mcp`\n- [ ] MCP stdio command and JSON config
 - [ ] Claude Desktop MCP config
 - [ ] Claude Code / project instruction snippet
 - [ ] Codex `AGENTS.md` / MCP config snippet
