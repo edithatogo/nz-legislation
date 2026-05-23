@@ -48,6 +48,7 @@ jobs:
           pnpm gate:install-snippets
           pnpm gate:security-provenance
           pnpm gate:release-notes
+          pnpm gate:package-metadata
       - name: Build package
         run: pnpm run build
 

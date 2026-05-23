@@ -63,6 +63,7 @@ jobs:
           pnpm gate:install-snippets
           pnpm gate:security-provenance
           pnpm gate:release-notes
+          pnpm gate:package-metadata
           pnpm typecheck
           pnpm test:run
           pnpm build

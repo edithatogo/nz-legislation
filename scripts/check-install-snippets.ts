@@ -10,7 +10,7 @@ const packageJson = JSON.parse(read('package.json')) as PackageJson;
 const bins = packageJson.bin ?? {};
 const failures: string[] = [];
 
-const requiredBins = ['nzlegislation', 'nzlegislation-mcp'];
+const requiredBins = ['nzlegislation', 'nzlegislation-mcp', 'anzlegislation', 'anzlegislation-mcp'];
 for (const bin of requiredBins) {
   if (!bins[bin]) {
     failures.push(`package.json is missing required bin ${bin}.`);

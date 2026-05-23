@@ -68,6 +68,8 @@ const releaseGateCommands = [
   'pnpm gate:manifest-docs',
   'pnpm gate:install-snippets',
   'pnpm gate:security-provenance',
+  'pnpm gate:release-notes',
+  'pnpm gate:package-metadata',
   'pnpm typecheck',
   'pnpm test:run',
   'pnpm build',
@@ -88,6 +90,7 @@ for (const workflow of [
 requireIncludes('.github/workflows/publish-github-packages.yml', [
   'packages: write',
   'pnpm gate:security-provenance',
+  'pnpm gate:package-metadata',
   'pnpm gate:install-snippets',
   'pnpm gate:manifest-docs',
   'pnpm run build',
