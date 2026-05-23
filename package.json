@@ -6,7 +6,9 @@
   "main": "dist/cli.js",
   "bin": {
     "nzlegislation": "./dist/cli.js",
-    "nzlegislation-mcp": "./dist/mcp-cli.js"
+    "nzlegislation-mcp": "./dist/mcp-cli.js",
+    "anzlegislation": "./dist/cli.js",
+    "anzlegislation-mcp": "./dist/mcp-cli.js"
   },
   "scripts": {
     "dev": "tsx src/cli.ts",
@@ -39,7 +41,8 @@
     "gate:manifest-docs": "tsx scripts/check-manifest-docs-drift.ts",
     "gate:install-snippets": "tsx scripts/check-install-snippets.ts",
     "gate:security-provenance": "tsx scripts/check-security-provenance.ts",
-    "gate:release-notes": "tsx scripts/check-release-notes.ts"
+    "gate:release-notes": "tsx scripts/check-release-notes.ts",
+    "gate:package-metadata": "tsx scripts/check-package-metadata.ts"
   },
   "keywords": [
     "nz",

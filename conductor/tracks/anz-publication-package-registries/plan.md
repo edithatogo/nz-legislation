@@ -8,12 +8,14 @@
 - [x] Add this Conductor track.
 - [x] Add release-note checks that reject premature Australian stable-support
       claims and require prerelease/planned language for AU-scoped changesets.
+- [x] Add package metadata checks that preserve package identity, stable command
+      names, transitional ANZ aliases, and NZ-stable/AU-prerelease claims.
 
 ## Phase 2: Publication readiness
 
 **Status:** Pending.
 
-- [ ] Verify npm stable and prerelease metadata.
+- [x] Verify npm stable and prerelease metadata.
 - [ ] Verify GitHub Packages provenance expectations.
 - [x] Verify GitHub Release note template distinguishes NZ stable from AU
       prerelease support.
