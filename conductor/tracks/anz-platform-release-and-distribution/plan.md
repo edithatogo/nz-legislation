@@ -25,6 +25,13 @@
 - [x] Capture the provider registry foundation and Commonwealth adapter slices
       in the umbrella progress docs.
 - [x] Add a channel matrix and release/submission gate checklist.
+- [x] Add `conductor/requirements.md` as the MoSCoW requirements and contract
+      register for provider, publication, registry, integration, and migration
+      tracks.
+- [x] Add dedicated Conductor tracks for present NZ compatibility, aggregator
+      evaluation, OpenAPI readiness, package registries, website/docs, MCP
+      registries, assistant integrations, IDE marketplaces, Docker/GHCR,
+      Homebrew, and Rust readiness.
 - [ ] Reconcile any stale Conductor status claims against the current repository
       remote and package registry state before future public release work.
 
@@ -63,6 +70,8 @@ Australian release claims and remaining jurisdictions.
 - [~] Use the manifest in CLI, MCP, export metadata, docs, and website surfaces.
 - [~] Add tests that fail on manifest/provider mismatch.
 - Require every listing or install page to match manifest-backed claims.
+- Run pnpm gate:conductor-requirements when requirements or track coverage
+  changes.
 
 ## Phase 5: MCP and export hardening
 

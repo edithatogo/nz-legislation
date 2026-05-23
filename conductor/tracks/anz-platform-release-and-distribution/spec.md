@@ -56,6 +56,23 @@ registry submission, the applicable gate record must show passing evidence for:
 - security/provenance review
 - release notes distinguishing NZ stable from Australian prerelease support
 
+### R4a: MoSCoW requirements and contracts
+
+Maintain `conductor/requirements.md` as the single MoSCoW requirements and
+contract register for:
+
+- provider tracks, including present stable NZ support, present Commonwealth
+  prerelease support, planned Australian jurisdictions, aggregator evaluation,
+  and future HTTP/OpenAPI readiness
+- publication and registry tracks, including npm, GitHub Packages, website/docs,
+  MCP directories, assistant integrations, IDE marketplaces, Docker/GHCR,
+  Homebrew, and Rust migration readiness
+- global compatibility, no-placeholder, and release/submission gate contracts
+
+Every provider, publication, registry, integration, and migration row in the
+requirements register must have a matching Conductor track with `metadata.json`,
+`spec.md`, and `plan.md`.
+
 ### R5: Capability manifest as source of truth
 
 Runtime capability must be represented in a provider capability manifest. CLI,

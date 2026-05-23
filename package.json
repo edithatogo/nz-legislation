@@ -34,7 +34,8 @@
     "audit": "pnpm audit",
     "audit:fix": "pnpm audit --fix",
     "docs": "typedoc",
-    "docs:serve": "npx http-server docs/api -p 8080 -o"
+    "docs:serve": "npx http-server docs/api -p 8080 -o",
+    "gate:conductor-requirements": "tsx scripts/check-conductor-requirements.ts"
   },
   "keywords": [
     "nz",
