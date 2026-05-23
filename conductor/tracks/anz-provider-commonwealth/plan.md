@@ -24,15 +24,14 @@
 
 ## Phase 2: Provider-aware CLI, MCP, and export
 
-**Status:** In progress. Commonwealth search, get-work, versions, export, and
-MCP are being enabled as source-backed prerelease runtime paths. Citation and
-single-version support remain blocked.
+**Status:** Complete for source-backed prerelease search, get-work, versions,
+export, and MCP. Citation and single-version support remain blocked.
 
-- [~] Route Commonwealth CLI paths through jurisdiction-aware provider
-  selection.
-- [~] Route Commonwealth MCP/export paths through shared runtime provider
-  gates.
-- [~] Add source cards and provenance metadata to export and MCP output.
+- [x] Route Commonwealth CLI paths through jurisdiction-aware provider
+      selection.
+- [x] Route Commonwealth MCP/export paths through shared runtime provider
+      gates.
+- [x] Add source cards and provenance metadata to export and MCP output.
 - [x] Preserve structured unsupported errors for incomplete features.
 
 ## Phase 3: Tests and gates
@@ -48,9 +47,11 @@ single-version support remain blocked.
 
 ## Phase 4: Release readiness
 
-**Status:** Not started.
+**Status:** In progress for local readiness; blocked for external publication,
+deployment, or submission.
 
-- [ ] Update docs, install snippets, and release notes only after runtime gates
-      pass.
-- [ ] Distinguish NZ stable support from Commonwealth prerelease support.
-- [ ] Re-check package metadata and registry copy before any public claim.
+- [x] Update docs and release-readiness gates after runtime gates pass.
+- [x] Distinguish NZ stable support from Commonwealth prerelease support.
+- [x] Re-check package metadata and local registry copy before any public claim.
+- [ ] Keep external publication, deployment, and submission blocked until the
+      umbrella release/submission gates pass for a specific channel.

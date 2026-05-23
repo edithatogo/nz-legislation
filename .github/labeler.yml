@@ -30,14 +30,14 @@ dependencies:
   - body: '/\b(dependency|dependencies|upgrade|update)\b/i'
 
 # Priority labels based on severity
-priority: critical:
+'priority: critical':
   - body: '/\b(critical|urgent|emergency|blocking)\b/i'
 
-priority: high:
+'priority: high':
   - body: '/\b(high|important|urgent)\b/i'
 
-priority: medium:
+'priority: medium':
   - body: '/\b(medium|normal)\b/i'
 
-priority: low:
+'priority: low':
   - body: '/\b(low|minor|nice.to.have)\b/i'

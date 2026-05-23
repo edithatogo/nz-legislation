@@ -141,12 +141,15 @@ unsupported runtime support claims.
 - Integration folders and maintainer docs now exist as preparation surfaces.
 - Commonwealth source validation, client/mapping, adapter source metadata, and
   provider registry foundation are reflected in the progress docs.
-- Runtime provider gate wiring is in place for blocking unsupported providers;
-  Australian runtime support remains off.
+- Runtime provider gate wiring is in place for blocking unsupported providers.
+  Commonwealth prerelease runtime is on for source-backed search, get-work,
+  versions, export, and MCP. Stable Australian runtime support remains off, and
+  other Australian jurisdictions remain planned or unsupported.
 - No publishing, deployment, registry submission, repository rename, package
   rename, or external submission has been performed.
-- Australian support remains prerelease/planned until provider truth, legal-data
-  quality, capability, docs, and security gates pass.
+- Australian support remains Commonwealth prerelease or planned until provider
+  truth, legal-data quality, capability, docs, and security gates pass for any
+  broader claim.
 
 ## Exit criteria
 
