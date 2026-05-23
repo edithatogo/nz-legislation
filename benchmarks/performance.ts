@@ -26,7 +26,7 @@ suite
       deferred.resolve();
     },
   })
-  
+
   // Search benchmark
   .add('Search (10 results)', {
     defer: true,
@@ -39,7 +39,7 @@ suite
       }
     },
   })
-  
+
   // Get work benchmark
   .add('Get Work by ID', {
     defer: true,
@@ -52,7 +52,7 @@ suite
       }
     },
   })
-  
+
   // Get versions benchmark
   .add('Get Work Versions', {
     defer: true,
@@ -65,7 +65,7 @@ suite
       }
     },
   })
-  
+
   // Citation generation benchmark
   .add('Generate Citation (NZMJ)', {
     defer: true,
@@ -79,7 +79,7 @@ suite
       }
     },
   })
-  
+
   // Callback when complete
   .on('cycle', (event: Event & { target: Benchmark }) => {
     const bench = event.target;

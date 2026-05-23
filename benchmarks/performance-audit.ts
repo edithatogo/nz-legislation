@@ -1,12 +1,12 @@
 /**
  * Performance Audit & Baselines
- * 
+ *
  * This script establishes comprehensive performance baselines for:
  * - CLI startup time
  * - API response times
  * - Memory usage
  * - Bundle size analysis
- * 
+ *
  * Run with: npm run tsx benchmarks/performance-audit.ts
  */
 
@@ -92,9 +92,9 @@ async function measureCLIStartup(): Promise<{ cold: number[]; warm: number[] }> 
     // Clear tsx cache by using fresh process
     const start = Date.now();
     try {
-      execSync('tsx src/cli.ts --help', { 
+      execSync('tsx src/cli.ts --help', {
         stdio: 'pipe',
-        env: { ...process.env, NODE_NO_WARNINGS: '1' }
+        env: { ...process.env, NODE_NO_WARNINGS: '1' },
       });
       const duration = Date.now() - start;
       coldRuns.push(duration);
@@ -108,9 +108,9 @@ async function measureCLIStartup(): Promise<{ cold: number[]; warm: number[] }> 
   for (let i = 0; i < iterations; i++) {
     const start = Date.now();
     try {
-      execSync('tsx src/cli.ts --help', { 
+      execSync('tsx src/cli.ts --help', {
         stdio: 'pipe',
-        env: { ...process.env, NODE_NO_WARNINGS: '1' }
+        env: { ...process.env, NODE_NO_WARNINGS: '1' },
       });
       const duration = Date.now() - start;
       warmRuns.push(duration);
@@ -211,7 +211,7 @@ async function measureMemoryUsage(): Promise<{
   // Perform some operations to increase memory usage
   console.log('   Running memory-intensive operations...');
   const { searchWorks } = await import('../src/client.js');
-  
+
   // Load data into memory
   const results = [];
   for (let i = 0; i < 5; i++) {
@@ -266,7 +266,7 @@ function analyzeBundleSize(): {
 
     // Get file sizes
     const { readdirSync, statSync } = await import('fs');
-    
+
     let totalSize = 0;
     let mainSize = 0;
     let dependencySize = 0;
@@ -275,11 +275,11 @@ function analyzeBundleSize(): {
     for (const file of files) {
       const filePath = join(distDir, file);
       const stat = statSync(filePath);
-      
+
       if (stat.isFile()) {
         const sizeKB = stat.size / 1024;
         totalSize += sizeKB;
-        
+
         if (file === 'cli.js' || file === 'main.js') {
           mainSize += sizeKB;
         } else {
@@ -318,30 +318,27 @@ function calculateScorecards(baseline: PerformanceBaseline): {
   bundle: number;
 } {
   // Scoring criteria (0-100 scale)
-  
+
   // Startup score: target <200ms
-  const startupScore = Math.max(0, 100 - ((baseline.cliStartup.average - 200) / 10));
-  
+  const startupScore = Math.max(0, 100 - (baseline.cliStartup.average - 200) / 10);
+
   // API score: target <500ms p95
   const apiP95 = Math.max(
     baseline.apiResponseTimes.search.p95,
     baseline.apiResponseTimes.getWork.p95,
     baseline.apiResponseTimes.getVersions.p95
   );
-  const apiScore = Math.max(0, 100 - ((apiP95 - 500) / 10));
-  
+  const apiScore = Math.max(0, 100 - (apiP95 - 500) / 10);
+
   // Memory score: target <256MB
-  const memoryScore = Math.max(0, 100 - ((baseline.memoryUsage.peak - 256) / 5));
-  
+  const memoryScore = Math.max(0, 100 - (baseline.memoryUsage.peak - 256) / 5);
+
   // Bundle score: target <5MB (5120KB)
-  const bundleScore = Math.max(0, 100 - ((baseline.bundleSize.total - 5120) / 50));
+  const bundleScore = Math.max(0, 100 - (baseline.bundleSize.total - 5120) / 50);
 
   // Overall score: weighted average
   const overall = Math.round(
-    (startupScore * 0.25) +
-    (apiScore * 0.35) +
-    (memoryScore * 0.25) +
-    (bundleScore * 0.15)
+    startupScore * 0.25 + apiScore * 0.35 + memoryScore * 0.25 + bundleScore * 0.15
   );
 
   return {
@@ -448,13 +445,17 @@ function generateRecommendations(baseline: PerformanceBaseline): string {
   const recommendations: string[] = [];
 
   if (baseline.cliStartup.average > 200) {
-    recommendations.push('- **Startup Time:** Consider implementing lazy loading for non-critical modules');
+    recommendations.push(
+      '- **Startup Time:** Consider implementing lazy loading for non-critical modules'
+    );
     recommendations.push('- **Startup Time:** Add startup caching for frequently used data');
   }
 
   if (baseline.apiResponseTimes.search.p95 > 500) {
     recommendations.push('- **API Response:** Implement response caching (see Phase 2)');
-    recommendations.push('- **API Response:** Add request batching for bulk operations (see Phase 3)');
+    recommendations.push(
+      '- **API Response:** Add request batching for bulk operations (see Phase 3)'
+    );
   }
 
   if (baseline.memoryUsage.peak > 256) {
@@ -479,7 +480,7 @@ function generateRecommendations(baseline: PerformanceBaseline): string {
  */
 async function runPerformanceAudit(): Promise<void> {
   console.log('🚀 Starting Performance Audit & Baselines\n');
-  console.log('=' .repeat(60));
+  console.log('='.repeat(60));
 
   // Create output directory
   if (!existsSync(AUDIT_OUTPUT_DIR)) {
@@ -568,7 +569,6 @@ async function runPerformanceAudit(): Promise<void> {
     const jsonPath = join(AUDIT_OUTPUT_DIR, `performance-baseline-${timestamp}.json`);
     writeFileSync(jsonPath, JSON.stringify(baseline, null, 2));
     console.log(`📄 Baseline data saved to: ${jsonPath}\n`);
-
   } catch (error) {
     console.error('\n❌ Performance Audit Failed.');
     process.exit(1);

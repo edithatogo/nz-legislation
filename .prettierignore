@@ -2,3 +2,5 @@ dist
 node_modules
 docs/api
 coverage
+conductor/archive/**
+pnpm-lock.yaml

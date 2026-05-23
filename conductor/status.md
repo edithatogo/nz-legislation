@@ -85,11 +85,12 @@ detail under `research-conductor` instead of this product-side Conductor tree.
   `nzlegislation-mcp` remains required. `anzlegislation` and
   `anzlegislation-mcp` are transition aliases while ANZ support is incomplete.
 - Candidate legal-data APIs are tracked in
-  `conductor/tracks/anz-platform-release-and-distribution/provider-api-roadmap.md`
-  as source-validation-required backlog items, including Australian Commonwealth,
-  Queensland, NSW, Victoria, South Australia, Western Australia, Tasmania, ACT,
-  Northern Territory, aggregator evaluation, and future HTTP/OpenAPI adapter
-  readiness.
+  `conductor/tracks/anz-platform-release-and-distribution/provider-api-roadmap.md`.
+  Australian Commonwealth is now a source-backed prerelease runtime lane for
+  search, get-work, versions, export, and MCP. Queensland, NSW, Victoria, South
+  Australia, Western Australia, Tasmania, ACT, Northern Territory, aggregator
+  evaluation, and future HTTP/OpenAPI adapter readiness remain planned or
+  source-validation-required backlog items.
 
 ### 2026-05-20 Supersession Reconciliation
 

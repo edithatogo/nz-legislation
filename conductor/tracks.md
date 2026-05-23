@@ -15,14 +15,15 @@ registry, integration, and migration tracks listed here.
 ## Provider implementation tracks
 
 Australian provider tracks do not permit publishing, deployment, registry
-submission, or stable support claims. Commonwealth may run as a source-backed
-prerelease provider inside this repo once its runtime gates pass, but NZ remains
-the only stable support lane until the umbrella release track says otherwise.
+submission, or stable support claims. Commonwealth is the source-backed
+prerelease provider lane for search, get-work, versions, export, and MCP inside
+this repo. NZ remains the only stable support lane until the umbrella release
+track says otherwise.
 
 | Track                                | Jurisdiction                  | Priority | Current phase                                                            |
 | ------------------------------------ | ----------------------------- | -------- | ------------------------------------------------------------------------ |
 | `nz-provider-stable-compatibility`   | New Zealand                   | P0       | Stable compatibility guard for existing NZ package, CLI, MCP, and export |
-| `anz-provider-commonwealth`          | Australian Commonwealth       | P0       | Source-backed prerelease runtime wiring, provenance, fixtures, and gates |
+| `anz-provider-commonwealth`          | Australian Commonwealth       | P0       | Source-backed prerelease runtime; fixture expansion and release gates    |
 | `anz-provider-queensland`            | Queensland                    | P0       | API access and source-backed adapter                                     |
 | `anz-provider-nsw`                   | New South Wales               | P1       | XML/export adapter design                                                |
 | `anz-provider-victoria`              | Victoria                      | P1       | Source-shape discovery and adapter mapping                               |

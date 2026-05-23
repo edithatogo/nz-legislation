@@ -79,8 +79,9 @@ Australian release claims and remaining jurisdictions.
 ## Phase 5: MCP and export hardening
 
 **Status:** In progress. Runtime gates now block unsupported providers through
-the provider registry; Commonwealth prerelease runtime and provenance are being
-wired while install-snippet verification remains.
+the provider registry; Commonwealth prerelease runtime and provenance are wired
+for search, get-work, versions, export, and MCP while install-snippet
+verification remains.
 
 - [x] Route MCP tools through provider-aware capability checks.
 - [x] Route export paths through provider-aware capability checks.
