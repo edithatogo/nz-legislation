@@ -47,6 +47,7 @@ jobs:
           pnpm gate:manifest-docs
           pnpm gate:install-snippets
           pnpm gate:security-provenance
+          pnpm gate:release-notes
       - name: Build package
         run: pnpm run build
 

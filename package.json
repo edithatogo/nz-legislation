@@ -38,7 +38,8 @@
     "gate:conductor-requirements": "tsx scripts/check-conductor-requirements.ts",
     "gate:manifest-docs": "tsx scripts/check-manifest-docs-drift.ts",
     "gate:install-snippets": "tsx scripts/check-install-snippets.ts",
-    "gate:security-provenance": "tsx scripts/check-security-provenance.ts"
+    "gate:security-provenance": "tsx scripts/check-security-provenance.ts",
+    "gate:release-notes": "tsx scripts/check-release-notes.ts"
   },
   "keywords": [
     "nz",
