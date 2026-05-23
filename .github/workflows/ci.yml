@@ -163,6 +163,31 @@ jobs:
 
       - name: Run manifest/docs drift gate
         run: pnpm gate:manifest-docs
+  install-snippets:
+    name: Install Snippet Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.29.3 --activate
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Run install snippet gate
+        run: pnpm gate:install-snippets
   test:
     name: Test (Node ${{ matrix.node-version }})
     runs-on: ubuntu-latest
@@ -199,7 +224,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    needs: [format, lint, typecheck, conductor-requirements, manifest-docs, test]
+    needs: [format, lint, typecheck, conductor-requirements, manifest-docs, install-snippets, test]
 
     steps:
       - name: Check out repository
