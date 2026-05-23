@@ -13,7 +13,8 @@
 
 **Status:** Pending.
 
-- [ ] Add tested install snippet evidence.
+- [x] Add tested install snippet evidence for local package CLI and MCP stdio
+      startup.
 - [x] Update docs and `llms.txt` from manifest-backed provider status.
 - [x] Add `pnpm gate:website-docs` to enforce public docs and website-control
       posture before release or deployment.
