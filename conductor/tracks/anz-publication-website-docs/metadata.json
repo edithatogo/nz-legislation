@@ -1,0 +1,16 @@
+{
+  "trackId": "anz-publication-website-docs",
+  "status": "planned",
+  "priority": "P0",
+  "created": "2026-05-23",
+  "sourceTrack": "anz-platform-release-and-distribution",
+  "singleRepo": true,
+  "phase": "preparation-only",
+  "channels": ["website", "docs", "llms.txt"],
+  "externalSubmissionAllowed": false,
+  "publishingAllowed": false,
+  "deploymentAllowed": false,
+  "repositoryRenameAllowed": false,
+  "packageRenameAllowed": false,
+  "requiredGates": ["updated-website-docs", "tested-install-snippets", "provider-capability-manifest", "release-notes"]
+}

@@ -2,7 +2,9 @@
 
 This registry lists active delivery tracks in this repository. The umbrella
 release/distribution track remains the source of truth for publication,
-submission, registry, and marketplace gates.
+submission, registry, and marketplace gates. `conductor/requirements.md` is the
+MoSCoW requirements and contract register for the provider, publication,
+registry, integration, and migration tracks listed here.
 
 ## Umbrella track
 
@@ -17,14 +19,33 @@ submission, or stable support claims. Commonwealth may run as a source-backed
 prerelease provider inside this repo once its runtime gates pass, but NZ remains
 the only stable support lane until the umbrella release track says otherwise.
 
-| Track                             | Jurisdiction                 | Priority | Current phase                                                            |
-| --------------------------------- | ---------------------------- | -------- | ------------------------------------------------------------------------ |
-| `anz-provider-commonwealth`       | Australian Commonwealth      | P0       | Source-backed prerelease runtime wiring, provenance, fixtures, and gates |
-| `anz-provider-queensland`         | Queensland                   | P0       | API access and source-backed adapter                                     |
-| `anz-provider-nsw`                | New South Wales              | P1       | XML/export adapter design                                                |
-| `anz-provider-victoria`           | Victoria                     | P1       | Source-shape discovery and adapter mapping                               |
-| `anz-provider-south-australia`    | South Australia              | P1       | Source-shape discovery and adapter mapping                               |
-| `anz-provider-western-australia`  | Western Australia            | P1       | Source-shape discovery and adapter mapping                               |
-| `anz-provider-tasmania`           | Tasmania                     | P1       | Source-shape discovery and adapter mapping                               |
-| `anz-provider-act`                | Australian Capital Territory | P1       | Source-shape discovery and adapter mapping                               |
-| `anz-provider-northern-territory` | Northern Territory           | P1       | Source-shape discovery and adapter mapping                               |
+| Track                                | Jurisdiction                  | Priority | Current phase                                                            |
+| ------------------------------------ | ----------------------------- | -------- | ------------------------------------------------------------------------ |
+| `nz-provider-stable-compatibility`   | New Zealand                   | P0       | Stable compatibility guard for existing NZ package, CLI, MCP, and export |
+| `anz-provider-commonwealth`          | Australian Commonwealth       | P0       | Source-backed prerelease runtime wiring, provenance, fixtures, and gates |
+| `anz-provider-queensland`            | Queensland                    | P0       | API access and source-backed adapter                                     |
+| `anz-provider-nsw`                   | New South Wales               | P1       | XML/export adapter design                                                |
+| `anz-provider-victoria`              | Victoria                      | P1       | Source-shape discovery and adapter mapping                               |
+| `anz-provider-south-australia`       | South Australia               | P1       | Source-shape discovery and adapter mapping                               |
+| `anz-provider-western-australia`     | Western Australia             | P1       | Source-shape discovery and adapter mapping                               |
+| `anz-provider-tasmania`              | Tasmania                      | P1       | Source-shape discovery and adapter mapping                               |
+| `anz-provider-act`                   | Australian Capital Territory  | P1       | Source-shape discovery and adapter mapping                               |
+| `anz-provider-northern-territory`    | Northern Territory            | P1       | Source-shape discovery and adapter mapping                               |
+| `anz-provider-aggregator-evaluation` | Cross-jurisdiction aggregator | P2       | Evaluation-only source/provenance and licence review                     |
+| `anz-openapi-adapter-readiness`      | Future HTTP/OpenAPI adapter   | P2       | Readiness-only API contract planning                                     |
+
+## Publication, registry, and integration tracks
+
+These tracks do not authorize publication, deployment, marketplace submission,
+registry submission, or package/repository renaming. They define the contracts
+and readiness gates each channel must satisfy before any later external action.
+
+| Track                                    | Channel scope                               | Priority | Current phase                                   |
+| ---------------------------------------- | ------------------------------------------- | -------- | ----------------------------------------------- |
+| `anz-publication-package-registries`     | npm, GitHub Packages, GitHub Releases       | P0       | Preparation-only package and release contract   |
+| `anz-publication-website-docs`           | Website/docs, install pages, `llms.txt`     | P0       | Preparation-only docs and deployment contract   |
+| `anz-registry-mcp-directories`           | Smithery and other MCP directories          | P0       | Preparation-only MCP registry contract          |
+| `anz-marketplace-assistant-integrations` | Claude, Codex, GitHub Copilot, Gemini, Qwen | P1       | Preparation-only assistant marketplace contract |
+| `anz-marketplace-ide-extensions`         | VS Code Marketplace, Open VSX, JetBrains    | P2       | Preparation-only extension marketplace contract |
+| `anz-distribution-container-homebrew`    | Docker/GHCR and Homebrew                    | P2       | Not-started distribution contract               |
+| `anz-rust-migration-readiness`           | Future Rust migration readiness             | P2       | Future-readiness-only compatibility contract    |
