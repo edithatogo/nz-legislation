@@ -1,0 +1,21 @@
+{
+  "status": "not_started",
+  "submission": {
+    "allowed": false,
+    "reason": "No image may be built or pushed until release/submission gates, SBOM/provenance review, and snippet evidence pass."
+  },
+  "image": "ghcr.io/edithatogo/nz-legislation-tool",
+  "entrypoints": ["nzlegislation", "nzlegislation-mcp"],
+  "runtime": "node >=18",
+  "baseImagePolicy": "Use a supported slim Node image or distroless Node image after threat-model review.",
+  "labels": {
+    "org.opencontainers.image.source": "https://github.com/edithatogo/nz-legislation",
+    "org.opencontainers.image.licenses": "Apache-2.0"
+  },
+  "sbom": "required before publication",
+  "provenance": "required before publication",
+  "claims": {
+    "nz": "stable supported runtime",
+    "australia": "Commonwealth prerelease; other Australian jurisdictions planned or unsupported"
+  }
+}

@@ -58,12 +58,17 @@ jobs:
       - name: Run prerelease gate checks
         run: |
           pnpm gate:no-placeholder-legal-data
-          pnpm gate:conductor-requirements
+          pnpm gate:provider-capability-manifest
+          pnpm gate:provider-aware-mcp-export
+          pnpm gate:package-metadata
           pnpm gate:manifest-docs
+          pnpm gate:conductor-requirements
+          pnpm gate:website-docs
           pnpm gate:install-snippets
+
+          pnpm gate:channel-readiness
           pnpm gate:security-provenance
           pnpm gate:release-notes
-          pnpm gate:package-metadata
           pnpm typecheck
           pnpm test:run
           pnpm build

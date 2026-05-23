@@ -64,12 +64,16 @@ requireIncludes(
 
 const releaseGateCommands = [
   'pnpm gate:no-placeholder-legal-data',
+  'pnpm gate:provider-capability-manifest',
+  'pnpm gate:provider-aware-mcp-export',
+  'pnpm gate:package-metadata',
   'pnpm gate:conductor-requirements',
   'pnpm gate:manifest-docs',
+  'pnpm gate:website-docs',
   'pnpm gate:install-snippets',
+  'pnpm gate:channel-readiness',
   'pnpm gate:security-provenance',
   'pnpm gate:release-notes',
-  'pnpm gate:package-metadata',
   'pnpm typecheck',
   'pnpm test:run',
   'pnpm build',
@@ -89,10 +93,16 @@ for (const workflow of [
 
 requireIncludes('.github/workflows/publish-github-packages.yml', [
   'packages: write',
-  'pnpm gate:security-provenance',
+  'pnpm gate:no-placeholder-legal-data',
+  'pnpm gate:provider-capability-manifest',
+  'pnpm gate:provider-aware-mcp-export',
   'pnpm gate:package-metadata',
-  'pnpm gate:install-snippets',
   'pnpm gate:manifest-docs',
+  'pnpm gate:website-docs',
+  'pnpm gate:install-snippets',
+  'pnpm gate:channel-readiness',
+  'pnpm gate:security-provenance',
+  'pnpm gate:release-notes',
   'pnpm run build',
 ]);
 

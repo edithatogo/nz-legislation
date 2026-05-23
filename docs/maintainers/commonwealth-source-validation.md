@@ -27,21 +27,22 @@ documentation and OpenAPI description.
 
 ## Current repository posture
 
-The source is validated, but no Commonwealth runtime support is enabled yet.
-The provider capability manifest must continue returning structured
-`unsupported_provider_capability` responses for `au-commonwealth` until the
-adapter maps official API responses into the repository's `Work`, `Version`,
-export, and MCP contracts.
+The source is validated and Commonwealth runtime support is enabled only as a
+source-backed prerelease surface for search, get-work, versions, export, and
+MCP. Citation and single-version retrieval remain unsupported and must continue
+returning structured `unsupported_provider_capability` responses.
 
 ## Implementation requirements
 
-Before any Commonwealth runtime support claim:
+Before any expanded Commonwealth runtime support claim:
 
 1. Add a Federal Register API client using `https://api.prod.legislation.gov.au/v1/`.
 2. Map OpenAPI `Title`, `Version`, and `Document` records into repository models.
-3. Implement provider-aware search, get-work, versions, citation, export, and
-   MCP paths without falling back to New Zealand data.
+3. Implement provider-aware search, get-work, versions, export, and MCP paths
+   without falling back to New Zealand data.
 4. Add no-placeholder tests using official API-shaped fixtures.
 5. Add live smoke tests that are opt-in and rate-limit respectful.
 6. Update website/docs and release notes to distinguish NZ stable support from
    Commonwealth prerelease support.
+7. Keep citation and single-version retrieval unsupported until official source
+   mapping, fixtures, tests, provenance, and release gates cover those features.

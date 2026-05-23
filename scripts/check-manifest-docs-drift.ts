@@ -92,6 +92,28 @@ for (const capability of capabilities) {
   }
 }
 
+const runtimeDocs = read('docs/provider-runtime.md');
+const sourceCardDocs = read('docs/maintainers/provider-source-cards.md');
+const capabilitiesDocs = read('docs/capabilities.md');
+
+for (const [path, content] of [
+  ['docs/provider-runtime.md', runtimeDocs],
+  ['docs/maintainers/provider-source-cards.md', sourceCardDocs],
+  ['docs/capabilities.md', capabilitiesDocs],
+] as const) {
+  if (!/Australian Commonwealth/i.test(content) || !/prerelease/i.test(content)) {
+    failures.push(path + ' must describe Australian Commonwealth as prerelease.');
+  }
+  if (
+    !/(citation|single-version).{0,80}unsupported/i.test(content) &&
+    !/unsupported.{0,80}(citation|single-version)/i.test(content)
+  ) {
+    failures.push(
+      path + ' must record Commonwealth citation and single-version support as unsupported.'
+    );
+  }
+}
+
 const forbiddenClaimPatterns = [
   /Australian support is stable/i,
   /stable Australian support/i,

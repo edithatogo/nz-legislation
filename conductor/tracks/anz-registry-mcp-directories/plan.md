@@ -6,12 +6,17 @@
 
 - [x] Add MCP registry contracts to `conductor/requirements.md`.
 - [x] Add this Conductor track.
-- [ ] Verify current Smithery and other MCP directory submission requirements.
+- [x] Record local-only registry metadata contracts for Smithery and other MCP
+      directories.
+- [ ] Verify current Smithery and other MCP directory submission requirements
+      before any external submission.
 
 ## Phase 2: Registry readiness
 
 **Status:** Pending.
 
 - [ ] Test MCP stdio install/config snippets.
-- [ ] Prepare listing evidence after provider-aware MCP/export gates pass.
+- [x] Prepare guarded local listing metadata after provider-aware MCP/export
+      gates were added.
+- [x] Add `pnpm gate:channel-readiness` to enforce local-only registry metadata.
 - [ ] Record security/provenance review before submission.

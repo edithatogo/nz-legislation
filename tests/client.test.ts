@@ -127,6 +127,29 @@ describe('Client error handling', () => {
     expect(calls).toEqual(['search:Legislation Act', 'get:C2004A01224', 'versions:C2004A01224']);
   });
 
+  it('blocks planned Australian jurisdictions before the NZ client path', async () => {
+    let nzClientCalled = false;
+
+    setHttpClientFactoryForTesting(() => ({
+      get: () => {
+        nzClientCalled = true;
+        return { json: async () => ({ results: [] }) };
+      },
+    }));
+
+    await expect(searchWorks({ query: 'water', jurisdiction: 'au-nsw' })).rejects.toMatchObject({
+      name: 'ProviderCapabilityError',
+    });
+    await expect(getWork('act/2020/1', { jurisdiction: 'au-nsw' })).rejects.toMatchObject({
+      name: 'ProviderCapabilityError',
+    });
+    await expect(getWorkVersions('act/2020/1', { jurisdiction: 'au-nsw' })).rejects.toMatchObject({
+      name: 'ProviderCapabilityError',
+    });
+
+    expect(nzClientCalled).toBe(false);
+  });
+
   it('should reconstruct a work from the versions endpoint when the direct work endpoint returns 404', async () => {
     setHttpClientFactoryForTesting(() => ({
       get: (url: string) => ({

@@ -6,12 +6,15 @@
 
 - [x] Add website/docs contracts to `conductor/requirements.md`.
 - [x] Add this Conductor track.
-- [ ] Inventory all install snippets and capability claims.
+- [x] Inventory install snippets and capability claims covered by README,
+      `llms.txt`, provider runtime docs, capability docs, and maintainer docs.
 
 ## Phase 2: Deployment readiness
 
 **Status:** Pending.
 
 - [ ] Add tested install snippet evidence.
-- [ ] Update docs and `llms.txt` from manifest-backed provider status.
+- [x] Update docs and `llms.txt` from manifest-backed provider status.
+- [x] Add `pnpm gate:website-docs` to enforce public docs and website-control
+      posture before release or deployment.
 - [ ] Record deployment gate evidence before any deployment.

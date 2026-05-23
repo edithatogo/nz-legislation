@@ -6,12 +6,14 @@
 
 - [x] Add container/Homebrew contracts to `conductor/requirements.md`.
 - [x] Add this Conductor track.
-- [ ] Define image and formula threat model.
+- [x] Define local-only image and formula contract boundaries.
+- [ ] Expand image and formula threat model before publication.
 
 ## Phase 2: Distribution readiness
 
 **Status:** Pending.
 
-- [ ] Define Docker/GHCR artifact expectations.
-- [ ] Define Homebrew formula expectations.
+- [x] Define Docker/GHCR artifact expectations.
+- [x] Define Homebrew formula expectations.
+- [x] Add `pnpm gate:channel-readiness` to enforce local-only contract metadata.
 - [ ] Add snippet verification before any publication.

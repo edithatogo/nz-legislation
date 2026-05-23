@@ -32,7 +32,9 @@
       evaluation, OpenAPI readiness, package registries, website/docs, MCP
       registries, assistant integrations, IDE marketplaces, Docker/GHCR,
       Homebrew, and Rust readiness.
-- [ ] Reconcile any stale Conductor status claims against the current repository
+- [x] Reconcile stale Commonwealth, website/docs, registry, IDE, Docker/GHCR,
+      and Homebrew status claims against the current repository state.
+- [ ] Reconcile any future stale Conductor status claims against the current repository
       remote and package registry state before future public release work.
 
 ## Phase 2: Release reconciliation
@@ -56,7 +58,7 @@ Australian release claims and remaining jurisdictions.
   legal-data providers and APIs.
 - Remove or quarantine placeholder Australian legal-data behavior.
 - Add structured unsupported capability errors for incomplete provider features.
-- Add no-placeholder legal-data tests for Commonwealth runtime fixtures.
+- [x] Add no-placeholder legal-data tests for Commonwealth runtime fixtures.
 - Confirm Australian support is described only as prerelease until the gate
   passes.
 - Prioritize Australian Commonwealth and Queensland provider replacement before
@@ -68,8 +70,8 @@ Australian release claims and remaining jurisdictions.
 **Status:** In progress.
 
 - [x] Implement a provider capability manifest.
-- [~] Use the manifest in CLI, MCP, export metadata, docs, and website surfaces.
-- [~] Add tests that fail on manifest/provider mismatch.
+- [x] Use the manifest in CLI, MCP, export metadata, docs, and website surfaces.
+- [x] Add tests that fail on manifest/provider mismatch.
 - Require every listing or install page to match manifest-backed claims.
 - Run pnpm gate:conductor-requirements when requirements or track coverage
   changes.
@@ -82,29 +84,35 @@ wired while install-snippet verification remains.
 
 - [x] Route MCP tools through provider-aware capability checks.
 - [x] Route export paths through provider-aware capability checks.
-- [~] Add provider/source cards and provenance metadata.
+- [x] Add provider/source cards and provenance metadata.
 - [ ] Use `docs/maintainers/provenance-wiring-test-plan.md` as the future
       provenance test checklist before emitting source cards in export or MCP
       outputs.
 - [x] Add runtime provider gates under `src/providers/runtime.ts` and companion
-      tests while keeping Commonwealth runtime support blocked.
+      tests while keeping Commonwealth runtime support prerelease and other
+      incomplete features blocked.
 - [ ] Verify stdio install/config snippets against the packaged command.
 
 ## Phase 6: npm, GitHub Packages, website, and docs
 
 **Status:** Preparation only.
 
-- Verify npm package metadata and package entry points.
-- Verify GitHub Packages publishing workflow and provenance.
-- Update website/docs install pages, capability matrix, and `llms.txt`.
-- Test install snippets locally before publishing or deploying.
+- [x] Verify npm package metadata and package entry points through the package
+      metadata gate.
+- [x] Verify GitHub Packages publishing workflow and provenance through the
+      security/provenance gate.
+- [x] Update website/docs install pages, capability matrix, and `llms.txt`.
+- [x] Add a website/docs gate to keep public docs aligned with runtime claims.
+- [ ] Test install snippets locally before publishing or deploying.
 - Do not publish or deploy until all gates pass.
 
 ## Phase 7: MCP registries
 
 **Status:** Preparation only.
 
-- Prepare registry metadata for Smithery and other MCP directories.
+- [x] Prepare local-only registry metadata for Smithery and other MCP
+      directories.
+- [x] Add a channel readiness gate for MCP registry metadata.
 - Verify current submission requirements before relying on any registry process.
 - Confirm provider-aware MCP behavior and no-placeholder legal data before
   submission.
@@ -126,7 +134,9 @@ wired while install-snippet verification remains.
 
 **Status:** Preparation only.
 
-- Keep VS Code extension planning under `integrations/vscode/`.
+- [x] Keep VS Code extension planning and local-only contract metadata under
+      `integrations/vscode/`.
+- [x] Add a channel readiness gate for IDE extension contract metadata.
 - Track Open VSX as a separate publication path from VS Code Marketplace.
 - Keep JetBrains as P2 readiness until the runtime contract and security review
   justify extension work.
@@ -135,8 +145,11 @@ wired while install-snippet verification remains.
 
 **Status:** Preparation only.
 
-- Define Docker/GHCR artifact expectations before any image is built or pushed.
-- Define Homebrew formula expectations before any tap or formula is published.
+- [x] Define local-only Docker/GHCR artifact expectations before any image is
+      built or pushed.
+- [x] Define local-only Homebrew formula expectations before any tap or formula
+      is published.
+- [x] Add a channel readiness gate for container and Homebrew contracts.
 - Maintain a registry/listing tracker with review dates and renewal dates.
 - Monitor upstream source drift and legal-data provider status.
 - [x] Keep all release automation guarded by provenance, docs, install, and

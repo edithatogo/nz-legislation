@@ -43,12 +43,16 @@ jobs:
       - name: Run mirror gate checks
         run: |
           pnpm gate:no-placeholder-legal-data
-          pnpm gate:conductor-requirements
+          pnpm gate:provider-capability-manifest
+          pnpm gate:provider-aware-mcp-export
+          pnpm gate:package-metadata
           pnpm gate:manifest-docs
+          pnpm gate:website-docs
           pnpm gate:install-snippets
+
+          pnpm gate:channel-readiness
           pnpm gate:security-provenance
           pnpm gate:release-notes
-          pnpm gate:package-metadata
       - name: Build package
         run: pnpm run build
 
