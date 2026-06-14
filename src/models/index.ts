@@ -42,7 +42,7 @@ const LatestMatchingVersionSchema = z.object({
 
 function extractDateFromVersionId(versionId: string): string {
   const match = versionId.match(/(\d{4}-\d{2}-\d{2})[A-Z]?$/);
-  return match ? match[1] : '1900-01-01';
+  return match ? (match[1] ?? '1900-01-01') : '1900-01-01';
 }
 
 function mapLegislationType(apiType: string): WorkType {

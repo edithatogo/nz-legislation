@@ -190,6 +190,7 @@ export class StreamExporter {
         const workId = workIds[i];
 
         try {
+          if (!workId) {continue;}
           const work = await getWork(workId);
 
           const line =

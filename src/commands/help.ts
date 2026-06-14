@@ -178,6 +178,7 @@ export function createInteractiveHelpCommand(): Command {
             if (input === '\r' || input === '\n') {
               // Show selected topic
               const topic = helpTopics[selectedIndex];
+              if (!topic) {return;}
               showTopic(topic);
 
               // Wait for Enter to return

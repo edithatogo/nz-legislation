@@ -69,7 +69,7 @@ export const batchCommand = new Command()
         } else if (options.file.endsWith('.csv')) {
           // Simple CSV parsing (for production, use a proper CSV parser)
           const lines = content.trim().split('\n');
-          const headers = lines[0].split(',');
+          const headers = (lines[0] ?? '').split(',');
           const idColumnIndex = options.idColumn
             ? headers.indexOf(options.idColumn)
             : headers.indexOf('id');
@@ -80,7 +80,7 @@ export const batchCommand = new Command()
 
           const rows = lines.slice(1).map(line => {
             const values = line.split(',');
-            return { [headers[idColumnIndex]]: values[idColumnIndex] };
+            return { [headers[idColumnIndex] ?? 'id']: values[idColumnIndex] ?? '' };
           });
 
           requests = createBatchFromFile(rows, options.type, options.idColumn || 'id');

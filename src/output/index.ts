@@ -222,12 +222,12 @@ ER - `;
 function extractCitationYear(work: Work): string {
   const idMatch = work.id.match(/(?:^|[_/])((?:19|20)\d{2})(?:[_/]|$)/);
   if (idMatch) {
-    return idMatch[1];
+    return idMatch[1] ?? '0000';
   }
 
   const titleMatch = work.title.match(/\b((?:19|20)\d{2})\b/);
   if (titleMatch) {
-    return titleMatch[1];
+    return titleMatch[1] ?? '0000';
   }
 
   return work.date.substring(0, 4);
