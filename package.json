@@ -66,6 +66,10 @@
     "url": "https://github.com/edithatogo/nz-legislation.git"
   },
   "packageManager": "pnpm@10.29.3",
+  "legalNz": {
+    "versioning": "semver",
+    "logging": "winston"
+  },
   "bugs": {
     "url": "https://github.com/edithatogo/nz-legislation/issues"
   },
