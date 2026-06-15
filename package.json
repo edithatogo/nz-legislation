@@ -48,7 +48,10 @@
     "gate:provider-aware-mcp-export": "node ./node_modules/vitest/vitest.mjs run tests/provider-runtime.test.ts tests/mcp-provider-capability.test.ts tests/e2e/cli.test.ts --config vitest.config.ts",
     "gate:website-docs": "tsx scripts/check-website-docs.ts",
     "gate:release-submission": "corepack pnpm gate:no-placeholder-legal-data && corepack pnpm gate:provider-capability-manifest && corepack pnpm gate:provider-aware-mcp-export && corepack pnpm gate:package-metadata && corepack pnpm gate:conductor-requirements && corepack pnpm gate:manifest-docs && corepack pnpm gate:website-docs && corepack pnpm gate:install-snippets && corepack pnpm gate:channel-readiness && corepack pnpm gate:security-provenance && corepack pnpm gate:release-notes",
-    "gate:channel-readiness": "tsx scripts/check-channel-readiness.ts"
+    "gate:channel-readiness": "tsx scripts/check-channel-readiness.ts",
+    "docs:dev": "npm --prefix docs-site run dev",
+    "docs:build": "npm --prefix docs-site run build",
+    "docs:check": "npm --prefix docs-site run check"
   },
   "keywords": [
     "nz",
@@ -132,5 +135,6 @@
     "dist",
     "README.md",
     "LICENSE"
-  ]
+  ],
+  "private": true
 }
