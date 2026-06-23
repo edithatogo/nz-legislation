@@ -1,0 +1,132 @@
+{
+  "schema_version": "1.0.0",
+  "artifact": {
+    "name": "nz-legislation-tool",
+    "owning_repo": "cli-legislation-nz",
+    "artifact_type": "cli",
+    "version": "1.2.0",
+    "license": "Apache-2.0",
+    "public_contracts": [
+      "nzlegislation --help",
+      "nzlegislation search --query <text> [--type <act|bill|regulation|instrument>] [--limit <n>]",
+      "nzlegislation get <workId> [--versions]",
+      "nzlegislation export --query <text> --output <file> [--format <csv|json|ndjson>]",
+      "nzlegislation cite <workId> [--style <nzmj|bibtex|ris|enw|apa>]",
+      "nzlegislation capabilities [--format <text|json>]",
+      "nzlegislation config [--show|--set <key> <value>]",
+      "nzlegislation cache [--stats|--clear]",
+      "nzlegislation batch --ids <ids> | --file <csv> [--type getWork|search] --output <file>",
+      "nzlegislation stream --query <text> --output <file>",
+      "nzlegislation help [--interactive]",
+      "nzlegislation generate [--type <report|summary>] --id <workId>"
+    ],
+    "release_notes_path": "CHANGELOG.md",
+    "changelog_path": "CHANGELOG.md",
+    "support_policy_path": "SECURITY.md"
+  },
+  "registries": [
+    {
+      "registry_id": "github_releases",
+      "registry_kind": "cli_distribution",
+      "submission_status": "requirements_inventory",
+      "requirements": [
+        {
+          "id": "release-artifacts",
+          "description": "Release tarball (dist/), checksums, and source archive tagged with semver tag.",
+          "status": "pending",
+          "evidence_path": "conductor/registry-submissions/cli/evidence.md"
+        }
+      ]
+    },
+    {
+      "registry_id": "homebrew_tap",
+      "registry_kind": "cli_distribution",
+      "submission_status": "not_started",
+      "requirements": [
+        {
+          "id": "formula",
+          "description": "Homebrew formula with versioned URL, sha256 checksum, and test block for nzlegislation binary.",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "registry_id": "smithery",
+      "registry_kind": "mcp_distribution",
+      "submission_status": "not_applicable",
+      "requirements": [
+        {
+          "id": "mcp-only",
+          "description": "Smithery targets MCP distributions; the CLI-only artifact does not publish an MCP server.",
+          "status": "not_applicable"
+        }
+      ]
+    },
+    {
+      "registry_id": "npm",
+      "registry_kind": "package",
+      "submission_status": "blocked",
+      "requirements": [
+        {
+          "id": "npm-publish-readiness",
+          "description": "Package.json set to private: true. Needs private flag removed, provenance config, and npm access token.",
+          "status": "blocked",
+          "blocker": "package.json has private: true; organization has not yet authorised public npm publishing."
+        }
+      ]
+    }
+  ],
+  "quality_gates": [
+    {
+      "name": "CLI smoke test",
+      "command_or_workflow": "nzlegislation --help",
+      "status": "pending"
+    },
+    {
+      "name": "Package build",
+      "command_or_workflow": "pnpm build",
+      "status": "pending"
+    },
+    {
+      "name": "Lint check",
+      "command_or_workflow": "pnpm lint",
+      "status": "pending"
+    }
+  ],
+  "security_gates": [
+    {
+      "name": "No secrets in release artifacts",
+      "status": "pending"
+    }
+  ],
+  "submission_workflow": {
+    "phases": [
+      {
+        "name": "Registry inventory",
+        "status": "in_progress",
+        "tasks": [
+          "Confirm target registries: github_releases, homebrew_tap, npm.",
+          "Record exact metadata and artifact requirements per registry."
+        ]
+      },
+      {
+        "name": "Submission",
+        "status": "pending",
+        "tasks": [
+          "Submit only after local readiness, CI evidence, and review approval.",
+          "Unblock npm publishing by resolving private: true and adding provenance."
+        ]
+      }
+    ],
+    "commit_policy": "Commit manifest and evidence in the owning repo only.",
+    "review_policy": "Review manifest, artifacts, and registry requirements before submission.",
+    "actions_policy": "Check owning repo GitHub Actions after each committed phase."
+  },
+  "self_improvement": {
+    "enabled": true,
+    "learning_log_path": "conductor/learning-log.md",
+    "reflection_cadence": "after each registry review result",
+    "improvement_backlog_path": "conductor/improvement-backlog.md",
+    "promotion_policy": "Promote reusable checks to root templates only after review."
+  }
+}
