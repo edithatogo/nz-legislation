@@ -55,3 +55,4 @@
 - `gate:conductor-requirements`: passed.
 - TypeScript strict typecheck and scoped Prettier: passed.
 - ACT runtime remains `planned`/unsupported; no publication or deployment is authorized.
+- Implementation commit: `b63b6f3`; latest Docs workflow passed (`29156670631`).
