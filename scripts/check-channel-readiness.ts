@@ -131,6 +131,8 @@ const container = readJson<{
   entrypoints: string[];
   sbom: string;
   provenance: string;
+  threatModel: string;
+  snippetVerification: string;
   claims: ClaimContract;
 }>('distribution/container/container-contract.json');
 if (container) {
@@ -147,6 +149,11 @@ if (container) {
   if (!/required/i.test(container.sbom) || !/required/i.test(container.provenance)) {
     failures.push('Container contract must require SBOM and provenance before publication.');
   }
+  if (!existsSync(container.threatModel) || !existsSync(container.snippetVerification)) {
+    failures.push(
+      'Container contract must link an existing threat model and snippet verification record.'
+    );
+  }
 }
 
 const homebrew = readJson<{
@@ -156,6 +163,8 @@ const homebrew = readJson<{
   installCommand: string;
   binaries: string[];
   checksumSource: string;
+  threatModel: string;
+  snippetVerification: string;
   claims: ClaimContract;
 }>('distribution/homebrew/formula-contract.json');
 if (homebrew) {
@@ -178,6 +187,11 @@ if (homebrew) {
   }
   if (!/brew install/.test(homebrew.installCommand))
     failures.push('Homebrew contract must include a brew install command.');
+  if (!existsSync(homebrew.threatModel) || !existsSync(homebrew.snippetVerification)) {
+    failures.push(
+      'Homebrew contract must link an existing threat model and snippet verification record.'
+    );
+  }
 }
 
 for (const workflow of [

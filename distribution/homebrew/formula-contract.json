@@ -9,6 +9,8 @@
   "installCommand": "brew install edithatogo/tap/nz-legislation-tool",
   "binaries": ["nzlegislation", "nzlegislation-mcp", "anzlegislation", "anzlegislation-mcp"],
   "checksumSource": "GitHub release tarball generated after provenance review",
+  "threatModel": "distribution/homebrew/threat-model.md",
+  "snippetVerification": "distribution/homebrew/snippet-verification.md",
   "claims": {
     "nz": "stable supported runtime",
     "australia": "Commonwealth prerelease; other Australian jurisdictions planned or unsupported"

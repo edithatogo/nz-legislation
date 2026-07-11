@@ -12,6 +12,14 @@ registry, integration, and migration tracks listed here.
 | --------------------------------------- | -------- | ------ | ------------------------------------------------------------------------------------------------------------ |
 | `anz-platform-release-and-distribution` | P0       | Active | Single-repository release, distribution, submission, integration, provider-gate, and Rust-readiness roadmap. |
 
+## Product unification tracks
+
+| Track                                    | Priority | Status  | Purpose                                                                                         |
+| ---------------------------------------- | -------- | ------- | ----------------------------------------------------------------------------------------------- |
+| `legislation-jurisdiction-mainstreaming` | P0       | Planned | Converge NZ and every Australian jurisdiction on one evidence-backed provider contract.         |
+| `legislation-brand-migration`            | P0       | Planned | Adopt legislation as the neutral product identity through a compatibility-preserving migration. |
+| `official-gazette-sources`               | P0       | Planned | Add NZ and Australian Gazette or equivalent sources as a distinct content family.               |
+
 ## Provider implementation tracks
 
 Australian provider tracks do not permit publishing, deployment, registry
@@ -48,6 +56,6 @@ and readiness gates each channel must satisfy before any later external action.
 | `anz-registry-mcp-directories`           | Smithery and other MCP directories          | P0       | Preparation-only MCP registry contract                                     |
 | `anz-marketplace-assistant-integrations` | Claude, Codex, GitHub Copilot, Gemini, Qwen | P1       | Preparation-only assistant marketplace contract                            |
 | `anz-marketplace-ide-extensions`         | VS Code Marketplace, Open VSX, JetBrains    | P2       | Preparation-only extension marketplace contract                            |
-| `anz-distribution-container-homebrew`    | Docker/GHCR and Homebrew                    | P2       | Not-started distribution contract                                          |
+| `anz-distribution-container-homebrew`    | Docker/GHCR and Homebrew                    | P2       | Complete locally; publication remains gated                                 |
 | `anz-rust-migration-readiness`           | Future Rust migration readiness             | P2       | Future-readiness-only compatibility contract                               |
 | `anz-multi-git-archive-mirroring`        | GitHub, GitLab, Codeberg, npm               | P0       | Local workflow configured; external mirror and registry verification gated |

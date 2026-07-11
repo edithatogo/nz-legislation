@@ -14,6 +14,8 @@
   },
   "sbom": "required before publication",
   "provenance": "required before publication",
+  "threatModel": "distribution/container/threat-model.md",
+  "snippetVerification": "distribution/container/snippet-verification.md",
   "claims": {
     "nz": "stable supported runtime",
     "australia": "Commonwealth prerelease; other Australian jurisdictions planned or unsupported"
