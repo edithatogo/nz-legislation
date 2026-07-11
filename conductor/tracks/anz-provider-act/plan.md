@@ -26,8 +26,9 @@
 **Status:** Complete for metadata-only readiness; runtime remains unsupported.
 
 - [x] Build a metadata-only source-shape fixture that reflects the recorded ACT shapes; no legal text is stored.
-- [x] Add tests for no-placeholder legal data, parsing, normalization, and
-      unsupported capability errors.
+- [x] Add readiness tests for no-placeholder policy, source-shape metadata, and
+      unsupported capability errors; parsing and normalization remain future
+      adapter work.
 - [x] Add manifest/provider alignment checks for the ACT.
 
 ## Phase 3: MCP/export and provenance
@@ -55,4 +56,4 @@
 - `gate:conductor-requirements`: passed.
 - TypeScript strict typecheck and scoped Prettier: passed.
 - ACT runtime remains `planned`/unsupported; no publication or deployment is authorized.
-- Implementation commit: `b63b6f3`; latest Docs workflow passed (`29156670631`).
+- Implementation commit: `b63b6f3`; latest Docs workflow passed (`29156705977`).

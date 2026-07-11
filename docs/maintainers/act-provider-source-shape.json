@@ -7,6 +7,11 @@
     "https://www.legislation.act.gov.au/Static/Help/About/about_the_register.html",
     "https://www.legislation.act.gov.au/Static/Help/Search/Using_search.html"
   ],
+  "accessTerms": {
+    "publicAccess": "free public access",
+    "copyright": "ACT Government copyright and register disclaimer apply",
+    "machineReadableAccess": "not verified in this discovery pass"
+  },
   "authority": {
     "authorisedFormat": "PDF",
     "convenienceFormats": ["HTML", "Word"],

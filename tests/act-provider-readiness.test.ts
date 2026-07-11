@@ -10,6 +10,7 @@ type ActSourceShape = {
   jurisdiction: string;
   providerId: string;
   authority: { authorisedFormat: string; convenienceFormats: string[]; wordStatus: string };
+  accessTerms: { publicAccess: string; machineReadableAccess: string };
   identifierPatterns: Array<{ class: string; pattern: string }>;
   runtimeStatus: string;
   fixturePolicy: string;
@@ -40,6 +41,8 @@ describe('ACT provider readiness', () => {
       expect.arrayContaining(['HTML', 'Word'])
     );
     expect(sourceShape.authority.wordStatus).toBe('unauthorised');
+    expect(sourceShape.accessTerms.publicAccess).toContain('free');
+    expect(sourceShape.accessTerms.machineReadableAccess).toContain('not verified');
     expect(sourceShape.identifierPatterns).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ class: 'act', pattern: '^A\\d{4}-\\d+$' }),
