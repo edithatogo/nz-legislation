@@ -1,19 +1,32 @@
 {
   "required_status_checks": {
-    "strict": false,
-    "contexts": ["CI/CD"]
+    "strict": true,
+    "contexts": [
+      "Typecheck",
+      "Test (Node 18)",
+      "Test (Node 20)",
+      "Test (Node 22)",
+      "Require changeset for user-facing changes",
+      "Conductor Requirements Gate",
+      "No Placeholder Legal Data Gate",
+      "Provider Capability Manifest Gate",
+      "Provider Aware MCP Export Gate",
+      "Manifest Docs Drift Gate",
+      "Install Snippet Gate",
+      "Security Provenance Gate",
+      "Release Notes Gate",
+      "Package Metadata Gate",
+      "Website Docs Gate",
+      "Channel Readiness Gate"
+    ]
   },
   "enforce_admins": true,
-  "required_pull_request_reviews": {
-    "required_approving_review_count": 1,
-    "dismiss_stale_reviews": true,
-    "require_code_owner_reviews": false
-  },
+  "required_pull_request_reviews": null,
   "restrictions": null,
   "allow_force_pushes": false,
   "allow_deletions": false,
   "block_creations": false,
-  "required_conversation_resolution": true,
+  "required_conversation_resolution": false,
   "lock_branch": false,
   "allow_fork_syncing": true
 }

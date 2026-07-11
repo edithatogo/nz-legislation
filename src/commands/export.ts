@@ -2,14 +2,17 @@
  * Export command - Export search results to file
  */
 
-import { writeFileSync } from 'fs';
+import { writeFileSync } from 'node:fs';
 
 import { Command } from 'commander';
 import ora from 'ora';
 
-import { searchWorks } from '@client';
-import type { CanonicalLegislationRecord } from '@models';
-import { worksToCsv } from '@output';
+import { searchWorks } from '../client.js';
+import { worksToCsv } from '../output/index.js';
+import { ProviderCapabilityError } from '../providers/capability-manifest.js';
+import { parseJurisdictionCode } from '../providers/jurisdictions.js';
+import { assertRuntimeProviderSupported } from '../providers/runtime.js';
+import { getProviderSourceCard } from '../providers/source-cards.js';
 
 interface ExportOptions {
   query: string;
@@ -21,78 +24,7 @@ interface ExportOptions {
   limit: string;
   format: string;
   includeMetadata: boolean;
-}
-
-export function toCanonicalExportRecords(
-  results: Awaited<ReturnType<typeof searchWorks>>
-): Array<
-  Pick<CanonicalLegislationRecord, 'work' | 'expressions' | 'manifestations' | 'relationships'>
-> {
-  return results.results.map(work => {
-    const canonicalId = `legacy:${work.id}`;
-    const workUri = `urn:nz-legislation:work:${work.id.replace(/[^a-zA-Z0-9-]+/g, '-')}`;
-    const expressionUri = `${workUri}:expression:current`;
-    const manifestationUri = `${expressionUri}:manifestation:html`;
-
-    return {
-      work: {
-        canonicalId,
-        workUri,
-        source: {
-          sourceSystem: 'legacy-cli-export',
-          sourceId: work.id,
-          sourceUrl: work.url,
-        },
-        jurisdictionCode: 'unknown',
-        documentType: work.type,
-        title: work.title,
-        shortTitle: work.shortTitle,
-        language: 'en',
-      },
-      expressions: [
-        {
-          expressionUri,
-          workUri,
-          expressionDate: work.date,
-          publicationDate: work.date,
-          lifecycleState:
-            work.status === 'in-force'
-              ? 'in-force'
-              : work.status === 'repealed'
-                ? 'repealed'
-                : work.status === 'withdrawn'
-                  ? 'withdrawn'
-                  : work.status === 'not-yet-in-force'
-                    ? 'not-yet-in-force'
-                    : 'unknown',
-          isCurrent: true,
-          versionLabel: 'current',
-          language: 'en',
-        },
-      ],
-      manifestations: [
-        {
-          manifestationUri,
-          expressionUri,
-          format: 'html',
-          mediaType: 'text/html',
-          sourceUrl: work.url,
-        },
-      ],
-      relationships: [
-        {
-          subjectUri: workUri,
-          relationshipType: 'has_expression',
-          objectUri: expressionUri,
-        },
-        {
-          subjectUri: expressionUri,
-          relationshipType: 'has_manifestation',
-          objectUri: manifestationUri,
-        },
-      ],
-    };
-  });
+  jurisdiction: string;
 }
 
 export const exportCommand = new Command()
@@ -106,12 +38,17 @@ export const exportCommand = new Command()
   .option('--to <date>', 'Filter to date (YYYY-MM-DD)')
   .option('-l, --limit <number>', 'Maximum results (default: 100)', '100')
   .option('-f, --format <format>', 'Output format (csv, json)', 'csv')
+  .option('-j, --jurisdiction <code>', 'Jurisdiction provider (default: nz)', 'nz')
   .option('--include-metadata', 'Include export metadata', false)
   .action(async (options: ExportOptions) => {
     const spinner = ora('Searching and exporting...').start();
 
     try {
       const limit = Math.min(parseInt(options.limit, 10), 1000);
+      const jurisdiction = parseJurisdictionCode(options.jurisdiction);
+      const sourceCard = getProviderSourceCard(jurisdiction);
+
+      assertRuntimeProviderSupported(jurisdiction, 'export');
 
       const results = await searchWorks({
         query: options.query,
@@ -120,6 +57,7 @@ export const exportCommand = new Command()
         from: options.from,
         to: options.to,
         limit,
+        jurisdiction,
       });
 
       spinner.stop();
@@ -140,20 +78,12 @@ export const exportCommand = new Command()
                   to: options.to,
                 },
                 timestamp,
+                jurisdiction,
+                sourceCard,
                 totalResults: results.total,
                 exportedCount: results.results.length,
-                canonical: {
-                  standardProfile: [
-                    'Akoma Ntoso concepts',
-                    'FRBR work-expression-manifestation',
-                    'ELI-style identifiers',
-                    'schema.org/Legislation',
-                  ],
-                  included: true,
-                },
               },
               results: results.results,
-              canonicalRecords: toCanonicalExportRecords(results),
             }
           : results;
         output = JSON.stringify(exportData, null, 2);
@@ -166,10 +96,12 @@ export const exportCommand = new Command()
           csvContent += `\n# Export Metadata`;
           csvContent += `\n# Query: ${options.query}`;
           csvContent += `\n# Timestamp: ${timestamp}`;
+          csvContent += `\n# Jurisdiction: ${jurisdiction}`;
+          csvContent += `\n# Provider: ${sourceCard.providerId}`;
+          csvContent += `\n# Source Authority: ${sourceCard.sourceAuthority}`;
+          csvContent += `\n# Release Channel: ${sourceCard.releaseChannel}`;
           csvContent += `\n# Total Results: ${results.total}`;
           csvContent += `\n# Exported: ${results.results.length}`;
-          csvContent += `\n# Canonical Metadata: included`;
-          csvContent += `\n# Canonical Standards: Akoma Ntoso concepts; FRBR work-expression-manifestation; ELI-style identifiers; schema.org/Legislation`;
           if (options.type) {
             csvContent += `\n# Type: ${options.type}`;
           }
@@ -192,6 +124,10 @@ export const exportCommand = new Command()
       }
     } catch (error) {
       spinner.stop();
+      if (error instanceof ProviderCapabilityError) {
+        console.error(JSON.stringify(error.details, null, 2));
+        process.exit(1);
+      }
       if (error instanceof Error) {
         console.error(`Error: ${error.message}`);
         process.exit(1);

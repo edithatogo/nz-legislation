@@ -6,7 +6,7 @@
 import chalk from 'chalk';
 import Table from 'cli-table3';
 
-import type { SearchResults, Version, Work } from '@models';
+import type { SearchResults, Version, Work } from '../models/index.js';
 
 export * from './legal-metadata-publication.js';
 
@@ -62,7 +62,7 @@ export function printTable(results: SearchResults): void {
   results.results.forEach(work => {
     table.push([
       work.id,
-      work.title.length > 48 ? work.title.substring(0, 47) + '…' : work.title,
+      work.title.length > 48 ? `${work.title.substring(0, 47)}…` : work.title,
       formatWorkType(work.type),
       formatStatus(work.status),
       work.date,
@@ -224,12 +224,12 @@ ER - `;
 function extractCitationYear(work: Work): string {
   const idMatch = work.id.match(/(?:^|[_/])((?:19|20)\d{2})(?:[_/]|$)/);
   if (idMatch) {
-    return idMatch[1];
+    return idMatch[1] ?? '0000';
   }
 
   const titleMatch = work.title.match(/\b((?:19|20)\d{2})\b/);
   if (titleMatch) {
-    return titleMatch[1];
+    return titleMatch[1] ?? '0000';
   }
 
   return work.date.substring(0, 4);

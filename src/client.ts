@@ -7,20 +7,28 @@ import got from 'got';
 import { LRUCache } from 'lru-cache';
 import { z } from 'zod';
 
-import { getConfig } from '@config';
-import { ConfigError, createApiError, ErrorCode, NetworkError } from '@errors';
+import { getConfig } from './config.js';
+import { ConfigError, createApiError, ErrorCode, NetworkError } from './errors.js';
 import {
-  LegislationVersionSchema,
-  SearchResultsSchema,
-  VersionSchema,
-  WorkSchema,
-  WorkFromVersionSchema,
+  type LegislationStatus,
   type LegislationVersion,
+  LegislationVersionSchema,
   type SearchResults,
+  SearchResultsSchema,
   type Version,
+  VersionSchema,
   type Work,
-} from '@models';
-import { logger } from '@utils/logger';
+  WorkFromVersionSchema,
+  WorkSchema,
+  type WorkType,
+} from './models/index.js';
+import type { JurisdictionCode } from './providers/capability-manifest.js';
+import {
+  type CommonwealthProviderAdapter,
+  createCommonwealthProviderAdapter,
+} from './providers/commonwealth.js';
+import { assertRuntimeProviderSupported } from './providers/runtime.js';
+import { logger } from './utils/logger.js';
 
 /**
  * Cache entry with metadata
@@ -93,6 +101,18 @@ interface HttpClientLike {
 }
 
 type HttpClientFactory = () => HttpClientLike;
+type CommonwealthProviderAdapterFactory = () => CommonwealthProviderAdapter;
+
+export interface ProviderAwareSearchParams {
+  query?: string;
+  type?: string;
+  status?: string;
+  from?: string;
+  to?: string;
+  limit?: number;
+  offset?: number;
+  jurisdiction?: JurisdictionCode;
+}
 
 /**
  * Generate cache key from request parameters
@@ -308,7 +328,7 @@ function createClient(): HttpClientLike {
           }
         }
         // Exponential backoff: 1s, 2s, 4s
-        return Math.pow(2, attemptCount - 1) * 1000;
+        return 2 ** (attemptCount - 1) * 1000;
       },
     },
     hooks: {
@@ -336,9 +356,21 @@ function createClient(): HttpClientLike {
 }
 
 let httpClientFactory: HttpClientFactory = createClient;
+let commonwealthProviderAdapterFactory: CommonwealthProviderAdapterFactory =
+  createCommonwealthProviderAdapter;
 
 export function setHttpClientFactoryForTesting(factory?: HttpClientFactory): void {
   httpClientFactory = factory ?? createClient;
+}
+
+export function setCommonwealthProviderAdapterFactoryForTesting(
+  factory?: CommonwealthProviderAdapterFactory
+): void {
+  commonwealthProviderAdapterFactory = factory ?? createCommonwealthProviderAdapter;
+}
+
+function getJurisdiction(params?: { jurisdiction?: JurisdictionCode }): JurisdictionCode {
+  return params?.jurisdiction ?? 'nz';
 }
 
 async function getWorkFromVersions(
@@ -360,7 +392,7 @@ async function getWorkFromVersions(
     );
   }
 
-  const result = candidates.slice().sort((a, b) => b.date.localeCompare(a.date))[0];
+  const result = candidates.slice().sort((a, b) => b.date.localeCompare(a.date))[0]!;
 
   result.versionCount = candidates.length;
   setInCache(cacheKey, result, CACHE_CONFIG.workTTL);
@@ -379,8 +411,31 @@ export async function searchWorks(params: {
   to?: string;
   limit?: number;
   offset?: number;
+  jurisdiction?: JurisdictionCode;
 }): Promise<SearchResults> {
-  const cacheKey = generateCacheKey('search', params as Record<string, string>);
+  const jurisdiction = getJurisdiction(params);
+  assertRuntimeProviderSupported(jurisdiction, 'search');
+
+  if (jurisdiction === 'au-commonwealth') {
+    return commonwealthProviderAdapterFactory().searchWorks({
+      query: params.query,
+      type: params.type as WorkType | undefined,
+      status: params.status as LegislationStatus | undefined,
+      limit: params.limit,
+      offset: params.offset,
+    });
+  }
+
+  const cacheKey = generateCacheKey('search', {
+    ...(params.query && { query: params.query }),
+    ...(params.type && { type: params.type }),
+    ...(params.status && { status: params.status }),
+    ...(params.from && { from: params.from }),
+    ...(params.to && { to: params.to }),
+    ...(params.limit && { limit: params.limit.toString() }),
+    ...(params.offset && { offset: params.offset.toString() }),
+    jurisdiction,
+  });
 
   // Try cache first
   const cached = getFromCache<SearchResults>(cacheKey);
@@ -447,8 +502,18 @@ export async function searchWorks(params: {
 /**
  * Get a specific work by ID
  */
-export async function getWork(workId: string): Promise<Work> {
-  const cacheKey = generateCacheKey('work', { id: workId });
+export async function getWork(
+  workId: string,
+  options: { jurisdiction?: JurisdictionCode } = {}
+): Promise<Work> {
+  const jurisdiction = getJurisdiction(options);
+  assertRuntimeProviderSupported(jurisdiction, 'getWork');
+
+  if (jurisdiction === 'au-commonwealth') {
+    return commonwealthProviderAdapterFactory().getWork(workId);
+  }
+
+  const cacheKey = generateCacheKey('work', { id: workId, jurisdiction });
 
   // Try cache first
   const cached = getFromCache<Work>(cacheKey);
@@ -545,8 +610,18 @@ export async function getWork(workId: string): Promise<Work> {
 /**
  * Get all versions of a work
  */
-export async function getWorkVersions(workId: string): Promise<Version[]> {
-  const cacheKey = generateCacheKey('versions', { workId });
+export async function getWorkVersions(
+  workId: string,
+  options: { jurisdiction?: JurisdictionCode } = {}
+): Promise<Version[]> {
+  const jurisdiction = getJurisdiction(options);
+  assertRuntimeProviderSupported(jurisdiction, 'getVersions');
+
+  if (jurisdiction === 'au-commonwealth') {
+    return commonwealthProviderAdapterFactory().getWorkVersions(workId);
+  }
+
+  const cacheKey = generateCacheKey('versions', { workId, jurisdiction });
 
   // Try cache first
   const cached = getFromCache<Version[]>(cacheKey);

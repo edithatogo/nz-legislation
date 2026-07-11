@@ -1,0 +1,16 @@
+{
+  "trackId": "anz-marketplace-assistant-integrations",
+  "status": "completed",
+  "priority": "P1",
+  "created": "2026-05-23",
+  "sourceTrack": "anz-platform-release-and-distribution",
+  "singleRepo": true,
+  "phase": "preparation-complete-submission-blocked",
+  "channels": ["Claude", "Codex", "GitHub Copilot", "Gemini", "Qwen"],
+  "externalSubmissionAllowed": false,
+  "publishingAllowed": false,
+  "deploymentAllowed": false,
+  "repositoryRenameAllowed": false,
+  "packageRenameAllowed": false,
+  "requiredGates": ["provider-capability-manifest", "docs-and-snippets", "security-provenance-review"]
+}

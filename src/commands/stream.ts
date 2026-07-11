@@ -5,7 +5,7 @@
 import { Command } from 'commander';
 import ora from 'ora';
 
-import { StreamExporter, type StreamExportOptions } from '@utils/streaming';
+import { StreamExporter, type StreamExportOptions } from '../utils/streaming.js';
 
 interface StreamOptions {
   query: string;

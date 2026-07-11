@@ -3,10 +3,10 @@
  * Tests complete CLI workflows from user perspective
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { existsSync, readFileSync, unlinkSync } from 'node:fs';
+import { join } from 'node:path';
 import { execa } from 'execa';
-import { readFileSync, existsSync, unlinkSync } from 'fs';
-import { join } from 'path';
+import { afterEach, describe, expect, it } from 'vitest';
 
 const CLI_PATH = join(process.cwd(), 'src', 'cli.ts');
 const TSX_BIN = join(
@@ -72,6 +72,68 @@ describe('E2E CLI Tests', () => {
     });
   });
 
+  describe('nzlegislation capabilities', () => {
+    it('should display provider capabilities without an API key', async () => {
+      const { stdout, stderr, exitCode } = await execa(
+        TSX_BIN,
+        [CLI_PATH, 'capabilities', '--format', 'json'],
+        {
+          env: {
+            NZ_LEGISLATION_API_KEY: '',
+          },
+        }
+      );
+
+      expect(exitCode).toBe(0);
+      expect(stderr).not.toContain('API key');
+
+      const parsed = JSON.parse(stdout);
+      const nzProvider = parsed.providers.find(
+        (provider: { jurisdiction?: string }) => provider.jurisdiction === 'nz'
+      );
+
+      expect(nzProvider).toMatchObject({
+        jurisdiction: 'nz',
+        releaseChannel: 'stable',
+      });
+    });
+
+    it('should include runtime provider registry details when requested', async () => {
+      const { stdout, exitCode } = await execa(
+        TSX_BIN,
+        [CLI_PATH, 'capabilities', '--format', 'json', '--include-runtime'],
+        {
+          env: {
+            NZ_LEGISLATION_API_KEY: '',
+          },
+        }
+      );
+
+      expect(exitCode).toBe(0);
+
+      const parsed = JSON.parse(stdout);
+      expect(parsed).toHaveProperty('providers');
+      expect(parsed).toHaveProperty('runtimeProviders');
+
+      const nzRuntimeProvider = parsed.runtimeProviders.find(
+        (provider: { jurisdiction?: string }) => provider.jurisdiction === 'nz'
+      );
+      const auCommonwealthRuntimeProvider = parsed.runtimeProviders.find(
+        (provider: { jurisdiction?: string }) => provider.jurisdiction === 'au-commonwealth'
+      );
+
+      expect(nzRuntimeProvider).toMatchObject({
+        jurisdiction: 'nz',
+        runtimeSupported: true,
+      });
+      expect(auCommonwealthRuntimeProvider).toMatchObject({
+        jurisdiction: 'au-commonwealth',
+        runtimeSupported: true,
+        runtimeKind: 'prerelease-au-adapter',
+      });
+    });
+  });
+
   describe('nzlegislation search', () => {
     itWithApi('should search for legislation', async () => {
       const { stdout, exitCode } = await execa(
@@ -113,7 +175,7 @@ describe('E2E CLI Tests', () => {
 
     it('should handle missing API key gracefully', async () => {
       // This test assumes no API key is set in test environment
-      const { stderr, exitCode } = await execa(TSX_BIN, [CLI_PATH, 'search', '--query', 'health'], {
+      const { stderr } = await execa(TSX_BIN, [CLI_PATH, 'search', '--query', 'health'], {
         reject: false,
         env: {
           NZ_LEGISLATION_API_KEY: '',
@@ -126,6 +188,37 @@ describe('E2E CLI Tests', () => {
   });
 
   describe('nzlegislation export', () => {
+    it('should block unsupported Australian jurisdiction exports before writing files', async () => {
+      const outputPath = join(FIXTURES_DIR, 'test-export.csv');
+
+      const { stderr, exitCode } = await execa(
+        TSX_BIN,
+        [
+          CLI_PATH,
+          'export',
+          '--query',
+          'health',
+          '--jurisdiction',
+          'au-nsw',
+          '--output',
+          outputPath,
+          '--format',
+          'json',
+        ],
+        {
+          reject: false,
+          env: {
+            NZ_LEGISLATION_API_KEY: '',
+          },
+        }
+      );
+
+      expect(exitCode).toBe(1);
+      expect(stderr).toContain('unsupported_provider_capability');
+      expect(stderr).toContain('au-nsw');
+      expect(existsSync(outputPath)).toBe(false);
+    });
+
     itWithApi('should export to CSV file', async () => {
       const outputPath = join(process.cwd(), 'tests', 'fixtures', 'test-export.csv');
 

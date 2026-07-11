@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * ANZ Legislation CLI
- * Command-line interface for searching and retrieving legislation data
+ * NZ Legislation CLI
+ * Command-line interface for searching and retrieving NZ legislation data
  */
 
 import chalk from 'chalk';
@@ -9,34 +9,28 @@ import { Command } from 'commander';
 
 import { batchCommand } from './commands/batch.js';
 import { cacheCommand } from './commands/cache.js';
+import { capabilitiesCommand } from './commands/capabilities.js';
 import { citeCommand } from './commands/cite.js';
 import { configCommand } from './commands/config.js';
 import { exportCommand } from './commands/export.js';
 import { createGenerateCommand } from './commands/generate.js';
 import { getCommand } from './commands/get.js';
-import { createInteractiveHelpCommand, createContextualHelpCommand } from './commands/help.js';
+import { createContextualHelpCommand, createInteractiveHelpCommand } from './commands/help.js';
 import { searchCommand } from './commands/search.js';
 import { streamCommand } from './commands/stream.js';
 import { getConfig } from './config.js';
 import { ApplicationError, ErrorCode, getUserFriendlyMessage } from './errors.js';
-import { initializeProviders } from './providers/index.js';
 import { logger } from './utils/logger.js';
 
 // Get package version from package.json
 const pkg = await import('../package.json', { with: { type: 'json' } });
-
-// Initialize providers with config
-initializeProviders({
-  commonwealthApiKey: process.env.COMMONWEALTH_API_KEY,
-  queenslandApiKey: process.env.QUEENSLAND_API_KEY,
-});
 
 // Create main CLI program
 const program = new Command();
 
 program
   .name('nzlegislation')
-  .description('Search and retrieve legislation data across jurisdictions')
+  .description('Search and retrieve New Zealand legislation data')
   .version(pkg.default.version)
   .configureHelp({
     sortOptions: true,
@@ -45,33 +39,27 @@ program
   .addHelpText(
     'after',
     `
-Jurisdictions:
-  - nz (New Zealand, default)
-  - au-comm (Australian Commonwealth)
-  - au-qld (Queensland)
-
 Examples:
   $ nzlegislation search --query "health" --type act
-  $ nzlegislation get "act_public_1989_18"
-  $ nzlegislation get "act/1988/123" --jurisdiction au-comm
-  $ nzlegislation get "act_public_1989_18" --versions
+  $ nzlegislation get "act/1986/132"
+  $ nzlegislation get "act/1986/132" --versions
   $ nzlegislation export --query "health" --output health.csv
   $ nzlegislation stream --query "health" --output health.csv  # Stream large exports
-  $ nzlegislation batch --ids "act_public_1989_18,act_public_1986_132" --type getWork --output results.json
+  $ nzlegislation batch --ids "act/1986/132,act/1989/18" --type getWork --output results.json
   $ nzlegislation batch --file works.csv --type getWork --output results.json
-  $ nzlegislation cite "act_public_1989_18" --style bibtex
+  $ nzlegislation cite "act/1986/132" --style bibtex
+  $ nzlegislation capabilities --format json
   $ nzlegislation config --show
   $ nzlegislation cache --stats
 
-Documentation: https://github.com/edithatogo/nz-legislation
-NZ API Documentation: https://api.legislation.govt.nz/docs/`
+Documentation: https://github.com/dylanmordaunt/nz-legislation-tool
+API Documentation: https://api.legislation.govt.nz/docs/`
   );
 
 // Add global options
 program
   .option('--verbose', 'Enable verbose output')
-  .option('--quiet', 'Suppress non-essential output')
-  .option('-j, --jurisdiction <id>', 'Jurisdiction identifier (nz, au-comm, au-qld)', 'nz');
+  .option('--quiet', 'Suppress non-essential output');
 
 // Add commands
 program
@@ -79,6 +67,7 @@ program
   .addCommand(getCommand)
   .addCommand(exportCommand)
   .addCommand(citeCommand)
+  .addCommand(capabilitiesCommand)
   .addCommand(configCommand)
   .addCommand(cacheCommand)
   .addCommand(batchCommand)
@@ -89,8 +78,18 @@ program
 
 // Pre-command hook to check configuration
 program.hook('preAction', (thisCommand, actionCommand) => {
-  // Skip config check for config command itself
-  if (actionCommand.name() === 'config') {
+  const options = thisCommand.opts();
+
+  if (options.verbose) {
+    logger.setVerbose(true);
+  }
+
+  if (options.quiet) {
+    logger.setQuiet(true);
+  }
+
+  // Skip API key checks for commands that do not call the legislation API.
+  if (['capabilities', 'config'].includes(actionCommand.name())) {
     return;
   }
 
@@ -102,8 +101,7 @@ program.hook('preAction', (thisCommand, actionCommand) => {
   }
 
   // Apply global options
-  if (thisCommand.opts().verbose) {
-    logger.setVerbose(true);
+  if (options.verbose) {
     config.verbose = true;
   }
 });

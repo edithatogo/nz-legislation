@@ -4,19 +4,19 @@ codecov:
 coverage:
   precision: 1
   round: down
-  range: "70...100"
+  range: '70...100'
   status:
     project:
       default:
         target: auto
-        threshold: "1%"
+        threshold: '1%'
     patch:
       default:
-        target: "80%"
-        threshold: "0%"
+        target: '80%'
+        threshold: '0%'
 
 comment:
-  layout: "reach,diff,flags,components"
+  layout: 'reach,diff,flags,components'
   require_changes: true
 
 component_management:
@@ -24,21 +24,21 @@ component_management:
     - component_id: cli-commands
       name: CLI Commands
       paths:
-        - "src/commands/**"
+        - 'src/commands/**'
     - component_id: api-client
       name: API Client
       paths:
-        - "src/client.ts"
-        - "src/config.ts"
-        - "src/utils/api-optimization.ts"
-        - "src/utils/streaming.ts"
-        - "src/utils/batch.ts"
+        - 'src/client.ts'
+        - 'src/config.ts'
+        - 'src/utils/api-optimization.ts'
+        - 'src/utils/streaming.ts'
+        - 'src/utils/batch.ts'
     - component_id: output-formatting
       name: Output Formatting
       paths:
-        - "src/output/**"
-        - "tests/output.test.ts"
-        - "tests/property/output.test.ts"
+        - 'src/output/**'
+        - 'tests/output.test.ts'
+        - 'tests/property/output.test.ts'
 
 flag_management:
   default_rules:

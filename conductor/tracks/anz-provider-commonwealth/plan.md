@@ -1,0 +1,66 @@
+# Plan: Australian Commonwealth Provider
+
+## Phase 0: Source and fixture baseline
+
+**Status:** Complete for source-backed prerelease readiness.
+
+- [x] Validate the Federal Register API and OpenAPI document.
+- [x] Add source validation notes under `docs/maintainers/`.
+- [x] Add mapping and injected client-wrapper foundation.
+- [x] Carry Federal Register source metadata through the adapter boundary.
+- [x] Capture additional official API-shaped fixtures for title, version,
+      document, search, and content download paths.
+- [x] Record live-smoke-test limits and opt-in execution rules; live execution remains opt-in.
+
+## Phase 1: Runtime provider adapter
+
+**Status:** Complete for the adapter slice.
+
+- [x] Add a provider adapter boundary for `au-commonwealth`.
+- [x] Map Federal Register title, version, document, and search responses into
+      repository models without placeholder fields.
+- [x] Keep unsupported capabilities explicit when a Federal Register endpoint
+      cannot satisfy a repository contract.
+
+## Phase 2: Provider-aware CLI, MCP, and export
+
+**Status:** Complete for source-backed prerelease search, get-work, versions,
+export, and MCP. Citation and single-version support remain blocked.
+
+- [x] Route Commonwealth CLI paths through jurisdiction-aware provider
+      selection.
+- [x] Route Commonwealth MCP/export paths through shared runtime provider
+      gates.
+- [x] Add source cards and provenance metadata to export and MCP output.
+- [x] Preserve structured unsupported errors for incomplete features.
+
+## Phase 3: Tests and gates
+
+**Status:** Complete for local gates; opt-in live execution remains separate.
+
+- [x] Add unit tests for mapper, adapter, and unsupported runtime cases.
+- [x] Add unit tests for provenance output.
+- [x] Add no-placeholder legal-data tests for Commonwealth fixtures.
+- [x] Add opt-in live smoke tests that are rate-limit respectful.
+- [x] Keep `pnpm typecheck`, `pnpm test:run`, `pnpm build`, and
+      `pnpm gate:no-placeholder-legal-data` passing.
+
+## Validation evidence
+
+- `gate:commonwealth-fixtures`: passed (18 provider/fixture tests).
+- `gate:conductor-requirements`: passed.
+- TypeScript strict typecheck and scoped Prettier: passed.
+- Live smoke test is skipped unless `LEGISLATION_LIVE_SMOKE=1` is explicitly set.
+- Full validation: 102 tests passed, 10 skipped; build and no-placeholder gate passed.
+- Implementation commit: `9d0ad56`; latest Docs workflow passed (`29156935006`).
+
+## Phase 4: Release readiness
+
+**Status:** In progress for local readiness; blocked for external publication,
+deployment, or submission.
+
+- [x] Update docs and release-readiness gates after runtime gates pass.
+- [x] Distinguish NZ stable support from Commonwealth prerelease support.
+- [x] Re-check package metadata and local registry copy before any public claim.
+- [ ] Keep external publication, deployment, and submission blocked until the
+      umbrella release/submission gates pass for a specific channel.

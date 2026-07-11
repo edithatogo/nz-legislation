@@ -93,7 +93,7 @@ The current package exposes both the legacy binaries and the new ANZ aliases:
 **Option A: Try without installing (recommended for first time)**
 
 ```bash
-npx nz-legislation-tool search --query "health"
+npx -y --package nz-legislation-tool nzlegislation search --query "health"
 ```
 
 **Option B: Install globally (recommended for regular use)**
@@ -509,7 +509,7 @@ npm install -g nz-legislation-tool
 ### Option 2: npx (Try before installing)
 
 ```bash
-npx nz-legislation-tool search --query "health"
+npx -y --package nz-legislation-tool nzlegislation search --query "health"
 ```
 
 **Pros:** No installation, try before committing  

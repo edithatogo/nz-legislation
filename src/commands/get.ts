@@ -5,16 +5,16 @@
 import { Command } from 'commander';
 import ora from 'ora';
 
-import { printWorkDetail, printVersionsTable, printJson, versionsToCsv } from '@output';
-import { logger } from '@utils/logger';
-import { validateWorkId, sanitizeInput } from '@utils/validation';
-
-import { getGlobalRegistry } from '../providers/index.js';
-import { toLegacyVersions, toLegacyWork } from '../providers/output-adapters.js';
+import { getWork, getWorkVersions } from '../client.js';
+import { printJson, printVersionsTable, printWorkDetail, versionsToCsv } from '../output/index.js';
+import { parseJurisdictionCode } from '../providers/jurisdictions.js';
+import { logger } from '../utils/logger.js';
+import { sanitizeInput, validateWorkId } from '../utils/validation.js';
 
 interface GetOptions {
   versions?: boolean;
   format: string;
+  jurisdiction: string;
 }
 
 export const getCommand = new Command()
@@ -23,50 +23,32 @@ export const getCommand = new Command()
   .argument('<id>', 'Work ID (e.g., act_public_1989_18)')
   .option('--versions', 'Show version history')
   .option('--format <format>', 'Output format (table, json, csv)', 'table')
-  .action(async (workId: string, options: GetOptions, command: Command) => {
-    const globalOptions = command.parent ? command.parent.opts<{ jurisdiction?: string }>() : {};
-    const jurisdiction = globalOptions.jurisdiction || 'nz';
-
-    const spinner = ora(`Retrieving ${jurisdiction} legislation...`).start();
+  .option('-j, --jurisdiction <code>', 'Jurisdiction provider (default: nz)', 'nz')
+  .action(async (workId: string, options: GetOptions) => {
+    const spinner = ora('Retrieving legislation...').start();
 
     try {
-      // Get provider
-      const registry = getGlobalRegistry();
-      const provider = registry.get(jurisdiction);
-
-      if (!provider) {
-        spinner.stop();
-        console.error(`❌ Error: Unknown jurisdiction "${jurisdiction}"`);
-        process.exit(1);
-      }
-
       // Sanitize and validate work ID
       const sanitizedWorkId = sanitizeInput(workId);
+      const validation = validateWorkId(sanitizedWorkId);
 
-      // NZ-specific ID validation only if jurisdiction is nz
-      if (jurisdiction === 'nz') {
-        const validation = validateWorkId(sanitizedWorkId);
-
-        if (!validation.valid) {
-          spinner.stop();
-          logger.error('Work ID validation failed', undefined, {
-            workId,
-            errors: validation.errors,
-          });
-          console.error('❌ Invalid work ID format:');
-          validation.errors?.forEach(err => {
-            console.error(`  - ${err.message}`);
-          });
-          console.error('\nExpected format: API work ID (e.g., act_public_1989_18)');
-          process.exit(3);
-        }
+      if (!validation.valid) {
+        spinner.stop();
+        logger.error('Work ID validation failed', undefined, { workId, errors: validation.errors });
+        console.error('❌ Invalid work ID format:');
+        validation.errors?.forEach(err => {
+          console.error(`  - ${err.message}`);
+        });
+        console.error('\nExpected format: API work ID (e.g., act_public_1989_18)');
+        process.exit(3);
       }
+
+      logger.debug('Work ID validated', { workId: sanitizedWorkId });
+      const jurisdiction = parseJurisdictionCode(options.jurisdiction);
 
       if (options.versions) {
         // Get version history
-        const versions = await provider.getVersions(sanitizedWorkId);
-        const work = await provider.getWork(sanitizedWorkId);
-        const legacyVersions = toLegacyVersions(versions, work.type);
+        const versions = await getWorkVersions(sanitizedWorkId, { jurisdiction });
         spinner.stop();
 
         switch (options.format.toLowerCase()) {
@@ -74,17 +56,15 @@ export const getCommand = new Command()
             printJson(versions);
             break;
           case 'csv':
-            console.log(versionsToCsv(legacyVersions));
+            console.log(versionsToCsv(versions));
             break;
-          case 'table':
           default:
-            printVersionsTable(legacyVersions);
+            printVersionsTable(versions);
             break;
         }
       } else {
         // Get work details
-        const work = await provider.getWork(sanitizedWorkId);
-        const legacyWork = toLegacyWork(work);
+        const work = await getWork(sanitizedWorkId, { jurisdiction });
         spinner.stop();
 
         switch (options.format.toLowerCase()) {
@@ -93,11 +73,10 @@ export const getCommand = new Command()
             break;
           case 'csv':
             console.log('Note: CSV format not ideal for single work. Use table or json.');
-            printWorkDetail(legacyWork);
+            printWorkDetail(work);
             break;
-          case 'table':
           default:
-            printWorkDetail(legacyWork);
+            printWorkDetail(work);
             break;
         }
       }

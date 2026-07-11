@@ -3,9 +3,10 @@
  * Runtime validation and health checks for configuration
  */
 
-import { ErrorCode, ValidationError } from '@errors';
-import { logger } from '@utils/logger';
-import { validateApiKeyFormat } from '@utils/secure-config';
+import { ErrorCode, ValidationError } from '../errors.js';
+
+import { logger } from './logger.js';
+import { validateApiKeyFormat } from './secure-config.js';
 
 /**
  * Configuration validation result
@@ -230,7 +231,7 @@ export function validateConfigurationOrThrow(config: Record<string, unknown>): v
   const result = validateConfiguration(config);
 
   if (!result.valid && result.errors.length > 0) {
-    const firstError = result.errors[0];
+    const firstError = result.errors[0]!;
     throw new ValidationError(firstError.code, firstError.message, { field: firstError.field });
   }
 }

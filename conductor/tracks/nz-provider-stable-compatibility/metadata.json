@@ -1,0 +1,26 @@
+{
+  "trackId": "nz-provider-stable-compatibility",
+  "status": "complete_local_compatibility",
+  "priority": "P0",
+  "created": "2026-05-23",
+  "sourceTrack": "anz-platform-release-and-distribution",
+  "singleRepo": true,
+  "phase": "stable-compatibility-gate-complete",
+  "jurisdiction": "New Zealand",
+  "jurisdictionCode": "nz",
+  "providerId": "nz-legislation",
+  "sourceSurface": "Existing New Zealand legislation client surface",
+  "externalSubmissionAllowed": false,
+  "publishingAllowed": false,
+  "deploymentAllowed": false,
+  "repositoryRenameAllowed": false,
+  "packageRenameAllowed": false,
+  "stableCompatibility": ["nz-legislation-tool", "nzlegislation", "nzlegislation-mcp"],
+  "transitionAliases": ["anzlegislation", "anzlegislation-mcp"],
+  "requiredGates": [
+    "provider-capability-manifest",
+    "provider-aware-mcp-export",
+    "accurate-package-metadata",
+    "release-notes"
+  ]
+}

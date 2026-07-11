@@ -1,16 +1,14 @@
 # nz-legislation-tool
 
-## 1.2.0-next.0
+## 1.2.0
 
 ### Minor Changes
 
-- # Australian Expansion (BETA)
+- Add a stable MCP server surface alongside the CLI.
 
-  Initial support for Australian jurisdictions (Commonwealth and Queensland).
-  - New providers in `src/providers/`
-  - Routing flag `--jurisdiction`
-  - Australian citation style
-  - Hardened test suite
+  This release publishes the `nzlegislation-mcp` entrypoint and the MCP tool layer for search,
+  retrieval, export, citation, and configuration workflows without breaking the existing CLI
+  interface.
 
 ## 1.1.0
 

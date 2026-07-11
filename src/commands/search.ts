@@ -5,12 +5,11 @@
 import { Command } from 'commander';
 import ora from 'ora';
 
-import { printTable, printJson, worksToCsv } from '@output';
-import { logger } from '@utils/logger';
-import { validateSearchParams, sanitizeInput } from '@utils/validation';
-
-import { getGlobalRegistry } from '../providers/index.js';
-import { toLegacySearchResults } from '../providers/output-adapters.js';
+import { searchWorks } from '../client.js';
+import { printJson, printTable, worksToCsv } from '../output/index.js';
+import { parseJurisdictionCode } from '../providers/jurisdictions.js';
+import { logger } from '../utils/logger.js';
+import { sanitizeInput, validateSearchParams } from '../utils/validation.js';
 
 interface SearchOptions {
   query: string;
@@ -21,6 +20,7 @@ interface SearchOptions {
   limit: string;
   offset: string;
   format: string;
+  jurisdiction: string;
 }
 
 export const searchCommand = new Command()
@@ -34,23 +34,11 @@ export const searchCommand = new Command()
   .option('-l, --limit <number>', 'Maximum results (default: 25, max: 100)', '25')
   .option('-o, --offset <number>', 'Result offset for pagination', '0')
   .option('--format <format>', 'Output format (table, json, csv)', 'table')
-  .action(async (options: SearchOptions, command: Command) => {
-    const globalOptions = command.parent ? command.parent.opts<{ jurisdiction?: string }>() : {};
-    const jurisdiction = globalOptions.jurisdiction || 'nz';
-
-    const spinner = ora(`Searching ${jurisdiction} legislation...`).start();
+  .option('-j, --jurisdiction <code>', 'Jurisdiction provider (default: nz)', 'nz')
+  .action(async (options: SearchOptions) => {
+    const spinner = ora('Searching legislation...').start();
 
     try {
-      // Get provider
-      const registry = getGlobalRegistry();
-      const provider = registry.get(jurisdiction);
-
-      if (!provider) {
-        spinner.stop();
-        console.error(`❌ Error: Unknown jurisdiction "${jurisdiction}"`);
-        process.exit(1);
-      }
-
       // Sanitize inputs
       const sanitizedOptions = {
         ...options,
@@ -67,33 +55,31 @@ export const searchCommand = new Command()
         spinner.stop();
         logger.error('Validation failed', undefined, { errors: validation.errors });
         console.error('❌ Validation errors:');
-        validation.errors?.forEach(err => {
+        validation.errors.forEach(err => {
           console.error(`  - ${err.field}: ${err.message}`);
         });
         process.exit(3);
       }
 
       const validatedParams = validation.data;
-      const normalizedStatus: 'in-force' | 'repealed' | 'not-in-force' | undefined =
-        validatedParams.status === 'not-yet-in-force'
-          ? 'not-in-force'
-          : validatedParams.status === 'in-force' || validatedParams.status === 'repealed'
-            ? validatedParams.status
-            : undefined;
-
-      // Map Command-style WorkType to SearchParams WorkType
-      const searchParams = {
+      const jurisdiction = parseJurisdictionCode(options.jurisdiction);
+      logger.debug('Search parameters validated', {
         query: validatedParams.query,
         type: validatedParams.type,
-        status: normalizedStatus,
+        limit: validatedParams.limit,
+        jurisdiction,
+      });
+
+      const results = await searchWorks({
+        query: validatedParams.query,
+        type: validatedParams.type,
+        status: validatedParams.status,
         from: validatedParams.from,
         to: validatedParams.to,
         limit: validatedParams.limit,
         offset: validatedParams.offset,
-      };
-
-      const results = await provider.search(searchParams);
-      const legacyResults = toLegacySearchResults(results);
+        jurisdiction,
+      });
 
       spinner.stop();
 
@@ -102,11 +88,10 @@ export const searchCommand = new Command()
           printJson(results);
           break;
         case 'csv':
-          console.log(worksToCsv(legacyResults));
+          console.log(worksToCsv(results));
           break;
-        case 'table':
         default:
-          printTable(legacyResults);
+          printTable(results);
           break;
       }
     } catch (error) {

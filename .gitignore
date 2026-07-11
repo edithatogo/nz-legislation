@@ -36,6 +36,7 @@ coverage/
 
 # Testing
 .vitest/
+.tmp/
 
 # OS
 Thumbs.db

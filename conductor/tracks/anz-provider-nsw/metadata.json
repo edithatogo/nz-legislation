@@ -1,0 +1,29 @@
+{
+  "trackId": "anz-provider-nsw",
+  "status": "active",
+  "priority": "P1",
+  "created": "2026-05-21",
+  "sourceTrack": "anz-platform-release-and-distribution",
+  "singleRepo": true,
+  "phase": "xml-export-adapter-design",
+  "jurisdiction": "New South Wales",
+  "jurisdictionCode": "au-nsw",
+  "providerId": "nsw-legislation",
+  "sourceSurface": "NSW legislation XML export surface",
+  "sourceValidation": "docs/maintainers/nsw-source-validation.md",
+  "externalSubmissionAllowed": false,
+  "publishingAllowed": false,
+  "deploymentAllowed": false,
+  "repositoryRenameAllowed": false,
+  "packageRenameAllowed": false,
+  "stableCompatibility": ["nz-legislation-tool", "nzlegislation", "nzlegislation-mcp"],
+  "transitionAliases": ["anzlegislation", "anzlegislation-mcp"],
+  "requiredGates": [
+    "no-placeholder-legal-data",
+    "provider-capability-manifest",
+    "provider-aware-mcp-export",
+    "xml-export-fixtures",
+    "provenance-source-cards",
+    "docs-and-release-notes"
+  ]
+}

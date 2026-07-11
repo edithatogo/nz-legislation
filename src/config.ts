@@ -7,9 +7,9 @@
 import Conf from 'conf';
 import { z } from 'zod';
 
-import { loadEnvConfig } from '@utils/env-loader';
-import { logger } from '@utils/logger';
-import { loadSecureConfig, validateApiKeyFormat } from '@utils/secure-config';
+import { loadEnvConfig } from './utils/env-loader.js';
+import { logger } from './utils/logger.js';
+import { loadSecureConfig, validateApiKeyFormat } from './utils/secure-config.js';
 
 /**
  * Configuration schema with Zod validation

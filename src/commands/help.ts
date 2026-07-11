@@ -3,7 +3,7 @@
  * Provides menu-driven help navigation for NZ Legislation CLI
  */
 
-import * as readline from 'readline';
+import * as readline from 'node:readline';
 
 import chalk from 'chalk';
 import { Command } from 'commander';
@@ -139,7 +139,7 @@ export function createInteractiveHelpCommand(): Command {
           console.log(`${symbol} ${color(topic.title)} - ${topic.description}`);
         });
 
-        console.log('\n' + chalk.gray('q - Quit'));
+        console.log(`\n${chalk.gray('q - Quit')}`);
         console.log(chalk.gray('↑/↓ - Navigate | Enter - Select\n'));
       };
 
@@ -154,13 +154,13 @@ export function createInteractiveHelpCommand(): Command {
         });
 
         if (topic.relatedCommands && topic.relatedCommands.length > 0) {
-          console.log('\n' + chalk.yellow.bold('Related Commands:'));
+          console.log(`\n${chalk.yellow.bold('Related Commands:')}`);
           topic.relatedCommands.forEach(cmdName => {
             console.log(`  ${chalk.green(`nzlegislation ${cmdName} --help`)}`);
           });
         }
 
-        console.log('\n' + chalk.gray('Press Enter to return to menu...'));
+        console.log(`\n${chalk.gray('Press Enter to return to menu...')}`);
       };
 
       // Handle keyboard input
@@ -178,6 +178,9 @@ export function createInteractiveHelpCommand(): Command {
             if (input === '\r' || input === '\n') {
               // Show selected topic
               const topic = helpTopics[selectedIndex];
+              if (!topic) {
+                return;
+              }
               showTopic(topic);
 
               // Wait for Enter to return
