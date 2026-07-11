@@ -20,9 +20,14 @@ Capture representative official API-shaped fixtures for:
 - not-found and invalid-request responses
 - rate-limit and transient error responses
 
-The current Commonwealth unit tests use inline fixtures in the test files. Those
-fixtures are useful for mapping coverage, but they are not a substitute for this
-official fixture set.
+The checked-in metadata fixtures now cover title search, title-by-id, version
+history, and document metadata. They intentionally omit legal document content
+and are used only to lock the official response shape. Inline fixtures remain in
+some mapper tests for focused edge cases.
+
+An opt-in live smoke test is available with `LEGISLATION_LIVE_SMOKE=1`. It makes
+one conservative title search request, does not retry, and is skipped by normal
+CI and local test runs. Stop the test if the service reports rate limiting.
 
 ## Capture evidence fields
 

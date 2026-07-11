@@ -1,0 +1,8 @@
+{
+  "trackId": "legislation-brand-migration",
+  "status": "complete_additive_identity",
+  "priority": "P0",
+  "created": "2026-07-11",
+  "breakingRenameAllowed": false,
+  "phase": "additive-identity-contract-complete"
+}

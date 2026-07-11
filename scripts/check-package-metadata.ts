@@ -37,6 +37,11 @@ function rejectPattern(path: string, pattern: RegExp, reason: string): void {
 }
 
 const packageJson = JSON.parse(read('package.json')) as PackageJson;
+const releaseGatesPath = existsSync(
+  'conductor/tracks/anz-platform-release-and-distribution/release-submission-gates.md'
+)
+  ? 'conductor/tracks/anz-platform-release-and-distribution/release-submission-gates.md'
+  : 'conductor/archive/anz-platform-release-and-distribution/release-submission-gates.md';
 
 const expectedPackageFields: Array<[keyof PackageJson, string]> = [
   ['name', 'nz-legislation-tool'],
@@ -110,7 +115,7 @@ if (packageJson.scripts?.['gate:package-metadata'] !== 'tsx scripts/check-packag
 
 const requiredDocs = [
   'docs/maintainers/package-metadata-review.md',
-  'conductor/tracks/anz-platform-release-and-distribution/release-submission-gates.md',
+  releaseGatesPath,
   'conductor/tracks/anz-publication-package-registries/spec.md',
   'conductor/requirements.md',
   'README.md',
@@ -131,13 +136,10 @@ requireIncludes('docs/maintainers/package-metadata-review.md', [
   'Australian support remains prerelease, planned, or unsupported unless the provider capability manifest and release gates promote a jurisdiction.',
 ]);
 
-requireIncludes(
-  'conductor/tracks/anz-platform-release-and-distribution/release-submission-gates.md',
-  [
-    'Accurate package metadata',
-    '`package.json`, README, registry metadata, binaries, aliases, and deprecation/prerelease language match runtime capability.',
-  ]
-);
+requireIncludes(releaseGatesPath, [
+  'Accurate package metadata',
+  '`package.json`, README, registry metadata, binaries, aliases, and deprecation/prerelease language match runtime capability.',
+]);
 
 requireIncludes('conductor/tracks/anz-publication-package-registries/spec.md', [
   'Preserve stable package and binary compatibility names.',

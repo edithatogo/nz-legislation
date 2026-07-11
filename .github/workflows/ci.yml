@@ -44,7 +44,7 @@ jobs:
         run: pnpm format:check
 
   lint:
-    name: Lint Audit
+    name: Lint Audit (ESLint)
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -66,9 +66,64 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
 
-      - name: Run lint audit
+      - name: Run ESLint audit
         run: pnpm lint
         continue-on-error: true
+
+  lint-biome:
+    name: Lint (Biome)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    continue-on-error: true
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.29.3 --activate
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Run Biome check
+        run: pnpm lint:biome
+
+  lint-oxlint:
+    name: Lint (Oxlint)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    continue-on-error: true
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.29.3 --activate
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Run Oxlint check
+        run: pnpm lint:oxlint
+
 
   docs-lint:
     name: Docs Lint (Vale)
@@ -428,6 +483,9 @@ jobs:
       [
         format,
         lint,
+        lint-biome,
+        lint-oxlint,
+
         typecheck,
         conductor-requirements,
         website-docs,

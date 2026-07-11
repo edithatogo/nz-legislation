@@ -5,7 +5,14 @@
     "reason": "No image may be built or pushed until release/submission gates, SBOM/provenance review, and snippet evidence pass."
   },
   "image": "ghcr.io/edithatogo/nz-legislation-tool",
-  "entrypoints": ["nzlegislation", "nzlegislation-mcp"],
+  "entrypoints": [
+    "nzlegislation",
+    "nzlegislation-mcp",
+    "anzlegislation",
+    "anzlegislation-mcp",
+    "legislation",
+    "legislation-mcp"
+  ],
   "runtime": "node >=18",
   "baseImagePolicy": "Use a supported slim Node image or distroless Node image after threat-model review.",
   "labels": {
@@ -14,6 +21,8 @@
   },
   "sbom": "required before publication",
   "provenance": "required before publication",
+  "threatModel": "distribution/container/threat-model.md",
+  "snippetVerification": "distribution/container/snippet-verification.md",
   "claims": {
     "nz": "stable supported runtime",
     "australia": "Commonwealth prerelease; other Australian jurisdictions planned or unsupported"

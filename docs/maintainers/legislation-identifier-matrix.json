@@ -1,0 +1,16 @@
+{
+  "displayName": "legislation",
+  "packageIdentifier": "nz-legislation-tool",
+  "repository": "edithatogo/nz-legislation",
+  "stableIdentifiers": ["nz-legislation-tool", "nzlegislation", "nzlegislation-mcp"],
+  "transitionAliases": ["anzlegislation", "anzlegislation-mcp"],
+  "neutralAdditiveAliases": ["legislation", "legislation-mcp"],
+  "removalPolicy": "No removal without explicit deprecation approval, support window, rollback plan, and release-gate evidence.",
+  "collisionAudit": {
+    "npm": "not verified for neutral package publication; local package remains private",
+    "github": "repository namespace is edithatogo/nz-legislation; neutral rename not performed",
+    "mcpDirectories": "not submitted; current availability not treated as verified",
+    "marketplaces": "not submitted; current availability not treated as verified",
+    "domains": "not verified; no domain claim is made"
+  }
+}

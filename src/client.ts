@@ -392,7 +392,7 @@ async function getWorkFromVersions(
     );
   }
 
-  const result = candidates.slice().sort((a, b) => b.date.localeCompare(a.date))[0];
+  const result = candidates.slice().sort((a, b) => b.date.localeCompare(a.date))[0]!;
 
   result.versionCount = candidates.length;
   setInCache(cacheKey, result, CACHE_CONFIG.workTTL);

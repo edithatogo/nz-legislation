@@ -8,9 +8,16 @@ registry, integration, and migration tracks listed here.
 
 ## Umbrella track
 
-| Track                                   | Priority | Status | Purpose                                                                                                      |
-| --------------------------------------- | -------- | ------ | ------------------------------------------------------------------------------------------------------------ |
-| `anz-platform-release-and-distribution` | P0       | Active | Single-repository release, distribution, submission, integration, provider-gate, and Rust-readiness roadmap. |
+| Track | Priority | Status | Purpose |
+| ----- | -------- | ------ | ------- |
+
+## Product unification tracks
+
+| Track                                    | Priority | Status  | Purpose                                                                                         |
+| ---------------------------------------- | -------- | ------- | ----------------------------------------------------------------------------------------------- |
+| `legislation-jurisdiction-mainstreaming` | P0       | Planned | Converge NZ and every Australian jurisdiction on one evidence-backed provider contract.         |
+| `legislation-brand-migration`            | P0       | Planned | Adopt legislation as the neutral product identity through a compatibility-preserving migration. |
+| `official-gazette-sources`               | P0       | Planned | Add NZ and Australian Gazette or equivalent sources as a distinct content family.               |
 
 ## Provider implementation tracks
 
@@ -30,10 +37,8 @@ track says otherwise.
 | `anz-provider-south-australia`       | South Australia               | P1       | Source-shape discovery and adapter mapping                               |
 | `anz-provider-western-australia`     | Western Australia             | P1       | Source-shape discovery and adapter mapping                               |
 | `anz-provider-tasmania`              | Tasmania                      | P1       | Source-shape discovery and adapter mapping                               |
-| `anz-provider-act`                   | Australian Capital Territory  | P1       | Source-shape discovery and adapter mapping                               |
 | `anz-provider-northern-territory`    | Northern Territory            | P1       | Source-shape discovery and adapter mapping                               |
 | `anz-provider-aggregator-evaluation` | Cross-jurisdiction aggregator | P2       | Evaluation-only source/provenance and licence review                     |
-| `anz-openapi-adapter-readiness`      | Future HTTP/OpenAPI adapter   | P2       | Readiness-only API contract planning                                     |
 
 ## Publication, registry, and integration tracks
 
@@ -41,12 +46,9 @@ These tracks do not authorize publication, deployment, marketplace submission,
 registry submission, or package/repository renaming. They define the contracts
 and readiness gates each channel must satisfy before any later external action.
 
-| Track                                    | Channel scope                               | Priority | Current phase                                   |
-| ---------------------------------------- | ------------------------------------------- | -------- | ----------------------------------------------- |
-| `anz-publication-package-registries`     | npm, GitHub Packages, GitHub Releases       | P0       | Preparation-only package and release contract   |
-| `anz-publication-website-docs`           | Website/docs, install pages, `llms.txt`     | P0       | Preparation-only docs and deployment contract   |
-| `anz-registry-mcp-directories`           | Smithery and other MCP directories          | P0       | Preparation-only MCP registry contract          |
-| `anz-marketplace-assistant-integrations` | Claude, Codex, GitHub Copilot, Gemini, Qwen | P1       | Preparation-only assistant marketplace contract |
-| `anz-marketplace-ide-extensions`         | VS Code Marketplace, Open VSX, JetBrains    | P2       | Preparation-only extension marketplace contract |
-| `anz-distribution-container-homebrew`    | Docker/GHCR and Homebrew                    | P2       | Not-started distribution contract               |
-| `anz-rust-migration-readiness`           | Future Rust migration readiness             | P2       | Future-readiness-only compatibility contract    |
+| Track                                | Channel scope                           | Priority | Current phase                                 |
+| ------------------------------------ | --------------------------------------- | -------- | --------------------------------------------- |
+| `anz-publication-package-registries` | npm, GitHub Packages, GitHub Releases   | P0       | Preparation-only package and release contract |
+| `anz-publication-website-docs`       | Website/docs, install pages, `llms.txt` | P0       | Preparation-only docs and deployment contract |
+| `anz-registry-mcp-directories`       | Smithery and other MCP directories      | P0       | Preparation-only MCP registry contract        |
+| `anz-rust-migration-readiness`       | Future Rust migration readiness         | P2       | Future-readiness-only compatibility contract  |

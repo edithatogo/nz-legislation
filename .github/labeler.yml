@@ -1,43 +1,37 @@
-# .github/labeler.yml
-# Auto-label issues based on content
+# RegEx Issue Labeler configuration.
+# github/issue-labeler@v3 expects each label to map to a list of regex strings.
+# Branch-based matching belongs to PR labeler workflows and is intentionally
+# not mixed into this issue-body labeler configuration.
 
-# Component labels
 bug:
-  - head-branch: ['^fix', 'fix/']
-  - body: '/\b(bug|error|fail|issue|broken)\b/i'
+  - '/\b(bug|error|fail(?:ed|ure)?|broken)\b/i'
 
 enhancement:
-  - head-branch: ['^feat', 'feat/', '^feature', 'feature/']
-  - body: '/\b(feature|enhancement|improve|add)\b/i'
+  - '/\b(feature|enhancement|improve|add)\b/i'
 
 documentation:
-  - head-branch: ['^docs', 'docs/', '^doc', 'doc/']
-  - body: '/\b(docs|documentation|readme|typo)\b/i'
+  - '/\b(docs?|documentation|readme|typo)\b/i'
 
 security:
-  - body: '/\b(security|vulnerability|exploit|attack)\b/i'
+  - '/\b(security|vulnerability|exploit|attack)\b/i'
 
 performance:
-  - head-branch: ['^perf', 'perf/', '^performance', 'performance/']
-  - body: '/\b(performance|slow|fast|optimize|benchmark)\b/i'
+  - '/\b(performance|slow|fast|optimi[sz]e|benchmark)\b/i'
 
 testing:
-  - head-branch: ['^test', 'test/', '^tests', 'tests/']
-  - body: '/\b(test|testing|spec|coverage)\b/i'
+  - '/\b(test(?:ing)?|spec|coverage)\b/i'
 
 dependencies:
-  - head-branch: ['^deps', 'deps/', '^dependabot', 'dependabot/']
-  - body: '/\b(dependency|dependencies|upgrade|update)\b/i'
+  - '/\b(dependenc(?:y|ies)|upgrade|update)\b/i'
 
-# Priority labels based on severity
 'priority: critical':
-  - body: '/\b(critical|urgent|emergency|blocking)\b/i'
+  - '/\b(critical|urgent|emergency|blocking)\b/i'
 
 'priority: high':
-  - body: '/\b(high|important|urgent)\b/i'
+  - '/\b(high|important|urgent)\b/i'
 
 'priority: medium':
-  - body: '/\b(medium|normal)\b/i'
+  - '/\b(medium|normal)\b/i'
 
 'priority: low':
-  - body: '/\b(low|minor|nice.to.have)\b/i'
+  - '/\b(low|minor|nice[ .-]?to[ .-]?have)\b/i'

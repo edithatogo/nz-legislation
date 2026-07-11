@@ -3,6 +3,16 @@ import { join } from 'node:path';
 
 const read = (path: string): string => readFileSync(path, 'utf8');
 const failures: string[] = [];
+const releaseGatesPath = existsSync(
+  'conductor/tracks/anz-platform-release-and-distribution/release-submission-gates.md'
+)
+  ? 'conductor/tracks/anz-platform-release-and-distribution/release-submission-gates.md'
+  : 'conductor/archive/anz-platform-release-and-distribution/release-submission-gates.md';
+const umbrellaPlanPath = existsSync(
+  'conductor/tracks/anz-platform-release-and-distribution/plan.md'
+)
+  ? 'conductor/tracks/anz-platform-release-and-distribution/plan.md'
+  : 'conductor/archive/anz-platform-release-and-distribution/plan.md';
 const normalize = (value: string): string => value.replace(/\s+/g, ' ').trim();
 
 function requireIncludes(path: string, needles: string[]): void {
@@ -25,8 +35,8 @@ function rejectPatterns(path: string, patterns: Array<{ pattern: RegExp; reason:
 
 const releaseNoteDocs = [
   'docs/maintainers/release-notes-anz-readiness-draft.md',
-  'conductor/tracks/anz-platform-release-and-distribution/release-submission-gates.md',
-  'conductor/tracks/anz-platform-release-and-distribution/plan.md',
+  releaseGatesPath,
+  umbrellaPlanPath,
   'conductor/tracks/anz-publication-package-registries/plan.md',
 ];
 
@@ -44,16 +54,13 @@ requireIncludes('docs/maintainers/release-notes-anz-readiness-draft.md', [
   'Future external release notes must keep the distinction between stable New Zealand support and Australian prerelease/planned support',
 ]);
 
-requireIncludes(
-  'conductor/tracks/anz-platform-release-and-distribution/release-submission-gates.md',
-  [
-    'NZ stable/Australian prerelease release notes',
-    'Release notes clearly distinguish NZ stable support from Australian prerelease or planned support.',
-    'between stable New Zealand support and Australian prerelease or planned',
-  ]
-);
+requireIncludes(releaseGatesPath, [
+  'NZ stable/Australian prerelease release notes',
+  'Release notes clearly distinguish NZ stable support from Australian prerelease or planned support.',
+  'between stable New Zealand support and Australian prerelease or planned',
+]);
 
-requireIncludes('conductor/tracks/anz-platform-release-and-distribution/plan.md', [
+requireIncludes(umbrellaPlanPath, [
   'Add an executable release notes gate that distinguishes NZ stable from Australian prerelease support.',
   'Keep all release automation guarded by provenance, docs, install, and release note checks.',
 ]);

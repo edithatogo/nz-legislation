@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0.0",
+  "artifact": {
+    "name": "nz-legislation-tool-mcp",
+    "owning_repo": "cli-legislation-nz",
+    "artifact_type": "mcp_server",
+    "version": "1.2.0",
+    "license": "Apache-2.0",
+    "public_contracts": [
+      "MCP tool: search_legislation(query, type, status, from, to, limit, jurisdiction)",
+      "MCP tool: get_legislation(workId, jurisdiction)",
+      "MCP tool: get_legislation_versions(workId, jurisdiction)",
+      "MCP tool: generate_citation(workId, style, jurisdiction)",
+      "MCP tool: export_legislation(query, format, limit, jurisdiction)",
+      "MCP tool: get_capabilities()",
+      "MCP tool: get_config()",
+      "MCP resource: legislation://{workId}"
+    ],
+    "release_notes_path": "CHANGELOG.md",
+    "changelog_path": "CHANGELOG.md",
+    "support_policy_path": "SECURITY.md"
+  },
+  "registries": [
+    {
+      "registry_id": "smithery",
+      "registry_kind": "mcp_distribution",
+      "submission_status": "requirements_inventory",
+      "requirements": [
+        {
+          "id": "tool-schema",
+          "description": "Tool schemas, descriptions, examples, and permissions for all 7 MCP tools are documented.",
+          "status": "pending"
+        },
+        {
+          "id": "install-config",
+          "description": "Install, runtime (stdio), and environment variable (NZ_LEGISLATION_API_KEY) configuration is documented without secret values.",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "registry_id": "github_releases",
+      "registry_kind": "cli_distribution",
+      "submission_status": "requirements_inventory",
+      "requirements": [
+        {
+          "id": "release-artifacts",
+          "description": "Release tarball (dist/ including mcp-cli.js), checksums, and source archive tagged with semver tag.",
+          "status": "pending",
+          "evidence_path": "conductor/registry-submissions/mcp_server/evidence.md"
+        }
+      ]
+    },
+    {
+      "registry_id": "mcp_registry",
+      "registry_kind": "mcp_distribution",
+      "submission_status": "requirements_inventory",
+      "requirements": [
+        {
+          "id": "registry-metadata",
+          "description": "Registry metadata, package URL (npm or GitHub release), support URL, and security notes are ready.",
+          "status": "pending"
+        }
+      ]
+    }
+  ],
+  "quality_gates": [
+    {
+      "name": "MCP smoke test",
+      "command_or_workflow": "nzlegislation-mcp < /dev/null 2>&1 | head -5",
+      "status": "pending"
+    },
+    {
+      "name": "Schema validation",
+      "command_or_workflow": "pnpm build && node -e \"require('./dist/mcp-cli.js')\"",
+      "status": "pending"
+    }
+  ],
+  "security_gates": [
+    {
+      "name": "Least-privilege permissions",
+      "status": "pending"
+    },
+    {
+      "name": "Prompt-injection and untrusted-content notes",
+      "status": "pending"
+    },
+    {
+      "name": "No secret values in config examples",
+      "status": "pending"
+    }
+  ],
+  "submission_workflow": {
+    "phases": [
+      {
+        "name": "MCP readiness",
+        "status": "pending",
+        "tasks": ["Document tools, resources, permissions, install config, and security notes."]
+      }
+    ],
+    "commit_policy": "Commit manifest and evidence in the owning MCP repo only.",
+    "review_policy": "Review tool behavior, permissions, prompt-injection notes, and install path before submission.",
+    "actions_policy": "Check owning repo tests, package build, and MCP smoke workflow before submission."
+  }
+}
