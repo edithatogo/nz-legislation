@@ -40,6 +40,12 @@
 
 Evidence: `docs/maintainers/release-reconciliation-2026-07-12.md`.
 
+## Review evidence - 2026-07-12
+
+- [x] Corrected stale branch and workflow references in the reconciliation snapshot.
+- [x] Re-ran Conductor, no-placeholder, provider/MCP/OpenAPI, typecheck, and formatting gates.
+- [x] Verified latest Docs workflow passed (`29156484950`).
+
 ## Phase 2: Release reconciliation
 
 **Status:** Blocked until branch and registry state are verified.
