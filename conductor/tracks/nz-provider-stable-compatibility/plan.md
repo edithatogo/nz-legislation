@@ -2,11 +2,11 @@
 
 ## Phase 1: Contract registration
 
-**Status:** In progress.
+**Status:** Complete for local compatibility gates.
 
 - [x] Add NZ stable compatibility to `conductor/requirements.md`.
 - [x] Add this Conductor track as the present stable provider track.
-- [ ] Add automated manifest/docs drift checks for stable NZ support claims.
+- [x] Add automated manifest/docs drift checks for stable NZ support claims.
 
 ## Phase 2: Compatibility verification
 
@@ -23,3 +23,8 @@
       `docs/maintainers/release-notes-anz-readiness-draft.md` keeps New Zealand
       stable and Australian support prerelease/planned; `pnpm gate:release-notes`
       passed outside the sandbox after a sandboxed `esbuild` spawn `EPERM`.
+
+## Validation evidence
+
+- `gate:nz-stable-compatibility`: passed.
+- Existing provider capability, MCP/export, release-notes, and install checks remain required before publication.
