@@ -37,7 +37,6 @@ track says otherwise.
 | `anz-provider-south-australia`       | South Australia               | P1       | Source-shape discovery and adapter mapping                               |
 | `anz-provider-western-australia`     | Western Australia             | P1       | Source-shape discovery and adapter mapping                               |
 | `anz-provider-tasmania`              | Tasmania                      | P1       | Source-shape discovery and adapter mapping                               |
-| `anz-provider-act`                   | Australian Capital Territory  | P1       | Source-shape discovery and adapter mapping                               |
 | `anz-provider-northern-territory`    | Northern Territory            | P1       | Source-shape discovery and adapter mapping                               |
 | `anz-provider-aggregator-evaluation` | Cross-jurisdiction aggregator | P2       | Evaluation-only source/provenance and licence review                     |
 

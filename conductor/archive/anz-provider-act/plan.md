@@ -56,4 +56,9 @@
 - `gate:conductor-requirements`: passed.
 - TypeScript strict typecheck and scoped Prettier: passed.
 - ACT runtime remains `planned`/unsupported; no publication or deployment is authorized.
-- Implementation commit: `b63b6f3`; latest Docs workflow passed (`29156705977`).
+- Implementation commit: `b63b6f3`; latest Docs workflow passed (`29156760779`).
+
+## Review evidence - 2026-07-12
+
+- [x] Clarified access-term and machine-readable-source uncertainty fields.
+- [x] Corrected the plan to distinguish metadata-only readiness tests from future parsing/normalization work (`4f17ff7`).
