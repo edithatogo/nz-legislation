@@ -7,8 +7,6 @@ export default defineConfig({
   site: 'https://edithatogo.github.io',
   base: '/cli-legislation-nz/',
   integrations: [
-    mdx(),
-    sitemap(),
     starlight({
       title: 'NZ Legislation CLI',
       description: 'Legal NZ documentation portal for NZ Legislation CLI.',
@@ -16,5 +14,7 @@ export default defineConfig({
         { label: 'Start', items: ['index', 'docs-tooling-audit'] },
       ],
     }),
+    mdx(),
+    sitemap(),
   ],
 });
