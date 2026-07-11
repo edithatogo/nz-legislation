@@ -1,0 +1,49 @@
+{
+  "jurisdiction": "au-act",
+  "providerId": "act-legislation",
+  "sourceAuthority": "ACT Legislation Register",
+  "sourceEntryPoints": [
+    "https://www.legislation.act.gov.au/",
+    "https://www.legislation.act.gov.au/Static/Help/About/about_the_register.html",
+    "https://www.legislation.act.gov.au/Static/Help/Search/Using_search.html"
+  ],
+  "authority": {
+    "authorisedFormat": "PDF",
+    "convenienceFormats": ["HTML", "Word"],
+    "wordStatus": "unauthorised",
+    "htmlStatus": "web-search-and-reading-representation"
+  },
+  "identifierPatterns": [
+    { "class": "act", "pattern": "^A\\d{4}-\\d+$" },
+    { "class": "subordinate-law", "pattern": "^SL\\d{4}-\\d+$" },
+    { "class": "disallowable-instrument", "pattern": "^DI\\d{4}-\\d+$" },
+    { "class": "notifiable-instrument", "pattern": "^NI\\d{4}-\\d+$" },
+    { "class": "commencement-notice", "pattern": "^CN\\d{4}-\\d+$" },
+    { "class": "assembly-resolution", "pattern": "^AR\\d{4}-\\d+$" },
+    { "class": "approved-form", "pattern": "^AF\\d{4}-\\d+$" }
+  ],
+  "versionCues": [
+    "current and repealed status",
+    "current version effective date",
+    "republication number such as R155",
+    "law history and commencement information",
+    "point-in-time republications"
+  ],
+  "adapterMapping": {
+    "search": "Not enabled; use the register search/browse surface only after a machine-readable contract is verified.",
+    "retrieval": "Future adapter may retrieve authorised PDF; HTML/Word must be labelled by authority and format.",
+    "versioning": "Use effective date, republication number, and law-history cues; do not infer versions from filenames alone.",
+    "export": "Remain unsupported until a source-backed parser and provenance-preserving export exists.",
+    "provenance": "Emit sourceAuthority, jurisdiction, source URL, format, authority status, and retrieval timestamp.",
+    "unsupported": "Return structured unsupported_provider_capability for runtime operations until tests and fixtures prove the adapter."
+  },
+  "edgeCases": [
+    "pre-12 September 2001 coverage is not complete",
+    "Word files are not authorised versions",
+    "HTML search output may contain hit highlighting rather than canonical text",
+    "current, repealed, notified, and point-in-time materials are distinct classes",
+    "no public machine-readable API or feed was verified in this discovery pass"
+  ],
+  "runtimeStatus": "unsupported",
+  "fixturePolicy": "metadata-only source-shape fixture; no legal text or fabricated records"
+}
