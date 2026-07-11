@@ -10,9 +10,6 @@ export default defineConfig({
     starlight({
       title: 'NZ Legislation CLI',
       description: 'Legal NZ documentation portal for NZ Legislation CLI.',
-      sidebar: [
-        { label: 'Start', items: ['index', 'docs-tooling-audit'] },
-      ],
     }),
     mdx(),
     sitemap(),
