@@ -156,5 +156,10 @@
     "README.md",
     "LICENSE"
   ],
+  "pnpm": {
+    "overrides": {
+      "vite": ">=7.3.5"
+    }
+  },
   "private": true
 }

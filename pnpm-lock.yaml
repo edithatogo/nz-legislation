@@ -5,14 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@ungap/structured-clone': 1.3.1
-  ajv@8.18.0>fast-uri: 3.1.2
-  express@5.2.1>qs: 6.15.2
-  body-parser@2.2.2>qs: 6.15.2
-  typed-rest-client@2.2.0>qs: 6.15.2
-  router@2.2.0>path-to-regexp: 8.4.0
-  express-rate-limit@8.3.1>ip-address: 10.1.1
-  postcss: 8.5.10
+  vite: '>=7.3.5'
 
 importers:
 
@@ -1567,7 +1560,7 @@ packages:
     resolution: {integrity: sha512-evxREh+Hork43+Y4IOhTo+h5lGmVRyjqI739Rz4RlUPqwrkFFDF6EMvOOYjTx4E8Tl6gyCLRL8Mu7Ry12a13Tw==}
     peerDependencies:
       msw: ^2.4.9
-      vite: ^6.0.0 || ^7.0.0 || ^8.0.0-0
+      vite: '>=7.3.5'
     peerDependenciesMeta:
       msw:
         optional: true
@@ -3787,7 +3780,7 @@ packages:
       '@vitest/ui': 4.1.0
       happy-dom: '*'
       jsdom: '*'
-      vite: ^6.0.0 || ^7.0.0 || ^8.0.0-0
+      vite: '>=7.3.5'
     peerDependenciesMeta:
       '@edge-runtime/vm':
         optional: true
