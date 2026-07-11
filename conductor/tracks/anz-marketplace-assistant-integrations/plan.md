@@ -14,3 +14,7 @@
 
 - [x] Reverify Claude, Codex, GitHub Copilot, Gemini, and Qwen requirements.
 - [x] Add target-specific evidence before any submission.
+
+## Review Fixes
+
+- [x] Apply review fixes (c0ca02d): refresh evidence date and enforce matrix documentation coverage.
