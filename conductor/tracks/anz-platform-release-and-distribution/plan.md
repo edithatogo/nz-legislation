@@ -36,7 +36,7 @@
       and Homebrew status claims against the current repository state.
 - [x] Reconcile stale Conductor status claims against the current repository
       remote, GitHub releases/packages, npm registry, and branch state before
-      future public release work (`pending-commit`).
+      future public release work (`27ad4eb`).
 
 Evidence: `docs/maintainers/release-reconciliation-2026-07-12.md`.
 
