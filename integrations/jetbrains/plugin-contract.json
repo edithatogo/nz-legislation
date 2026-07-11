@@ -1,0 +1,27 @@
+{
+  "status": "readiness_only",
+  "marketplace": "JetBrains Marketplace",
+  "scopeJustified": false,
+  "reason": "No JetBrains implementation scope is approved; retain readiness evidence until a separate scope decision is made.",
+  "requirements": [
+    "Vendor profile",
+    "Plugin archive and compatibility matrix",
+    "End user license agreement",
+    "Marketplace listing review",
+    "Manual JetBrains review"
+  ],
+  "submission": {
+    "allowed": false,
+    "reason": "JetBrains publication is blocked until extension scope, archive, EULA, security, provenance, and manual-review evidence exist."
+  },
+  "claims": {
+    "nz": "stable supported runtime",
+    "australia": "Commonwealth prerelease; other Australian jurisdictions planned or unsupported"
+  },
+  "officialSources": [
+    "https://plugins.jetbrains.com/docs/marketplace/uploading-a-new-plugin.html",
+    "https://plugins.jetbrains.com/docs/marketplace/publishing-and-listing-your-plugin.html"
+  ],
+  "threatModel": "integrations/ide-extension-threat-model.md",
+  "readinessMatrix": "integrations/ide-marketplace-readiness.md"
+}

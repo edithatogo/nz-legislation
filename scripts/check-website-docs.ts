@@ -43,6 +43,7 @@ const requiredDocs = [
   'docs/maintainers/security-and-submission-gates-v9.md',
   'integrations/README.md',
   'integrations/assistant-marketplace-readiness.md',
+  'integrations/ide-marketplace-readiness.md',
   'integrations/mcp/example-configs.md',
 ];
 
@@ -134,6 +135,12 @@ requireIncludes('integrations/assistant-marketplace-readiness.md', [
   'Qwen',
   'preparation-only',
   'NZ_LEGISLATION_API_KEY',
+]);
+requireIncludes('integrations/ide-marketplace-readiness.md', [
+  'VS Code Marketplace',
+  'Open VSX',
+  'JetBrains Marketplace',
+  'preparation-only',
 ]);
 requireIncludes('integrations/mcp/example-configs.md', [
   '"command": "npx"',

@@ -1,0 +1,19 @@
+{
+  "status": "not_started",
+  "registry": "Open VSX",
+  "registryUrl": "https://open-vsx.org",
+  "packageName": "nz-legislation-tool",
+  "publisherNamespace": "not_registered",
+  "publishCommand": "ovsx publish <reviewed-vsix>",
+  "submission": {
+    "allowed": false,
+    "reason": "Separate Open VSX namespace, token, archive, provenance, and listing evidence are required before publication."
+  },
+  "security": "Use a scoped OVSX_PAT only in a protected release environment; never commit or print it.",
+  "claims": {
+    "nz": "stable supported runtime",
+    "australia": "Commonwealth prerelease; other Australian jurisdictions planned or unsupported"
+  },
+  "threatModel": "integrations/ide-extension-threat-model.md",
+  "readinessMatrix": "integrations/ide-marketplace-readiness.md"
+}

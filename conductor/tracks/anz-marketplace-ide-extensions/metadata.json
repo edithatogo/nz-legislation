@@ -1,11 +1,11 @@
 {
   "trackId": "anz-marketplace-ide-extensions",
-  "status": "planned",
+  "status": "completed",
   "priority": "P2",
   "created": "2026-05-23",
   "sourceTrack": "anz-platform-release-and-distribution",
   "singleRepo": true,
-  "phase": "preparation-only",
+  "phase": "preparation-complete-submission-blocked",
   "channels": ["VS Code Marketplace", "Open VSX", "JetBrains"],
   "externalSubmissionAllowed": false,
   "publishingAllowed": false,

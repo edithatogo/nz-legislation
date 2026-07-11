@@ -67,4 +67,5 @@ jobs:
           pnpm gate:install-snippets
           pnpm gate:channel-readiness
           pnpm gate:assistant-integrations
+          pnpm gate:ide-integrations
           pnpm gate:release-notes
