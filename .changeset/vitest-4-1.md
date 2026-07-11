@@ -1,5 +1,5 @@
 ---
-"nz-legislation-tool": patch
+'nz-legislation-tool': patch
 ---
 
-Update the Vitest development dependency.
+Consolidate the reviewed release-readiness and provider compatibility work.
