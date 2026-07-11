@@ -1,0 +1,30 @@
+{
+  "value": [
+    {
+      "titleId": "C2004A01224",
+      "start": "2003-12-17T00:00:00",
+      "retrospectiveStart": "2003-12-17T00:00:00",
+      "end": "2005-01-01T00:00:00",
+      "isCurrent": false,
+      "isLatest": false,
+      "name": "Legislation Act 2003",
+      "status": "InForce",
+      "registerId": "C2004A01224",
+      "registeredAt": "2005-01-01T00:00:00",
+      "compilationNumber": "0"
+    },
+    {
+      "titleId": "C2004A01224",
+      "start": "2005-01-01T00:00:00",
+      "retrospectiveStart": "2005-01-01T00:00:00",
+      "end": "2006-03-27T00:00:00",
+      "isCurrent": false,
+      "isLatest": false,
+      "name": "Legislation Act 2003",
+      "status": "InForce",
+      "registerId": "C2005C00006",
+      "registeredAt": "2005-01-07T08:59:50",
+      "compilationNumber": "7"
+    }
+  ]
+}

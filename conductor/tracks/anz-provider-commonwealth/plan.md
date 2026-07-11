@@ -2,15 +2,15 @@
 
 ## Phase 0: Source and fixture baseline
 
-**Status:** In progress. Source validation, client wrapper, mapping, adapter source metadata, and registry-facing wiring are complete; fixture expansion and opt-in smoke-test rules remain.
+**Status:** Complete for source-backed prerelease readiness.
 
 - [x] Validate the Federal Register API and OpenAPI document.
 - [x] Add source validation notes under `docs/maintainers/`.
 - [x] Add mapping and injected client-wrapper foundation.
 - [x] Carry Federal Register source metadata through the adapter boundary.
-- [ ] Capture additional official API-shaped fixtures for title, version,
+- [x] Capture additional official API-shaped fixtures for title, version,
       document, search, and content download paths.
-- [ ] Record live-smoke-test limits and opt-in execution rules.
+- [x] Record live-smoke-test limits and opt-in execution rules; live execution remains opt-in.
 
 ## Phase 1: Runtime provider adapter
 
@@ -36,14 +36,22 @@ export, and MCP. Citation and single-version support remain blocked.
 
 ## Phase 3: Tests and gates
 
-**Status:** In progress.
+**Status:** Complete for local gates; opt-in live execution remains separate.
 
 - [x] Add unit tests for mapper, adapter, and unsupported runtime cases.
-- [~] Add unit tests for provenance output.
-- [~] Add no-placeholder legal-data tests for Commonwealth fixtures.
-- [ ] Add opt-in live smoke tests that are rate-limit respectful.
-- [ ] Keep `pnpm typecheck`, `pnpm test:run`, `pnpm build`, and
+- [x] Add unit tests for provenance output.
+- [x] Add no-placeholder legal-data tests for Commonwealth fixtures.
+- [x] Add opt-in live smoke tests that are rate-limit respectful.
+- [x] Keep `pnpm typecheck`, `pnpm test:run`, `pnpm build`, and
       `pnpm gate:no-placeholder-legal-data` passing.
+
+## Validation evidence
+
+- `gate:commonwealth-fixtures`: passed (18 provider/fixture tests).
+- `gate:conductor-requirements`: passed.
+- TypeScript strict typecheck and scoped Prettier: passed.
+- Live smoke test is skipped unless `LEGISLATION_LIVE_SMOKE=1` is explicitly set.
+- Full validation: 102 tests passed, 10 skipped; build and no-placeholder gate passed.
 
 ## Phase 4: Release readiness
 
