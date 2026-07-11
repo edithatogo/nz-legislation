@@ -27,4 +27,4 @@
 
 ## Review evidence - 2026-07-12
 
-- [x] Applied review fixes to strengthen manifest-wide feature coverage, route uniqueness, and source-reference checks (`<pending-review-commit>`).
+- [x] Applied review fixes to strengthen manifest-wide feature coverage, route uniqueness, and source-reference checks (`be6900a`).
