@@ -142,7 +142,14 @@ if (container) {
     container.submission
   );
   assertClaims('distribution/container/container-contract.json', container.claims);
-  for (const bin of ['nzlegislation', 'nzlegislation-mcp']) {
+  for (const bin of [
+    'nzlegislation',
+    'nzlegislation-mcp',
+    'anzlegislation',
+    'anzlegislation-mcp',
+    'legislation',
+    'legislation-mcp',
+  ]) {
     if (!container.entrypoints.includes(bin))
       failures.push(`Container contract must include entrypoint ${bin}.`);
   }
@@ -181,6 +188,8 @@ if (homebrew) {
     'nzlegislation-mcp',
     'anzlegislation',
     'anzlegislation-mcp',
+    'legislation',
+    'legislation-mcp',
   ]) {
     if (!homebrew.binaries.includes(bin))
       failures.push(`Homebrew contract must include binary ${bin}.`);

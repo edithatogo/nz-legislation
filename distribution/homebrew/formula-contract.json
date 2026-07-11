@@ -7,7 +7,14 @@
   "formulaName": "nz-legislation-tool",
   "tap": "edithatogo/homebrew-tap",
   "installCommand": "brew install edithatogo/tap/nz-legislation-tool",
-  "binaries": ["nzlegislation", "nzlegislation-mcp", "anzlegislation", "anzlegislation-mcp"],
+  "binaries": [
+    "nzlegislation",
+    "nzlegislation-mcp",
+    "anzlegislation",
+    "anzlegislation-mcp",
+    "legislation",
+    "legislation-mcp"
+  ],
   "checksumSource": "GitHub release tarball generated after provenance review",
   "threatModel": "distribution/homebrew/threat-model.md",
   "snippetVerification": "distribution/homebrew/snippet-verification.md",
