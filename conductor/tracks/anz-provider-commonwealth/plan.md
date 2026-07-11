@@ -52,6 +52,7 @@ export, and MCP. Citation and single-version support remain blocked.
 - TypeScript strict typecheck and scoped Prettier: passed.
 - Live smoke test is skipped unless `LEGISLATION_LIVE_SMOKE=1` is explicitly set.
 - Full validation: 102 tests passed, 10 skipped; build and no-placeholder gate passed.
+- Implementation commit: `9d0ad56`; latest Docs workflow passed (`29156935006`).
 
 ## Phase 4: Release readiness
 
