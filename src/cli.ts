@@ -15,7 +15,7 @@ import { configCommand } from './commands/config.js';
 import { exportCommand } from './commands/export.js';
 import { createGenerateCommand } from './commands/generate.js';
 import { getCommand } from './commands/get.js';
-import { createInteractiveHelpCommand, createContextualHelpCommand } from './commands/help.js';
+import { createContextualHelpCommand, createInteractiveHelpCommand } from './commands/help.js';
 import { searchCommand } from './commands/search.js';
 import { streamCommand } from './commands/stream.js';
 import { getConfig } from './config.js';

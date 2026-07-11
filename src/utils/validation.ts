@@ -13,7 +13,7 @@ export const DateStringSchema = z
   .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format')
   .refine(date => {
     const parsed = new Date(date);
-    return !isNaN(parsed.getTime());
+    return !Number.isNaN(parsed.getTime());
   }, 'Invalid date');
 
 /**
@@ -61,7 +61,7 @@ export const LimitSchema = z
   .default('25')
   .transform(val => {
     const num = parseInt(val, 10);
-    if (isNaN(num)) {
+    if (Number.isNaN(num)) {
       return 25;
     }
     return Math.min(Math.max(num, 1), 100); // Clamp between 1 and 100
@@ -75,7 +75,7 @@ export const OffsetSchema = z
   .default('0')
   .transform(val => {
     const num = parseInt(val, 10);
-    if (isNaN(num)) {
+    if (Number.isNaN(num)) {
       return 0;
     }
     return Math.max(num, 0); // Ensure non-negative
@@ -155,7 +155,7 @@ export const TimeoutSchema = z
   .default('30000')
   .transform(val => {
     const num = parseInt(val, 10);
-    if (isNaN(num)) {
+    if (Number.isNaN(num)) {
       return 30000;
     }
     return Math.min(Math.max(num, 1000), 300000); // Clamp between 1s and 5min

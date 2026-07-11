@@ -1,7 +1,7 @@
 import {
   getUnsupportedProviderCapability,
-  ProviderCapabilityError,
   type JurisdictionCode,
+  ProviderCapabilityError,
   type ProviderFeature,
   type UnsupportedProviderCapability,
 } from './capability-manifest.js';

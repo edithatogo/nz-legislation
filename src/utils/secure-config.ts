@@ -3,9 +3,9 @@
  * Handles API keys and sensitive configuration securely
  */
 
-import { chmodSync, existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'fs';
-import { homedir } from 'os';
-import { join } from 'path';
+import { chmodSync, existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { homedir } from 'node:os';
+import { join } from 'node:path';
 
 import { logger } from './logger.js';
 

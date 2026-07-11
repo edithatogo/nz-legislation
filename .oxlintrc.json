@@ -1,0 +1,16 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oxc-project/oxc/refs/heads/main/crates/oxc_linter/src/config/schema.json",
+  "plugins": ["import", "typescript"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn",
+    "perf": "warn"
+  },
+  "rules": {
+    "no-console": "warn",
+    "no-var": "error",
+    "prefer-const": "error",
+    "typescript/no-unused-vars": "error"
+  },
+  "ignorePatterns": ["node_modules", "dist", "coverage", "*.js"]
+}

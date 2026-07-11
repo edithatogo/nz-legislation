@@ -3,10 +3,10 @@
  * Tests real API integration with mocked responses
  */
 
-import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
-import { http, HttpResponse } from 'msw';
+import { HttpResponse, http } from 'msw';
 import { setupServer } from 'msw/node';
-import { clearCache, searchWorks, getWork, getRateLimitStatus } from '../../src/client.ts';
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { clearCache, getRateLimitStatus, getWork, searchWorks } from '../../src/client.ts';
 
 const TEST_API_KEY = 'test-api-key-123456';
 

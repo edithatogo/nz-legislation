@@ -1,8 +1,8 @@
-import {
-  type CapabilityStatus,
-  type FeatureCapability,
-  type JurisdictionCode,
-  type ProviderFeature,
+import type {
+  CapabilityStatus,
+  FeatureCapability,
+  JurisdictionCode,
+  ProviderFeature,
 } from './capability-manifest.js';
 import {
   getProviderRegistry,

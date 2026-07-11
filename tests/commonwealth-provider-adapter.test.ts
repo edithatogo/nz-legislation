@@ -2,13 +2,13 @@ import { describe, expect, it } from 'vitest';
 
 import { getUnsupportedProviderCapability } from '../src/providers/capability-manifest.ts';
 import {
-  commonwealthProviderSource,
-  createCommonwealthProviderAdapter,
   type CommonwealthHttpClientLike,
   type CommonwealthODataResponse,
   type CommonwealthProviderClient,
   type CommonwealthTitle,
   type CommonwealthVersion,
+  commonwealthProviderSource,
+  createCommonwealthProviderAdapter,
 } from '../src/providers/commonwealth.ts';
 
 interface RecordedCall {

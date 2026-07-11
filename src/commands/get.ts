@@ -6,10 +6,10 @@ import { Command } from 'commander';
 import ora from 'ora';
 
 import { getWork, getWorkVersions } from '../client.js';
-import { printWorkDetail, printVersionsTable, printJson, versionsToCsv } from '../output/index.js';
+import { printJson, printVersionsTable, printWorkDetail, versionsToCsv } from '../output/index.js';
 import { parseJurisdictionCode } from '../providers/jurisdictions.js';
 import { logger } from '../utils/logger.js';
-import { validateWorkId, sanitizeInput } from '../utils/validation.js';
+import { sanitizeInput, validateWorkId } from '../utils/validation.js';
 
 interface GetOptions {
   versions?: boolean;
@@ -58,7 +58,6 @@ export const getCommand = new Command()
           case 'csv':
             console.log(versionsToCsv(versions));
             break;
-          case 'table':
           default:
             printVersionsTable(versions);
             break;
@@ -76,7 +75,6 @@ export const getCommand = new Command()
             console.log('Note: CSV format not ideal for single work. Use table or json.');
             printWorkDetail(work);
             break;
-          case 'table':
           default:
             printWorkDetail(work);
             break;

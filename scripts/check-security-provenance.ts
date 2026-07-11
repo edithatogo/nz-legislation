@@ -1,7 +1,12 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 
 const read = (path: string): string => readFileSync(path, 'utf8');
 const failures: string[] = [];
+const releaseGatesPath = existsSync(
+  'conductor/tracks/anz-platform-release-and-distribution/release-submission-gates.md'
+)
+  ? 'conductor/tracks/anz-platform-release-and-distribution/release-submission-gates.md'
+  : 'conductor/archive/anz-platform-release-and-distribution/release-submission-gates.md';
 
 function requireIncludes(path: string, needles: string[]): void {
   const content = read(path);
@@ -16,7 +21,8 @@ const requiredDocs = [
   'SECURITY.md',
   'docs/maintainers/security-and-submission-gates-v9.md',
   'docs/maintainers/security-provenance-review.md',
-  'conductor/tracks/anz-platform-release-and-distribution/release-submission-gates.md',
+  'docs/maintainers/package-registry-provenance.md',
+  releaseGatesPath,
   'integrations/mcp/registry-submission-checklist.md',
 ];
 
@@ -57,10 +63,11 @@ requireIncludes('docs/maintainers/security-provenance-review.md', [
   'Legal-data truthfulness',
 ]);
 
-requireIncludes(
-  'conductor/tracks/anz-platform-release-and-distribution/release-submission-gates.md',
-  ['Security/provenance review', 'BLOCKING', 'Gate evidence must be committed in this repository']
-);
+requireIncludes(releaseGatesPath, [
+  'Security/provenance review',
+  'BLOCKING',
+  'Gate evidence must be committed in this repository',
+]);
 
 const releaseGateCommands = [
   'pnpm gate:no-placeholder-legal-data',

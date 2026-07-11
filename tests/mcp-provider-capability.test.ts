@@ -23,7 +23,7 @@ describe('MCP provider capability gates', () => {
 
     expect(response?.isError).toBe(true);
     expect(response?.content[0]).toMatchObject({ type: 'text' });
-    expect(JSON.parse(response!.content[0].text)).toMatchObject({
+    expect(JSON.parse(response?.content[0].text)).toMatchObject({
       error: 'unsupported_provider_capability',
       jurisdiction: 'au-nsw',
       feature: 'export',

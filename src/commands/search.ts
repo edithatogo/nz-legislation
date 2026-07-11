@@ -6,10 +6,10 @@ import { Command } from 'commander';
 import ora from 'ora';
 
 import { searchWorks } from '../client.js';
-import { printTable, printJson, worksToCsv } from '../output/index.js';
+import { printJson, printTable, worksToCsv } from '../output/index.js';
 import { parseJurisdictionCode } from '../providers/jurisdictions.js';
 import { logger } from '../utils/logger.js';
-import { validateSearchParams, sanitizeInput } from '../utils/validation.js';
+import { sanitizeInput, validateSearchParams } from '../utils/validation.js';
 
 interface SearchOptions {
   query: string;
@@ -90,7 +90,6 @@ export const searchCommand = new Command()
         case 'csv':
           console.log(worksToCsv(results));
           break;
-        case 'table':
         default:
           printTable(results);
           break;

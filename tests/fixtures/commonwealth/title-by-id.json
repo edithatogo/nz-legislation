@@ -1,0 +1,17 @@
+{
+  "@odata.count": 1,
+  "value": [
+    {
+      "id": "C2004A01224",
+      "name": "Legislation Act 2003",
+      "makingDate": "2003-12-17T00:00:00",
+      "collection": "Act",
+      "isPrincipal": true,
+      "isInForce": true,
+      "status": "InForce",
+      "year": 2003,
+      "number": 139,
+      "seriesType": "Act"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+name: Mirror Sync
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Mirror to Secondary Git Remote
+        env:
+          GIT_MIRROR_URL: ${{ secrets.GIT_MIRROR_URL }}
+          GIT_MIRROR_SSH_PRIVATE_KEY: ${{ secrets.GIT_MIRROR_SSH_PRIVATE_KEY }}
+          GIT_MIRROR_KNOWN_HOSTS: ${{ secrets.GIT_MIRROR_KNOWN_HOSTS }}
+        run: |
+          if [ -z "$GIT_MIRROR_URL" ]; then
+            echo "GIT_MIRROR_URL is not set, skipping mirror."
+            exit 0
+          fi
+          if [ -z "$GIT_MIRROR_SSH_PRIVATE_KEY" ]; then
+            echo "GIT_MIRROR_SSH_PRIVATE_KEY is not set, skipping mirror."
+            exit 0
+          fi
+          if [ -z "$GIT_MIRROR_KNOWN_HOSTS" ]; then
+            echo "GIT_MIRROR_KNOWN_HOSTS is not set, skipping mirror to avoid SSH host-key trust on first use."
+            exit 0
+          fi
+
+          mkdir -p ~/.ssh
+          echo "$GIT_MIRROR_SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+          printf '%s\n' "$GIT_MIRROR_KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+          git remote add mirror "$GIT_MIRROR_URL"
+          git push --force --prune mirror HEAD:${{ github.ref }}

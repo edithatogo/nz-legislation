@@ -4,10 +4,10 @@
  * Provides request batching for bulk operations to optimize API usage and improve performance.
  */
 
-import { EventEmitter } from 'events';
-import { writeFileSync } from 'fs';
+import { EventEmitter } from 'node:events';
+import { writeFileSync } from 'node:fs';
 
-import { searchWorks, getWork, getWorkVersions, getVersion } from '../client.js';
+import { getVersion, getWork, getWorkVersions, searchWorks } from '../client.js';
 import type { SearchResults } from '../models/index.js';
 
 /**

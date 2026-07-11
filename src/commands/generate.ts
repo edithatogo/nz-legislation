@@ -1,12 +1,13 @@
 #!/usr/bin/env node
+
 /**
  * Code Generation Tools
  * Generate templates for commands, models, tests, and documentation
  */
 
-import * as fs from 'fs';
-import * as path from 'path';
-import { fileURLToPath } from 'url';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import chalk from 'chalk';
 import { Command } from 'commander';

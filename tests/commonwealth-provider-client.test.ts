@@ -2,11 +2,11 @@ import { describe, expect, it } from 'vitest';
 
 import {
   buildCommonwealthTitleSearchParams,
-  createCommonwealthProviderClient,
   type CommonwealthHttpClientLike,
   type CommonwealthODataResponse,
   type CommonwealthTitle,
   type CommonwealthVersion,
+  createCommonwealthProviderClient,
 } from '../src/providers/commonwealth.ts';
 
 interface RecordedCall {

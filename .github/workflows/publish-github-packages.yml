@@ -73,6 +73,11 @@ jobs:
           EOF
 
       - name: Publish mirror package to GitHub Packages
-        run: pnpm publish --no-git-checks
+        run: |
+          if node -e "process.exit(require('./package.json').private === true ? 0 : 1)"; then
+            echo "package.json is private; publication remains externally gated."
+            exit 0
+          fi
+          pnpm publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -2,7 +2,7 @@
  * Export command - Export search results to file
  */
 
-import { writeFileSync } from 'fs';
+import { writeFileSync } from 'node:fs';
 
 import { Command } from 'commander';
 import ora from 'ora';

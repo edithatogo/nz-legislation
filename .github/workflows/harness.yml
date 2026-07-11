@@ -1,0 +1,71 @@
+name: Harness Engineering Gate
+
+on:
+  pull_request:
+    branches: [main, next]
+  push:
+    branches: [main, next]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: harness-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  strict:
+    name: Strict harness and release gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+      - name: Enable pinned pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.29.3 --activate
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: pnpm
+      - name: Install frozen dependency graph
+        run: pnpm install --frozen-lockfile
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Strict ESLint
+        run: pnpm lint
+      - name: Biome errors
+        run: pnpm lint:biome --diagnostic-level=error
+      - name: Oxlint
+        run: pnpm lint:oxlint
+      - name: Tests and coverage
+        run: pnpm test:coverage
+      - name: Coverage ratchet
+        run: pnpm gate:coverage
+      - name: Build
+        run: pnpm build
+      - name: Dependency audit
+        run: pnpm audit --audit-level high
+      - name: No-placeholder legal data
+        run: pnpm gate:no-placeholder-legal-data
+      - name: Provider capability manifest
+        run: pnpm gate:provider-capability-manifest
+      - name: Provider-aware MCP/export
+        run: pnpm gate:provider-aware-mcp-export
+      - name: Conductor requirements
+        run: pnpm gate:conductor-requirements
+      - name: Security and provenance
+        run: pnpm gate:security-provenance
+      - name: Package, docs, snippets, and channel gates
+        run: |
+          pnpm gate:package-metadata
+          pnpm gate:manifest-docs
+          pnpm gate:website-docs
+          pnpm gate:install-snippets
+          pnpm gate:channel-readiness
+          pnpm gate:assistant-integrations
+          pnpm gate:ide-integrations
+          pnpm gate:release-notes

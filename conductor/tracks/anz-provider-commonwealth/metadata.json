@@ -1,11 +1,11 @@
 {
   "trackId": "anz-provider-commonwealth",
-  "status": "active",
+  "status": "complete_prerelease_readiness",
   "priority": "P0",
   "created": "2026-05-21",
   "sourceTrack": "anz-platform-release-and-distribution",
   "singleRepo": true,
-  "phase": "adapter-foundation-runtime-gates",
+  "phase": "fixture-and-smoke-gate-complete",
   "jurisdiction": "Australian Commonwealth",
   "jurisdictionCode": "au-commonwealth",
   "providerId": "federal-register-of-legislation",

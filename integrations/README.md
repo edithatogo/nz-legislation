@@ -18,5 +18,8 @@ Keep all integrations in this repository.
 
 Do not publish or submit integration artifacts until the submission gates pass.
 
+The target matrix and current official-source evidence are maintained in
+[`assistant-marketplace-readiness.md`](./assistant-marketplace-readiness.md).
+
 GitHub Copilot integration work remains local-only until the release/submission
 gates pass.

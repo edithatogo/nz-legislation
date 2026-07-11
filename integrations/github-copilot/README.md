@@ -14,3 +14,8 @@ Add repository instructions that help Copilot respect:
 - provider capability manifest
 - single-repo rule
 - release gates
+
+Current local capability: `.github/copilot-instructions.md` plus the packaged
+MCP stdio command. A future Copilot CLI plugin must include a reviewed
+`plugin.json` and explicitly declare skills, agents, hooks, and MCP configuration
+that it uses. See [`../assistant-marketplace-readiness.md`](../assistant-marketplace-readiness.md).

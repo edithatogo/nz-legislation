@@ -3,6 +3,7 @@ import { join } from 'node:path';
 
 const requirementsPath = 'conductor/requirements.md';
 const tracksRoot = 'conductor/tracks';
+const archiveRoot = 'conductor/archive';
 
 const requiredTracks = [
   'nz-provider-stable-compatibility',
@@ -48,7 +49,9 @@ for (const trackId of requiredTracks) {
     failures.push(`Missing requirements row for ${trackId}`);
   }
 
-  const trackDir = join(tracksRoot, trackId);
+  const activeDir = join(tracksRoot, trackId);
+  const archivedDir = join(archiveRoot, trackId);
+  const trackDir = existsSync(activeDir) ? activeDir : archivedDir;
   for (const file of ['metadata.json', 'spec.md', 'plan.md']) {
     const path = join(trackDir, file);
     if (!existsSync(path)) {

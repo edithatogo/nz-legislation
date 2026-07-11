@@ -5,7 +5,7 @@
  * and payload optimization for improved API performance.
  */
 
-import { EventEmitter } from 'events';
+import { EventEmitter } from 'node:events';
 import { Agent as HttpAgent } from 'node:http';
 import { Agent as HttpsAgent } from 'node:https';
 
@@ -153,7 +153,7 @@ class RetryManager {
   }
 
   getDelay(attempt: number): number {
-    const exponentialDelay = this.baseDelay * Math.pow(2, attempt);
+    const exponentialDelay = this.baseDelay * 2 ** attempt;
     const jitter = Math.random() * 0.3 * exponentialDelay;
     return Math.round(Math.min(exponentialDelay + jitter, this.maxDelay));
   }
@@ -377,14 +377,14 @@ export class PayloadOptimizer {
     }
 
     if (Array.isArray(data)) {
-      return data.map(item => this.pickFields(item, fields));
+      return data.map(item => PayloadOptimizer.pickFields(item, fields));
     }
 
-    return this.pickFields(data, fields);
+    return PayloadOptimizer.pickFields(data, fields);
   }
 
   private static pickFields(value: unknown, fields: string[]): JsonObject {
-    if (!this.isJsonObject(value)) {
+    if (!PayloadOptimizer.isJsonObject(value)) {
       return {};
     }
 

@@ -2,12 +2,12 @@ import { describe, expect, it } from 'vitest';
 
 import {
   COMMONWEALTH_API_BASE_URL,
-  mapCommonwealthTitlesToSearchResults,
-  mapCommonwealthTitleToWork,
-  mapCommonwealthVersionsToVersions,
   type CommonwealthODataResponse,
   type CommonwealthTitle,
   type CommonwealthVersion,
+  mapCommonwealthTitlesToSearchResults,
+  mapCommonwealthTitleToWork,
+  mapCommonwealthVersionsToVersions,
 } from '../src/providers/commonwealth.ts';
 
 const legislationActTitle: CommonwealthTitle = {
