@@ -1,11 +1,11 @@
 {
   "trackId": "anz-openapi-adapter-readiness",
-  "status": "planned",
+  "status": "complete_readiness_only",
   "priority": "P2",
   "created": "2026-05-23",
   "sourceTrack": "anz-platform-release-and-distribution",
   "singleRepo": true,
-  "phase": "readiness-only",
+  "phase": "readiness-contract-complete",
   "surface": "Future HTTP/OpenAPI adapter",
   "externalSubmissionAllowed": false,
   "publishingAllowed": false,

@@ -2,16 +2,24 @@
 
 ## Phase 1: Readiness registration
 
-**Status:** In progress.
+**Status:** Complete.
 
 - [x] Add OpenAPI readiness to the requirements contract register.
 - [x] Add this Conductor track for the roadmap entry.
-- [ ] Inventory existing CLI, MCP, and export response contracts that a future
+- [x] Inventory existing CLI, MCP, and export response contracts that a future
       OpenAPI surface would need to preserve.
 
 ## Phase 2: Future contract design
 
-**Status:** Pending.
+**Status:** Complete.
 
-- [ ] Draft schema and route acceptance criteria.
-- [ ] Add contract tests before any implementation begins.
+- [x] Draft schema and route acceptance criteria in `docs/maintainers/openapi-adapter-contract.json` and `docs/maintainers/openapi-adapter-readiness.md`.
+- [x] Add contract tests before any implementation begins (`tests/openapi-adapter-contract.test.ts`).
+
+## Validation evidence
+
+- `gate:openapi-adapter-contract`: passed (4 tests).
+- `gate:conductor-requirements`: passed.
+- TypeScript strict typecheck: passed.
+- Scoped Prettier check: passed.
+- No HTTP service, route, package split, deployment, or publication was added.

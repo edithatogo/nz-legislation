@@ -1,0 +1,90 @@
+{
+  "version": "0.1.0-readiness",
+  "status": "future-contract-only",
+  "serviceEnabled": false,
+  "sourceOfTruth": [
+    "src/models/index.ts",
+    "src/providers/capability-manifest.ts",
+    "src/providers/source-cards.ts",
+    "src/mcp/server.ts",
+    "src/commands/export.ts"
+  ],
+  "security": {
+    "transport": "https-only",
+    "authentication": "required-before-deployment",
+    "authorization": "provider-and-operation-scoped",
+    "rateLimiting": "required",
+    "auditLogging": "required",
+    "apiKeyLogging": "prohibited"
+  },
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/v1/capabilities",
+      "operationId": "listCapabilities",
+      "response": "ProviderCapability[] with source-card metadata",
+      "providerGate": "capability-manifest"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/search",
+      "operationId": "searchWorks",
+      "response": "SearchResults",
+      "unsupportedResponse": "UnsupportedProviderCapability",
+      "providerGate": "search"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/works/{workId}",
+      "operationId": "getWork",
+      "response": "Work",
+      "unsupportedResponse": "UnsupportedProviderCapability",
+      "providerGate": "getWork"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/works/{workId}/versions",
+      "operationId": "getWorkVersions",
+      "response": "Version[]",
+      "unsupportedResponse": "UnsupportedProviderCapability",
+      "providerGate": "getVersions"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/works/{workId}/versions/{versionId}",
+      "operationId": "getVersion",
+      "response": "LegislationVersion",
+      "unsupportedResponse": "UnsupportedProviderCapability",
+      "providerGate": "getVersion"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/citations",
+      "operationId": "createCitation",
+      "response": "Citation",
+      "unsupportedResponse": "UnsupportedProviderCapability",
+      "providerGate": "citation"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/exports",
+      "operationId": "exportWorks",
+      "response": "ExportMetadata plus provider-aware export payload",
+      "unsupportedResponse": "UnsupportedProviderCapability",
+      "providerGate": "export"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/mcp/tools/{toolName}",
+      "operationId": "invokeMcpTool",
+      "response": "MCP content envelope with optional isError",
+      "unsupportedResponse": "UnsupportedProviderCapability",
+      "providerGate": "mcp"
+    }
+  ],
+  "nonGoals": [
+    "No HTTP server or hosted endpoint is enabled by this contract.",
+    "No provider is promoted beyond the capability manifest.",
+    "No package split, repository split, or external publication is authorized."
+  ]
+}

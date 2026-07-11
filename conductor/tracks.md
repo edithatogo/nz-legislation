@@ -41,7 +41,7 @@ track says otherwise.
 | `anz-provider-act`                   | Australian Capital Territory  | P1       | Source-shape discovery and adapter mapping                               |
 | `anz-provider-northern-territory`    | Northern Territory            | P1       | Source-shape discovery and adapter mapping                               |
 | `anz-provider-aggregator-evaluation` | Cross-jurisdiction aggregator | P2       | Evaluation-only source/provenance and licence review                     |
-| `anz-openapi-adapter-readiness`      | Future HTTP/OpenAPI adapter   | P2       | Readiness-only API contract planning                                     |
+| `anz-openapi-adapter-readiness`      | Future HTTP/OpenAPI adapter   | P2       | Readiness contract recorded; no HTTP service enabled                     |
 
 ## Publication, registry, and integration tracks
 
