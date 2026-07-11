@@ -8,9 +8,8 @@ registry, integration, and migration tracks listed here.
 
 ## Umbrella track
 
-| Track                                   | Priority | Status | Purpose                                                                                                      |
-| --------------------------------------- | -------- | ------ | ------------------------------------------------------------------------------------------------------------ |
-| `anz-platform-release-and-distribution` | P0       | Active | Single-repository release, distribution, submission, integration, provider-gate, and Rust-readiness roadmap. |
+| Track | Priority | Status | Purpose |
+| ----- | -------- | ------ | ------- |
 
 ## Product unification tracks
 
