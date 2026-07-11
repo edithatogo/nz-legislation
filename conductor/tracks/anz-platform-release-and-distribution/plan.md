@@ -15,7 +15,7 @@
 
 ## Phase 1: Merge tracks and progress
 
-**Status:** In progress.
+**Status:** Complete for local reconciliation; external release work remains gated.
 
 - [x] Promote this track as the umbrella Conductor release/distribution track.
 - [x] Fold v9 roadmap, submission pathways, security gates, integration folders,
@@ -34,8 +34,11 @@
       Homebrew, and Rust readiness.
 - [x] Reconcile stale Commonwealth, website/docs, registry, IDE, Docker/GHCR,
       and Homebrew status claims against the current repository state.
-- [ ] Reconcile any future stale Conductor status claims against the current repository
-      remote and package registry state before future public release work.
+- [x] Reconcile stale Conductor status claims against the current repository
+      remote, GitHub releases/packages, npm registry, and branch state before
+      future public release work (`pending-commit`).
+
+Evidence: `docs/maintainers/release-reconciliation-2026-07-12.md`.
 
 ## Phase 2: Release reconciliation
 

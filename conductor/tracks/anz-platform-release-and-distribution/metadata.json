@@ -6,7 +6,7 @@
   "imported": "2026-05-20",
   "sourceHandoff": "conductor/archive/handoffs/2026-05-19-v9-distribution-submission/anz_legislation_handoff_v9_covering_prompt.zip",
   "singleRepo": true,
-  "phase": "phase-1-merge-tracks-and-progress",
+  "phase": "phase-1-local-reconciliation-complete",
   "externalSubmissionAllowed": false,
   "publishingAllowed": false,
   "deploymentAllowed": false,
