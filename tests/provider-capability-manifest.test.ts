@@ -67,7 +67,7 @@ describe('provider capability manifest', () => {
 
     expect(nzCapability).toBeDefined();
 
-    nzCapability!.features.search.status = 'unsupported';
+    nzCapability?.features.search.status = 'unsupported';
 
     expect(getProviderCapability('nz').features.search.status).toBe('supported');
   });

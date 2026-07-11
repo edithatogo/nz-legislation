@@ -60,7 +60,7 @@ export function printTable(results: SearchResults): void {
   results.results.forEach(work => {
     table.push([
       work.id,
-      work.title.length > 48 ? work.title.substring(0, 47) + '…' : work.title,
+      work.title.length > 48 ? `${work.title.substring(0, 47)}…` : work.title,
       formatWorkType(work.type),
       formatStatus(work.status),
       work.date,

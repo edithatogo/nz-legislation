@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest';
-import { worksToCsv, generateCitation } from '../src/output/index.ts';
-import type { Work, SearchResults } from '../src/models/index.ts';
+import { describe, expect, it } from 'vitest';
+import type { SearchResults, Work } from '../src/models/index.ts';
+import { generateCitation, worksToCsv } from '../src/output/index.ts';
 
 describe('Output Formatters', () => {
   const mockWork: Work = {

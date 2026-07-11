@@ -5,11 +5,11 @@
  * Allows exporting GBs of data without running out of memory.
  */
 
-import { createWriteStream, WriteStream } from 'fs';
-import { Readable } from 'stream';
-import { pipeline } from 'stream/promises';
+import { createWriteStream, type WriteStream } from 'node:fs';
+import { Readable } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
 
-import { searchWorks, getWork } from '../client.js';
+import { getWork, searchWorks } from '../client.js';
 import type { Work } from '../models/index.js';
 
 interface SearchParams {
@@ -190,13 +190,15 @@ export class StreamExporter {
         const workId = workIds[i];
 
         try {
-          if (!workId) {continue;}
+          if (!workId) {
+            continue;
+          }
           const work = await getWork(workId);
 
           const line =
             format === 'json'
               ? (i > 0 ? ',\n' : '') + JSON.stringify(work, null, 2)
-              : JSON.stringify(work) + '\n';
+              : `${JSON.stringify(work)}\n`;
 
           writeStream.write(line);
           bytesWritten += line.length;
@@ -270,7 +272,7 @@ export class StreamExporter {
         break;
 
       case 'ndjson':
-        line = JSON.stringify(work) + '\n';
+        line = `${JSON.stringify(work)}\n`;
         break;
     }
 
@@ -283,25 +285,23 @@ export class StreamExporter {
    */
   private formatCsvRow(work: Work): string {
     // Escape CSV fields
-    const escape = (str: string): string => {
+    const escapeCsvField = (str: string): string => {
       if (str.includes(',') || str.includes('"') || str.includes('\n')) {
         return `"${str.replace(/"/g, '""')}"`;
       }
       return str;
     };
 
-    return (
-      [
-        work.id,
-        escape(work.title),
-        work.shortTitle ? escape(work.shortTitle) : '',
-        work.type,
-        work.status,
-        work.date,
-        work.url,
-        work.versionCount.toString(),
-      ].join(',') + '\n'
-    );
+    return `${[
+      work.id,
+      escapeCsvField(work.title),
+      work.shortTitle ? escapeCsvField(work.shortTitle) : '',
+      work.type,
+      work.status,
+      work.date,
+      work.url,
+      work.versionCount.toString(),
+    ].join(',')}\n`;
   }
 
   /**

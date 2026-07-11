@@ -162,10 +162,6 @@ function mapCollectionToWorkType(collection: string): WorkType {
       return 'act';
     case 'LegislativeInstrument':
       return 'regulation';
-    case 'NotifiableInstrument':
-    case 'AdministrativeArrangementsOrder':
-    case 'Gazette':
-    case 'PrerogativeInstrument':
     default:
       return 'instrument';
   }
@@ -220,7 +216,6 @@ function mapWorkTypeToCollection(type?: WorkType): string | undefined {
       return 'LegislativeInstrument';
     case 'instrument':
       return 'NotifiableInstrument';
-    case 'bill':
     default:
       return undefined;
   }
@@ -235,7 +230,6 @@ function mapLegislationStatusToCommonwealthStatus(status?: LegislationStatus): s
       return 'Repealed';
     case 'withdrawn':
       return 'NeverEffective';
-    case 'not-yet-in-force':
     default:
       return undefined;
   }

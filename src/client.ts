@@ -10,22 +10,22 @@ import { z } from 'zod';
 import { getConfig } from './config.js';
 import { ConfigError, createApiError, ErrorCode, NetworkError } from './errors.js';
 import {
-  LegislationVersionSchema,
-  SearchResultsSchema,
-  VersionSchema,
-  WorkSchema,
-  WorkFromVersionSchema,
-  type LegislationVersion,
-  type SearchResults,
-  type Version,
-  type Work,
   type LegislationStatus,
+  type LegislationVersion,
+  LegislationVersionSchema,
+  type SearchResults,
+  SearchResultsSchema,
+  type Version,
+  VersionSchema,
+  type Work,
+  WorkFromVersionSchema,
+  WorkSchema,
   type WorkType,
 } from './models/index.js';
 import type { JurisdictionCode } from './providers/capability-manifest.js';
 import {
-  createCommonwealthProviderAdapter,
   type CommonwealthProviderAdapter,
+  createCommonwealthProviderAdapter,
 } from './providers/commonwealth.js';
 import { assertRuntimeProviderSupported } from './providers/runtime.js';
 import { logger } from './utils/logger.js';
@@ -328,7 +328,7 @@ function createClient(): HttpClientLike {
           }
         }
         // Exponential backoff: 1s, 2s, 4s
-        return Math.pow(2, attemptCount - 1) * 1000;
+        return 2 ** (attemptCount - 1) * 1000;
       },
     },
     hooks: {

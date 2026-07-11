@@ -3,7 +3,7 @@ import {
   type JurisdictionCode,
   type ProviderCapability,
 } from './capability-manifest.js';
-import { commonwealthProviderSource, type CommonwealthProviderSource } from './commonwealth.js';
+import { type CommonwealthProviderSource, commonwealthProviderSource } from './commonwealth.js';
 
 export type ProviderRuntimeKind =
   | 'legacy-nz-client'

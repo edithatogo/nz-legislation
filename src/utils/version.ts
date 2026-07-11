@@ -4,7 +4,7 @@
 
 import chalk from 'chalk';
 
-import pkg from '../../package.json' assert { type: 'json' };
+import pkg from '../../package.json';
 
 import { logger } from './logger.js';
 

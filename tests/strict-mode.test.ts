@@ -5,9 +5,10 @@
  * including noUncheckedIndexedAccess, strictNullChecks, and noImplicitAny.
  * These tests ensure that regressions in type safety are caught.
  */
-import { describe, it, expect } from 'vitest';
+
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import { describe, expect, it } from 'vitest';
 
 // ---------------------------------------------------------------------------
 // Helper — parse the project tsconfig.json

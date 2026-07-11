@@ -2,15 +2,14 @@
  * Batch Command - Execute bulk operations
  */
 
-import { readFileSync } from 'fs';
-
+import { readFileSync } from 'node:fs';
 import { Command } from 'commander';
 import ora from 'ora';
 
 import {
   BatchExecutor,
   type BatchProgress,
-  BatchRequest,
+  type BatchRequest,
   createBatchFromFile,
   createBatchFromIds,
   formatBatchResults,

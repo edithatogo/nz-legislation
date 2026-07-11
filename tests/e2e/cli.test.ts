@@ -3,10 +3,10 @@
  * Tests complete CLI workflows from user perspective
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { existsSync, readFileSync, unlinkSync } from 'node:fs';
+import { join } from 'node:path';
 import { execa } from 'execa';
-import { readFileSync, existsSync, unlinkSync } from 'fs';
-import { join } from 'path';
+import { afterEach, describe, expect, it } from 'vitest';
 
 const CLI_PATH = join(process.cwd(), 'src', 'cli.ts');
 const TSX_BIN = join(
@@ -175,7 +175,7 @@ describe('E2E CLI Tests', () => {
 
     it('should handle missing API key gracefully', async () => {
       // This test assumes no API key is set in test environment
-      const { stderr, exitCode } = await execa(TSX_BIN, [CLI_PATH, 'search', '--query', 'health'], {
+      const { stderr } = await execa(TSX_BIN, [CLI_PATH, 'search', '--query', 'health'], {
         reject: false,
         env: {
           NZ_LEGISLATION_API_KEY: '',

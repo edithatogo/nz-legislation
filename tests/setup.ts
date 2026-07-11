@@ -1,5 +1,5 @@
 // Vitest setup file
-import { beforeAll, afterAll } from 'vitest';
+import { afterAll, beforeAll } from 'vitest';
 import { setLoggerQuiet } from '../src/utils/logger.ts';
 
 const originalLocalStorageDescriptor = Object.getOwnPropertyDescriptor(globalThis, 'localStorage');

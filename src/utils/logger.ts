@@ -3,10 +3,9 @@
  * Structured logging with file rotation, request tracing, and performance timing
  */
 
-import { existsSync, mkdirSync, readdirSync, statSync, unlinkSync, writeFileSync } from 'fs';
-import { homedir } from 'os';
-import { join } from 'path';
-
+import { existsSync, mkdirSync, readdirSync, statSync, unlinkSync, writeFileSync } from 'node:fs';
+import { homedir } from 'node:os';
+import { join } from 'node:path';
 import chalk from 'chalk';
 import winston from 'winston';
 import 'winston-daily-rotate-file';

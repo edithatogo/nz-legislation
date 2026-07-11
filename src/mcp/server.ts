@@ -7,7 +7,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
 
-import { searchWorks, getWork, getWorkVersions } from '../client.js';
+import { getWork, getWorkVersions, searchWorks } from '../client.js';
 import { getConfig, hasApiKey } from '../config.js';
 import { generateCitation, worksToCsv } from '../output/index.js';
 import {
@@ -130,7 +130,7 @@ function registerSearchTool(server: McpServer): void {
         .regex(/^\d{4}-\d{2}-\d{2}$/)
         .transform(val => {
           const date = new Date(val);
-          if (isNaN(date.getTime())) {
+          if (Number.isNaN(date.getTime())) {
             throw new Error('Invalid date format');
           }
           return val;
@@ -142,7 +142,7 @@ function registerSearchTool(server: McpServer): void {
         .regex(/^\d{4}-\d{2}-\d{2}$/)
         .transform(val => {
           const date = new Date(val);
-          if (isNaN(date.getTime())) {
+          if (Number.isNaN(date.getTime())) {
             throw new Error('Invalid date format');
           }
           return val;
