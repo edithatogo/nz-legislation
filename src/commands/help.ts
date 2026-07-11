@@ -4,6 +4,7 @@
  */
 
 import * as readline from 'node:readline';
+
 import chalk from 'chalk';
 import { Command } from 'commander';
 

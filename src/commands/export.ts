@@ -3,6 +3,7 @@
  */
 
 import { writeFileSync } from 'node:fs';
+
 import { Command } from 'commander';
 import ora from 'ora';
 
