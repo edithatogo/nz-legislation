@@ -19,6 +19,9 @@ for (const [name, path, source] of [
     failures.push(`${name}: submission must remain blocked`);
   if (!content.includes('threat-model.md')) failures.push(`${name}: missing threat-model link`);
   if (!content.includes('readinessMatrix')) failures.push(`${name}: missing readiness-matrix link`);
+  for (const requiredLink of ['capabilityManifest', 'sourceCards', 'snippetVerification']) {
+    if (!content.includes(requiredLink)) failures.push(`${name}: missing ${requiredLink} link`);
+  }
   if (/stable Australian|production-ready Australian/i.test(content)) {
     failures.push(`${name}: contains an unsupported Australian stability claim`);
   }

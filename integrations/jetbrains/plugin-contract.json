@@ -23,5 +23,8 @@
     "https://plugins.jetbrains.com/docs/marketplace/publishing-and-listing-your-plugin.html"
   ],
   "threatModel": "integrations/ide-extension-threat-model.md",
-  "readinessMatrix": "integrations/ide-marketplace-readiness.md"
+  "readinessMatrix": "integrations/ide-marketplace-readiness.md",
+  "capabilityManifest": "docs/capabilities.md",
+  "sourceCards": "docs/maintainers/provider-source-cards.md",
+  "snippetVerification": "integrations/vscode/snippet-verification.md"
 }

@@ -21,6 +21,9 @@
   "marketplaces": ["Visual Studio Code Marketplace", "Open VSX"],
   "threatModel": "integrations/ide-extension-threat-model.md",
   "readinessMatrix": "integrations/ide-marketplace-readiness.md",
+  "capabilityManifest": "docs/capabilities.md",
+  "sourceCards": "docs/maintainers/provider-source-cards.md",
+  "snippetVerification": "integrations/vscode/snippet-verification.md",
   "claims": {
     "nz": "stable supported runtime",
     "australia": "Commonwealth prerelease; other Australian jurisdictions planned or unsupported"
