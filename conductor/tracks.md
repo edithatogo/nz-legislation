@@ -41,7 +41,6 @@ track says otherwise.
 | `anz-provider-act`                   | Australian Capital Territory  | P1       | Source-shape discovery and adapter mapping                               |
 | `anz-provider-northern-territory`    | Northern Territory            | P1       | Source-shape discovery and adapter mapping                               |
 | `anz-provider-aggregator-evaluation` | Cross-jurisdiction aggregator | P2       | Evaluation-only source/provenance and licence review                     |
-| `anz-openapi-adapter-readiness`      | Future HTTP/OpenAPI adapter   | P2       | Readiness contract recorded; no HTTP service enabled                     |
 
 ## Publication, registry, and integration tracks
 
@@ -49,9 +48,9 @@ These tracks do not authorize publication, deployment, marketplace submission,
 registry submission, or package/repository renaming. They define the contracts
 and readiness gates each channel must satisfy before any later external action.
 
-| Track                                | Channel scope                           | Priority | Current phase                                                              |
-| ------------------------------------ | --------------------------------------- | -------- | -------------------------------------------------------------------------- |
-| `anz-publication-package-registries` | npm, GitHub Packages, GitHub Releases   | P0       | Preparation-only package and release contract                              |
-| `anz-publication-website-docs`       | Website/docs, install pages, `llms.txt` | P0       | Preparation-only docs and deployment contract                              |
-| `anz-registry-mcp-directories`       | Smithery and other MCP directories      | P0       | Preparation-only MCP registry contract                                     |
-| `anz-rust-migration-readiness`       | Future Rust migration readiness         | P2       | Future-readiness-only compatibility contract                               |
+| Track                                | Channel scope                           | Priority | Current phase                                 |
+| ------------------------------------ | --------------------------------------- | -------- | --------------------------------------------- |
+| `anz-publication-package-registries` | npm, GitHub Packages, GitHub Releases   | P0       | Preparation-only package and release contract |
+| `anz-publication-website-docs`       | Website/docs, install pages, `llms.txt` | P0       | Preparation-only docs and deployment contract |
+| `anz-registry-mcp-directories`       | Smithery and other MCP directories      | P0       | Preparation-only MCP registry contract        |
+| `anz-rust-migration-readiness`       | Future Rust migration readiness         | P2       | Future-readiness-only compatibility contract  |
