@@ -47,6 +47,7 @@
     "docs": "typedoc",
     "docs:serve": "npx http-server docs/api -p 8080 -o",
     "gate:conductor-requirements": "tsx scripts/check-conductor-requirements.ts",
+    "gate:mirror-readiness": "tsx scripts/check-mirror-readiness.ts",
     "gate:manifest-docs": "tsx scripts/check-manifest-docs-drift.ts",
     "smoke:install-snippets": "tsx scripts/smoke-install-snippets.ts",
     "gate:install-snippets": "tsx scripts/check-install-snippets.ts && corepack pnpm smoke:install-snippets",
