@@ -1,11 +1,11 @@
 {
   "trackId": "anz-publication-package-registries",
-  "status": "planned",
+  "status": "complete_local_readiness",
   "priority": "P0",
   "created": "2026-05-23",
   "sourceTrack": "anz-platform-release-and-distribution",
   "singleRepo": true,
-  "phase": "preparation-only",
+  "phase": "provenance-contract-complete",
   "channels": ["npm", "GitHub Packages", "GitHub Releases"],
   "externalSubmissionAllowed": false,
   "publishingAllowed": false,
