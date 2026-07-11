@@ -3,7 +3,7 @@
 Status: preparation-only. No assistant marketplace, plugin directory, or
 first-party submission is authorized by this document.
 
-Last verified: 2026-07-11
+Last verified: 2026-07-12
 
 ## Shared capability contract
 

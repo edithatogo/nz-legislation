@@ -42,6 +42,7 @@ const requiredDocs = [
   'docs/maintainers/release-notes-anz-readiness-draft.md',
   'docs/maintainers/security-and-submission-gates-v9.md',
   'integrations/README.md',
+  'integrations/assistant-marketplace-readiness.md',
   'integrations/mcp/example-configs.md',
 ];
 
@@ -124,6 +125,15 @@ requireIncludes('integrations/README.md', [
   'Claude',
   'Codex',
   'GitHub Copilot',
+]);
+requireIncludes('integrations/assistant-marketplace-readiness.md', [
+  'Claude',
+  'Codex',
+  'GitHub Copilot',
+  'Gemini',
+  'Qwen',
+  'preparation-only',
+  'NZ_LEGISLATION_API_KEY',
 ]);
 requireIncludes('integrations/mcp/example-configs.md', [
   '"command": "npx"',
