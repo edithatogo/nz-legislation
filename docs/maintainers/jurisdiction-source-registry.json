@@ -1,0 +1,101 @@
+{
+  "version": "1.0.0",
+  "policy": {
+    "sourceAuthorityRequired": true,
+    "licenseEvidenceRequired": true,
+    "unverifiedProvidersRemainUnsupported": true,
+    "silentCrossProviderFallback": false
+  },
+  "jurisdictions": [
+    {
+      "jurisdiction": "nz",
+      "providerId": "legislation-govt-nz",
+      "sourceAuthority": "legislation.govt.nz",
+      "sourceUrl": "https://www.legislation.govt.nz/",
+      "releaseChannel": "stable",
+      "licenseStatus": "reviewed-existing-source-terms",
+      "accessStatus": "source-backed"
+    },
+    {
+      "jurisdiction": "au-commonwealth",
+      "providerId": "federal-register-of-legislation",
+      "sourceAuthority": "Federal Register of Legislation public API",
+      "sourceUrl": "https://www.legislation.gov.au/",
+      "releaseChannel": "prerelease",
+      "licenseStatus": "review-required-before-public-redistribution",
+      "accessStatus": "source-backed-api"
+    },
+    {
+      "jurisdiction": "au-qld",
+      "providerId": "queensland-legislation",
+      "sourceAuthority": "Queensland Legislation API service",
+      "sourceUrl": "https://www.legislation.qld.gov.au/",
+      "releaseChannel": "planned",
+      "licenseStatus": "unverified",
+      "accessStatus": "source-shape-only"
+    },
+    {
+      "jurisdiction": "au-nsw",
+      "providerId": "nsw-legislation",
+      "sourceAuthority": "NSW legislation XML export surface",
+      "sourceUrl": "https://legislation.nsw.gov.au/",
+      "releaseChannel": "planned",
+      "licenseStatus": "unverified",
+      "accessStatus": "source-shape-only"
+    },
+    {
+      "jurisdiction": "au-vic",
+      "providerId": "victorian-legislation",
+      "sourceAuthority": "Victorian legislation website",
+      "sourceUrl": "https://www.legislation.vic.gov.au/",
+      "releaseChannel": "planned",
+      "licenseStatus": "unverified",
+      "accessStatus": "source-shape-only"
+    },
+    {
+      "jurisdiction": "au-sa",
+      "providerId": "south-australian-legislation",
+      "sourceAuthority": "South Australian Legislation website",
+      "sourceUrl": "https://www.legislation.sa.gov.au/",
+      "releaseChannel": "planned",
+      "licenseStatus": "unverified",
+      "accessStatus": "source-shape-only"
+    },
+    {
+      "jurisdiction": "au-wa",
+      "providerId": "western-australian-legislation",
+      "sourceAuthority": "Western Australian Legislation website",
+      "sourceUrl": "https://www.legislation.wa.gov.au/",
+      "releaseChannel": "planned",
+      "licenseStatus": "unverified",
+      "accessStatus": "source-shape-only"
+    },
+    {
+      "jurisdiction": "au-tas",
+      "providerId": "tasmanian-legislation",
+      "sourceAuthority": "Tasmanian Legislation Online",
+      "sourceUrl": "https://www.legislation.tas.gov.au/",
+      "releaseChannel": "planned",
+      "licenseStatus": "unverified",
+      "accessStatus": "source-shape-only"
+    },
+    {
+      "jurisdiction": "au-act",
+      "providerId": "act-legislation",
+      "sourceAuthority": "ACT Legislation Register",
+      "sourceUrl": "https://www.legislation.act.gov.au/",
+      "releaseChannel": "planned",
+      "licenseStatus": "review-required-before-adapter",
+      "accessStatus": "source-shape-only"
+    },
+    {
+      "jurisdiction": "au-nt",
+      "providerId": "northern-territory-legislation",
+      "sourceAuthority": "Northern Territory legislation website",
+      "sourceUrl": "https://legislation.nt.gov.au/",
+      "releaseChannel": "planned",
+      "licenseStatus": "unverified",
+      "accessStatus": "source-shape-only"
+    }
+  ]
+}
