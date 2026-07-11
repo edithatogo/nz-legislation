@@ -18,3 +18,7 @@
       any external submission.
 - [x] Add `pnpm gate:channel-readiness` to enforce extension contract metadata.
 - [x] Verify JetBrains plugin requirements if extension scope becomes justified.
+
+## Review Fixes
+
+- [x] Apply review fixes (981f4ac): add capability/source-card links and IDE snippet evidence.
