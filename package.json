@@ -8,7 +8,9 @@
     "nzlegislation": "./dist/cli.js",
     "nzlegislation-mcp": "./dist/mcp-cli.js",
     "anzlegislation": "./dist/cli.js",
-    "anzlegislation-mcp": "./dist/mcp-cli.js"
+    "anzlegislation-mcp": "./dist/mcp-cli.js",
+    "legislation": "./dist/cli.js",
+    "legislation-mcp": "./dist/mcp-cli.js"
   },
   "scripts": {
     "dev": "tsx src/cli.ts",
@@ -20,6 +22,7 @@
     "test": "node ./node_modules/vitest/vitest.mjs --config vitest.config.ts",
     "test:run": "node ./node_modules/vitest/vitest.mjs run --config vitest.config.ts",
     "test:coverage": "node ./node_modules/vitest/vitest.mjs run --config vitest.config.ts --coverage",
+    "gate:coverage": "tsx scripts/check-coverage-threshold.ts",
     "gate:no-placeholder-legal-data": "tsx scripts/check-no-placeholder-legal-data.ts",
     "bench": "tsx benchmarks/performance.ts",
     "bench:audit": "tsx benchmarks/performance-audit.ts",
@@ -53,8 +56,9 @@
     "gate:provider-capability-manifest": "node ./node_modules/vitest/vitest.mjs run tests/provider-capability-manifest.test.ts tests/provider-registry.test.ts tests/provider-source-cards.test.ts --config vitest.config.ts",
     "gate:provider-aware-mcp-export": "node ./node_modules/vitest/vitest.mjs run tests/provider-runtime.test.ts tests/mcp-provider-capability.test.ts tests/e2e/cli.test.ts --config vitest.config.ts",
     "gate:website-docs": "tsx scripts/check-website-docs.ts",
-    "gate:release-submission": "corepack pnpm gate:no-placeholder-legal-data && corepack pnpm gate:provider-capability-manifest && corepack pnpm gate:provider-aware-mcp-export && corepack pnpm gate:package-metadata && corepack pnpm gate:conductor-requirements && corepack pnpm gate:manifest-docs && corepack pnpm gate:website-docs && corepack pnpm gate:install-snippets && corepack pnpm gate:channel-readiness && corepack pnpm gate:security-provenance && corepack pnpm gate:release-notes",
+    "gate:release-submission": "corepack pnpm gate:no-placeholder-legal-data && corepack pnpm gate:provider-capability-manifest && corepack pnpm gate:provider-aware-mcp-export && corepack pnpm gate:package-metadata && corepack pnpm gate:conductor-requirements && corepack pnpm gate:manifest-docs && corepack pnpm gate:website-docs && corepack pnpm gate:install-snippets && corepack pnpm gate:channel-readiness && corepack pnpm gate:assistant-integrations && corepack pnpm gate:security-provenance && corepack pnpm gate:release-notes",
     "gate:channel-readiness": "tsx scripts/check-channel-readiness.ts",
+    "gate:assistant-integrations": "tsx scripts/check-assistant-integrations.ts",
     "docs:dev": "npm --prefix docs-site run dev",
     "docs:build": "npm --prefix docs-site run build",
     "docs:check": "npm --prefix docs-site run check"

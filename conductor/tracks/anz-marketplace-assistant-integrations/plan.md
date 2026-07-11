@@ -2,15 +2,15 @@
 
 ## Phase 1: Contract registration
 
-**Status:** In progress.
+**Status:** Complete (preparation-only; submission blocked).
 
 - [x] Add assistant marketplace contracts to `conductor/requirements.md`.
 - [x] Add this Conductor track.
-- [ ] Map each integration folder to package/MCP capabilities.
+- [x] Map each integration folder to package/MCP capabilities.
 
 ## Phase 2: Submission readiness
 
-**Status:** Pending.
+**Status:** Complete (preparation-only; submission blocked).
 
-- [ ] Reverify Claude, Codex, GitHub Copilot, Gemini, and Qwen requirements.
-- [ ] Add target-specific evidence before any submission.
+- [x] Reverify Claude, Codex, GitHub Copilot, Gemini, and Qwen requirements.
+- [x] Add target-specific evidence before any submission.
