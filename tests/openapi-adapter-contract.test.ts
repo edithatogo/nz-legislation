@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 
 import { getProviderCapabilities } from '../src/providers/capability-manifest.ts';
 
@@ -16,6 +16,7 @@ type AdapterContract = {
   version: string;
   status: string;
   serviceEnabled: boolean;
+  sourceOfTruth: string[];
   security: Record<string, string>;
   routes: ContractRoute[];
   nonGoals: string[];
@@ -33,11 +34,24 @@ describe('OpenAPI adapter readiness contract', () => {
   });
 
   it('defines provider-aware routes for every runtime provider feature', () => {
-    const manifestFeatures = new Set(Object.keys(getProviderCapabilities()[0]?.features ?? {}));
+    const capabilities = getProviderCapabilities();
+    const manifestFeatures = new Set(
+      capabilities.flatMap(capability => Object.keys(capability.features))
+    );
     const routeFeatures = new Set(contract.routes.map(route => route.providerGate).filter(Boolean));
 
     for (const feature of manifestFeatures) {
       expect(routeFeatures).toContain(feature);
+    }
+  });
+
+  it('keeps route identifiers unique and source references resolvable', () => {
+    const operationIds = contract.routes.map(route => route.operationId);
+    expect(new Set(operationIds).size).toBe(operationIds.length);
+
+    expect(contract.sourceOfTruth.length).toBeGreaterThan(0);
+    for (const sourcePath of contract.sourceOfTruth) {
+      expect(existsSync(sourcePath)).toBe(true);
     }
   });
 

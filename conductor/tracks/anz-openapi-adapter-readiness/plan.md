@@ -18,9 +18,13 @@
 
 ## Validation evidence
 
-- `gate:openapi-adapter-contract`: passed (4 tests).
+- `gate:openapi-adapter-contract`: passed (5 tests).
 - `gate:conductor-requirements`: passed.
 - TypeScript strict typecheck: passed.
 - Scoped Prettier check: passed.
 - No HTTP service, route, package split, deployment, or publication was added.
-- Latest branch Docs workflow passed: run `29156239534`.
+- Latest branch Docs workflow passed: run `29156280691`.
+
+## Review evidence - 2026-07-12
+
+- [x] Applied review fixes to strengthen manifest-wide feature coverage, route uniqueness, and source-reference checks (`<pending-review-commit>`).
