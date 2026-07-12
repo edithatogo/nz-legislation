@@ -44,6 +44,62 @@ pub fn is_supported_provider(provider: &str) -> bool {
     PROVIDER_IDENTIFIERS.contains(&provider)
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum CapabilityStatus {
+    Supported,
+    Prerelease,
+    Unsupported,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum ProviderFeature {
+    Search,
+    GetWork,
+    GetVersions,
+    GetVersion,
+    Citation,
+    Export,
+    Mcp,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct FeatureCapability {
+    pub status: CapabilityStatus,
+    pub source_backed: bool,
+    pub notes: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct UnsupportedProviderCapability {
+    pub error: &'static str,
+    pub jurisdiction: String,
+    pub provider_id: String,
+    pub feature: ProviderFeature,
+    pub status: CapabilityStatus,
+    pub source_backed: bool,
+    pub message: String,
+}
+
+pub fn require_capability(
+    jurisdiction: &str,
+    provider_id: &str,
+    feature: ProviderFeature,
+    capability: &FeatureCapability,
+) -> Result<(), UnsupportedProviderCapability> {
+    if capability.status == CapabilityStatus::Unsupported || !capability.source_backed {
+        return Err(UnsupportedProviderCapability {
+            error: "unsupported_provider_capability",
+            jurisdiction: jurisdiction.to_owned(),
+            provider_id: provider_id.to_owned(),
+            feature,
+            status: capability.status,
+            source_backed: capability.source_backed,
+            message: capability.notes.clone(),
+        });
+    }
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use serde::Deserialize;
@@ -97,5 +153,35 @@ mod tests {
         assert!(!is_supported_command("unknown"));
         assert!(is_supported_provider("au-commonwealth"));
         assert!(!is_supported_provider("au-nsw"));
+    }
+
+    #[test]
+    fn blocks_unsupported_or_unbacked_capabilities_structurally() {
+        let capability = FeatureCapability {
+            status: CapabilityStatus::Unsupported,
+            source_backed: false,
+            notes: "source validation required".to_owned(),
+        };
+        let error = require_capability("au-nsw", "nsw", ProviderFeature::Search, &capability)
+            .expect_err("unsupported capability must be blocked");
+        assert_eq!(error.error, "unsupported_provider_capability");
+        assert_eq!(error.jurisdiction, "au-nsw");
+        assert_eq!(error.feature, ProviderFeature::Search);
+    }
+
+    #[test]
+    fn permits_source_backed_prerelease_capabilities() {
+        let capability = FeatureCapability {
+            status: CapabilityStatus::Prerelease,
+            source_backed: true,
+            notes: "source-backed prerelease".to_owned(),
+        };
+        assert!(require_capability(
+            "au-commonwealth",
+            "federal-register-of-legislation",
+            ProviderFeature::Search,
+            &capability
+        )
+        .is_ok());
     }
 }
