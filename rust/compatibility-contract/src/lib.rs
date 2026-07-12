@@ -27,6 +27,7 @@ mod tests {
     use super::*;
 
     #[derive(Deserialize)]
+    #[serde(rename_all = "camelCase")]
     struct Fixture {
         cli_binaries: Vec<String>,
         mcp_binaries: Vec<String>,
