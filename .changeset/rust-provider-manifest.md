@@ -2,4 +2,4 @@
 'nz-legislation': patch
 ---
 
-Add a source-backed Rust provider capability manifest for NZ, Commonwealth, and Queensland metadata.
+Add a gated Rust provider capability manifest for NZ, prerelease Commonwealth, and planned Queensland metadata, preserving unsupported and source-validation status.
