@@ -20,11 +20,13 @@ pub const COMMANDS: &[&str] = &[
 ];
 pub const PROVIDER_IDENTIFIERS: &[&str] = &["nz", "au-commonwealth", "au-qld"];
 pub const MCP_TOOLS: &[&str] = &[
-    "search",
-    "get_work",
-    "get_versions",
-    "export",
-    "capabilities",
+    "search_legislation",
+    "get_legislation",
+    "get_legislation_versions",
+    "generate_citation",
+    "export_legislation",
+    "get_capabilities",
+    "get_config",
 ];
 
 use serde::{Deserialize, Serialize};
@@ -242,10 +244,47 @@ mod tests {
         provider_identifiers: Vec<String>,
     }
 
+    #[derive(Deserialize)]
+    struct McpFixture {
+        tools: Vec<String>,
+        response_fields: Vec<String>,
+        provenance_fields: Vec<String>,
+    }
+
     const FIXTURE: &str = include_str!(concat!(
         env!("CARGO_MANIFEST_DIR"),
         "/../../tests/fixtures/rust/cli-contracts.json"
     ));
+
+    const MCP_FIXTURE: &str = include_str!(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/../../tests/fixtures/rust/mcp-contracts.json"
+    ));
+
+    #[test]
+    fn preserves_mcp_tool_and_provenance_contract() {
+        let fixture: McpFixture = serde_json::from_str(MCP_FIXTURE).expect("valid MCP fixture");
+        assert_eq!(fixture.tools, MCP_TOOLS);
+        assert_eq!(
+            fixture.response_fields,
+            [
+                "tool",
+                "jurisdiction",
+                "release_gate",
+                "submission_gate",
+                "provenance"
+            ]
+        );
+        assert_eq!(
+            fixture.provenance_fields,
+            [
+                "sourceAuthority",
+                "sourceUrl",
+                "retrievedAt",
+                "sourceBacked"
+            ]
+        );
+    }
 
     #[test]
     fn preserves_compatibility_aliases() {
@@ -346,7 +385,7 @@ mod tests {
     #[test]
     fn validates_mcp_requests_and_round_trips_provenance_response() {
         let request = McpRequest {
-            tool: "search".to_owned(),
+            tool: "search_legislation".to_owned(),
             jurisdiction: "nz".to_owned(),
         };
         assert!(validate_mcp_request(&request).is_ok());

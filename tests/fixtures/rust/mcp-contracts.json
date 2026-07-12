@@ -1,0 +1,13 @@
+{
+  "tools": [
+    "search_legislation",
+    "get_legislation",
+    "get_legislation_versions",
+    "generate_citation",
+    "export_legislation",
+    "get_capabilities",
+    "get_config"
+  ],
+  "response_fields": ["tool", "jurisdiction", "release_gate", "submission_gate", "provenance"],
+  "provenance_fields": ["sourceAuthority", "sourceUrl", "retrievedAt", "sourceBacked"]
+}

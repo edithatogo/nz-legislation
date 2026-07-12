@@ -22,4 +22,5 @@
 - [x] Implement provider capability and structured unsupported-capability contracts.
 - [x] Implement gated Rust CLI command and output-format contract parsing.
 - [x] Implement gated Rust MCP request/response and provenance contracts.
+- [x] Add shared MCP tool and provenance fixture parity tests against the TypeScript server.
 - [ ] Run dual-runtime performance and security comparisons.
