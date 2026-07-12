@@ -1,0 +1,7 @@
+{
+  "packageName": "nz-legislation-tool",
+  "cliBinaries": ["nzlegislation", "anzlegislation", "legislation"],
+  "mcpBinaries": ["nzlegislation-mcp", "anzlegislation-mcp", "legislation-mcp"],
+  "commands": ["search", "get", "export", "cite", "batch", "cache", "capabilities", "config", "generate", "stream"],
+  "providerIdentifiers": ["nz", "au-commonwealth", "au-qld"]
+}
