@@ -6,15 +6,15 @@ below has an executable Rust parity test and the release gates pass.
 
 ## Public contracts
 
-| Surface | Required compatibility |
-| --- | --- |
-| Package | Preserve `nz-legislation-tool` metadata, install instructions, and semver policy. |
-| CLI binaries | Preserve `nzlegislation`, `anzlegislation`, and `legislation`; retain the MCP binary aliases. |
-| Commands | Preserve help, search, get, export, cite, batch, cache, capabilities, config, generate, and stream behavior. |
-| MCP | Preserve tool names, structured errors, provider capability checks, provenance fields, and unsupported-provider behavior. |
-| Providers | Preserve jurisdiction identifiers, capability states, source cards, and no-placeholder-data guarantees. |
-| Output | Preserve table, JSON, CSV, and metadata output schemas, including exit-code semantics. |
-| Configuration | Preserve environment variables, config-file locations, secure-secret handling, and redaction behavior. |
+| Surface       | Required compatibility                                                                                                    |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Package       | Preserve `nz-legislation-tool` metadata, install instructions, and semver policy.                                         |
+| CLI binaries  | Preserve `nzlegislation`, `anzlegislation`, and `legislation`; retain the MCP binary aliases.                             |
+| Commands      | Preserve help, search, get, export, cite, batch, cache, capabilities, config, generate, and stream behavior.              |
+| MCP           | Preserve tool names, structured errors, provider capability checks, provenance fields, and unsupported-provider behavior. |
+| Providers     | Preserve jurisdiction identifiers, capability states, source cards, and no-placeholder-data guarantees.                   |
+| Output        | Preserve table, JSON, CSV, and metadata output schemas, including exit-code semantics.                                    |
+| Configuration | Preserve environment variables, config-file locations, secure-secret handling, and redaction behavior.                    |
 
 ## Required parity evidence
 
