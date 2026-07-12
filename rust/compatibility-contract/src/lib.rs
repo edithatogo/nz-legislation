@@ -264,6 +264,7 @@ mod tests {
     #[serde(rename_all = "camelCase")]
     struct RuntimeEntry {
         available: bool,
+        contract_runtime_available: bool,
         security_checks: Vec<String>,
         performance_evidence: Option<String>,
     }
@@ -293,6 +294,7 @@ mod tests {
             Some("benchmarks/performance.ts")
         );
         assert!(!fixture.rust_runtime.available);
+        assert!(fixture.rust_runtime.contract_runtime_available);
         assert!(fixture.rust_runtime.performance_evidence.is_none());
         assert!(!fixture.cutover_allowed);
         assert!(fixture.reason.contains("not yet available"));

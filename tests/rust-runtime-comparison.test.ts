@@ -4,7 +4,12 @@ import { describe, expect, it } from 'vitest';
 
 type RuntimeComparison = {
   typescriptRuntime: { available: boolean; securityChecks: string[]; performanceEvidence: string };
-  rustRuntime: { available: boolean; securityChecks: string[]; performanceEvidence: string | null };
+  rustRuntime: {
+    available: boolean;
+    contractRuntimeAvailable: boolean;
+    securityChecks: string[];
+    performanceEvidence: string | null;
+  };
   cutoverAllowed: boolean;
   reason: string;
 };
@@ -18,6 +23,7 @@ describe('Rust migration runtime comparison gate', () => {
     expect(comparison.typescriptRuntime.available).toBe(true);
     expect(comparison.typescriptRuntime.performanceEvidence).toBe('benchmarks/performance.ts');
     expect(comparison.rustRuntime.available).toBe(false);
+    expect(comparison.rustRuntime.contractRuntimeAvailable).toBe(true);
     expect(comparison.rustRuntime.performanceEvidence).toBeNull();
     expect(comparison.cutoverAllowed).toBe(false);
     expect(comparison.reason).toMatch(/not yet available/);
