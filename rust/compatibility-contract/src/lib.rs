@@ -251,6 +251,23 @@ mod tests {
         provenance_fields: Vec<String>,
     }
 
+    #[derive(Deserialize)]
+    #[serde(rename_all = "camelCase")]
+    struct RuntimeFixture {
+        typescript_runtime: RuntimeEntry,
+        rust_runtime: RuntimeEntry,
+        cutover_allowed: bool,
+        reason: String,
+    }
+
+    #[derive(Deserialize)]
+    #[serde(rename_all = "camelCase")]
+    struct RuntimeEntry {
+        available: bool,
+        security_checks: Vec<String>,
+        performance_evidence: Option<String>,
+    }
+
     const FIXTURE: &str = include_str!(concat!(
         env!("CARGO_MANIFEST_DIR"),
         "/../../tests/fixtures/rust/cli-contracts.json"
@@ -260,6 +277,35 @@ mod tests {
         env!("CARGO_MANIFEST_DIR"),
         "/../../tests/fixtures/rust/mcp-contracts.json"
     ));
+
+    const RUNTIME_FIXTURE: &str = include_str!(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/../../tests/fixtures/rust/runtime-comparison.json"
+    ));
+
+    #[test]
+    fn blocks_cutover_without_dual_runtime_evidence() {
+        let fixture: RuntimeFixture =
+            serde_json::from_str(RUNTIME_FIXTURE).expect("valid runtime comparison fixture");
+        assert!(fixture.typescript_runtime.available);
+        assert_eq!(
+            fixture.typescript_runtime.performance_evidence.as_deref(),
+            Some("benchmarks/performance.ts")
+        );
+        assert!(!fixture.rust_runtime.available);
+        assert!(fixture.rust_runtime.performance_evidence.is_none());
+        assert!(!fixture.cutover_allowed);
+        assert!(fixture.reason.contains("not yet available"));
+        assert!(!fixture.typescript_runtime.security_checks.is_empty());
+        assert_eq!(
+            fixture.rust_runtime.security_checks,
+            vec![
+                "cargo-check-locked".to_owned(),
+                "cargo-test-locked".to_owned(),
+                "cargo-tree-locked".to_owned()
+            ]
+        );
+    }
 
     #[test]
     fn preserves_mcp_tool_and_provenance_contract() {

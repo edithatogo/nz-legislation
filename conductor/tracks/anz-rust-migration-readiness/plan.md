@@ -23,4 +23,4 @@
 - [x] Implement gated Rust CLI command and output-format contract parsing.
 - [x] Implement gated Rust MCP request/response and provenance contracts.
 - [x] Add shared MCP tool and provenance fixture parity tests against the TypeScript server.
-- [ ] Run dual-runtime performance and security comparisons.
+- [x] Establish a traceable dual-runtime performance/security comparison harness and explicit no-cutover gate; full Rust runtime comparison remains pending until a Rust runtime exists.
