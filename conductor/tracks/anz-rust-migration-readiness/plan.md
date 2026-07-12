@@ -15,5 +15,5 @@
 - [x] Define test parity requirements.
 - [x] Define release governance required before cutover.
 - [x] Add executable golden fixtures and contract tests.
-- [ ] Add a Rust workspace behind the parity gates.
+- [x] Add a minimal Rust contract workspace behind the parity gates.
 - [ ] Run dual-runtime performance and security comparisons.

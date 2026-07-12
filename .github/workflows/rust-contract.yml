@@ -1,0 +1,32 @@
+name: Rust migration contract
+
+on:
+  pull_request:
+    paths:
+      - "rust/**"
+      - ".github/workflows/rust-contract.yml"
+  push:
+    branches: [main, next]
+    paths:
+      - "rust/**"
+      - ".github/workflows/rust-contract.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    name: Rust contract workspace
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: rust
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          components: rustfmt
+      - run: cargo fmt --all -- --check
+      - run: cargo check --workspace --locked
+      - run: cargo test --workspace --locked

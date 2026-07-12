@@ -1,0 +1,9 @@
+[package]
+name = "legislation-compatibility-contract"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "In-repository Rust migration compatibility contract; not a production runtime"
+
+[lib]
+path = "src/lib.rs"
