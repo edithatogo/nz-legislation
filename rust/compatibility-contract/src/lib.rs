@@ -100,6 +100,74 @@ pub fn require_capability(
     Ok(())
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum OutputFormat {
+    Table,
+    Json,
+    Csv,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct CommandRequest {
+    pub command: String,
+    pub format: OutputFormat,
+    pub jurisdiction: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum CliContractError {
+    MissingCommand,
+    UnsupportedCommand(String),
+    MissingOptionValue(String),
+    UnsupportedFormat(String),
+    UnsupportedOption(String),
+}
+
+pub fn parse_command_args<I, S>(args: I) -> Result<CommandRequest, CliContractError>
+where
+    I: IntoIterator<Item = S>,
+    S: Into<String>,
+{
+    let mut command = None;
+    let mut format = OutputFormat::Table;
+    let mut jurisdiction = None;
+    let mut iter = args.into_iter().map(Into::into);
+
+    while let Some(arg) = iter.next() {
+        if arg == "--format" {
+            let value = iter
+                .next()
+                .ok_or_else(|| CliContractError::MissingOptionValue(arg.clone()))?;
+            format = match value.as_str() {
+                "table" => OutputFormat::Table,
+                "json" => OutputFormat::Json,
+                "csv" => OutputFormat::Csv,
+                _ => return Err(CliContractError::UnsupportedFormat(value)),
+            };
+        } else if arg == "--jurisdiction" {
+            jurisdiction = Some(
+                iter.next()
+                    .ok_or_else(|| CliContractError::MissingOptionValue(arg.clone()))?,
+            );
+        } else if arg.starts_with('-') {
+            return Err(CliContractError::UnsupportedOption(arg));
+        } else if command.is_none() {
+            if !is_supported_command(&arg) {
+                return Err(CliContractError::UnsupportedCommand(arg));
+            }
+            command = Some(arg);
+        }
+    }
+
+    command
+        .map(|command| CommandRequest {
+            command,
+            format,
+            jurisdiction,
+        })
+        .ok_or(CliContractError::MissingCommand)
+}
+
 #[cfg(test)]
 mod tests {
     use serde::Deserialize;
@@ -183,5 +251,36 @@ mod tests {
             &capability
         )
         .is_ok());
+    }
+
+    #[test]
+    fn parses_supported_command_and_output_contracts() {
+        let request = parse_command_args([
+            "search",
+            "--format",
+            "json",
+            "--jurisdiction",
+            "au-commonwealth",
+        ])
+        .expect("valid command contract");
+        assert_eq!(request.command, "search");
+        assert_eq!(request.format, OutputFormat::Json);
+        assert_eq!(request.jurisdiction.as_deref(), Some("au-commonwealth"));
+    }
+
+    #[test]
+    fn rejects_invalid_command_format_and_options() {
+        assert_eq!(
+            parse_command_args(["unknown"]),
+            Err(CliContractError::UnsupportedCommand("unknown".to_owned()))
+        );
+        assert_eq!(
+            parse_command_args(["search", "--format", "xml"]),
+            Err(CliContractError::UnsupportedFormat("xml".to_owned()))
+        );
+        assert_eq!(
+            parse_command_args(["search", "--nope"]),
+            Err(CliContractError::UnsupportedOption("--nope".to_owned()))
+        );
     }
 }

@@ -20,4 +20,5 @@
 - [x] Add locked dependency-tree provenance validation to Rust CI.
 - [x] Implement the first non-publishing Rust runtime component for contract validation.
 - [x] Implement provider capability and structured unsupported-capability contracts.
+- [x] Implement gated Rust CLI command and output-format contract parsing.
 - [ ] Run dual-runtime performance and security comparisons.
