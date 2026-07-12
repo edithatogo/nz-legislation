@@ -2,15 +2,18 @@
 
 ## Phase 1: Readiness registration
 
-**Status:** In progress.
+**Status:** Complete.
 
 - [x] Add Rust readiness contracts to `conductor/requirements.md`.
 - [x] Add this Conductor track.
-- [ ] Inventory compatibility contracts that future language work must preserve.
+- [x] Inventory compatibility contracts in `docs/maintainers/rust-migration-compatibility.md`.
 
 ## Phase 2: Future migration controls
 
-**Status:** Pending.
+**Status:** In progress.
 
-- [ ] Define test parity requirements.
-- [ ] Define release governance required before implementation starts.
+- [x] Define test parity requirements.
+- [x] Define release governance required before cutover.
+- [ ] Add executable golden fixtures and contract tests.
+- [ ] Add a Rust workspace behind the parity gates.
+- [ ] Run dual-runtime performance and security comparisons.

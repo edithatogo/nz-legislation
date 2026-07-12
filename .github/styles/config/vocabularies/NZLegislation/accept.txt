@@ -145,3 +145,5 @@ overclaiming
 untrusted
 SVGs
 reverified
+cutover
+semver
