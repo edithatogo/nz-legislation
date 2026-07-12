@@ -38,3 +38,7 @@ Before Rust becomes a release candidate, the migration must provide:
   release checks pass in CI.
 - The TypeScript implementation remains the fallback until a documented,
   reversible cutover decision is approved.
+
+The Rust workspace includes a non-publishing `legislation-contract` binary. It
+validates command and output-format compatibility only; it does not fetch legal
+data, expose MCP, or authorize runtime cutover.

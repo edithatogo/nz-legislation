@@ -6,6 +6,7 @@
   },
   "rustRuntime": {
     "available": false,
+    "contractRuntimeAvailable": true,
     "securityChecks": ["cargo-check-locked", "cargo-test-locked", "cargo-tree-locked"],
     "performanceEvidence": null
   },
