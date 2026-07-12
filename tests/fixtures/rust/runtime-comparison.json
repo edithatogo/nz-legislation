@@ -1,0 +1,14 @@
+{
+  "typescriptRuntime": {
+    "available": true,
+    "securityChecks": ["dependency-review", "codeql", "security-provenance-gate"],
+    "performanceEvidence": "benchmarks/performance.ts"
+  },
+  "rustRuntime": {
+    "available": false,
+    "securityChecks": ["cargo-check-locked", "cargo-test-locked", "cargo-tree-locked"],
+    "performanceEvidence": null
+  },
+  "cutoverAllowed": false,
+  "reason": "Rust runtime implementation is not yet available; contract workspace evidence is insufficient for cutover."
+}
