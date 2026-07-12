@@ -8,17 +8,6 @@
     "get_capabilities",
     "get_config"
   ],
-  "response_fields": [
-    "tool",
-    "jurisdiction",
-    "release_gate",
-    "submission_gate",
-    "provenance"
-  ],
-  "provenance_fields": [
-    "sourceAuthority",
-    "sourceUrl",
-    "retrievedAt",
-    "sourceBacked"
-  ]
+  "response_fields": ["tool", "jurisdiction", "release_gate", "submission_gate", "provenance"],
+  "provenance_fields": ["sourceAuthority", "sourceUrl", "retrievedAt", "sourceBacked"]
 }

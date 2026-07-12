@@ -385,7 +385,7 @@ mod tests {
     #[test]
     fn validates_mcp_requests_and_round_trips_provenance_response() {
         let request = McpRequest {
-            tool: "search".to_owned(),
+            tool: "search_legislation".to_owned(),
             jurisdiction: "nz".to_owned(),
         };
         assert!(validate_mcp_request(&request).is_ok());
