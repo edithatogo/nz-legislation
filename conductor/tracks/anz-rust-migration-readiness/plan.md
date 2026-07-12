@@ -21,4 +21,5 @@
 - [x] Implement the first non-publishing Rust runtime component for contract validation.
 - [x] Implement provider capability and structured unsupported-capability contracts.
 - [x] Implement gated Rust CLI command and output-format contract parsing.
+- [x] Implement gated Rust MCP request/response and provenance contracts.
 - [ ] Run dual-runtime performance and security comparisons.

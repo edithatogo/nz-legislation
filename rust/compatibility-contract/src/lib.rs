@@ -19,8 +19,18 @@ pub const COMMANDS: &[&str] = &[
     "stream",
 ];
 pub const PROVIDER_IDENTIFIERS: &[&str] = &["nz", "au-commonwealth", "au-qld"];
+pub const MCP_TOOLS: &[&str] = &[
+    "search",
+    "get_work",
+    "get_versions",
+    "export",
+    "capabilities",
+];
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum BinaryKind {
     Cli,
     Mcp,
@@ -44,14 +54,20 @@ pub fn is_supported_provider(provider: &str) -> bool {
     PROVIDER_IDENTIFIERS.contains(&provider)
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub fn is_supported_mcp_tool(tool: &str) -> bool {
+    MCP_TOOLS.contains(&tool)
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum CapabilityStatus {
     Supported,
     Prerelease,
     Unsupported,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum ProviderFeature {
     Search,
     GetWork,
@@ -62,22 +78,65 @@ pub enum ProviderFeature {
     Mcp,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct FeatureCapability {
     pub status: CapabilityStatus,
     pub source_backed: bool,
     pub notes: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct UnsupportedProviderCapability {
-    pub error: &'static str,
+    pub error: String,
     pub jurisdiction: String,
     pub provider_id: String,
     pub feature: ProviderFeature,
     pub status: CapabilityStatus,
     pub source_backed: bool,
     pub message: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct McpRequest {
+    pub tool: String,
+    pub jurisdiction: String,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum GateStatus {
+    Allowed,
+    Blocked,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ProvenanceMetadata {
+    pub source_authority: String,
+    pub source_url: Option<String>,
+    pub retrieved_at: Option<String>,
+    pub source_backed: bool,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct McpResponse {
+    pub tool: String,
+    pub jurisdiction: String,
+    pub release_gate: GateStatus,
+    pub submission_gate: GateStatus,
+    pub provenance: Option<ProvenanceMetadata>,
+    pub error: Option<UnsupportedProviderCapability>,
+}
+
+pub fn validate_mcp_request(request: &McpRequest) -> Result<(), CliContractError> {
+    if !is_supported_mcp_tool(&request.tool) {
+        return Err(CliContractError::UnsupportedOption(request.tool.clone()));
+    }
+    if !is_supported_provider(&request.jurisdiction) {
+        return Err(CliContractError::UnsupportedCommand(
+            request.jurisdiction.clone(),
+        ));
+    }
+    Ok(())
 }
 
 pub fn require_capability(
@@ -88,7 +147,7 @@ pub fn require_capability(
 ) -> Result<(), UnsupportedProviderCapability> {
     if capability.status == CapabilityStatus::Unsupported || !capability.source_backed {
         return Err(UnsupportedProviderCapability {
-            error: "unsupported_provider_capability",
+            error: "unsupported_provider_capability".to_owned(),
             jurisdiction: jurisdiction.to_owned(),
             provider_id: provider_id.to_owned(),
             feature,
@@ -282,5 +341,30 @@ mod tests {
             parse_command_args(["search", "--nope"]),
             Err(CliContractError::UnsupportedOption("--nope".to_owned()))
         );
+    }
+
+    #[test]
+    fn validates_mcp_requests_and_round_trips_provenance_response() {
+        let request = McpRequest {
+            tool: "search".to_owned(),
+            jurisdiction: "nz".to_owned(),
+        };
+        assert!(validate_mcp_request(&request).is_ok());
+        let response = McpResponse {
+            tool: request.tool,
+            jurisdiction: request.jurisdiction,
+            release_gate: GateStatus::Allowed,
+            submission_gate: GateStatus::Allowed,
+            provenance: Some(ProvenanceMetadata {
+                source_authority: "legislation.govt.nz".to_owned(),
+                source_url: None,
+                retrieved_at: None,
+                source_backed: true,
+            }),
+            error: None,
+        };
+        let encoded = serde_json::to_string(&response).expect("serializable MCP response");
+        let decoded: McpResponse = serde_json::from_str(&encoded).expect("valid MCP response");
+        assert_eq!(decoded, response);
     }
 }
