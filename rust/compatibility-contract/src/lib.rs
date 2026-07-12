@@ -68,6 +68,24 @@ pub enum CapabilityStatus {
     Unsupported,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ReleaseChannel {
+    Stable,
+    Prerelease,
+    Planned,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ProviderCapability {
+    pub jurisdiction: String,
+    pub label: String,
+    pub provider_id: String,
+    pub source_authority: String,
+    pub release_channel: ReleaseChannel,
+    pub features: Vec<(ProviderFeature, FeatureCapability)>,
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ProviderFeature {
@@ -85,6 +103,89 @@ pub struct FeatureCapability {
     pub status: CapabilityStatus,
     pub source_backed: bool,
     pub notes: String,
+}
+
+fn feature_set(capability: FeatureCapability) -> Vec<(ProviderFeature, FeatureCapability)> {
+    [
+        ProviderFeature::Search,
+        ProviderFeature::GetWork,
+        ProviderFeature::GetVersions,
+        ProviderFeature::GetVersion,
+        ProviderFeature::Citation,
+        ProviderFeature::Export,
+        ProviderFeature::Mcp,
+    ]
+    .into_iter()
+    .map(|feature| (feature, capability.clone()))
+    .collect()
+}
+
+fn capability(status: CapabilityStatus, source_backed: bool, notes: &str) -> FeatureCapability {
+    FeatureCapability {
+        status,
+        source_backed,
+        notes: notes.to_owned(),
+    }
+}
+
+/// Source-backed provider capability inventory shared by Rust contract consumers.
+/// This is metadata only; it performs no network access or legal-data fetches.
+pub fn provider_capability_manifest() -> Vec<ProviderCapability> {
+    let nz = capability(
+        CapabilityStatus::Supported,
+        true,
+        "Backed by the existing legislation.govt.nz API client surface.",
+    );
+    let commonwealth = capability(
+        CapabilityStatus::Prerelease,
+        true,
+        "Prerelease support backed by the Federal Register of Legislation public API.",
+    );
+    let unsupported_commonwealth = capability(
+        CapabilityStatus::Unsupported,
+        false,
+        "Federal Register mapping for this feature is not complete; use structured unsupported capability errors.",
+    );
+    let unsupported_australian = capability(
+        CapabilityStatus::Unsupported,
+        false,
+        "Source validation and provider implementation are required before this feature can be enabled.",
+    );
+    let mut commonwealth_features = feature_set(commonwealth);
+    for (feature, value) in &mut commonwealth_features {
+        if matches!(
+            feature,
+            ProviderFeature::GetVersion | ProviderFeature::Citation
+        ) {
+            *value = unsupported_commonwealth.clone();
+        }
+    }
+    vec![
+        ProviderCapability {
+            jurisdiction: "nz".to_owned(),
+            label: "New Zealand".to_owned(),
+            provider_id: "legislation-govt-nz".to_owned(),
+            source_authority: "legislation.govt.nz".to_owned(),
+            release_channel: ReleaseChannel::Stable,
+            features: feature_set(nz),
+        },
+        ProviderCapability {
+            jurisdiction: "au-commonwealth".to_owned(),
+            label: "Australian Commonwealth".to_owned(),
+            provider_id: "federal-register-of-legislation".to_owned(),
+            source_authority: "Federal Register of Legislation public API".to_owned(),
+            release_channel: ReleaseChannel::Prerelease,
+            features: commonwealth_features,
+        },
+        ProviderCapability {
+            jurisdiction: "au-qld".to_owned(),
+            label: "Queensland".to_owned(),
+            provider_id: "queensland-legislation".to_owned(),
+            source_authority: "Queensland Legislation API service".to_owned(),
+            release_channel: ReleaseChannel::Planned,
+            features: feature_set(unsupported_australian),
+        },
+    ]
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -345,6 +446,39 @@ mod tests {
     fn preserves_non_empty_command_and_provider_contracts() {
         assert!(!COMMANDS.is_empty());
         assert_eq!(PROVIDER_IDENTIFIERS, &["nz", "au-commonwealth", "au-qld"]);
+    }
+
+    #[test]
+    fn mirrors_source_backed_provider_manifest_without_network_access() {
+        let manifest = provider_capability_manifest();
+        assert_eq!(manifest.len(), 3);
+        assert_eq!(manifest[0].jurisdiction, "nz");
+        assert_eq!(manifest[0].release_channel, ReleaseChannel::Stable);
+        assert!(manifest[0]
+            .features
+            .iter()
+            .all(
+                |(_, capability)| capability.status == CapabilityStatus::Supported
+                    && capability.source_backed
+            ));
+
+        let commonwealth = &manifest[1];
+        assert_eq!(commonwealth.release_channel, ReleaseChannel::Prerelease);
+        assert!(commonwealth.features.iter().any(|(feature, capability)| {
+            *feature == ProviderFeature::GetVersion
+                && capability.status == CapabilityStatus::Unsupported
+                && !capability.source_backed
+        }));
+
+        let queensland = &manifest[2];
+        assert_eq!(queensland.release_channel, ReleaseChannel::Planned);
+        assert!(queensland
+            .features
+            .iter()
+            .all(
+                |(_, capability)| capability.status == CapabilityStatus::Unsupported
+                    && !capability.source_backed
+            ));
     }
 
     #[test]
