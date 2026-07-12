@@ -1,16 +1,17 @@
 {
   "trackId": "anz-rust-migration-readiness",
-  "status": "planned",
+  "status": "in_progress",
   "priority": "P2",
   "created": "2026-05-23",
   "sourceTrack": "anz-platform-release-and-distribution",
   "singleRepo": true,
-  "phase": "future-readiness-only",
+  "phase": "staged-parity",
   "externalSubmissionAllowed": false,
   "publishingAllowed": false,
   "deploymentAllowed": false,
   "repositoryRenameAllowed": false,
   "packageRenameAllowed": false,
   "rustRewriteAllowed": false,
-  "requiredGates": ["compatibility-contracts", "test-parity", "release-governance"]
+  "rustWorkspaceAllowed": true,
+  "requiredGates": ["compatibility-contracts", "test-parity", "security", "provenance", "release-governance"]
 }

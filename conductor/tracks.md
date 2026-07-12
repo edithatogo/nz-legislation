@@ -51,4 +51,4 @@ and readiness gates each channel must satisfy before any later external action.
 | `anz-publication-package-registries` | npm, GitHub Packages, GitHub Releases   | P0       | Preparation-only package and release contract |
 | `anz-publication-website-docs`       | Website/docs, install pages, `llms.txt` | P0       | Preparation-only docs and deployment contract |
 | `anz-registry-mcp-directories`       | Smithery and other MCP directories      | P0       | Preparation-only MCP registry contract        |
-| `anz-rust-migration-readiness`       | Future Rust migration readiness         | P2       | Future-readiness-only compatibility contract  |
+| `anz-rust-migration-readiness`       | Staged Rust migration                   | P2       | In-repository parity work behind release gates |
