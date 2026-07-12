@@ -19,4 +19,5 @@
 - [x] Consume the shared JSON compatibility fixture from Rust contract tests.
 - [x] Add locked dependency-tree provenance validation to Rust CI.
 - [x] Implement the first non-publishing Rust runtime component for contract validation.
+- [x] Implement provider capability and structured unsupported-capability contracts.
 - [ ] Run dual-runtime performance and security comparisons.
