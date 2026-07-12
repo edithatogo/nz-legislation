@@ -189,6 +189,83 @@ pub fn provider_capability_manifest() -> Vec<ProviderCapability> {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ProviderRequest {
+    pub jurisdiction: String,
+    pub feature: ProviderFeature,
+    pub url: String,
+    pub source_authority: String,
+    pub requires_api_key: bool,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum ProviderRequestError {
+    UnsupportedCapability(UnsupportedProviderCapability),
+    InvalidIdentifier,
+}
+
+/// Build an allowlisted request description without performing network I/O.
+pub fn build_provider_request(
+    jurisdiction: &str,
+    feature: ProviderFeature,
+    identifier: &str,
+) -> Result<ProviderRequest, ProviderRequestError> {
+    if identifier.is_empty()
+        || identifier.contains('/')
+        || identifier.contains('\\')
+        || identifier.contains("..")
+    {
+        return Err(ProviderRequestError::InvalidIdentifier);
+    }
+    let (provider_id, source_authority, base_url, requires_api_key, status, notes) =
+        match jurisdiction {
+            "nz" => (
+                "legislation-govt-nz",
+                "legislation.govt.nz",
+                "https://api.legislation.govt.nz/v0/works",
+                true,
+                CapabilityStatus::Supported,
+                "Backed by the existing legislation.govt.nz API client surface.",
+            ),
+            "au-commonwealth" => (
+                "federal-register-of-legislation",
+                "Federal Register of Legislation public API",
+                "https://api.prod.legislation.gov.au/v1/works",
+                false,
+                CapabilityStatus::Prerelease,
+                "Prerelease support backed by the Federal Register of Legislation public API.",
+            ),
+            _ => {
+                return Err(ProviderRequestError::UnsupportedCapability(
+                    UnsupportedProviderCapability {
+                        error: "unsupported_provider_capability".to_owned(),
+                        jurisdiction: jurisdiction.to_owned(),
+                        provider_id: "unknown".to_owned(),
+                        feature,
+                        status: CapabilityStatus::Unsupported,
+                        source_backed: false,
+                        message: "Provider request planning is not enabled for this jurisdiction."
+                            .to_owned(),
+                    },
+                ))
+            }
+        };
+    let capability = FeatureCapability {
+        status,
+        source_backed: true,
+        notes: notes.to_owned(),
+    };
+    require_capability(jurisdiction, provider_id, feature, &capability)
+        .map_err(ProviderRequestError::UnsupportedCapability)?;
+    Ok(ProviderRequest {
+        jurisdiction: jurisdiction.to_owned(),
+        feature,
+        url: format!("{base_url}/{identifier}"),
+        source_authority: source_authority.to_owned(),
+        requires_api_key,
+    })
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct UnsupportedProviderCapability {
     pub error: String,
     pub jurisdiction: String,
@@ -479,6 +556,34 @@ mod tests {
                 |(_, capability)| capability.status == CapabilityStatus::Unsupported
                     && !capability.source_backed
             ));
+    }
+
+    #[test]
+    fn plans_allowlisted_provider_requests_without_network_access() {
+        let nz = build_provider_request("nz", ProviderFeature::Search, "act/2020/67");
+        assert_eq!(nz, Err(ProviderRequestError::InvalidIdentifier));
+
+        let nz = build_provider_request("nz", ProviderFeature::Search, "act_2020_67")
+            .expect("NZ request plan");
+        assert_eq!(
+            nz.url,
+            "https://api.legislation.govt.nz/v0/works/act_2020_67"
+        );
+        assert!(nz.requires_api_key);
+
+        let au = build_provider_request("au-commonwealth", ProviderFeature::Search, "C2024A00001")
+            .expect("Commonwealth request plan");
+        assert_eq!(
+            au.source_authority,
+            "Federal Register of Legislation public API"
+        );
+        assert!(!au.requires_api_key);
+
+        let qld = build_provider_request("au-qld", ProviderFeature::Search, "1");
+        assert!(matches!(
+            qld,
+            Err(ProviderRequestError::UnsupportedCapability(_))
+        ));
     }
 
     #[test]
