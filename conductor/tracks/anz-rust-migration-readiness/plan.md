@@ -16,4 +16,6 @@
 - [x] Define release governance required before cutover.
 - [x] Add executable golden fixtures and contract tests.
 - [x] Add a minimal Rust contract workspace behind the parity gates.
+- [x] Consume the shared JSON compatibility fixture from Rust contract tests.
+- [x] Add locked dependency-tree provenance validation to Rust CI.
 - [ ] Run dual-runtime performance and security comparisons.
