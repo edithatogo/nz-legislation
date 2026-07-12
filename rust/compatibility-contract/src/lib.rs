@@ -87,7 +87,7 @@ pub struct FeatureCapability {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct UnsupportedProviderCapability {
-    pub error: &'static str,
+    pub error: String,
     pub jurisdiction: String,
     pub provider_id: String,
     pub feature: ProviderFeature,
@@ -147,7 +147,7 @@ pub fn require_capability(
 ) -> Result<(), UnsupportedProviderCapability> {
     if capability.status == CapabilityStatus::Unsupported || !capability.source_backed {
         return Err(UnsupportedProviderCapability {
-            error: "unsupported_provider_capability",
+            error: "unsupported_provider_capability".to_owned(),
             jurisdiction: jurisdiction.to_owned(),
             provider_id: provider_id.to_owned(),
             feature,
