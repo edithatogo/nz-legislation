@@ -24,4 +24,5 @@
 - [x] Implement gated Rust MCP request/response and provenance contracts.
 - [x] Add shared MCP tool and provenance fixture parity tests against the TypeScript server.
 - [x] Add a non-publishing Rust CLI contract binary for executable command/output parity.
+- [x] Add a source-backed Rust provider capability manifest for the staged provider inventory.
 - [x] Establish a traceable dual-runtime performance/security comparison harness and explicit no-cutover gate; full Rust runtime comparison remains pending until a Rust runtime exists.
