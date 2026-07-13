@@ -1,0 +1,40 @@
+{
+  "jurisdiction": "au-sa",
+  "providerId": "south-australian-legislation",
+  "sourceAuthority": "South Australian Legislation website",
+  "sourceEntryPoints": ["https://www.legislation.sa.gov.au/", "https://governmentgazette.sa.gov.au/"],
+  "accessTerms": {
+    "publicAccess": "public web access",
+    "copyright": "South Australian Government copyright and site terms apply",
+    "machineReadableAccess": "not verified in this discovery pass"
+  },
+  "authoritativeFormats": {
+    "status": "not verified in this discovery pass",
+    "candidateFormats": ["HTML", "PDF", "XML"],
+    "selectionRule": "Do not treat a candidate format as authoritative until the source owner and format are verified."
+  },
+  "identifierPatterns": [
+    { "class": "act-or-regulation", "pattern": "not recorded" },
+    { "class": "gazette-notice", "pattern": "not recorded" }
+  ],
+  "versionCues": [
+    "current and repealed status may be distinct",
+    "commencement and amendment history requires source verification",
+    "point-in-time versions must not be inferred from page or file names"
+  ],
+  "adapterMapping": {
+    "search": "Not enabled; verify a machine-readable search or index contract first.",
+    "retrieval": "Not enabled; preserve the source URL and format authority when a future adapter is built.",
+    "versioning": "Not enabled; require explicit commencement, amendment, and point-in-time evidence.",
+    "export": "Remain unsupported until source-backed parsing and provenance-preserving export tests exist.",
+    "provenance": "Future outputs must include jurisdiction, source authority, source URL, format, authority status, and retrieval timestamp.",
+    "unsupported": "Return structured unsupported_provider_capability for runtime operations until tests and fixtures prove the adapter."
+  },
+  "edgeCases": [
+    "legislation and Government Gazette notices are separate source surfaces",
+    "historical, repealed, and point-in-time materials require explicit source evidence",
+    "machine-readable access, identifiers, and authoritative formats were not verified in this discovery pass"
+  ],
+  "runtimeStatus": "unsupported",
+  "fixturePolicy": "metadata-only source-shape fixture; no legal text or fabricated records"
+}
