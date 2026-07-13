@@ -32,7 +32,7 @@ pub const MCP_TOOLS: &[&str] = &[
     "get_config",
 ];
 
-use serde::{Deserialize, Serialize};
+use serde::{de::DeserializeOwned, Deserialize, Serialize};
 use std::collections::BTreeMap;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -401,6 +401,59 @@ pub struct ProviderExecutionResult {
     pub status: u16,
     pub body: String,
     pub provenance: ProvenanceMetadata,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct ProviderResponseEnvelope<T> {
+    pub jurisdiction: String,
+    pub provider_id: String,
+    pub source_authority: String,
+    pub source_url: String,
+    pub retrieved_at: String,
+    pub source_backed: bool,
+    pub payload: T,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum ProviderResponseError {
+    InvalidJson(String),
+    UntrustedSource,
+    JurisdictionMismatch,
+    ProviderMismatch,
+    AuthorityMismatch,
+    SourceUrlMismatch,
+    MissingRetrievalTimestamp,
+}
+
+pub fn parse_provider_response_envelope<T: DeserializeOwned>(
+    result: &ProviderExecutionResult,
+    expected_provider_id: &str,
+) -> Result<ProviderResponseEnvelope<T>, ProviderResponseError> {
+    if !result.provenance.source_backed {
+        return Err(ProviderResponseError::UntrustedSource);
+    }
+    let envelope: ProviderResponseEnvelope<T> = serde_json::from_str(&result.body)
+        .map_err(|error| ProviderResponseError::InvalidJson(error.to_string()))?;
+    if envelope.jurisdiction != result.jurisdiction {
+        return Err(ProviderResponseError::JurisdictionMismatch);
+    }
+    if envelope.provider_id != expected_provider_id {
+        return Err(ProviderResponseError::ProviderMismatch);
+    }
+    if envelope.source_authority != result.provenance.source_authority {
+        return Err(ProviderResponseError::AuthorityMismatch);
+    }
+    if result.provenance.source_url.as_deref() != Some(envelope.source_url.as_str()) {
+        return Err(ProviderResponseError::SourceUrlMismatch);
+    }
+    if envelope.retrieved_at.trim().is_empty() {
+        return Err(ProviderResponseError::MissingRetrievalTimestamp);
+    }
+    if !envelope.source_backed {
+        return Err(ProviderResponseError::UntrustedSource);
+    }
+    Ok(envelope)
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -1047,6 +1100,50 @@ mod tests {
         assert_eq!(
             execute_provider_request(&mut transport, &request),
             Err(ProviderExecutionError::ProvenanceMismatch)
+        );
+    }
+
+    #[test]
+    fn parses_and_rejects_source_backed_response_envelopes() {
+        let valid = [
+            (
+                "nz",
+                "legislation-govt-nz",
+                "legislation.govt.nz",
+                "https://api.legislation.govt.nz/v0/works/act_2020_67",
+                serde_json::json!({"results": []}),
+            ),
+            (
+                "au-commonwealth",
+                "federal-register-of-legislation",
+                "Federal Register of Legislation public API",
+                "https://api.prod.legislation.gov.au/v1/titles",
+                serde_json::json!({"value": []}),
+            ),
+        ];
+        for (jurisdiction, provider_id, authority, url, payload) in valid {
+            let body = serde_json::json!({"jurisdiction": jurisdiction, "providerId": provider_id, "sourceAuthority": authority, "sourceUrl": url, "retrievedAt": "2026-07-13T00:00:00Z", "sourceBacked": true, "payload": payload}).to_string();
+            let result = ProviderExecutionResult {
+                jurisdiction: jurisdiction.to_owned(),
+                feature: ProviderFeature::Search,
+                status: 200,
+                body,
+                provenance: ProvenanceMetadata {
+                    source_authority: authority.to_owned(),
+                    source_url: Some(url.to_owned()),
+                    retrieved_at: Some("2026-07-13T00:00:00Z".to_owned()),
+                    source_backed: true,
+                },
+            };
+            let parsed =
+                parse_provider_response_envelope::<serde_json::Value>(&result, provider_id)
+                    .expect("valid envelope");
+            assert_eq!(parsed.source_url, url);
+        }
+        let forged = ProviderExecutionResult { jurisdiction: "nz".to_owned(), feature: ProviderFeature::Search, status: 200, body: "{\"jurisdiction\":\"nz\",\"providerId\":\"forged\",\"sourceAuthority\":\"legislation.govt.nz\",\"sourceUrl\":\"https://api.legislation.govt.nz/v0/works/act_2020_67\",\"retrievedAt\":\"2026-07-13T00:00:00Z\",\"sourceBacked\":true,\"payload\":{}}".to_owned(), provenance: ProvenanceMetadata { source_authority: "legislation.govt.nz".to_owned(), source_url: Some("https://api.legislation.govt.nz/v0/works/act_2020_67".to_owned()), retrieved_at: None, source_backed: true } };
+        assert_eq!(
+            parse_provider_response_envelope::<serde_json::Value>(&forged, "legislation-govt-nz"),
+            Err(ProviderResponseError::ProviderMismatch)
         );
     }
 
