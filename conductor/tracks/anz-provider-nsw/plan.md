@@ -2,19 +2,20 @@
 
 ## Phase 0: XML/export source-shape discovery
 
-**Status:** Not started.
+**Status:** In progress (source shape captured; runtime remains disabled).
 
+- [x] Capture source-shape metadata for XML and JSON export/listing surfaces
+      without copying legal records into the repository.
 - [ ] Capture representative XML fixtures for in-force, repealed, historical,
-      and point-in-time legislation records.
+      and point-in-time legislation records after licensing and fixture review.
 - [ ] Capture representative JSON export listings.
-- [ ] Record URL patterns, query fields, identifier rules, version cues, update
-      cadence, and automation guidance.
+- [x] Record documented query fields and automation timing guidance.
 
 ## Phase 1: Adapter design
 
-**Status:** Not started.
+**Status:** Source-shape design recorded; adapter not implemented.
 
-- [ ] Design NSW as an export/download adapter before claiming search support.
+- [x] Design NSW as an export/download adapter before claiming search support.
 - [ ] Map XML/export records to repository `Work`, `Version`, export, and MCP
       contracts where source data supports them.
 - [ ] Record unsupported runtime boundaries where source data does not support a
@@ -22,7 +23,7 @@
 
 ## Phase 2: Runtime integration
 
-**Status:** Not started.
+**Status:** Blocked until source adapter and provenance gates pass.
 
 - [ ] Add jurisdiction-aware CLI provider routing for NSW.
 - [ ] Add provider-aware MCP routing for NSW.
@@ -31,7 +32,7 @@
 
 ## Phase 3: Tests and gates
 
-**Status:** Not started.
+**Status:** Blocked until runtime and fixture gates pass.
 
 - [ ] Add XML parsing, normalization, unsupported-boundary, and provenance
       tests.

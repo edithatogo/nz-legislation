@@ -1,0 +1,17 @@
+{
+  "jurisdiction": "au-nsw",
+  "providerId": "nsw-legislation",
+  "sourceAuthority": "NSW Parliamentary Counsel's Office",
+  "websiteUrl": "https://legislation.nsw.gov.au/",
+  "exportHelpUrl": "https://legislation.nsw.gov.au/help/export",
+  "accessGuidanceUrl": "https://pco.nsw.gov.au/accessing-legislation.html",
+  "formats": ["xml", "json"],
+  "collections": ["in-force", "repealed"],
+  "exportQueryFields": ["type", "year", "number", "title", "repealed", "last-updated", "point-in-time"],
+  "listingFormat": "json",
+  "automationGuidance": "Run scripted processing outside normal NSW business hours where practical.",
+  "runtimeStatus": "planned",
+  "runtimeSupported": false,
+  "sourceBacked": true,
+  "legalRecordsIncluded": false
+}
