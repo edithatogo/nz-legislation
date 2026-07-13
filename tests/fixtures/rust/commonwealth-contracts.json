@@ -1,0 +1,22 @@
+{
+  "providerId": "federal-register-of-legislation",
+  "apiBaseUrl": "https://api.prod.legislation.gov.au/v1",
+  "registerBaseUrl": "https://www.legislation.gov.au",
+  "requests": [
+    {
+      "feature": "search",
+      "path": "titles",
+      "searchParams": { "$count": "true", "$skip": "0", "$top": "20" }
+    },
+    {
+      "feature": "get_work",
+      "path": "titles",
+      "searchParams": { "$filter": "id eq 'C2004A01224'", "$top": "1" }
+    },
+    {
+      "feature": "get_versions",
+      "path": "versions",
+      "searchParams": { "$filter": "titleId eq 'C2004A01224'" }
+    }
+  ]
+}
