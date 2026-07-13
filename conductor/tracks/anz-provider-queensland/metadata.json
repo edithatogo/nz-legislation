@@ -5,7 +5,7 @@
   "created": "2026-05-21",
   "sourceTrack": "anz-platform-release-and-distribution",
   "singleRepo": true,
-  "phase": "api-access-and-source-backed-adapter",
+  "phase": "source-shape-discovery",
   "jurisdiction": "Queensland",
   "jurisdictionCode": "au-qld",
   "providerId": "queensland-legislation",
@@ -23,6 +23,7 @@
     "provider-capability-manifest",
     "provider-aware-mcp-export",
     "api-registration-and-swagger-capture",
+    "source-shape-fixture-and-tests",
     "provenance-source-cards",
     "docs-and-release-notes"
   ]
