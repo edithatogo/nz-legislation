@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "mode": "contract-only",
+  "liveLegalData": false,
+  "typescript": {
+    "status": "measured",
+    "timingSource": "benchmarks/performance.ts",
+    "securityEvidence": ["dependency-review", "codeql", "security-provenance-gate"]
+  },
+  "rust": {
+    "status": "blocked",
+    "timingSource": null,
+    "securityEvidence": ["cargo-check-locked", "cargo-test-locked", "cargo-tree-locked"],
+    "blockedReason": "A provider-backed Rust runtime is not available; contract timings cannot be treated as runtime parity evidence."
+  },
+  "cutover": {
+    "allowed": false,
+    "requiredEvidence": ["provider-backed-runtime", "same-fixtures", "performance-comparison", "security-comparison"]
+  }
+}
