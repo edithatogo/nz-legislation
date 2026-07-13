@@ -611,6 +611,43 @@ mod tests {
         "/../../tests/fixtures/rust/runtime-comparison.json"
     ));
 
+    const RUNTIME_EVIDENCE: &str = include_str!(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/../../tests/fixtures/rust/runtime-comparison-evidence.json"
+    ));
+
+    #[derive(Debug, Deserialize)]
+    #[serde(rename_all = "camelCase")]
+    struct RuntimeEvidence {
+        schema_version: u8,
+        mode: String,
+        live_legal_data: bool,
+        typescript: RuntimeEvidenceSide,
+        rust: RustEvidenceSide,
+        cutover: CutoverEvidence,
+    }
+    #[derive(Debug, Deserialize)]
+    #[serde(rename_all = "camelCase")]
+    struct RuntimeEvidenceSide {
+        status: String,
+        timing_source: Option<String>,
+        security_evidence: Vec<String>,
+    }
+    #[derive(Debug, Deserialize)]
+    #[serde(rename_all = "camelCase")]
+    struct RustEvidenceSide {
+        status: String,
+        timing_source: Option<String>,
+        security_evidence: Vec<String>,
+        blocked_reason: Option<String>,
+    }
+    #[derive(Debug, Deserialize)]
+    #[serde(rename_all = "camelCase")]
+    struct CutoverEvidence {
+        allowed: bool,
+        required_evidence: Vec<String>,
+    }
+
     const COMMONWEALTH_FIXTURE: &str = include_str!(concat!(
         env!("CARGO_MANIFEST_DIR"),
         "/../../tests/fixtures/rust/commonwealth-contracts.json"
@@ -636,6 +673,39 @@ mod tests {
                 "cargo-check-locked".to_owned(),
                 "cargo-test-locked".to_owned(),
                 "cargo-tree-locked".to_owned()
+            ]
+        );
+    }
+
+    #[test]
+    fn enforces_deterministic_dual_runtime_evidence_gate() {
+        let evidence: RuntimeEvidence =
+            serde_json::from_str(RUNTIME_EVIDENCE).expect("valid evidence fixture");
+        assert_eq!(evidence.schema_version, 1);
+        assert_eq!(evidence.mode, "contract-only");
+        assert!(!evidence.live_legal_data);
+        assert_eq!(evidence.typescript.status, "measured");
+        assert_eq!(
+            evidence.typescript.timing_source.as_deref(),
+            Some("benchmarks/performance.ts")
+        );
+        assert!(!evidence.typescript.security_evidence.is_empty());
+        assert_eq!(evidence.rust.status, "blocked");
+        assert!(evidence.rust.timing_source.is_none());
+        assert!(evidence
+            .rust
+            .blocked_reason
+            .as_deref()
+            .is_some_and(|reason| reason.contains("provider-backed Rust runtime")));
+        assert!(!evidence.rust.security_evidence.is_empty());
+        assert!(!evidence.cutover.allowed);
+        assert_eq!(
+            evidence.cutover.required_evidence,
+            vec![
+                "provider-backed-runtime",
+                "same-fixtures",
+                "performance-comparison",
+                "security-comparison"
             ]
         );
     }
