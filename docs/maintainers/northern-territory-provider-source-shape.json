@@ -1,0 +1,59 @@
+{
+  "jurisdiction": "au-nt",
+  "providerId": "northern-territory-legislation",
+  "sourceAuthority": "Northern Territory legislation website",
+  "sourceEntryPoints": [
+    "https://legislation.nt.gov.au/en",
+    "https://legislation.nt.gov.au/en/LegislationPortal/Legislation/By-Title",
+    "https://legislation.nt.gov.au/en/LegislationPortal/Subordinate-Legislation/By-Year",
+    "https://legislation.nt.gov.au/LegislationPortal/Superseded-Reprints",
+    "https://legislation.nt.gov.au/Footer/Help"
+  ],
+  "access": {
+    "publicAccess": "free public web access",
+    "authentication": "not required for the public browse and detail surfaces",
+    "machineReadableAccess": "not verified in this discovery pass",
+    "licence": "review official copyright and terms before redistribution"
+  },
+  "collections": [
+    "Acts in force by title and year",
+    "subordinate legislation in force by title, year, and parent Act",
+    "Bills as introduced",
+    "superseded reprints and historical in-force dates",
+    "legislation information, gazettes, and Hansard"
+  ],
+  "formats": ["HTML", "PDF", "Word"],
+  "authority": {
+    "authoritativeStatus": "official web register; machine-readable authority and format precedence not yet verified",
+    "downloadCues": ["PDF version", "Word version"],
+    "wordStatus": "format and authority status require provider review"
+  },
+  "identifierAndVersionCues": [
+    "Act title and Act number",
+    "subordinate legislation number",
+    "Gazette number and Gazette date",
+    "assent, commencement, and in-force status",
+    "reprint identifier and history listing",
+    "as-in-force date for consolidated legislation"
+  ],
+  "adapterMapping": {
+    "search": "Not enabled; use official browse/search routes only after a stable machine-readable contract is verified.",
+    "retrieval": "Future adapter may retrieve an official representation after format authority, copyright, and provenance review.",
+    "versioning": "Use source status, commencement, reprint, history, and as-in-force cues; do not infer versions from filenames.",
+    "export": "Unsupported until a source-backed parser and provenance-preserving export exists.",
+    "provenance": "Emit source authority, jurisdiction, source URL, collection, format, status, and retrieval timestamp.",
+    "unsupported": "Return structured unsupported_provider_capability for runtime operations until tests and fixtures prove the adapter."
+  },
+  "edgeCases": [
+    "current and historical in-force collections are distinct source surfaces",
+    "Acts, subordinate legislation, Bills, gazettes, and Hansard are different collections",
+    "commencement and as-in-force dates can differ",
+    "Word and PDF downloads require an explicit authority decision before parsing",
+    "no public machine-readable API or feed was verified in this discovery pass"
+  ],
+  "runtimeStatus": "planned",
+  "runtimeSupported": false,
+  "sourceBacked": true,
+  "legalRecordsIncluded": false,
+  "fixturePolicy": "metadata-only source-shape fixture; no legal text or fabricated records"
+}

@@ -2,52 +2,52 @@
 
 ## Phase 0: Source-shape discovery
 
-**Status:** Not started.
+**Status:** Complete for metadata-only discovery; runtime remains blocked.
 
-- [ ] Capture the official Northern Territory legislation source entry points
+- [x] Capture the official Northern Territory legislation source entry points
       and access terms.
-- [ ] Record machine-readable source-shape details: document types, URL
+- [x] Record machine-readable source-shape details: document types, URL
       patterns, identifiers, version cues, and provenance fields.
-- [ ] Mark ambiguous or unsupported cases explicitly instead of inferring
+- [x] Mark ambiguous or unsupported cases explicitly instead of inferring
       placeholder behavior.
 
 ## Phase 1: Authoritative formats and adapter mapping
 
-**Status:** Not started.
+**Status:** Mapped with unsupported boundaries; runtime remains blocked.
 
-- [ ] Choose the authoritative formats the future Northern Territory adapter
+- [x] Choose the authoritative formats the future Northern Territory adapter
       will trust.
-- [ ] Map discovery, retrieval, versioning, export, and provenance behavior to
+- [x] Map discovery, retrieval, versioning, export, and provenance behavior to
       the provider contract.
-- [ ] Record unsupported capability boundaries so the adapter can fail
+- [x] Record unsupported capability boundaries so the adapter can fail
       truthfully.
 
 ## Phase 2: Fixtures and tests
 
-**Status:** Not started.
+**Status:** Metadata-only fixture and readiness tests added; runtime remains blocked.
 
-- [ ] Build source-backed fixtures that reflect the recorded Northern Territory
+- [x] Build source-backed fixtures that reflect the recorded Northern Territory
       shapes.
-- [ ] Add tests for no-placeholder legal data, parsing, normalization, and
+- [x] Add tests for no-placeholder legal data, parsing, normalization, and
       unsupported capability errors.
-- [ ] Add manifest/provider alignment checks for the Northern Territory.
+- [x] Add manifest/provider alignment checks for the Northern Territory.
 
 ## Phase 3: MCP/export and provenance
 
-**Status:** Not started.
+**Status:** Source card is gated; runtime remains unsupported.
 
-- [ ] Define Northern Territory source cards and provenance metadata for
+- [x] Define Northern Territory source cards and provenance metadata for
       export output.
-- [ ] Route MCP/export behavior through provider-aware gates.
-- [ ] Keep the Northern Territory unsupported in the manifest until
+- [x] Route MCP/export behavior through provider-aware gates.
+- [x] Keep the Northern Territory unsupported in the manifest until
       source-backed evidence is complete.
 
 ## Phase 4: Docs and release notes
 
-**Status:** Not started.
+**Status:** Validation and release posture documented; public support remains blocked.
 
-- [ ] Draft Northern Territory-specific docs language that stays truthful
+- [x] Draft Northern Territory-specific docs language that stays truthful
       about support state.
-- [ ] Draft release-note language that distinguishes NZ stable support from
+- [x] Draft release-note language that distinguishes NZ stable support from
       Northern Territory prerelease or unsupported status.
-- [ ] Re-check the track against the release gates before any public claim.
+- [x] Re-check the track against the release gates before any public claim.
