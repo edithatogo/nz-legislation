@@ -10,9 +10,11 @@ type FixtureRequest = {
 
 describe('NZ provider request parity contract', () => {
   it('keeps the shared Rust fixture aligned with the TypeScript client request shapes', () => {
-    const fixture = JSON.parse(
-      readFileSync('tests/fixtures/rust/nz-contracts.json', 'utf8')
-    ) as { providerId: string; apiBaseUrl: string; requests: FixtureRequest[] };
+    const fixture = JSON.parse(readFileSync('tests/fixtures/rust/nz-contracts.json', 'utf8')) as {
+      providerId: string;
+      apiBaseUrl: string;
+      requests: FixtureRequest[];
+    };
 
     expect(fixture.providerId).toBe('legislation-govt-nz');
     expect(fixture.apiBaseUrl).toBe('https://api.legislation.govt.nz');
@@ -46,9 +48,9 @@ describe('NZ provider request parity contract', () => {
   it('records the same identifier safety boundary as the Rust planner', () => {
     const unsafeIdentifiers = ['act/1989/18', 'act\\1989\\18', '../secret'];
     for (const identifier of unsafeIdentifiers) {
-      expect(identifier.includes('/') || identifier.includes('\\') || identifier.includes('..')).toBe(
-        true
-      );
+      expect(
+        identifier.includes('/') || identifier.includes('\\') || identifier.includes('..')
+      ).toBe(true);
     }
   });
 });
