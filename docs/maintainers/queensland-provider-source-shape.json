@@ -1,0 +1,38 @@
+{
+  "jurisdiction": "au-qld",
+  "providerId": "queensland-legislation",
+  "sourceAuthority": "Queensland Office of the Queensland Parliamentary Counsel",
+  "sourceEntryPoints": [
+    "https://www.legislation.qld.gov.au/",
+    "https://www.legislation.qld.gov.au/api",
+    "https://api.legislation.qld.gov.au/",
+    "https://api.legislation.qld.gov.au/api/signup",
+    "https://www.legislation.qld.gov.au/api/usage-guidelines"
+  ],
+  "apiBaseUrl": "https://api.legislation.qld.gov.au/",
+  "access": {
+    "registrationRequired": true,
+    "authentication": "maintainer-controlled API account; credentials must not be committed",
+    "rateLimits": "subject to the Queensland API usage agreement and may be changed by OQPC",
+    "licence": "CC BY 4.0 unless the Queensland legislation copyright statement says otherwise"
+  },
+  "formats": ["json", "xml", "html", "pdf"],
+  "authority": {
+    "sourceIsOfficial": true,
+    "authoritativeFormats": ["json", "xml", "html", "pdf"],
+    "notesAndAnnotationsStatus": "aids only; not part of the legislation"
+  },
+  "adapterMapping": {
+    "search": "Not enabled until the registered API Swagger contract is captured and mapped.",
+    "retrieval": "Future adapter may retrieve API representations after access and provenance review.",
+    "versioning": "Use API-provided identifiers and effective-date fields; do not infer versions from filenames.",
+    "export": "Unsupported until source-backed export mapping and tests exist.",
+    "provenance": "Emit source authority, jurisdiction, endpoint, format, and retrieval timestamp.",
+    "unsupported": "Return structured unsupported_provider_capability for runtime operations until gates pass."
+  },
+  "runtimeStatus": "planned",
+  "runtimeSupported": false,
+  "sourceBacked": true,
+  "legalRecordsIncluded": false,
+  "fixturePolicy": "metadata-only source-shape fixture; no legal text or fabricated records"
+}
