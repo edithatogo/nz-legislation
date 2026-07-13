@@ -1,0 +1,21 @@
+{
+  "providerId": "legislation-govt-nz",
+  "apiBaseUrl": "https://api.legislation.govt.nz",
+  "requests": [
+    {
+      "feature": "search",
+      "path": "v0/works",
+      "searchParams": {
+        "from": "2020-01-01",
+        "legislation_status": "in_force",
+        "legislation_type": "act",
+        "page": "3",
+        "per_page": "10",
+        "search_term": "health",
+        "to": "2020-12-31"
+      }
+    },
+    { "feature": "get_work", "path": "v0/works/act_public_1989_18/versions", "searchParams": {} },
+    { "feature": "get_versions", "path": "v0/works/act_public_1989_18/versions", "searchParams": {} }
+  ]
+}
