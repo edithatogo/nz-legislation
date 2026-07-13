@@ -197,6 +197,62 @@ pub struct ProviderRequest {
     pub requires_api_key: bool,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ProviderTransportResponse {
+    pub status: u16,
+    pub body: String,
+    pub source_url: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ProviderExecutionResult {
+    pub jurisdiction: String,
+    pub feature: ProviderFeature,
+    pub status: u16,
+    pub body: String,
+    pub provenance: ProvenanceMetadata,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum ProviderExecutionError {
+    Transport(String),
+    NonSuccessStatus(u16),
+    ProvenanceMismatch,
+}
+
+pub trait ProviderTransport {
+    fn send(&mut self, request: &ProviderRequest) -> Result<ProviderTransportResponse, String>;
+}
+
+/// Execute an already-validated request through an injected transport.
+/// No concrete network client is enabled by this crate.
+pub fn execute_provider_request<T: ProviderTransport>(
+    transport: &mut T,
+    request: &ProviderRequest,
+) -> Result<ProviderExecutionResult, ProviderExecutionError> {
+    let response = transport
+        .send(request)
+        .map_err(ProviderExecutionError::Transport)?;
+    if !(200..=299).contains(&response.status) {
+        return Err(ProviderExecutionError::NonSuccessStatus(response.status));
+    }
+    if response.source_url != request.url {
+        return Err(ProviderExecutionError::ProvenanceMismatch);
+    }
+    Ok(ProviderExecutionResult {
+        jurisdiction: request.jurisdiction.clone(),
+        feature: request.feature,
+        status: response.status,
+        body: response.body,
+        provenance: ProvenanceMetadata {
+            source_authority: request.source_authority.clone(),
+            source_url: Some(response.source_url),
+            retrieved_at: None,
+            source_backed: true,
+        },
+    })
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ProviderRequestError {
     UnsupportedCapability(UnsupportedProviderCapability),
@@ -584,6 +640,59 @@ mod tests {
             qld,
             Err(ProviderRequestError::UnsupportedCapability(_))
         ));
+    }
+
+    struct MockTransport {
+        response: Result<ProviderTransportResponse, String>,
+    }
+
+    impl ProviderTransport for MockTransport {
+        fn send(
+            &mut self,
+            _request: &ProviderRequest,
+        ) -> Result<ProviderTransportResponse, String> {
+            self.response.clone()
+        }
+    }
+
+    #[test]
+    fn executes_injected_transport_with_provenance_and_status_gates() {
+        let request = build_provider_request("nz", ProviderFeature::Search, "act_2020_67")
+            .expect("request plan");
+        let mut transport = MockTransport {
+            response: Ok(ProviderTransportResponse {
+                status: 200,
+                body: "{\"results\":[]}".to_owned(),
+                source_url: request.url.clone(),
+            }),
+        };
+        let result = execute_provider_request(&mut transport, &request).expect("execution result");
+        assert_eq!(result.status, 200);
+        assert!(result.provenance.source_backed);
+        assert_eq!(
+            result.provenance.source_url.as_deref(),
+            Some(request.url.as_str())
+        );
+
+        transport.response = Ok(ProviderTransportResponse {
+            status: 503,
+            body: "unavailable".to_owned(),
+            source_url: request.url.clone(),
+        });
+        assert_eq!(
+            execute_provider_request(&mut transport, &request),
+            Err(ProviderExecutionError::NonSuccessStatus(503))
+        );
+
+        transport.response = Ok(ProviderTransportResponse {
+            status: 200,
+            body: "{}".to_owned(),
+            source_url: "https://example.invalid/forged".to_owned(),
+        });
+        assert_eq!(
+            execute_provider_request(&mut transport, &request),
+            Err(ProviderExecutionError::ProvenanceMismatch)
+        );
     }
 
     #[test]
