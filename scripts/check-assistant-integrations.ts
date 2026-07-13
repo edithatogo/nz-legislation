@@ -1,6 +1,77 @@
 import { existsSync, readFileSync } from 'node:fs';
 
 const failures: string[] = [];
+const readinessPath = 'integrations/registry-readiness.json';
+interface ReadinessTarget {
+  id: string;
+  category: 'assistant' | 'mcp-registry';
+  status: string;
+  artifact: string;
+  officialSource: string;
+  blockers: string[];
+  submission: { allowed: boolean; reason: string };
+}
+interface ReadinessContract {
+  schemaVersion: number;
+  status: string;
+  externalSubmissionAllowed: boolean;
+  packageName: string;
+  targets: ReadinessTarget[];
+}
+if (!existsSync(readinessPath)) {
+  failures.push(`Missing ${readinessPath}`);
+}
+let readiness: ReadinessContract | undefined;
+if (existsSync(readinessPath)) {
+  try {
+    readiness = JSON.parse(readFileSync(readinessPath, 'utf8')) as ReadinessContract;
+  } catch {
+    failures.push(`${readinessPath} must contain valid JSON.`);
+  }
+}
+if (readiness) {
+  if (readiness.schemaVersion !== 1) failures.push(`${readinessPath} schemaVersion must be 1.`);
+  if (readiness.status !== 'preparation-only')
+    failures.push(`${readinessPath} must remain preparation-only.`);
+  if (readiness.externalSubmissionAllowed !== false)
+    failures.push(`${readinessPath} must block external submissions.`);
+  if (readiness.packageName !== 'nz-legislation-tool')
+    failures.push(`${readinessPath} packageName must be nz-legislation-tool.`);
+  const expected = new Set([
+    'claude',
+    'codex',
+    'github-copilot',
+    'gemini',
+    'qwen',
+    'smithery',
+    'mcp-so',
+    'mcp-market',
+    'mcp-store',
+    'pulsemcp',
+    'glama',
+  ]);
+  const seen = new Set<string>();
+  for (const target of readiness.targets ?? []) {
+    seen.add(target.id);
+    if (!expected.has(target.id))
+      failures.push(`${readinessPath} contains unknown target ${target.id}.`);
+    if (target.status !== 'blocked')
+      failures.push(`${readinessPath} target ${target.id} must remain blocked.`);
+    if (!target.artifact || !existsSync(target.artifact))
+      failures.push(`${readinessPath} target ${target.id} must link an existing artifact.`);
+    if (!/^https:\/\//.test(target.officialSource))
+      failures.push(`${readinessPath} target ${target.id} must link an HTTPS official source.`);
+    if (!Array.isArray(target.blockers) || target.blockers.length === 0)
+      failures.push(`${readinessPath} target ${target.id} must list blockers.`);
+    if (
+      target.submission?.allowed !== false ||
+      !/preparation|blocked|evidence|review/i.test(target.submission?.reason ?? '')
+    )
+      failures.push(`${readinessPath} target ${target.id} must block submission with a reason.`);
+  }
+  for (const target of expected)
+    if (!seen.has(target)) failures.push(`${readinessPath} is missing target ${target}.`);
+}
 const matrixPath = 'integrations/assistant-marketplace-readiness.md';
 const matrix = existsSync(matrixPath) ? readFileSync(matrixPath, 'utf8') : '';
 if (!matrix) failures.push(`Missing ${matrixPath}`);

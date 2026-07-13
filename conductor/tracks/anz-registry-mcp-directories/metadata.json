@@ -1,11 +1,11 @@
 {
   "trackId": "anz-registry-mcp-directories",
-  "status": "planned",
+  "status": "in_progress",
   "priority": "P0",
   "created": "2026-05-23",
   "sourceTrack": "anz-platform-release-and-distribution",
   "singleRepo": true,
-  "phase": "preparation-only",
+  "phase": "registry-readiness",
   "channels": ["Smithery", "other MCP directories"],
   "externalSubmissionAllowed": false,
   "publishingAllowed": false,

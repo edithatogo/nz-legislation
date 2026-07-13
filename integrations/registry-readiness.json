@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "status": "preparation-only",
+  "externalSubmissionAllowed": false,
+  "generatedAt": "2026-07-13",
+  "packageName": "nz-legislation-tool",
+  "targets": [
+    {
+      "id": "claude",
+      "category": "assistant",
+      "name": "Claude",
+      "status": "blocked",
+      "artifact": "integrations/claude/README.md",
+      "officialSource": "https://docs.anthropic.com/en/docs/mcp",
+      "blockers": ["target-requirements-review", "security-provenance-review", "maintainer-approval"],
+      "submission": {
+        "allowed": false,
+        "reason": "Preparation-only; target requirements and security evidence are not yet approved."
+      }
+    },
+    {
+      "id": "codex",
+      "category": "assistant",
+      "name": "Codex",
+      "status": "blocked",
+      "artifact": "integrations/codex/README.md",
+      "officialSource": "https://help.openai.com/en/articles/20001256-plugins-in-codex",
+      "blockers": ["plugin-manifest-review", "app-permission-review", "maintainer-approval"],
+      "submission": {
+        "allowed": false,
+        "reason": "Preparation-only; plugin and app approval evidence is not yet recorded."
+      }
+    },
+    {
+      "id": "github-copilot",
+      "category": "assistant",
+      "name": "GitHub Copilot",
+      "status": "blocked",
+      "artifact": "integrations/github-copilot/README.md",
+      "officialSource": "https://docs.github.com/en/copilot/concepts/agents/about-plugins",
+      "blockers": ["plugin-manifest-review", "marketplace-requirements-review", "security-provenance-review"],
+      "submission": {
+        "allowed": false,
+        "reason": "Preparation-only; plugin manifest and marketplace evidence are not yet approved."
+      }
+    },
+    {
+      "id": "gemini",
+      "category": "assistant",
+      "name": "Gemini",
+      "status": "blocked",
+      "artifact": "integrations/gemini/README.md",
+      "officialSource": "https://ai.google.dev/gemini-api/docs/tools",
+      "blockers": ["hosting-auth-review", "tool-schema-review", "maintainer-approval"],
+      "submission": {
+        "allowed": false,
+        "reason": "Preparation-only; hosting, authentication, quota, and distribution evidence are pending."
+      }
+    },
+    {
+      "id": "qwen",
+      "category": "assistant",
+      "name": "Qwen",
+      "status": "blocked",
+      "artifact": "integrations/qwen/README.md",
+      "officialSource": "https://github.com/QwenLM/Qwen-Agent",
+      "blockers": ["wrapper-contract-review", "transport-review", "distribution-requirements-review"],
+      "submission": {
+        "allowed": false,
+        "reason": "Preparation-only; wrapper, transport, credential, and distribution evidence are pending."
+      }
+    },
+    {
+      "id": "smithery",
+      "category": "mcp-registry",
+      "name": "Smithery",
+      "status": "blocked",
+      "artifact": "integrations/mcp/registry-metadata/smithery.json",
+      "officialSource": "https://smithery.ai/",
+      "blockers": [
+        "provider-aware-mcp-export",
+        "tested-install-snippets",
+        "security-provenance-review",
+        "listing-truthfulness"
+      ],
+      "submission": {
+        "allowed": false,
+        "reason": "Preparation-only; registry requirements and release evidence are not complete."
+      }
+    },
+    {
+      "id": "mcp-so",
+      "category": "mcp-registry",
+      "name": "mcp.so",
+      "status": "blocked",
+      "artifact": "integrations/mcp/registry-metadata/mcp-so.json",
+      "officialSource": "https://mcp.so/",
+      "blockers": [
+        "provider-aware-mcp-export",
+        "tested-install-snippets",
+        "security-provenance-review",
+        "listing-truthfulness"
+      ],
+      "submission": {
+        "allowed": false,
+        "reason": "Preparation-only; registry requirements and release evidence are not complete."
+      }
+    },
+    {
+      "id": "mcp-market",
+      "category": "mcp-registry",
+      "name": "MCP Market",
+      "status": "blocked",
+      "artifact": "integrations/mcp/registry-metadata/mcp-market.json",
+      "officialSource": "https://mcpmarket.com/",
+      "blockers": [
+        "provider-aware-mcp-export",
+        "tested-install-snippets",
+        "security-provenance-review",
+        "listing-truthfulness"
+      ],
+      "submission": {
+        "allowed": false,
+        "reason": "Preparation-only; registry requirements and release evidence are not complete."
+      }
+    },
+    {
+      "id": "mcp-store",
+      "category": "mcp-registry",
+      "name": "MCP Store",
+      "status": "blocked",
+      "artifact": "integrations/mcp/registry-metadata/mcp-store.json",
+      "officialSource": "https://mcpstore.ai/",
+      "blockers": [
+        "provider-aware-mcp-export",
+        "tested-install-snippets",
+        "security-provenance-review",
+        "listing-truthfulness"
+      ],
+      "submission": {
+        "allowed": false,
+        "reason": "Preparation-only; registry requirements and release evidence are not complete."
+      }
+    },
+    {
+      "id": "pulsemcp",
+      "category": "mcp-registry",
+      "name": "PulseMCP",
+      "status": "blocked",
+      "artifact": "integrations/mcp/registry-metadata/pulsemcp.json",
+      "officialSource": "https://www.pulsemcp.com/",
+      "blockers": [
+        "provider-aware-mcp-export",
+        "tested-install-snippets",
+        "security-provenance-review",
+        "listing-truthfulness"
+      ],
+      "submission": {
+        "allowed": false,
+        "reason": "Preparation-only; registry requirements and release evidence are not complete."
+      }
+    },
+    {
+      "id": "glama",
+      "category": "mcp-registry",
+      "name": "Glama-style directories",
+      "status": "blocked",
+      "artifact": "integrations/mcp/registry-metadata/glama.json",
+      "officialSource": "https://glama.ai/mcp",
+      "blockers": [
+        "provider-aware-mcp-export",
+        "tested-install-snippets",
+        "security-provenance-review",
+        "listing-truthfulness"
+      ],
+      "submission": {
+        "allowed": false,
+        "reason": "Preparation-only; registry requirements and release evidence are not complete."
+      }
+    }
+  ]
+}
