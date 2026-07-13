@@ -58,6 +58,15 @@
 - ACT runtime remains `planned`/unsupported; no publication or deployment is authorized.
 - Implementation commit: `b63b6f3`; latest Docs workflow passed (`29156760779`).
 
+## Review evidence - 2026-07-13
+
+- [x] Re-verified official ACT register entry points are HTTPS-only and remain
+      confined to the ACT Government host.
+- [x] Added a source-card gate test proving ACT runtime, release, and
+      submission remain blocked while the fixture policy stays metadata-only.
+- [x] No legal text, inferred records, or machine-readable access claims were
+      added; adapter implementation remains future work.
+
 ## Review evidence - 2026-07-12
 
 - [x] Clarified access-term and machine-readable-source uncertainty fields.
