@@ -1,0 +1,57 @@
+{
+  "jurisdiction": "au-tas",
+  "providerId": "tasmanian-legislation",
+  "sourceAuthority": "Tasmanian Office of Parliamentary Counsel",
+  "sourceEntryPoints": [
+    "https://www.legislation.tas.gov.au/",
+    "https://www.legislation.tas.gov.au/browse/inforce",
+    "https://www.legislation.tas.gov.au/search",
+    "https://www.legislation.tas.gov.au/tables",
+    "https://www.gazette.tas.gov.au/",
+    "https://www.gazette.tas.gov.au/editions/search"
+  ],
+  "accessTerms": {
+    "publicAccess": "free public access to Tasmanian Legislation Online and the Tasmanian Government Gazette website",
+    "machineReadableAccess": "no public machine-readable API or feed verified in this discovery pass",
+    "copyright": "Tasmanian Government copyright and website terms apply"
+  },
+  "authoritativeFormats": ["HTML", "PDF"],
+  "convenienceFormats": ["HTML", "PDF"],
+  "collections": ["in-force", "historical-and-point-in-time", "legislative-tables", "gazette-editions"],
+  "urlPatterns": [
+    "https://www.legislation.tas.gov.au/browse/inforce",
+    "https://www.legislation.tas.gov.au/view/html/inforce/current/{identifier}",
+    "https://www.legislation.tas.gov.au/file/{index-or-document}.pdf",
+    "https://www.gazette.tas.gov.au/editions/search"
+  ],
+  "identifierCues": [
+    "Act or Statutory Rule title and year",
+    "Tasmanian legislation view identifier and type",
+    "consolidated and sessional version labels"
+  ],
+  "versionCues": [
+    "in-force and historical versions",
+    "commencement and amendment history",
+    "point-in-time consolidation information",
+    "Gazette notification and publication date"
+  ],
+  "adapterMapping": {
+    "search": "Not enabled; use official browse/search pages only after a machine-readable contract is verified.",
+    "retrieval": "Future adapter may retrieve authoritative HTML or PDF pages with authority and format labels.",
+    "versioning": "Use published consolidation, commencement, amendment, and sessional cues; do not infer versions from filenames alone.",
+    "export": "Unsupported until a source-backed parser and provenance-preserving export exists.",
+    "provenance": "Emit sourceAuthority, jurisdiction, source URL, format, authority status, and retrieval timestamp.",
+    "unsupported": "Return structured unsupported_provider_capability for runtime operations until tests and fixtures prove the adapter."
+  },
+  "edgeCases": [
+    "historical documents may be fragmented versions used to construct consolidations",
+    "Acts and Statutory Rules have different assent or notification timing",
+    "the Tasmanian Government Gazette is a separate official publication surface",
+    "no public machine-readable API or feed was verified in this discovery pass"
+  ],
+  "runtimeStatus": "unsupported",
+  "runtimeSupported": false,
+  "sourceBacked": true,
+  "legalRecordsIncluded": false,
+  "fixturePolicy": "metadata-only source-shape fixture; no legal text or fabricated records"
+}
