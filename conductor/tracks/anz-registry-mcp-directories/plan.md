@@ -20,4 +20,6 @@
 - [x] Prepare guarded local listing metadata after provider-aware MCP/export
       gates were added.
 - [x] Add `pnpm gate:channel-readiness` to enforce local-only registry metadata.
+- [x] Add machine-readable blocked readiness status for assistant and MCP
+      directory targets; keep external submission disabled.
 - [ ] Record security/provenance review before submission.
