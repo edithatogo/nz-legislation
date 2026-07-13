@@ -44,8 +44,18 @@ impl ProviderTransport for HttpProviderTransport {
 
 fn redact_error(error: &str) -> String {
     error
-        .replace("X-Api-Key", "[REDACTED_HEADER]")
-        .replace("api_key", "[REDACTED_SECRET]")
+        .split_whitespace()
+        .map(|token| {
+            if token == "X-Api-Key" {
+                "[REDACTED_HEADER]".to_owned()
+            } else if token.starts_with("api_key=") {
+                "api_key=[REDACTED_SECRET]".to_owned()
+            } else {
+                token.to_owned()
+            }
+        })
+        .collect::<Vec<_>>()
+        .join(" ")
 }
 
 #[cfg(test)]
