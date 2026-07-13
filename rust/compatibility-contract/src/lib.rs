@@ -4,6 +4,9 @@
 //! provider, or legal-data runtime. It is the first executable component of the
 //! staged migration and remains non-publishing until parity gates pass.
 
+#[cfg(feature = "network")]
+pub mod http;
+
 pub const CLI_BINARIES: &[&str] = &["nzlegislation", "anzlegislation", "legislation"];
 pub const MCP_BINARIES: &[&str] = &["nzlegislation-mcp", "anzlegislation-mcp", "legislation-mcp"];
 pub const COMMANDS: &[&str] = &[
