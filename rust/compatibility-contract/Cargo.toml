@@ -8,8 +8,13 @@ description = "In-repository Rust migration compatibility contract; not a produc
 [lib]
 path = "src/lib.rs"
 
+[features]
+default = []
+network = ["dep:ureq"]
+
 [dependencies]
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+ureq = { version = "2.12", optional = true, default-features = false, features = ["tls"] }
 
 [dev-dependencies]
