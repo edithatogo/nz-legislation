@@ -205,6 +205,7 @@ pub struct ProviderRequest {
 /// TypeScript provider's OData `titles` and `versions` calls without fetching
 /// or inventing legal records.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct CommonwealthRequest {
     pub feature: ProviderFeature,
     pub path: String,

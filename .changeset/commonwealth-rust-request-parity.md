@@ -2,4 +2,4 @@
 'nz-legislation': patch
 ---
 
-Add a source-backed Rust Commonwealth OData request-shape contract aligned with the existing TypeScript provider.
+Add a gated, prerelease Rust Commonwealth request-shape contract aligned with the existing TypeScript provider; live publication remains blocked pending source validation.

@@ -23,11 +23,11 @@
 - [x] Implement gated Rust CLI command and output-format contract parsing.
 - [x] Implement gated Rust MCP request/response and provenance contracts.
 - [x] Add shared MCP tool and provenance fixture parity tests against the TypeScript server.
-- [x] Add a network-free Rust provider request planner with URL allowlisting and identifier validation.
+- [x] Add a network-free Rust provider request planner with URL allowlists and identifier validation.
 - [x] Add an injected Rust provider transport boundary with HTTP status and provenance validation.
 - [x] Add an opt-in HTTPS transport with timeout, API-key enforcement, and secret-redacted errors; keep the default build network-disabled.
 - [x] Add local mock-server integration tests for HTTP timeout, redirect policy, response-size limits, and error handling.
 - [x] Add a non-publishing Rust CLI contract binary for executable command/output parity.
 - [x] Add a source-backed Rust provider capability manifest for the staged provider inventory.
 - [x] Establish a traceable dual-runtime performance/security comparison harness and explicit no-cutover gate; full Rust runtime comparison remains pending until a Rust runtime exists.
-- [x] Add source-backed Commonwealth OData request-shape parity fixtures for search, title, and version lookups without fetching or fabricating legal data.
+- [x] Add source-backed Commonwealth API request-shape parity fixtures for search, title, and version lookups without fetching or fabricating legal data.

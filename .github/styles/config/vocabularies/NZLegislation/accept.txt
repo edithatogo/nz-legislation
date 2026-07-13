@@ -141,6 +141,9 @@ namespace
 Astro
 Alibaba
 allowlists
+allowlisting
+allowlisted
+OData
 overclaiming
 untrusted
 SVGs
