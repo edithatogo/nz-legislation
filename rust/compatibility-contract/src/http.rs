@@ -136,10 +136,11 @@ mod tests {
             Duration::ZERO,
         );
         let mut transport = HttpProviderTransport::new(Duration::from_secs(2), None);
-        let error = transport
+        let response = transport
             .send(&request(url))
-            .expect_err("redirect must be rejected");
-        assert!(!error.contains("example.invalid"));
+            .expect("redirect response must not be followed");
+        assert_eq!(response.status, 302);
+        assert!(response.body.is_empty());
     }
 
     #[test]
