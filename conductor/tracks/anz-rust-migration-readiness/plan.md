@@ -30,3 +30,4 @@
 - [x] Add a non-publishing Rust CLI contract binary for executable command/output parity.
 - [x] Add a source-backed Rust provider capability manifest for the staged provider inventory.
 - [x] Establish a traceable dual-runtime performance/security comparison harness and explicit no-cutover gate; full Rust runtime comparison remains pending until a Rust runtime exists.
+- [x] Add source-backed Commonwealth OData request-shape parity fixtures for search, title, and version lookups without fetching or fabricating legal data.

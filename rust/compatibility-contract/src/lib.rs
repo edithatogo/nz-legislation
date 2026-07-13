@@ -33,6 +33,7 @@ pub const MCP_TOOLS: &[&str] = &[
 ];
 
 use serde::{Deserialize, Serialize};
+use std::collections::BTreeMap;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -198,6 +199,86 @@ pub struct ProviderRequest {
     pub url: String,
     pub source_authority: String,
     pub requires_api_key: bool,
+}
+
+/// Request shape used by the staged Commonwealth adapter.  This mirrors the
+/// TypeScript provider's OData `titles` and `versions` calls without fetching
+/// or inventing legal records.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct CommonwealthRequest {
+    pub feature: ProviderFeature,
+    pub path: String,
+    pub search_params: BTreeMap<String, String>,
+}
+
+/// Build the source-backed Commonwealth OData request shape used by the
+/// existing TypeScript adapter.
+pub fn build_commonwealth_request(
+    feature: ProviderFeature,
+    identifier: Option<&str>,
+) -> Result<CommonwealthRequest, ProviderRequestError> {
+    let mut search_params = BTreeMap::new();
+    let path = match feature {
+        ProviderFeature::Search => {
+            search_params.insert("$count".to_owned(), "true".to_owned());
+            search_params.insert("$skip".to_owned(), "0".to_owned());
+            search_params.insert("$top".to_owned(), "20".to_owned());
+            "titles".to_owned()
+        }
+        ProviderFeature::GetWork => {
+            let id = identifier
+                .filter(|value| !value.is_empty())
+                .ok_or(ProviderRequestError::InvalidIdentifier)?;
+            validate_commonwealth_identifier(id)?;
+            search_params.insert(
+                "$filter".to_owned(),
+                format!("id eq '{}'", escape_commonwealth_odata(id)),
+            );
+            search_params.insert("$top".to_owned(), "1".to_owned());
+            "titles".to_owned()
+        }
+        ProviderFeature::GetVersions => {
+            let id = identifier
+                .filter(|value| !value.is_empty())
+                .ok_or(ProviderRequestError::InvalidIdentifier)?;
+            validate_commonwealth_identifier(id)?;
+            search_params.insert(
+                "$filter".to_owned(),
+                format!("titleId eq '{}'", escape_commonwealth_odata(id)),
+            );
+            "versions".to_owned()
+        }
+        _ => {
+            return Err(ProviderRequestError::UnsupportedCapability(
+                UnsupportedProviderCapability {
+                    error: "unsupported_provider_capability".to_owned(),
+                    jurisdiction: "au-commonwealth".to_owned(),
+                    provider_id: "federal-register-of-legislation".to_owned(),
+                    feature,
+                    status: CapabilityStatus::Unsupported,
+                    source_backed: false,
+                    message: "Commonwealth request mapping is not enabled for this feature."
+                        .to_owned(),
+                },
+            ))
+        }
+    };
+    Ok(CommonwealthRequest {
+        feature,
+        path,
+        search_params,
+    })
+}
+
+fn validate_commonwealth_identifier(value: &str) -> Result<(), ProviderRequestError> {
+    if value.contains('/') || value.contains('\\') || value.contains("..") {
+        return Err(ProviderRequestError::InvalidIdentifier);
+    }
+    Ok(())
+}
+
+fn escape_commonwealth_odata(value: &str) -> String {
+    value.replace('\'', "''")
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -505,6 +586,15 @@ mod tests {
         performance_evidence: Option<String>,
     }
 
+    #[derive(Deserialize)]
+    #[serde(rename_all = "camelCase")]
+    struct CommonwealthFixture {
+        provider_id: String,
+        api_base_url: String,
+        register_base_url: String,
+        requests: Vec<CommonwealthRequest>,
+    }
+
     const FIXTURE: &str = include_str!(concat!(
         env!("CARGO_MANIFEST_DIR"),
         "/../../tests/fixtures/rust/cli-contracts.json"
@@ -518,6 +608,11 @@ mod tests {
     const RUNTIME_FIXTURE: &str = include_str!(concat!(
         env!("CARGO_MANIFEST_DIR"),
         "/../../tests/fixtures/rust/runtime-comparison.json"
+    ));
+
+    const COMMONWEALTH_FIXTURE: &str = include_str!(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/../../tests/fixtures/rust/commonwealth-contracts.json"
     ));
 
     #[test]
@@ -643,6 +738,27 @@ mod tests {
             qld,
             Err(ProviderRequestError::UnsupportedCapability(_))
         ));
+    }
+
+    #[test]
+    fn mirrors_commonwealth_odata_request_shapes_without_network_access() {
+        let fixture: CommonwealthFixture =
+            serde_json::from_str(COMMONWEALTH_FIXTURE).expect("valid Commonwealth fixture");
+        assert_eq!(fixture.provider_id, "federal-register-of-legislation");
+        assert_eq!(
+            fixture.api_base_url,
+            "https://api.prod.legislation.gov.au/v1"
+        );
+        assert_eq!(fixture.register_base_url, "https://www.legislation.gov.au");
+
+        let expected = [
+            build_commonwealth_request(ProviderFeature::Search, None).expect("search plan"),
+            build_commonwealth_request(ProviderFeature::GetWork, Some("C2004A01224"))
+                .expect("title plan"),
+            build_commonwealth_request(ProviderFeature::GetVersions, Some("C2004A01224"))
+                .expect("versions plan"),
+        ];
+        assert_eq!(fixture.requests, expected);
     }
 
     struct MockTransport {

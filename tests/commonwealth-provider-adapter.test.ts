@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
 
 import { getUnsupportedProviderCapability } from '../src/providers/capability-manifest.ts';
 import {
@@ -9,6 +10,7 @@ import {
   type CommonwealthVersion,
   commonwealthProviderSource,
   createCommonwealthProviderAdapter,
+  buildCommonwealthTitleSearchParams,
 } from '../src/providers/commonwealth.ts';
 
 interface RecordedCall {
@@ -82,6 +84,27 @@ function createMockHttpClient(responses: Record<string, unknown>): {
 }
 
 describe('Commonwealth provider adapter', () => {
+  it('keeps the shared Rust request fixture aligned with the TypeScript OData contract', async () => {
+    const fixture = JSON.parse(readFileSync('tests/fixtures/rust/commonwealth-contracts.json', 'utf8')) as {
+      requests: Array<{ feature: string; path: string; searchParams: Record<string, string> }>;
+    };
+    expect(fixture.requests[0]).toEqual({
+      feature: 'search',
+      path: 'titles',
+      searchParams: buildCommonwealthTitleSearchParams({}),
+    });
+    expect(fixture.requests[1]).toEqual({
+      feature: 'get_work',
+      path: 'titles',
+      searchParams: { $filter: "id eq 'C2004A01224'", $top: '1' },
+    });
+    expect(fixture.requests[2]).toEqual({
+      feature: 'get_versions',
+      path: 'versions',
+      searchParams: { $filter: "titleId eq 'C2004A01224'" },
+    });
+  });
+
   it('declares source metadata for prerelease Australian runtime support', () => {
     const unsupportedSearch = getUnsupportedProviderCapability('au-commonwealth', 'search');
 
