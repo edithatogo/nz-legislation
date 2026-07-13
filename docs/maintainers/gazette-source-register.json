@@ -1,0 +1,112 @@
+{
+  "version": "1.0.0",
+  "policy": {
+    "officialAuthorityRequired": true,
+    "evidenceUrlRequired": true,
+    "runtimeRequiresRightsReview": true,
+    "unverifiedSourcesRemainUnsupported": true,
+    "gazetteNotLegislation": true
+  },
+  "sources": [
+    {
+      "jurisdiction": "nz",
+      "sourceId": "nz-gazette",
+      "authority": "New Zealand Gazette",
+      "sourceUrl": "https://gazette.govt.nz/",
+      "evidenceUrl": "https://gazette.govt.nz/find-a-notice",
+      "publicationKind": "official-gazette",
+      "accessStatus": "official-online-search",
+      "runtimeStatus": "not-implemented"
+    },
+    {
+      "jurisdiction": "au-commonwealth",
+      "sourceId": "au-commonwealth-gazette",
+      "authority": "Federal Register of Legislation — Government Gazettes",
+      "sourceUrl": "https://www.legislation.gov.au/gazettes",
+      "evidenceUrl": "https://www.legislation.gov.au/help-and-resources/using-the-legislation-register/government-gazettes",
+      "publicationKind": "official-gazette",
+      "accessStatus": "official-online-search",
+      "runtimeStatus": "not-implemented"
+    },
+    {
+      "jurisdiction": "au-qld",
+      "sourceId": "au-qld-gazette",
+      "authority": "Queensland Government Gazette",
+      "sourceUrl": "https://www.publications.qld.gov.au/",
+      "evidenceUrl": "https://www.publications.qld.gov.au/",
+      "publicationKind": "official-gazette",
+      "accessStatus": "source-shape-only",
+      "runtimeStatus": "unsupported"
+    },
+    {
+      "jurisdiction": "au-nsw",
+      "sourceId": "au-nsw-gazette",
+      "authority": "NSW Government Gazette",
+      "sourceUrl": "https://gazette.nsw.gov.au/",
+      "evidenceUrl": "https://legislation.nsw.gov.au/gazette",
+      "publicationKind": "official-gazette",
+      "accessStatus": "official-online-archive",
+      "runtimeStatus": "not-implemented"
+    },
+    {
+      "jurisdiction": "au-vic",
+      "sourceId": "au-vic-gazette",
+      "authority": "Victoria Government Gazette",
+      "sourceUrl": "https://www.gazette.vic.gov.au/",
+      "evidenceUrl": "https://www.gazette.vic.gov.au/gazette_bin/about_us.cfm",
+      "publicationKind": "official-gazette",
+      "accessStatus": "official-online-archive",
+      "runtimeStatus": "not-implemented"
+    },
+    {
+      "jurisdiction": "au-sa",
+      "sourceId": "au-sa-gazette",
+      "authority": "South Australian Government Gazette",
+      "sourceUrl": "https://governmentgazette.sa.gov.au/",
+      "evidenceUrl": "https://governmentgazette.sa.gov.au/",
+      "publicationKind": "official-gazette",
+      "accessStatus": "official-online-publication",
+      "runtimeStatus": "not-implemented"
+    },
+    {
+      "jurisdiction": "au-wa",
+      "sourceId": "au-wa-gazette",
+      "authority": "Western Australian Government Gazette",
+      "sourceUrl": "https://www.legislation.wa.gov.au/",
+      "evidenceUrl": "https://www.legislation.wa.gov.au/legislation/gazettes",
+      "publicationKind": "official-gazette",
+      "accessStatus": "official-online-archive",
+      "runtimeStatus": "not-implemented"
+    },
+    {
+      "jurisdiction": "au-tas",
+      "sourceId": "au-tas-gazette",
+      "authority": "Tasmanian Government Gazette",
+      "sourceUrl": "https://www.gazette.tas.gov.au/",
+      "evidenceUrl": "https://www.gazette.tas.gov.au/",
+      "publicationKind": "official-gazette",
+      "accessStatus": "source-shape-only",
+      "runtimeStatus": "unsupported"
+    },
+    {
+      "jurisdiction": "au-act",
+      "sourceId": "au-act-gazette",
+      "authority": "ACT Government Gazette",
+      "sourceUrl": "https://www.act.gov.au/",
+      "evidenceUrl": "https://www.legislation.act.gov.au/",
+      "publicationKind": "official-gazette-or-equivalent",
+      "accessStatus": "source-shape-only",
+      "runtimeStatus": "unsupported"
+    },
+    {
+      "jurisdiction": "au-nt",
+      "sourceId": "au-nt-gazette",
+      "authority": "Northern Territory Government Gazette",
+      "sourceUrl": "https://nt.gov.au/about-government/gazettes",
+      "evidenceUrl": "https://nt.gov.au/about-government/gazettes",
+      "publicationKind": "official-gazette",
+      "accessStatus": "official-online-archive",
+      "runtimeStatus": "not-implemented"
+    }
+  ]
+}
