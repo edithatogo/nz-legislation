@@ -212,6 +212,111 @@ pub struct CommonwealthRequest {
     pub search_params: BTreeMap<String, String>,
 }
 
+/// Request shape used by the existing TypeScript New Zealand client.  This is
+/// metadata only; it performs no network access or legal-data fetching.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NzRequest {
+    pub feature: ProviderFeature,
+    pub path: String,
+    pub search_params: BTreeMap<String, String>,
+}
+
+/// Build the source-backed NZ v0 request shapes used by the TypeScript client.
+/// Query parameters intentionally mirror the existing client naming and
+/// pagination semantics so a future Rust runtime can be compared safely.
+pub fn build_nz_request(
+    feature: ProviderFeature,
+    identifier: Option<&str>,
+    query: Option<&str>,
+    legislation_type: Option<&str>,
+    status: Option<&str>,
+    from: Option<&str>,
+    to: Option<&str>,
+    limit: Option<u32>,
+    offset: Option<u32>,
+) -> Result<NzRequest, ProviderRequestError> {
+    let mut search_params = BTreeMap::new();
+    let path = match feature {
+        ProviderFeature::Search => {
+            if let Some(value) = query.filter(|value| !value.is_empty()) {
+                search_params.insert("search_term".to_owned(), value.to_owned());
+            }
+            if let Some(value) = legislation_type.filter(|value| !value.is_empty()) {
+                search_params.insert(
+                    "legislation_type".to_owned(),
+                    if value == "regulation" {
+                        "secondary_legislation".to_owned()
+                    } else {
+                        value.to_owned()
+                    },
+                );
+            }
+            if let Some(value) = status.filter(|value| !value.is_empty()) {
+                search_params.insert("legislation_status".to_owned(), value.replace('-', "_"));
+            }
+            if let Some(value) = from.filter(|value| !value.is_empty()) {
+                search_params.insert("from".to_owned(), value.to_owned());
+            }
+            if let Some(value) = to.filter(|value| !value.is_empty()) {
+                search_params.insert("to".to_owned(), value.to_owned());
+            }
+            if let Some(value) = limit {
+                if value > 0 {
+                    search_params.insert("per_page".to_owned(), value.to_string());
+                    if let Some(offset) = offset {
+                        search_params.insert("page".to_owned(), (offset / value + 1).to_string());
+                    }
+                }
+            }
+            "v0/works".to_owned()
+        }
+        ProviderFeature::GetWork => {
+            let id = identifier
+                .filter(|value| !value.is_empty())
+                .ok_or(ProviderRequestError::InvalidIdentifier)?;
+            validate_nz_identifier(id)?;
+            if id.contains('_') {
+                format!("v0/works/{id}/versions")
+            } else {
+                format!("v0/works/{id}")
+            }
+        }
+        ProviderFeature::GetVersions => {
+            let id = identifier
+                .filter(|value| !value.is_empty())
+                .ok_or(ProviderRequestError::InvalidIdentifier)?;
+            validate_nz_identifier(id)?;
+            format!("v0/works/{id}/versions")
+        }
+        _ => {
+            return Err(ProviderRequestError::UnsupportedCapability(
+                UnsupportedProviderCapability {
+                    error: "unsupported_provider_capability".to_owned(),
+                    jurisdiction: "nz".to_owned(),
+                    provider_id: "legislation-govt-nz".to_owned(),
+                    feature,
+                    status: CapabilityStatus::Unsupported,
+                    source_backed: false,
+                    message: "NZ request mapping is not enabled for this feature.".to_owned(),
+                },
+            ))
+        }
+    };
+    Ok(NzRequest {
+        feature,
+        path,
+        search_params,
+    })
+}
+
+fn validate_nz_identifier(value: &str) -> Result<(), ProviderRequestError> {
+    if value.contains('/') || value.contains('\\') || value.contains("..") {
+        return Err(ProviderRequestError::InvalidIdentifier);
+    }
+    Ok(())
+}
+
 /// Build the source-backed Commonwealth OData request shape used by the
 /// existing TypeScript adapter.
 pub fn build_commonwealth_request(
@@ -596,6 +701,14 @@ mod tests {
         requests: Vec<CommonwealthRequest>,
     }
 
+    #[derive(Deserialize)]
+    #[serde(rename_all = "camelCase")]
+    struct NzFixture {
+        provider_id: String,
+        api_base_url: String,
+        requests: Vec<NzRequest>,
+    }
+
     const FIXTURE: &str = include_str!(concat!(
         env!("CARGO_MANIFEST_DIR"),
         "/../../tests/fixtures/rust/cli-contracts.json"
@@ -651,6 +764,11 @@ mod tests {
     const COMMONWEALTH_FIXTURE: &str = include_str!(concat!(
         env!("CARGO_MANIFEST_DIR"),
         "/../../tests/fixtures/rust/commonwealth-contracts.json"
+    ));
+
+    const NZ_FIXTURE: &str = include_str!(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/../../tests/fixtures/rust/nz-contracts.json"
     ));
 
     #[test]
@@ -828,6 +946,53 @@ mod tests {
                 .expect("title plan"),
             build_commonwealth_request(ProviderFeature::GetVersions, Some("C2004A01224"))
                 .expect("versions plan"),
+        ];
+        assert_eq!(fixture.requests, expected);
+    }
+
+    #[test]
+    fn mirrors_nz_request_shapes_without_network_access() {
+        let fixture: NzFixture = serde_json::from_str(NZ_FIXTURE).expect("valid NZ fixture");
+        assert_eq!(fixture.provider_id, "legislation-govt-nz");
+        assert_eq!(fixture.api_base_url, "https://api.legislation.govt.nz");
+
+        let expected = [
+            build_nz_request(
+                ProviderFeature::Search,
+                None,
+                Some("health"),
+                Some("act"),
+                Some("in-force"),
+                Some("2020-01-01"),
+                Some("2020-12-31"),
+                Some(10),
+                Some(20),
+            )
+            .expect("search plan"),
+            build_nz_request(
+                ProviderFeature::GetWork,
+                Some("act_public_1989_18"),
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+            )
+            .expect("work plan"),
+            build_nz_request(
+                ProviderFeature::GetVersions,
+                Some("act_public_1989_18"),
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+            )
+            .expect("versions plan"),
         ];
         assert_eq!(fixture.requests, expected);
     }

@@ -32,3 +32,4 @@
 - [x] Establish a traceable dual-runtime performance/security comparison harness and explicit no-cutover gate; full Rust runtime comparison remains pending until a Rust runtime exists.
 - [x] Add source-backed Commonwealth API request-shape parity fixtures for search, title, and version lookups without fetching or fabricating legal data.
 - [x] Add deterministic dual-runtime performance/security evidence schema and tests; keep cutover blocked until provider-backed Rust parity evidence exists.
+- [x] Add source-backed New Zealand API request-shape parity fixtures for search, work, and version lookups without fetching or fabricating legal data.
