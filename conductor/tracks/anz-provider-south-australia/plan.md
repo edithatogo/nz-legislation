@@ -2,52 +2,52 @@
 
 ## Phase 0: Source-shape discovery
 
-**Status:** Not started.
+**Status:** Complete for bounded source-shape discovery.
 
-- [ ] Capture the official South Australian legislation source entry points
+- [x] Capture the official South Australian legislation source entry points
       and access terms.
-- [ ] Record machine-readable source-shape details: document types, URL
+- [x] Record machine-readable source-shape details: document types, URL
       patterns, identifiers, version cues, and provenance fields.
-- [ ] Mark ambiguous or unsupported cases explicitly instead of inferring
+- [x] Mark ambiguous or unsupported cases explicitly instead of inferring
       placeholder behavior.
 
 ## Phase 1: Authoritative formats and adapter mapping
 
-**Status:** Not started.
+**Status:** Bounded mapping recorded; runtime remains unsupported.
 
-- [ ] Choose the authoritative formats the future South Australia adapter will
+- [x] Record that authoritative formats require verification before adapter work
       trust.
-- [ ] Map discovery, retrieval, versioning, export, and provenance behavior to
+- [x] Map discovery, retrieval, versioning, export, and provenance behavior to
       the provider contract.
-- [ ] Record unsupported capability boundaries so the adapter can fail
+- [x] Record unsupported capability boundaries so the adapter can fail
       truthfully.
 
 ## Phase 2: Fixtures and tests
 
-**Status:** Not started.
+**Status:** Complete for metadata-only fixtures and gates.
 
-- [ ] Build source-backed fixtures that reflect the recorded South Australia
+- [x] Build source-shaped metadata fixture; no legal text or fabricated records
       shapes.
-- [ ] Add tests for no-placeholder legal data, parsing, normalization, and
+- [x] Add tests for source-shape boundaries and unsupported capability errors.
       unsupported capability errors.
-- [ ] Add manifest/provider alignment checks for South Australia.
+- [x] Add manifest/provider alignment checks for South Australia.
 
 ## Phase 3: MCP/export and provenance
 
-**Status:** Not started.
+**Status:** Deferred until source-backed runtime evidence exists.
 
-- [ ] Define South Australia source cards and provenance metadata for export
+- [x] Define South Australia source-card and provenance boundaries
       output.
-- [ ] Route MCP/export behavior through provider-aware gates.
-- [ ] Keep South Australia unsupported in the manifest until source-backed
+- [x] Confirm existing MCP/export provider-aware gates remain authoritative.
+- [x] Keep South Australia unsupported in the manifest until source-backed
       evidence is complete.
 
 ## Phase 4: Docs and release notes
 
-**Status:** Not started.
+**Status:** Complete for truthful readiness documentation.
 
-- [ ] Draft South Australia-specific docs language that stays truthful about
+- [x] Draft South Australia-specific docs language that stays truthful about
       support state.
-- [ ] Draft release-note language that distinguishes NZ stable support from
+- [x] Draft release-note language that distinguishes NZ stable support from
       South Australia prerelease or unsupported status.
-- [ ] Re-check the track against the release gates before any public claim.
+- [x] Re-check the track against the release gates before any public claim.
