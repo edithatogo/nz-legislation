@@ -1,8 +1,9 @@
-import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { describe, expect, it } from 'vitest';
 
 import { getUnsupportedProviderCapability } from '../src/providers/capability-manifest.ts';
 import {
+  buildCommonwealthTitleSearchParams,
   type CommonwealthHttpClientLike,
   type CommonwealthODataResponse,
   type CommonwealthProviderClient,
@@ -10,7 +11,6 @@ import {
   type CommonwealthVersion,
   commonwealthProviderSource,
   createCommonwealthProviderAdapter,
-  buildCommonwealthTitleSearchParams,
 } from '../src/providers/commonwealth.ts';
 
 interface RecordedCall {
@@ -85,7 +85,9 @@ function createMockHttpClient(responses: Record<string, unknown>): {
 
 describe('Commonwealth provider adapter', () => {
   it('keeps the shared Rust request fixture aligned with the TypeScript OData contract', async () => {
-    const fixture = JSON.parse(readFileSync('tests/fixtures/rust/commonwealth-contracts.json', 'utf8')) as {
+    const fixture = JSON.parse(
+      readFileSync('tests/fixtures/rust/commonwealth-contracts.json', 'utf8')
+    ) as {
       requests: Array<{ feature: string; path: string; searchParams: Record<string, string> }>;
     };
     expect(fixture.requests[0]).toEqual({
