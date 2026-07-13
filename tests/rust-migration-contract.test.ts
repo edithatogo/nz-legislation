@@ -21,6 +21,19 @@ type McpContract = {
   provenance_fields: string[];
 };
 
+type ResponseEnvelopeFixture = {
+  valid: Array<{
+    jurisdiction: string;
+    providerId: string;
+    sourceAuthority: string;
+    sourceUrl: string;
+    retrievedAt: string;
+    sourceBacked: boolean;
+    payload: unknown;
+  }>;
+  invalid: string[];
+};
+
 const packageJson = JSON.parse(readFileSync('package.json', 'utf8')) as PackageJson;
 const contract = JSON.parse(
   readFileSync('tests/fixtures/rust/cli-contracts.json', 'utf8')
@@ -29,6 +42,9 @@ const mcpContract = JSON.parse(
   readFileSync('tests/fixtures/rust/mcp-contracts.json', 'utf8')
 ) as McpContract;
 const mcpServerSource = readFileSync('src/mcp/server.ts', 'utf8');
+const responseEnvelopeFixture = JSON.parse(
+  readFileSync('tests/fixtures/rust/provider-response-envelopes.json', 'utf8')
+) as ResponseEnvelopeFixture;
 
 describe('Rust migration compatibility contract', () => {
   it('preserves package and executable identities', () => {
@@ -58,5 +74,17 @@ describe('Rust migration compatibility contract', () => {
       'retrievedAt',
       'sourceBacked',
     ]);
+  });
+
+  it('keeps source-backed provider response envelopes strict and attributable', () => {
+    expect(responseEnvelopeFixture.valid).toHaveLength(2);
+    for (const envelope of responseEnvelopeFixture.valid) {
+      expect(envelope.sourceBacked).toBe(true);
+      expect(envelope.sourceUrl).toMatch(/^https:\/\//);
+      expect(envelope.sourceAuthority.length).toBeGreaterThan(0);
+      expect(envelope.retrievedAt).toMatch(/Z$/);
+      expect(envelope).toHaveProperty('payload');
+    }
+    expect(responseEnvelopeFixture.invalid).toHaveLength(2);
   });
 });

@@ -1,0 +1,26 @@
+{
+  "valid": [
+    {
+      "jurisdiction": "nz",
+      "providerId": "legislation-govt-nz",
+      "sourceAuthority": "legislation.govt.nz",
+      "sourceUrl": "https://api.legislation.govt.nz/v0/works/act_2020_67",
+      "retrievedAt": "2026-07-13T00:00:00Z",
+      "sourceBacked": true,
+      "payload": { "results": [] }
+    },
+    {
+      "jurisdiction": "au-commonwealth",
+      "providerId": "federal-register-of-legislation",
+      "sourceAuthority": "Federal Register of Legislation public API",
+      "sourceUrl": "https://api.prod.legislation.gov.au/v1/titles",
+      "retrievedAt": "2026-07-13T00:00:00Z",
+      "sourceBacked": true,
+      "payload": { "@odata.count": 0, "value": [] }
+    }
+  ],
+  "invalid": [
+    "{\"jurisdiction\":\"nz\",\"providerId\":\"legislation-govt-nz\",\"sourceAuthority\":\"legislation.govt.nz\",\"sourceUrl\":\"https://api.legislation.govt.nz/v0/works/act_2020_67\",\"retrievedAt\":\"2026-07-13T00:00:00Z\",\"sourceBacked\":true}",
+    "{\"jurisdiction\":\"nz\",\"providerId\":\"forged\",\"sourceAuthority\":\"legislation.govt.nz\",\"sourceUrl\":\"https://api.legislation.govt.nz/v0/works/act_2020_67\",\"retrievedAt\":\"2026-07-13T00:00:00Z\",\"sourceBacked\":true,\"payload\":{}}"
+  ]
+}
