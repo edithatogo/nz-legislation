@@ -1,0 +1,53 @@
+{
+  "jurisdiction": "au-vic",
+  "providerId": "victorian-legislation",
+  "sourceAuthority": "Victorian Office of the Chief Parliamentary Counsel",
+  "sourceEntryPoints": [
+    "https://www.legislation.vic.gov.au/",
+    "https://www.legislation.vic.gov.au/in-force",
+    "https://www.legislation.vic.gov.au/repealed-revoked",
+    "https://www.legislation.vic.gov.au/legislative-information",
+    "https://www.gazette.vic.gov.au/"
+  ],
+  "accessTerms": {
+    "publicAccess": "free public access to the Victorian legislation website",
+    "machineReadableAccess": "no public machine-readable API or feed verified in this discovery pass",
+    "copyright": "Victorian Government copyright and website terms apply"
+  },
+  "authoritativeFormats": ["HTML", "PDF"],
+  "convenienceFormats": ["HTML", "PDF"],
+  "collections": ["in-force", "repealed-or-revoked", "legislative-information"],
+  "urlPatterns": [
+    "https://www.legislation.vic.gov.au/in-force",
+    "https://www.legislation.vic.gov.au/repealed-revoked",
+    "https://www.legislation.vic.gov.au/sites/default/files/{year}-{month}/{filename}.pdf"
+  ],
+  "identifierCues": [
+    "title and year displayed by the Victorian legislation website",
+    "Act and statutory-rule version history",
+    "consolidated current and superseded versions"
+  ],
+  "versionCues": [
+    "current and superseded versions in the in-force collection",
+    "repealed or revoked status",
+    "version history and commencement information",
+    "point-in-time material where published"
+  ],
+  "adapterMapping": {
+    "search": "Not enabled; use official browse/search pages only after a machine-readable contract is verified.",
+    "retrieval": "Future adapter may retrieve authoritative PDF or HTML pages with format and authority labels.",
+    "versioning": "Use published version history, commencement, and superseded/repealed cues; do not infer versions from filenames alone.",
+    "export": "Unsupported until a source-backed parser and provenance-preserving export exists.",
+    "provenance": "Emit sourceAuthority, jurisdiction, source URL, format, authority status, and retrieval timestamp.",
+    "unsupported": "Return structured unsupported_provider_capability for runtime operations until tests and fixtures prove the adapter."
+  },
+  "edgeCases": [
+    "the website distinguishes Acts from statutory rules",
+    "repealed or revoked material is separate from in-force material",
+    "PDF and HTML representations may have different authority or convenience status",
+    "no public machine-readable API or feed was verified in this discovery pass",
+    "the Victoria Government Gazette is a separate official publication surface"
+  ],
+  "runtimeStatus": "unsupported",
+  "fixturePolicy": "metadata-only source-shape fixture; no legal text or fabricated records"
+}
